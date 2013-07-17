@@ -1,0 +1,66 @@
+parameters:
+    sonatra.acl.rule.manager.base.class: Sonatra\Bundle\SecurityBundle\Acl\Domain\AclRuleManager
+    sonatra.acl.manager.base.class: Sonatra\Bundle\SecurityBundle\Acl\Domain\AclManager
+    sonatra.security.acl_voter.base.class: Sonatra\Bundle\SecurityBundle\Core\Authorization\Voter\AclVoter
+    sonatra.acl.rule.extension.base.class: Sonatra\Bundle\SecurityBundle\Acl\DependencyInjection\RuleExtension
+
+services:
+    #Rule Extension
+    sonatra.acl.rule.extension:
+        class: '%sonatra.acl.rule.extension.base.class%'
+        arguments: ['@service_container', ['@sonatra.acl.rule_definition']]
+        public: false
+
+    #Rule Manager
+    sonatra.acl.rule.manager:
+        class: '%sonatra.acl.rule.manager.base.class%'
+        arguments:
+            - '@sonatra.acl.rule.extension'
+            - '%sonatra_security.acl_default_rule%'
+            - '%sonatra_security.acl_rules%'
+
+    #ACL Manager
+    sonatra.acl.manager:
+        class: '%sonatra.acl.manager.base.class%'
+        arguments:
+            - '@security.acl.provider'
+            - '@security.acl.object_identity_retrieval_strategy'
+            - '@sonatra.acl.rule.manager'
+            - '@?sonatra.security.group_role'
+            - '@?sonatra.security.role_hierarchy'
+
+    #Voter
+    sonatra.security.class_voter:
+        public:    false
+        class:     '%sonatra.security.acl_voter.base.class%'
+        arguments: ['@sonatra.acl.manager']
+        tags:      [ { name: security.voter, priority: 260 } ]
+
+    #Acl Rule Definitions
+    sonatra.acl.rule_definition.disabled:
+        class:  Sonatra\Bundle\SecurityBundle\Acl\Rule\Definition\DisabledDefinition
+        tags:   [ { name: sonatra.acl.rule_definition, alias: disabled } ]
+
+    sonatra.acl.rule_definition.allow:
+        class:  Sonatra\Bundle\SecurityBundle\Acl\Rule\Definition\AllowDefinition
+        tags:   [ { name: sonatra.acl.rule_definition, alias: allow } ]
+
+    sonatra.acl.rule_definition.deny:
+        class:  Sonatra\Bundle\SecurityBundle\Acl\Rule\Definition\DenyDefinition
+        tags:   [ { name: sonatra.acl.rule_definition, alias: deny } ]
+
+    sonatra.acl.rule_definition.affirmative:
+        class:  Sonatra\Bundle\SecurityBundle\Acl\Rule\Definition\AffirmativeDefinition
+        tags:   [ { name: sonatra.acl.rule_definition, alias: affirmative } ]
+
+    sonatra.acl.rule_definition.unanimous:
+        class:  Sonatra\Bundle\SecurityBundle\Acl\Rule\Definition\UnanimousDefinition
+        tags:   [ { name: sonatra.acl.rule_definition, alias: unanimous } ]
+
+    sonatra.acl.rule_definition.object:
+        class:  Sonatra\Bundle\SecurityBundle\Acl\Rule\Definition\ObjectDefinition
+        tags:   [ { name: sonatra.acl.rule_definition, alias: object } ]
+
+    sonatra.acl.rule_definition.class:
+        class:  Sonatra\Bundle\SecurityBundle\Acl\Rule\Definition\ClassDefinition
+        tags:   [ { name: sonatra.acl.rule_definition, alias: class } ]

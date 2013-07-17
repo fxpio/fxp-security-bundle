@@ -1,0 +1,17 @@
+parameters:
+    sonatra.security.expression.has_any_role_evaluator.class: Sonatra\Bundle\SecurityBundle\Acl\Expression\AnyRoleEvaluator
+    sonatra.security.expression.has_any_role_compiler.class: Sonatra\Bundle\SecurityBundle\Acl\Expression\Compiler\Func\HasAnyRoleFunctionCompiler
+
+services:
+    #JMS Expression
+    sonatra.security.expression.has_any_role_evaluator:
+        public:    false
+        class:     '%sonatra.security.expression.has_any_role_evaluator.class%'
+        arguments: ['@sonatra.acl.manager']
+
+    sonatra.security.expression.has_any_role_compiler:
+        public: false
+        class:  '%sonatra.security.expression.has_any_role_compiler.class%'
+        tags:
+            - { name: security.expressions.function_compiler }
+            - { name: security.expressions.variable, variable: any_role_evaluator, service: sonatra.security.expression.has_any_role_evaluator }

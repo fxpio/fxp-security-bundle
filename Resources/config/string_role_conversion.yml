@@ -1,0 +1,7 @@
+services:
+    sonatra.security.listener.string_role_conversion:
+        public:    false
+        class:     Sonatra\Bundle\SecurityBundle\Listener\StringRoleConversionListener
+        arguments: ['%sonatra_security.role_class%', '%sonatra_security.string_role_conversion.classes%']
+        tags:
+            - { name: doctrine.event_subscriber }
