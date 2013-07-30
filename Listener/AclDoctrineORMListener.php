@@ -132,7 +132,7 @@ class AclDoctrineORMListener implements EventSubscriber
             $edited = $this->updateObject($em, $object, 'CREATE');
 
             if (!$edited && !$sc->isGranted('CREATE', $object)) {
-                throw new AccessDeniedException("Insufficient privilege to create the resource");
+                throw new AccessDeniedException('Insufficient privilege to create the resource');
             }
         }
 
@@ -141,14 +141,14 @@ class AclDoctrineORMListener implements EventSubscriber
             $edited = $this->updateObject($em, $object, 'EDIT');
 
             if (!$edited && !$sc->isGranted('EDIT', $object)) {
-                throw new AccessDeniedException("Insufficient privilege to update the resource");
+                throw new AccessDeniedException('Insufficient privilege to update the resource');
             }
         }
 
         // check all scheduled deletations
         foreach ($scheduledDeletations as $object) {
             if (!$sc->isGranted('DELETE', $object)) {
-                throw new AccessDeniedException("Insufficient privilege to delete the resource");
+                throw new AccessDeniedException('Insufficient privilege to delete the resource');
             }
         }
     }

@@ -60,7 +60,7 @@ abstract class AbstractAclManager implements AclManagerInterface
         }
 
         if (!is_string($mask) && !is_array($mask)) {
-            throw new SecurityException("The mask must be a string, or array of string or int (the symfony mask value)");
+            throw new SecurityException('The mask must be a string, or array of string or int (the symfony mask value)');
         }
 
         // convert the rights to mask
@@ -75,7 +75,7 @@ abstract class AbstractAclManager implements AclManagerInterface
             }
 
         } catch (\Exception $e) {
-            throw new SecurityException("The right '$maskConverted' does not exist");
+            throw new SecurityException(sprintf('The right "%s" does not exist', $maskConverted));
         }
 
         return $builder->get();

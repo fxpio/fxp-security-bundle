@@ -25,6 +25,9 @@ use Sonatra\Bundle\SecurityBundle\Acl\Model\AclManagerInterface;
  */
 class AclVoter implements VoterInterface
 {
+    /**
+     * @var AclManagerInterface
+     */
     private $aclManager;
 
     /**

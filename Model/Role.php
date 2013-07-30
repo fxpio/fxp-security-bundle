@@ -11,28 +11,32 @@
 
 namespace Sonatra\Bundle\SecurityBundle\Model;
 
-use Symfony\Component\Security\Core\Role\RoleInterface;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * This is the domain class for the Role object.
  *
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-abstract class Role implements RoleInterface, \Serializable
+abstract class Role implements RoleHierarchisableInterface, \Serializable
 {
     protected $id;
     protected $name;
     protected $parents;
     protected $children;
+    protected $authorization;
 
     /**
      * Constructor.
      *
      * @param string $name
      */
-    public function __construct($name = null)
+    public function __construct($name)
     {
         $this->name = $name;
+
+        $this->parents = new ArrayCollection();
+        $this->children = new ArrayCollection();
     }
 
     /**
@@ -78,41 +82,125 @@ abstract class Role implements RoleInterface, \Serializable
     }
 
     /**
-     * Sets a parent on the current role.
-     *
-     * @param Role $role
+     * {@inheritdoc}
      */
-    abstract public function addParent($role);
-
-    /**
-     * Gets all parent.
-     *
-     * @return \Doctrine\Common\Collections\ArrayCollection
-     */
-    abstract public function getParents();
-
-    /**
-     * Sets a child on the current role.
-     *
-     * @param Role $role
-     */
-    abstract public function addChild($role);
-
-    /**
-     * Gets all children.
-     *
-     * @return \Doctrine\Common\Collections\ArrayCollection
-     */
-    abstract public function getChildren();
-
-    /**
-     * Get the children roles.
-     *
-     * @return \Doctrine\Common\Collections\ArrayCollection
-     */
-    public function getRoles()
+    public function addParent(RoleHierarchisableInterface $role)
     {
-        return $this->getChildren();
+        $role->addChild($this);
+        $this->parents->add($role);
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function removeParent(RoleHierarchisableInterface $parent)
+    {
+        if ($this->getParents()->contains($parent)) {
+            $this->getParents()->removeElement($parent);
+            $parent->getChildren()->removeElement($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getParents()
+    {
+        return $this->parents;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getParentNames()
+    {
+        $names = array();
+
+        foreach ($this->getParents() as $parent) {
+            $names[] = $parent->getRole();
+        }
+
+        return $names;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function hasParent($name)
+    {
+        return in_array($name, $this->getParentNames());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function addChild(RoleHierarchisableInterface $role)
+    {
+        $this->children->add($role);
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function removeChild(RoleHierarchisableInterface $child)
+    {
+        if ($this->getChildren()->contains($child)) {
+            $this->getChildren()->removeElement($child);
+        }
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getChildren()
+    {
+        return $this->children;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getChildrenNames()
+    {
+        $names = array();
+
+        foreach ($this->getChildren() as $child) {
+            $names[] = $child->getRole();
+        }
+
+        return $names;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function hasChild($name)
+    {
+        return in_array($name, $this->getChildrenNames());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setAuthorization($authorization)
+    {
+        $this->authorization = $authorization;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isAuthorization()
+    {
+        return $this->authorization;
     }
 
     /**

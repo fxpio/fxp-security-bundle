@@ -14,8 +14,8 @@ namespace Sonatra\Bundle\SecurityBundle\Core\Role;
 use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
 use Symfony\Component\Security\Core\Role\RoleInterface;
 use Symfony\Component\Security\Core\Role\Role;
+use Symfony\Bridge\Doctrine\RegistryInterface;
 use Doctrine\ORM\EntityManager;
-use Doctrine\Bundle\DoctrineBundle\Registry;
 use Sonatra\Bundle\SecurityBundle\Exception\SecurityException;
 
 /**
@@ -25,8 +25,19 @@ use Sonatra\Bundle\SecurityBundle\Exception\SecurityException;
  */
 class RoleHierarchy implements RoleHierarchyInterface
 {
+    /**
+     * @var RegistryInterface
+     */
     private $registry;
+
+    /**
+     * @var string
+     */
     private $roleClassname;
+
+    /**
+     * @var array
+     */
     private $cache = array();
 
     /**
@@ -35,7 +46,7 @@ class RoleHierarchy implements RoleHierarchyInterface
      * @param Registry $registry
      * @param string   $roleClassName
      */
-    public function __construct(Registry $registry, $roleClassname)
+    public function __construct(RegistryInterface $registry, $roleClassname)
     {
         $this->registry = $registry;
         $this->roleClassname = $roleClassname;
@@ -54,10 +65,12 @@ class RoleHierarchy implements RoleHierarchyInterface
 
         foreach ($roles as $role) {
             if (!is_string($role) && !($role instanceof RoleInterface)) {
-                throw new SecurityException("The Role class must be an instance of 'Symfony\Component\Security\Core\Role\RoleInterface'");
+                $roleClass = 'Symfony\Component\Security\Core\Role\RoleInterface';
+
+                throw new SecurityException(sprintf('The Role class must be an instance of "%s"', $roleClass));
             }
 
-            $rolenames[] = is_string($role) ? $role : $role->getRole();
+            $rolenames[] = ($role instanceof RoleInterface) ? $role->getRole() : $role;
         }
 
         $cacheName = implode('__', $rolenames);
@@ -108,7 +121,7 @@ class RoleHierarchy implements RoleHierarchyInterface
     private function getAllChildren($role)
     {
         $returnRoles = array();
-        $children = $role->getRoles()->toArray();
+        $children = $role->getChildren();
         $returnRoles[$role->getRole()] = $role;
 
         if (!empty($children)) {

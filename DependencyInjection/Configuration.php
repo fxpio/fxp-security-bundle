@@ -35,43 +35,19 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('role_class')->defaultValue('Symfony\Component\Security\Core\Role\RoleInterface')->end()
                 ->scalarNode('group_class')->defaultValue('FOS\UserBundle\Model\GroupInterface')->end()
             ->end()
-            ->append($this->getStringRoleConversionNode())
             ->append($this->getAnonymousRoleNode())
             ->append($this->getAclNode())
             ->append($this->getExpressionNode())
+            ->append($this->getDoctrineListenerNode())
         ;
 
         return $treeBuilder;
     }
 
     /**
-     * Get string role conversion node.
-     *
-     * @return unknown
-     */
-    private function getStringRoleConversionNode()
-    {
-        $treeBuilder = new TreeBuilder();
-        $node = $treeBuilder->root('string_role_conversion');
-
-        $node
-            ->addDefaultsIfNotSet()
-            ->children()
-                ->scalarNode('enabled')->defaultTrue()->end()
-                ->arrayNode('classes')
-                    ->example(array('Vendor\BlogBundle\User' => 'roles'))
-                    ->prototype('scalar')->end()
-                ->end()
-            ->end()
-        ;
-
-        return $node;
-    }
-
-    /**
      * Get anonymous role node.
      *
-     * @return unknown
+     * @return NodeDefinition
      */
     private function getAnonymousRoleNode()
     {
@@ -96,7 +72,7 @@ class Configuration implements ConfigurationInterface
     /**
      * Get acl node.
      *
-     * @return unknown
+     * @return NodeDefinition
      */
     private function getAclNode()
     {
@@ -107,7 +83,6 @@ class Configuration implements ConfigurationInterface
             ->addDefaultsIfNotSet()
             ->children()
                 ->scalarNode('enabled')->defaultTrue()->end()
-                ->scalarNode('enabled_group')->defaultTrue()->end()
                 ->scalarNode('enabled_hierarchy')->defaultTrue()->end()
                 ->scalarNode('doctrine_orm_listener')->defaultTrue()->end()
                 ->scalarNode('default_rule')->defaultValue('disabled')->end()
@@ -158,7 +133,7 @@ class Configuration implements ConfigurationInterface
     /**
      * Get expression node.
      *
-     * @return unknown
+     * @return NodeDefinition
      */
     private function getExpressionNode()
     {
@@ -172,6 +147,26 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('replace_has_any_role')->defaultTrue()->end()
                 ->scalarNode('replace_has_permission')->defaultTrue()->end()
                 ->scalarNode('add_has_field_permission')->defaultTrue()->end()
+            ->end()
+        ;
+
+        return $node;
+    }
+
+    /**
+     * Get doctrine listener node.
+     *
+     * @return NodeDefinition
+     */
+    private function getDoctrineListenerNode()
+    {
+        $treeBuilder = new TreeBuilder();
+        $node = $treeBuilder->root('doctrine_listener');
+
+        $node
+            ->addDefaultsIfNotSet()
+            ->children()
+                ->scalarNode('enabled')->defaultTrue()->end()
             ->end()
         ;
 

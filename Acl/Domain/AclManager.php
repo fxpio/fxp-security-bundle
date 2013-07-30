@@ -321,7 +321,7 @@ class AclManager extends AbstractAclManager
         $oid = $this->getObjectIdentifier($domainObject);
 
         if (null === $oid || 'object' === $oid->getIdentifier()) {
-            throw new InvalidDomainObjectException("The domain object identity is null");
+            throw new InvalidDomainObjectException('The domain object identity is null');
         }
 
         $this->getAclProvider()->deleteAcl($oid);
@@ -455,7 +455,7 @@ class AclManager extends AbstractAclManager
         }
 
         if (!is_string($domainObject)) {
-            throw new SecurityException("The domain object must be an string for 'class' type");
+            throw new SecurityException('The domain object must be an string for "class"" type');
         }
 
         return $domainObject;
@@ -637,13 +637,13 @@ class AclManager extends AbstractAclManager
     protected function getSecurityIdentity($securityIdentity)
     {
         if (null === $securityIdentity) {
-            throw new SecurityException("The Security Identity must be present");
+            throw new SecurityException('The Security Identity must be present');
         }
 
         $securityIdentities = $this->doCreateSecurityIdentities($securityIdentity);
 
         if (0 === count($securityIdentities)) {
-            throw new SecurityException("The Security Identity not found");
+            throw new SecurityException('The Security Identity not found');
         }
 
         return $securityIdentities[0];

@@ -193,7 +193,7 @@ class AclRuleManager implements AclRuleManagerInterface
     protected function validateRuleName($rule)
     {
         if (!$this->hasDefinition($rule)) {
-            throw new SecurityException("The rule '$rule' in configuration of Sonatra ACL Rules does not exist");
+            throw new SecurityException(sprintf('The rule "%s" in configuration of Sonatra ACL Rules does not exist', $rule));
         }
 
         return $rule;
@@ -211,7 +211,7 @@ class AclRuleManager implements AclRuleManagerInterface
         $type = strtoupper($type);
 
         if (!defined('Sonatra\Bundle\SecurityBundle\Acl\Model\AclManagerInterface::'.$type)) {
-            throw new SecurityException("The type '$type' in configuration of Sonatra ACL Rules does not exist");
+            throw new SecurityException(sprintf('The type "%s" in configuration of Sonatra ACL Rules does not exist', $type));
         }
 
         return $type;

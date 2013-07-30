@@ -1,8 +1,0 @@
-parameters:
-    sonatra.security.group_role.base.class: Sonatra\Bundle\SecurityBundle\Core\Role\GroupRole
-
-services:
-    #Security Group Role
-    sonatra.security.group_role:
-        class:     '%sonatra.security.group_role.base.class%'
-        arguments: ['@doctrine', '%sonatra_security.group_class%']

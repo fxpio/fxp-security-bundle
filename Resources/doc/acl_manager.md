@@ -53,7 +53,7 @@ You can use the mask constant or integer of mask, or the string action (not case
 ```php
 <?php
 // ...
-// add read, create, edit for class permission
+// add read, create, edit permissions for a class 'My\\Entity\\Class\\Name'
 $aclManager->addClassPermission($user, 'My\\Entity\\Class\\Name', array (MaskBuilder::MASK_VIEW, 2, 'edit'));
 
 // ...

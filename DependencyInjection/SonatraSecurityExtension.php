@@ -32,21 +32,7 @@ class SonatraSecurityExtension extends Extension
         $config = $this->processConfiguration($configuration, $configs);
         $loader = new Loader\YamlFileLoader($container,new FileLocator(__DIR__ . '/../Resources/config'));
 
-        # String role conversion
-        if ($config['string_role_conversion']['enabled']) {
-            $classes = $config['string_role_conversion']['classes'];
-
-            if (0 === count($classes)) {
-                $classes = array(
-                        'Symfony\Component\Security\Core\User\UserInterface' => 'roles',
-                        'FOS\UserBundle\Model\GroupInterface' => 'roles',
-                );
-            }
-
-            $container->setParameter('sonatra_security.string_role_conversion.classes', $classes);
-            $loader->load('string_role_conversion.yml');
-        }
-
+        // entity classes
         $container->setParameter('sonatra_security.user_class', $config['user_class']);
         $container->setParameter('sonatra_security.role_class', $config['role_class']);
         $container->setParameter('sonatra_security.group_class', $config['group_class']);
@@ -61,9 +47,6 @@ class SonatraSecurityExtension extends Extension
 
         // acl
         if ($config['acl']['enabled']) {
-            if ($config['acl']['enabled_group']) {
-                $loader->load('acl_group.yml');
-            }
             if ($config['acl']['enabled_hierarchy']) {
                 $loader->load('acl_hierarchy.yml');
             }
@@ -94,6 +77,10 @@ class SonatraSecurityExtension extends Extension
 
         if ($config['expression']['add_has_field_permission']) {
             $loader->load('expression_has_field_permission.yml');
+        }
+
+        if ($config['doctrine_listener']['enabled']) {
+            $loader->load('doctrine_listener_role.yml');
         }
     }
 

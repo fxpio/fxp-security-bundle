@@ -19,19 +19,19 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Sonatra\Bundle\SecurityBundle\Acl\Domain\AclManager;
 
 /**
- * Revoke entry (class or object) rights.
+ * Remove entry (class or object) rights.
  *
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-class AclRightRevokeCommand extends ContainerAwareCommand
+class RemoveCommand extends ContainerAwareCommand
 {
     /**
      * {@inheritdoc}
      */
     protected function configure()
     {
-        $this->setName('acl:right:revoke')
-        ->setDescription('Revokes a specified right from a given identifier on a given domain (class or object).')
+        $this->setName('security:acl:remove')
+        ->setDescription('Remove a specified right from a given identifier on a given domain (class or object).')
         ->setDefinition(array(
                 new InputArgument('identity-type', InputArgument::REQUIRED, 'The security identity type (role, user)'),
                 new InputArgument('identity-name', InputArgument::REQUIRED, 'The security identity name to use for the right'),
@@ -70,11 +70,11 @@ EOF
         $identity = $identityRepo->findOneBy(array(('user' === $identityType ? 'username' : 'name') => $identity));
 
         if (!in_array($identityType, array('role', 'user'))) {
-            throw new \InvalidArgumentException("The 'identity-type' argument must be 'role' or 'user'");
+            throw new \InvalidArgumentException('The "identity-type" argument must be "role" or "user"');
         }
 
         if (null === $identity) {
-            throw new \InvalidArgumentException("Identity instance '".$input->getArgument('identity-name')."' on '$identityClass' not found");
+            throw new \InvalidArgumentException(sprintf('Identity instance "%s" on "%s" not found', $input->getArgument('identity-name'), $identityClass));
         }
 
         // get the domain instance
@@ -83,7 +83,7 @@ EOF
             $domain = $domainRepo->findOneBy(array('id' => $domain));
 
             if (null === $domain) {
-                throw new \InvalidArgumentException("Domain instance '".$input->getOption('domainid')."' on '$domainClass' not found");
+                throw new \InvalidArgumentException(sprintf('Domain instance "%s" on "%s" not found', $input->getOption('domainid'), $domainClass));
             }
 
         } else {
@@ -125,7 +125,9 @@ EOF
         } catch (\Exception $ex) {
         }
 
-        return $entityName;
+        $entityName = new \ReflectionClass($entityName);
+
+        return $entityName->getName();
     }
 
     /**

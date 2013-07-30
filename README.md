@@ -8,15 +8,16 @@ and adds some interesting features.
 
 Features include:
 
-- Ability to define permissions for Entity (Class, Class Field, Record, Record Field), but also for any Classes and methods (controller for example)
-- Service manager (helper) for ACL/ACE manipulation (read, add, revoke permissions)
+- Ability to define permissions for Entity (Class, Class Field, Record, Record Field)
+- Service manager (helper) for ACL/ACE manipulation (read, grant, revoke permissions)
 - ACL Rule Definition for optimize the ACL queries (and ability to create a sharing rule)
 - ACL Voter for use the `security.context` service
 - Ability to set permissions for roles or users
 - Ability to define a hierarchy of role (with all roles in all associated groups)
-- Merge the permissions of roles children of associated roles with user, group, and token.
+- Merge the permissions of roles children of associated roles with user, role, and token
+- Define an anonymous role for various host with the direct injection of the role in token (regex compatible)
 - Execution cache system for the ACL/ACE getter
-- Execution cache system for the determination of all roles of the token
+- Execution cache system for the determination of all roles (of token, user, group and children role) of the token
 - Doctrine ORM Filter for filter the records in query (all type)
 - Doctrine Listener for empty the record field value for all query type
 - Doctrine Listener for keep the old value in the record field value if the user has not the permission of action
@@ -26,11 +27,18 @@ Features include:
 - Ability to replace the 'hasPermission()' JMS Expression (and twig function)
 - Ability to add the 'hasFieldPermission()' JMS Expression (and twig function)
 - Commands for:
+ * create/delete a user
  * create/delete a role
  * create/delete a group
- * associate/desassociate a role with group
- * associate/desassociate a user with group
- * add/revoke permissions by user or by role for a defined class (or record entity)
+ * promote/demote a user
+ * promote/demote a group
+ * associate/disassociate a user from a group
+ * add/remove child of role
+ * grant/revoke permissions by user or by role for a defined class (or record entity)
+ * display direct and indirect roles of user (anonymous role of host compatible)
+ * display direct and indirect roles of group (anonymous role of host compatible)
+ * display direct and indirect children of role (anonymous role of host compatible)
+ 
  * display the permissions by user or by role for a defined class (or a record entity)
  * display the calculated permissions by user or by role for a defined class (or a record entity)
 

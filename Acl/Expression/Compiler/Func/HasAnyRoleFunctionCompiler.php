@@ -57,7 +57,7 @@ class HasAnyRoleFunctionCompiler implements FunctionCompilerInterface
                 $compiler->write(', ');
             }
             $first = false;
-            $compiler->write("'" . $arg->value . "'");
+            $compiler->write('\'' . $arg->value . '\'');
         }
 
         $compiler->write('])');
