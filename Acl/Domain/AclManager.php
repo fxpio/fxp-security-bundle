@@ -16,6 +16,7 @@ use Symfony\Component\Security\Acl\Model\ObjectIdentityRetrievalStrategyInterfac
 use Symfony\Component\Security\Acl\Model\ObjectIdentityInterface;
 use Symfony\Component\Security\Acl\Domain\ObjectIdentity;
 use Symfony\Component\Security\Acl\Permission\MaskBuilder;
+use Symfony\Component\Security\Acl\Permission\BasicPermissionMap;
 use Symfony\Component\Security\Acl\Exception\InvalidDomainObjectException;
 use Symfony\Component\Security\Acl\Exception\AclAlreadyExistsException;
 use Symfony\Component\Security\Acl\Exception\NoAceFoundException;
@@ -468,7 +469,7 @@ class AclManager extends AbstractAclManager
     {
         try {
             $acl = $this->getAclProvider()->findAcl($oid);
-            $masks = $this->getAllMasks($masks);
+            $masks = $this->getAllMasks($masks, $oid);
 
             if (null === $field) {
                 return $acl->isGranted($masks, $securityIdentities);
@@ -653,100 +654,24 @@ class AclManager extends AbstractAclManager
      * Get the all masks for allow the access on greater permissions define by
      * the Symfony2 ACL Advanced Pre-Authorization Decisions Documentation.
      *
-     * @param array $masks The masks
+     * @param array  $masks  The masks
+     * @param object $object The object
      *
      * @return array The all masks to find the access
      */
-    protected function getAllMasks(array $masks)
+    protected function getAllMasks(array $masks, $object)
     {
-        $allMasks = array();
+        $all = array();
+        $map = new BasicPermissionMap();
 
         foreach ($masks as $mask) {
+            $mask = implode('', $this->convertToAclName($mask));
 
-            switch ($mask) {
-                case MaskBuilder::MASK_VIEW:
-                    $allMasks = array_merge($allMasks, array(
-                        MaskBuilder::MASK_VIEW,
-                        MaskBuilder::MASK_EDIT,
-                        MaskBuilder::MASK_OPERATOR,
-                        MaskBuilder::MASK_MASTER,
-                        MaskBuilder::MASK_OWNER,
-                        MaskBuilder::MASK_IDDQD,
-                    ));
-                    break;
-
-                case MaskBuilder::MASK_EDIT:
-                    $allMasks = array_merge($allMasks, array(
-                        MaskBuilder::MASK_EDIT,
-                        MaskBuilder::MASK_OPERATOR,
-                        MaskBuilder::MASK_MASTER,
-                        MaskBuilder::MASK_OWNER,
-                        MaskBuilder::MASK_IDDQD,
-                    ));
-                    break;
-
-                case MaskBuilder::MASK_CREATE:
-                    $allMasks = array_merge($allMasks, array(
-                        MaskBuilder::MASK_CREATE,
-                        MaskBuilder::MASK_OPERATOR,
-                        MaskBuilder::MASK_MASTER,
-                        MaskBuilder::MASK_OWNER,
-                        MaskBuilder::MASK_IDDQD,
-                    ));
-                    break;
-
-                case MaskBuilder::MASK_DELETE:
-                    $allMasks = array_merge($allMasks, array(
-                        MaskBuilder::MASK_DELETE,
-                        MaskBuilder::MASK_OPERATOR,
-                        MaskBuilder::MASK_MASTER,
-                        MaskBuilder::MASK_OWNER,
-                        MaskBuilder::MASK_IDDQD,
-                    ));
-                    break;
-
-                case MaskBuilder::MASK_UNDELETE:
-                    $allMasks = array_merge($allMasks, array(
-                        MaskBuilder::MASK_UNDELETE,
-                        MaskBuilder::MASK_OPERATOR,
-                        MaskBuilder::MASK_MASTER,
-                        MaskBuilder::MASK_OWNER,
-                        MaskBuilder::MASK_IDDQD,
-                    ));
-                    break;
-
-                case MaskBuilder::MASK_OPERATOR:
-                    $allMasks = array_merge($allMasks, array(
-                        MaskBuilder::MASK_OPERATOR,
-                        MaskBuilder::MASK_MASTER,
-                        MaskBuilder::MASK_OWNER,
-                        MaskBuilder::MASK_IDDQD,
-                    ));
-                    break;
-
-                case MaskBuilder::MASK_MASTER:
-                    $allMasks = array_merge($allMasks, array(
-                        MaskBuilder::MASK_MASTER,
-                        MaskBuilder::MASK_OWNER,
-                        MaskBuilder::MASK_IDDQD,
-                    ));
-                    break;
-
-                case MaskBuilder::MASK_OWNER:
-                    $allMasks = array_merge($allMasks, array(
-                        MaskBuilder::MASK_OWNER,
-                        MaskBuilder::MASK_IDDQD,
-                    ));
-                    break;
-
-                case MaskBuilder::MASK_IDDQD:
-                    $allMasks = array_merge($allMasks, array(
-                        MaskBuilder::MASK_IDDQD,
-                    ));
-                    break;
+            if ($map->contains($mask)) {
+                $all = array_merge($all, $map->getMasks($mask, $object));
             }
         }
 
-        return array_unique($allMasks);
+        return array_unique($all);
     }
 }
