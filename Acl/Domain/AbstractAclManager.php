@@ -23,6 +23,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Acl\Model\ObjectIdentityRetrievalStrategyInterface;
 use Sonatra\Bundle\SecurityBundle\Acl\Model\PermissionContextInterface;
 use Sonatra\Bundle\SecurityBundle\Acl\Model\AclManagerInterface;
+use Sonatra\Bundle\SecurityBundle\Acl\Util\AclUtils;
 use Sonatra\Bundle\SecurityBundle\Exception\SecurityException;
 
 /**
@@ -48,81 +49,6 @@ abstract class AbstractAclManager implements AclManagerInterface
     {
         $this->aclProvider = $aclProvider;
         $this->objectIdentityRetrievalStrategy = $objectIdentityRetrievalStrategy;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function convertToMask($mask)
-    {
-        if (is_int($mask)) {
-            return $mask;
-        }
-
-        if (!is_string($mask) && !is_array($mask)) {
-            throw new SecurityException('The mask must be a string, or array of string or int (the symfony mask value)');
-        }
-
-        // convert the rights to mask
-        $mask = (array) $mask;
-        $builder = new MaskBuilder();
-        $maskConverted = null;
-
-        try {
-            foreach ($mask as $m) {
-                $maskConverted = strtoupper($m);
-                $builder->add($m);
-            }
-
-        } catch (\Exception $e) {
-            throw new SecurityException(sprintf('The right "%s" does not exist', $maskConverted));
-        }
-
-        return $builder->get();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function convertToAclName($mask)
-    {
-        $mb = new MaskBuilder($mask);
-        $pattern = $mb->getPattern();
-        $rights = array();
-
-        if (false !== strpos($pattern, MaskBuilder::CODE_VIEW)) {
-            $rights[] = 'VIEW';
-        }
-
-        if (false !== strpos($pattern, MaskBuilder::CODE_CREATE)) {
-            $rights[] = 'CREATE';
-        }
-
-        if (false !== strpos($pattern, MaskBuilder::CODE_EDIT)) {
-            $rights[] = 'EDIT';
-        }
-
-        if (false !== strpos($pattern, MaskBuilder::CODE_DELETE)) {
-            $rights[] = 'DELETE';
-        }
-
-        if (false !== strpos($pattern, MaskBuilder::CODE_UNDELETE)) {
-            $rights[] = 'UNDELETE';
-        }
-
-        if (false !== strpos($pattern, MaskBuilder::CODE_OPERATOR)) {
-            $rights[] = 'OPERATOR';
-        }
-
-        if (false !== strpos($pattern, MaskBuilder::CODE_MASTER)) {
-            $rights[] = 'MASTER';
-        }
-
-        if (false !== strpos($pattern, MaskBuilder::CODE_OWNER)) {
-            $rights[] = 'OWNER';
-        }
-
-        return $rights;
     }
 
     /**
@@ -271,19 +197,19 @@ abstract class AbstractAclManager implements AclManagerInterface
 
                 } else {
                     // Merge all existing permissions with new permissions
-                    $newRights = $this->convertToAclName($context->getMask());
+                    $newRights = AclUtils::convertToAclName($context->getMask());
 
-                    foreach ($this->convertToAclName($ace->getMask()) as $currentRight) {
+                    foreach (AclUtils::convertToAclName($ace->getMask()) as $currentRight) {
                         if (!in_array($currentRight, $newRights)) {
                             $newRights[] = $currentRight;
                         }
                     }
 
                     if (null === $field) {
-                        $acl->{"update{$type}Ace"}($i, $this->convertToMask($newRights), $context->getGrantingRule());
+                        $acl->{"update{$type}Ace"}($i, AclUtils::convertToMask($newRights), $context->getGrantingRule());
 
                     } else {
-                        $acl->{"update{$type}FieldAce"}($i, $field, $this->convertToMask($newRights, $context->getGrantingRule()));
+                        $acl->{"update{$type}FieldAce"}($i, $field, AclUtils::convertToMask($newRights, $context->getGrantingRule()));
                     }
                 }
 
@@ -338,8 +264,8 @@ abstract class AbstractAclManager implements AclManagerInterface
             } elseif ($context->hasDifferentPermission($ace)) {
                 // find ace for identity but the permissions is different
                 // Remove permissions in current permissions
-                $currentRights = $this->convertToAclName($ace->getMask());
-                $removeRights = $this->convertToAclName($context->getMask());
+                $currentRights = AclUtils::convertToAclName($ace->getMask());
+                $removeRights = AclUtils::convertToAclName($context->getMask());
 
                 foreach ($currentRights as $j => $currentRight) {
                     if (in_array($currentRight, $removeRights)) {
@@ -357,10 +283,10 @@ abstract class AbstractAclManager implements AclManagerInterface
 
                 // update permissions
                 else if (null === $field) {
-                    $acl->{"update{$type}Ace"}($i, $this->convertToMask($currentRights));
+                    $acl->{"update{$type}Ace"}($i, AclUtils::convertToMask($currentRights));
 
                 } else {
-                    $acl->{"update{$type}FieldAce"}($i, $field, $this->convertToMask($currentRights));
+                    $acl->{"update{$type}FieldAce"}($i, $field, AclUtils::convertToMask($currentRights));
                 }
             }
             // Ace for other identity (ignored)

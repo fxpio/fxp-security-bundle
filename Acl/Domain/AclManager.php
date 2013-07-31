@@ -24,6 +24,7 @@ use Symfony\Component\Security\Acl\Exception\AclNotFoundException;
 use Symfony\Component\Security\Acl\Voter\FieldVote;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
+use Sonatra\Bundle\SecurityBundle\Acl\Util\AclUtils;
 use Sonatra\Bundle\SecurityBundle\Acl\Model\AclRuleManagerInterface;
 use Sonatra\Bundle\SecurityBundle\Acl\Domain\AbstractAclManager;
 use Sonatra\Bundle\SecurityBundle\Exception\SecurityException;
@@ -283,7 +284,7 @@ class AclManager extends AbstractAclManager
         }
 
         foreach ($mask as $m) {
-            $masks[] = $this->convertToMask($m);
+            $masks[] = AclUtils::convertToMask($m);
         }
 
         // get the object or class
@@ -360,7 +361,7 @@ class AclManager extends AbstractAclManager
         }
 
         if (is_int($type)) {
-            $type = $this->convertToAclName($type);
+            $type = AclUtils::convertToAclName($type);
         }
 
         $classname = $this->getDomainObjectClassname($domainObject);
@@ -505,24 +506,24 @@ class AclManager extends AbstractAclManager
             $acl = $this->getAclProvider()->findAcl($oid);
 
         } catch (AclNotFoundException $e) {
-            return $this->convertToMask($rights);
+            return AclUtils::convertToMask($rights);
 
         } catch (NoAceFoundException $e) {
-            return $this->convertToMask($rights);
+            return AclUtils::convertToMask($rights);
         }
 
         $aces = $this->getAces($acl, $type, $field);
 
         foreach ($aces as $i => $ace) {
             if ($ace->getSecurityIdentity() == $securityIdentity) {
-                $rights = array_merge($rights, $this->convertToAclName($ace->getMask()));
+                $rights = array_merge($rights, AclUtils::convertToAclName($ace->getMask()));
             }
         }
 
         // remove doublon
         $rights = array_unique($rights);
 
-        return $this->convertToMask($rights);
+        return AclUtils::convertToMask($rights);
     }
 
     /**
@@ -544,7 +545,7 @@ class AclManager extends AbstractAclManager
     {
         $oid = $this->getObjectIdentifier($domainObject);
         $securityIdentity = $this->getSecurityIdentity($securityIdentity);
-        $mask = $this->convertToMask($mask);
+        $mask = AclUtils::convertToMask($mask);
         $context = $this->doCreatePermissionContext($type, $securityIdentity, $mask, $index, $granting, $grantingRule);
 
         try {
@@ -597,7 +598,7 @@ class AclManager extends AbstractAclManager
     {
         $oid = $this->getObjectIdentifier($domainObject);
         $securityIdentity = $this->getSecurityIdentity($securityIdentity);
-        $mask = $this->convertToMask($mask);
+        $mask = AclUtils::convertToMask($mask);
         $context = $this->doCreatePermissionContext($type, $securityIdentity, $mask);
 
         $acl = $this->getAclProvider()->findAcl($oid);
@@ -665,7 +666,7 @@ class AclManager extends AbstractAclManager
         $map = new BasicPermissionMap();
 
         foreach ($masks as $mask) {
-            $mask = implode('', $this->convertToAclName($mask));
+            $mask = implode('', AclUtils::convertToAclName($mask));
 
             if ($map->contains($mask)) {
                 $all = array_merge($all, $map->getMasks($mask, $object));

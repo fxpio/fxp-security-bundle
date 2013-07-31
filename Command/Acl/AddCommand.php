@@ -17,6 +17,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Sonatra\Bundle\SecurityBundle\Acl\Domain\AclManager;
+use Sonatra\Bundle\SecurityBundle\Acl\Util\AclUtils;
 
 /**
  * Add domain (class or object) rights.
@@ -175,7 +176,7 @@ EOF
 
         // display new rights
         $mask = $aclManager->$getMethod($identity, $domain);
-        $rights = $aclManager->convertToAclName($mask);
+        $rights = AclUtils::convertToAclName($mask);
         $output->writeln(array('', "<info>Newing $domainType rights:</info> [ ".implode(', ', $rights)." ]"));
     }
 
@@ -201,7 +202,7 @@ EOF
 
         // display new rights
         $mask = $aclManager->$getMethod($identity, $domain, $field);
-        $rights = $aclManager->convertToAclName($mask);
+        $rights = AclUtils::convertToAclName($mask);
         $output->writeln(array('', "<info>Newing $domainType field rights:</info> [ ".implode(', ', $rights)." ]"));
     }
 }

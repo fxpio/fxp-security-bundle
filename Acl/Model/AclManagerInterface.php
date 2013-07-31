@@ -330,24 +330,6 @@ interface AclManagerInterface
     public function preloadAcls(array $objects);
 
     /**
-     * Convert the acl name or the array of acl name to mask.
-     *
-     * @param int | string | array $mask
-     *
-     * @return integer
-     */
-    public function convertToMask($mask);
-
-    /**
-     * Convert the mask to array of acl name.
-     *
-     * @param int The mask
-     *
-     * @return array The list of permission (in string)
-     */
-    public function convertToAclName($mask);
-
-    /**
      * Get the internal acl rule.
      *
      * @param string | int                            $type         The mask type

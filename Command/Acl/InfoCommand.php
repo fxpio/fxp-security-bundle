@@ -19,6 +19,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Security\Acl\Voter\FieldVote;
 use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
+use Sonatra\Bundle\SecurityBundle\Acl\Util\AclUtils;
 
 /**
  * Display the identifier rights of class/field.
@@ -149,7 +150,7 @@ EOF
 
             // get class rights
             $classMask = $aclManager->$getMethod($identity, $domain);
-            $classRights = $aclManager->convertToAclName($classMask);
+            $classRights = AclUtils::convertToAclName($classMask);
 
             // get fields rights
             foreach ($fields as $cField) {
@@ -157,7 +158,7 @@ EOF
 
                 foreach ($this->rightsDisplayed as $right) {
                     $fieldMask = $aclManager->$getFieldMethod($identity, $domain, $cField);
-                    $fieldRights[$cField] = $aclManager->convertToAclName($fieldMask);
+                    $fieldRights[$cField] = AclUtils::convertToAclName($fieldMask);
                 }
             }
         }
