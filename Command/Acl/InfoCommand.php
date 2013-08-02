@@ -11,6 +11,14 @@
 
 namespace Sonatra\Bundle\SecurityBundle\Command\Acl;
 
+use Symfony\Component\Security\Core\Role\RoleInterface;
+
+use FOS\UserBundle\Model\GroupInterface;
+
+use Symfony\Component\Security\Core\User\UserInterface;
+
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+
 use Symfony\Component\Security\Core\Role\Role;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
@@ -18,7 +26,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Security\Acl\Voter\FieldVote;
-use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
+use Sonatra\Bundle\SecurityBundle\Core\Token\ConsoleToken;
 use Sonatra\Bundle\SecurityBundle\Acl\Util\AclUtils;
 
 /**
@@ -29,7 +37,7 @@ use Sonatra\Bundle\SecurityBundle\Acl\Util\AclUtils;
 class InfoCommand extends ContainerAwareCommand
 {
     protected $rightsDisplayed = array('VIEW', 'CREATE', 'EDIT',
-                'DELETE', 'UNDELETE', 'OPERATOR', 'MASTER', 'OWNER', 'IDDQD',);
+                'DELETE', 'UNDELETE', 'OPERATOR', 'MASTER', 'OWNER');
 
     /**
      * {@inheritdoc}
@@ -44,7 +52,6 @@ class InfoCommand extends ContainerAwareCommand
                 new InputArgument('domain-class-name', InputArgument::REQUIRED, 'The domain class name to get the right for'),
                 new InputArgument('domain-field-name', InputArgument::OPTIONAL, 'The domain class field name to get the right for'),
                 new InputOption('domainid', null, InputOption::VALUE_REQUIRED, 'This domain id (only for object)'),
-                new InputOption('security-identity', null, InputOption::VALUE_REQUIRED, 'This security identity type', 'role'),
                 new InputOption('host', null, InputOption::VALUE_REQUIRED, 'The hostname pattern (for default anonymous role)', 'localhost'),
                 new InputOption('no-host', null, InputOption::VALUE_NONE, 'Not display the role of host'),
                 new InputOption('calc', 'c', InputOption::VALUE_NONE, 'Get the rights with granted method (calculated)')
@@ -103,6 +110,7 @@ EOF
         // init get acl rights
         $classRights = array();
         $fieldRights = array();
+        $aclManipulator = $this->getContainer()->get('sonatra.acl.manipulator');
 
         if (null === $field) {
             $reflClass = new \ReflectionClass($domainClass);
@@ -114,10 +122,19 @@ EOF
 
         // check with all acl voter
         if ($calculated) {
-            $toekenIdentity = 'user' === $identityType ? $identity : 'console.';
             $sc = $this->getContainer()->get('security.context');
 
-            $sc->setToken(new AnonymousToken('key', $toekenIdentity, $this->getHostRoles($host)));
+            if ($identity instanceof UserInterface) {
+                $sc->setToken(new UsernamePasswordToken($identity, '', 'key', $this->getHostRoles($host)));
+
+            } elseif ($identity instanceof GroupInterface) {
+                $roles = array_merge($identity->getRoles(), $this->getHostRoles($host));
+                $sc->setToken(new ConsoleToken('key', '', $roles));
+
+            } elseif ($identity instanceof RoleInterface) {
+                $roles = array_merge(array($identityName), $this->getHostRoles($host));
+                $sc->setToken(new ConsoleToken('key', '', $roles));
+            }
 
             // get class rights
             foreach ($this->rightsDisplayed as $right) {
@@ -139,7 +156,6 @@ EOF
 
         // check with only ACL stored in table
         } else {
-            $aclManager = $this->getContainer()->get('sonatra.acl.manager');
             $getMethod = 'getClassPermission';
             $getFieldMethod = 'getClassFieldPermission';
 
@@ -149,7 +165,7 @@ EOF
             }
 
             // get class rights
-            $classMask = $aclManager->$getMethod($identity, $domain);
+            $classMask = $aclManipulator->$getMethod($identity, $domain);
             $classRights = AclUtils::convertToAclName($classMask);
 
             // get fields rights
@@ -157,7 +173,7 @@ EOF
                 $fieldRights[$cField] = array();
 
                 foreach ($this->rightsDisplayed as $right) {
-                    $fieldMask = $aclManager->$getFieldMethod($identity, $domain, $cField);
+                    $fieldMask = $aclManipulator->$getFieldMethod($identity, $domain, $cField);
                     $fieldRights[$cField] = AclUtils::convertToAclName($fieldMask);
                 }
             }
@@ -220,7 +236,7 @@ EOF
             return array();
         }
 
-        $aclManager = $this->getContainer()->get('sonatra.acl.manager');
+        $aclManipulator = $this->getContainer()->get('sonatra.acl.manipulator');
         $out = array('', '  Class rights:');
         $rights = array();
         $width = 0;
@@ -252,7 +268,7 @@ EOF
             return array();
         }
 
-        $aclManager = $this->getContainer()->get('sonatra.acl.manager');
+        $aclManipulator = $this->getContainer()->get('sonatra.acl.manipulator');
         $out = array('');
         $fields = array();
         $width = 0;

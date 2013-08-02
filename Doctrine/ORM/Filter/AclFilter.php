@@ -25,42 +25,21 @@ class AclFilter extends SQLFilter
 {
     protected $listener;
     protected $em;
-    protected $enabled = true;
 
     /**
      * {@inheritdoc}
      */
     public function addFilterConstraint(ClassMetadata $targetEntity, $targetTableAlias)
     {
-        if (!$this->enabled) {
-            return '';
-        }
-
-        $class = $targetEntity->getName();
-        $rule = $this->getListener()->getAclRuleManager()->getRule('VIEW', $class);
-        $definition = $this->getListener()->getAclRuleManager()->getDefinition($rule);
         $am = $this->getListener()->getAclManager();
         $arm = $this->getListener()->getAclRuleManager();
+        $class = $targetEntity->getName();
+        $rule = $arm->getRule('VIEW', $class);
+        $definition = $arm->getDefinition($rule);
         $identities = $this->getListener()->getSecurityIdentities();
         $arc = new AclRuleContext($am, $arm, $identities);
 
         return $definition->addFilterConstraint($arc, $this->getEntityManager(), $targetEntity, $targetTableAlias);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function enable()
-    {
-        $this->enabled = true;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function disable()
-    {
-        $this->enabled = false;
     }
 
     /**

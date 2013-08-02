@@ -12,8 +12,10 @@
 namespace Sonatra\Bundle\SecurityBundle\Command\Group;
 
 use Sonatra\Bundle\SecurityBundle\Command\InfoCommand as BaseInfoCommand;
+use Sonatra\Bundle\SecurityBundle\Core\Token\ConsoleToken;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Security\Acl\Domain\RoleSecurityIdentity;
 use FOS\UserBundle\Model\GroupInterface;
 
 /**
@@ -81,11 +83,11 @@ class InfoCommand extends BaseInfoCommand
                 $tokenRoles = array_merge($tokenRoles, array($identity));
             }
 
-            $token = new AnonymousToken('key', 'console.', $tokenRoles);
-            $identities = $this->getContainer()->get('sonatra.acl.manager')->getIdentities($token);
+            $token = new ConsoleToken('key', 'console.', $tokenRoles);
+            $identities = $this->getContainer()->get('sonatra.acl.manager')->getSecurityIdentities($token);
 
             foreach ($identities as $child) {
-                if ($child instanceof RoleInterface
+                if ($child instanceof RoleSecurityIdentity
                         && (!($identity instanceof RoleInterface)
                                 || $child->getRole() !== $identity->getRole())) {
                     if (!array_key_exists($child->getRole(), $allRoles)) {

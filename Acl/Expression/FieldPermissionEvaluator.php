@@ -32,18 +32,18 @@ class FieldPermissionEvaluator
     }
 
     /**
-     * Check if token ha role (with role hierarchy and group).
+     * Check if token has field permission of domain object.
      *
-     * @param TokenInterface $token
-     * @param mixed          $domainObject
-     * @param string         $field
-     * @param string         $mask
+     * @param TokenInterface                      $token
+     * @param DomainObjectInterface|object|string $domainObject
+     * @param string                              $field
+     * @param int|string|array                    $mask
      *
      * @return boolean
      */
     public function hasFieldPermission(TokenInterface $token, $domainObject, $field, $mask)
     {
-        $sis = $this->aclManager->getIdentities($token);
+        $sis = $this->aclManager->getSecurityIdentities($token);
 
         return $this->aclManager->isFieldGranted($sis, $domainObject, $field, $mask);
     }

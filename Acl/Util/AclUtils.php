@@ -12,7 +12,16 @@
 namespace Sonatra\Bundle\SecurityBundle\Acl\Util;
 
 use Sonatra\Bundle\SecurityBundle\Exception\SecurityException;
+use Symfony\Component\Security\Acl\Domain\UserSecurityIdentity;
+use Symfony\Component\Security\Acl\Domain\RoleSecurityIdentity;
+use Symfony\Component\Security\Acl\Model\ObjectIdentityInterface;
+use Symfony\Component\Security\Acl\Model\SecurityIdentityInterface;
 use Symfony\Component\Security\Acl\Permission\MaskBuilder;
+use Symfony\Component\Security\Acl\Voter\FieldVote;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Util\ClassUtils;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\Role\RoleInterface;
 
 /**
  * Class related functionality for acl manipulation.
@@ -24,7 +33,7 @@ class AclUtils
     /**
      * Convert the acl name or the array of acl name to mask.
      *
-     * @param int | string | array $mask
+     * @param int|string|array $mask
      *
      * @return integer
      */
@@ -102,5 +111,100 @@ class AclUtils
         }
 
         return $rights;
+    }
+
+    /**
+     * Creates a new object of SecurityIdentityInterface from input implementing
+     * one of UserInterface, RoleInterface or string representation.
+     *
+     * @param RoleInterface|UserInterface|TokenInterface|string|SecurityIdentityInterface $identity
+     *
+     * @return SecurityIdentityInterface
+     *
+     * @throws InvalidIdentityException
+     */
+    public static function convertSecurityIdentity($identity)
+    {
+        $sids = static::convertSecurityIdentities($identity);
+
+        return array_shift($sids);
+    }
+
+    /**
+     * Creates a new list of SecurityIdentityInterface from input implementing
+     * one of UserInterface, RoleInterface or string representation.
+     *
+     * @param RoleInterface[]|UserInterface[]|TokenInterface[]|string[]|SecurityIdentityInterface[] $identities
+     *
+     * @return SecurityIdentityInterface[]
+     *
+     * @throws InvalidIdentityException
+     */
+    public static function convertSecurityIdentities($identities)
+    {
+        $sids = array();
+
+        if (!is_array($identities)) {
+            $identities = array($identities);
+        }
+
+        foreach ($identities as $identity) {
+            if ($identity instanceof SecurityIdentityInterface) {
+                $sids[] = $identity;
+
+            } elseif ($identity instanceof UserInterface) {
+                $sids[] = UserSecurityIdentity::fromAccount($identity);
+
+            } elseif ($identity instanceof TokenInterface) {
+                $sids[] = UserSecurityIdentity::fromToken($identity);
+
+            } elseif ($identity instanceof RoleInterface) {
+                $sids[] = new RoleSecurityIdentity($identity->getRole());
+
+            } elseif (is_string($identity)) {
+                $sids[] = new RoleSecurityIdentity($identity);
+
+            } else {
+                $str = 'Identity must implement one of: RoleInterface, UserInterface or string';
+
+                if (is_object($identity)) {
+                    $str .= sprintf(' (%s given)', get_class($identity));
+                }
+
+                throw new \InvalidArgumentException($str);
+            }
+        }
+
+        return $sids;
+    }
+
+    /**
+     * Convert DomainObject class to the string of object classname.
+     *
+     * @param FieldVote|ObjectIdentity|object|string $domainObject
+     *
+     * @throws SecurityException When the domain object is not a string for class type
+     *
+     * @return string
+     */
+    public static function convertDomainObjectToClassname($domainObject)
+    {
+        if ($domainObject instanceof FieldVote) {
+            $domainObject = $domainObject->getDomainObject();
+        }
+
+        if ($domainObject instanceof ObjectIdentityInterface) {
+            $domainObject = $domainObject->getType();
+        }
+
+        if (is_object($domainObject)) {
+            $domainObject = get_class($domainObject);
+        }
+
+        if (!is_string($domainObject)) {
+            throw new SecurityException('The domain object must be an string for "class"" type');
+        }
+
+        return ClassUtils::getRealClass($domainObject);
     }
 }

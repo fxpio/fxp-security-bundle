@@ -13,13 +13,15 @@ namespace Sonatra\Bundle\SecurityBundle\Core\Authorization\Voter;
 
 use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Acl\Model\DomainObjectInterface;
 use Symfony\Component\Security\Acl\Model\ObjectIdentityInterface;
+use Symfony\Component\Security\Acl\Model\SecurityIdentityRetrievalStrategyInterface;
 use Symfony\Component\Security\Acl\Voter\FieldVote;
 use Sonatra\Bundle\SecurityBundle\Acl\Model\AclManagerInterface;
 
 /**
- * AclVoter uses a Doctrine RoleHierarchy to determine the roles granted on
- * object, object field, class, or class field to the user before voting.
+ * AclVoter to determine the roles granted on object, object field, class, or
+ * class field to the token before voting.
  *
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
@@ -31,13 +33,21 @@ class AclVoter implements VoterInterface
     private $aclManager;
 
     /**
+     * @var SecurityIdentityRetrievalStrategyInterface
+     */
+    private $sidRetrievalStrategy;
+
+    /**
      * Constructor.
      *
-     * @param AclManagerInterface $aclManager
+     * @param AclManagerInterface                        $aclManager
+     * @param SecurityIdentityRetrievalStrategyInterface $sidRetrievalStrategy
      */
-    public function __construct(AclManagerInterface $aclManager)
+    public function __construct(AclManagerInterface $aclManager,
+            SecurityIdentityRetrievalStrategyInterface $sidRetrievalStrategy)
     {
         $this->aclManager = $aclManager;
+        $this->sidRetrievalStrategy = $sidRetrievalStrategy;
     }
 
     /**
@@ -55,19 +65,22 @@ class AclVoter implements VoterInterface
     {
         // field
         if ($class instanceof FieldVote) {
-            if (is_string($class->getDomainObject()) || $class->getDomainObject() instanceof ObjectIdentityInterface) {
+            $domainObject = $class->getDomainObject();
+
+            if (is_string($domainObject)
+                    || $domainObject instanceof DomainObjectInterface
+                    || $domainObject instanceof ObjectIdentityInterface) {
                 return true;
             }
 
-            if (is_object($class->getDomainObject())) {
-                $ref = new \ReflectionClass($class->getDomainObject());
-
-                return $ref->hasMethod('getId');
+            if (is_object($domainObject)) {
+                return method_exists($domainObject, 'getId');
             }
         }
-
         // class
-        if (is_string($class) || $class instanceof ObjectIdentityInterface) {
+        if (is_string($class)
+                || $class instanceof DomainObjectInterface
+                || $class instanceof ObjectIdentityInterface) {
             return true;
         }
 
@@ -91,7 +104,7 @@ class AclVoter implements VoterInterface
             return $result;
         }
 
-        $identities = $this->aclManager->getIdentities($token);
+        $sids = $this->sidRetrievalStrategy->getSecurityIdentities($token);
 
         foreach ($attributes as $attribute) {
             if (!$this->supportsAttribute($attribute)) {
@@ -100,7 +113,7 @@ class AclVoter implements VoterInterface
 
             $result = VoterInterface::ACCESS_DENIED;
 
-            if ($this->aclManager->isGranted($identities, $object, $attribute)) {
+            if ($this->aclManager->isGranted($sids, $object, $attribute)) {
                 return VoterInterface::ACCESS_GRANTED;
             }
         }

@@ -15,6 +15,8 @@ use Sonatra\Bundle\SecurityBundle\Acl\DependencyInjection\RuleExtensionInterface
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
+ * ACL rule extension for add the rule definitions.
+ *
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
 class RuleExtension implements RuleExtensionInterface

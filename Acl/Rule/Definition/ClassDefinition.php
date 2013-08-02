@@ -13,10 +13,12 @@ namespace Sonatra\Bundle\SecurityBundle\Acl\Rule\Definition;
 
 use Sonatra\Bundle\SecurityBundle\Acl\Domain\AbstractAclRuleDefinition;
 use Sonatra\Bundle\SecurityBundle\Acl\Model\AclRuleContextInterface;
-use Doctrine\ORM\EntityManager;
-use Doctrine\Common\Persistence\Mapping\ClassMetadata;
+use Sonatra\Bundle\SecurityBundle\Acl\Util\AclUtils;
 use Symfony\Component\Security\Acl\Domain\ObjectIdentity;
 use Symfony\Component\Security\Acl\Domain\UserSecurityIdentity;
+use Symfony\Component\Security\Acl\Model\ObjectIdentityInterface;
+use Doctrine\ORM\EntityManager;
+use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 
 /**
  * The Class ACL Rule Definition.
@@ -36,13 +38,13 @@ class ClassDefinition extends AbstractAclRuleDefinition
     /**
      * {@inheritdoc}
      */
-    public function isGranted(AclRuleContextInterface $arc, $domainObject, array $masks, $field = null)
+    public function isGranted(AclRuleContextInterface $arc, ObjectIdentityInterface $oid, array $masks, $field = null)
     {
         $am = $arc->getAclManager();
-        $securityIdentities = $arc->getSecurityIdentities();
-        $coid = $am->getObjectIdentifier(new ObjectIdentity('class', $am->getDomainObjectClassname($domainObject)));
+        $sids = $arc->getSecurityIdentities();
+        $coid = new ObjectIdentity('class', AclUtils::convertDomainObjectToClassname($oid));
 
-        return $am->doIsGranted($securityIdentities, $masks, $coid, $field);
+        return $am->doIsGranted($sids, $masks, $coid, $field);
     }
 
     /**
@@ -50,9 +52,9 @@ class ClassDefinition extends AbstractAclRuleDefinition
      */
     public function addFilterConstraint(AclRuleContextInterface $arc, EntityManager $em, ClassMetadata $targetEntity, $targetTableAlias)
     {
-        $securityIdentities = $arc->getSecurityIdentities();
+        $identities = $arc->getSecurityIdentities();
 
-        if (0 === count($securityIdentities)) {
+        if (0 === count($identities)) {
             return '';
         }
 
@@ -60,7 +62,7 @@ class ClassDefinition extends AbstractAclRuleDefinition
         $classname = $connection->quote($targetEntity->getName());
         $sids = array();
 
-        foreach ($securityIdentities as $sid) {
+        foreach ($identities as $sid) {
             if ($sid instanceof UserSecurityIdentity) {
                 $sids[] = 's.identifier = ' . $connection->quote($sid->getClass().'-'.$sid->getUsername());
                 continue;

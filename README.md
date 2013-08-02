@@ -9,7 +9,8 @@ and adds some interesting features.
 Features include:
 
 - Ability to define permissions for Entity (Class, Class Field, Record, Record Field)
-- Service manager (helper) for ACL/ACE manipulation (read, grant, revoke permissions)
+- Service manipulator (helper) for ACL/ACE manipulation (read, grant, revoke permissions)
+- Service manager (helper) for check granting on domain object (granted, field granted, preload ACLs)
 - ACL Rule Definition for optimize the ACL queries (and ability to create a sharing rule)
 - ACL Voter for use the `security.context` service
 - Ability to set permissions for roles or users
@@ -34,11 +35,11 @@ Features include:
  * promote/demote a group
  * associate/disassociate a user from a group
  * add/remove child of role
+ * add/remove parent of role
  * grant/revoke permissions by user or by role for a defined class (or record entity)
  * display direct and indirect roles of user (anonymous role of host compatible)
  * display direct and indirect roles of group (anonymous role of host compatible)
  * display direct and indirect children of role (anonymous role of host compatible)
- 
  * display the permissions by user or by role for a defined class (or a record entity)
  * display the calculated permissions by user or by role for a defined class (or a record entity)
 

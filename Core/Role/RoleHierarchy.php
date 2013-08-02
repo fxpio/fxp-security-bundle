@@ -11,11 +11,10 @@
 
 namespace Sonatra\Bundle\SecurityBundle\Core\Role;
 
-use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
+use Symfony\Component\Security\Core\Role\RoleHierarchy as BaseRoleHierarchy;
 use Symfony\Component\Security\Core\Role\RoleInterface;
 use Symfony\Component\Security\Core\Role\Role;
 use Symfony\Bridge\Doctrine\RegistryInterface;
-use Doctrine\ORM\EntityManager;
 use Sonatra\Bundle\SecurityBundle\Exception\SecurityException;
 
 /**
@@ -23,7 +22,7 @@ use Sonatra\Bundle\SecurityBundle\Exception\SecurityException;
  *
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-class RoleHierarchy implements RoleHierarchyInterface
+class RoleHierarchy extends BaseRoleHierarchy
 {
     /**
      * @var RegistryInterface
@@ -38,18 +37,22 @@ class RoleHierarchy implements RoleHierarchyInterface
     /**
      * @var array
      */
-    private $cache = array();
+    private $cache;
 
     /**
      * Constructor.
      *
+     * @param array    $hierarchy     An array defining the hierarchy
      * @param Registry $registry
      * @param string   $roleClassName
      */
-    public function __construct(RegistryInterface $registry, $roleClassname)
+    public function __construct(array $hierarchy, RegistryInterface $registry, $roleClassname)
     {
+        parent::__construct($hierarchy);
+
         $this->registry = $registry;
         $this->roleClassname = $roleClassname;
+        $this->cache = array();
     }
 
     /**
@@ -81,12 +84,16 @@ class RoleHierarchy implements RoleHierarchyInterface
         }
 
         //Get all children
-        $reachableRoles = array();
+        $reachableRoles = parent::getReachableRoles($roles);
         $em = $this->registry->getManagerForClass($this->roleClassname);
         $repo = $em->getRepository($this->roleClassname);
         $entityRoles = array();
 
-        $this->manageSqlFilter($em, false);
+        $filterIsEnabled = $em->getFilters()->isEnabled('sonatra_acl');
+
+        if ($filterIsEnabled) {
+            $em->getFilters()->disable('sonatra_acl');
+        }
 
         if (count($rolenames) > 0) {
             $entityRoles = $repo->findBy(array('name' => $rolenames));
@@ -106,7 +113,10 @@ class RoleHierarchy implements RoleHierarchyInterface
 
         // insert in cache
         $this->cache[$cacheName] = $reachableRoles;
-        $this->manageSqlFilter($em, true);
+
+        if ($filterIsEnabled) {
+            $em->getFilters()->enable('sonatra_acl');
+        }
 
         return $reachableRoles;
     }
@@ -131,29 +141,5 @@ class RoleHierarchy implements RoleHierarchyInterface
         }
 
         return $returnRoles;
-    }
-
-    /**
-     * Enable/Disable the ACL SQL Filter.
-     *
-     * @param boolean $enable
-     */
-    private function manageSqlFilter(EntityManager $em, $enable, $name = 'acl')
-    {
-        if (null === $name) {
-            return;
-        }
-
-        // exception when filter is not enabled
-        try {
-            if ($enable) {
-                $em->getFilters()->getFilter($name)->enable();
-
-            } else {
-                $em->getFilters()->getFilter($name)->disable();
-            }
-
-        } catch (\Exception $e) {
-        }
     }
 }

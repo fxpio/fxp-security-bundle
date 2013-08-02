@@ -13,6 +13,7 @@ namespace Sonatra\Bundle\SecurityBundle\Acl\Domain;
 
 use Sonatra\Bundle\SecurityBundle\Acl\Model\AclRuleDefinitionInterface;
 use Sonatra\Bundle\SecurityBundle\Acl\Model\AclRuleContextInterface;
+use Symfony\Component\Security\Acl\Model\ObjectIdentityInterface;
 use Doctrine\ORM\EntityManager;
 use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 
@@ -26,7 +27,7 @@ abstract class AbstractAclRuleDefinition implements AclRuleDefinitionInterface
     /**
      * {@inheritdoc}
      */
-    public function isGranted(AclRuleContextInterface $arc, $domainObject, array $masks, $field = null)
+    public function isGranted(AclRuleContextInterface $arc, ObjectIdentityInterface $oid, array $masks, $field = null)
     {
         return true;
     }

@@ -16,7 +16,6 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Sonatra\Bundle\SecurityBundle\Acl\Domain\AclManager;
 use Sonatra\Bundle\SecurityBundle\Acl\Util\AclUtils;
 
 /**
@@ -142,20 +141,20 @@ EOF
      */
     private function revokeRights(OutputInterface $output, $identity, $rights, $domainType, $domain)
     {
-        $aclManager = $this->getContainer()->get('sonatra.acl.manager');
+        $aclManipulator = $this->getContainer()->get('sonatra.acl.manipulator');
         $revokeMethod = 'revoke'.ucfirst($domainType).'Permission';
         $deleteMethod = 'delete'.ucfirst($domainType).'Permissions';
         $getMethod = 'get'.ucfirst($domainType).'Permission';
 
         if (empty($rights)) {
-            $aclManager->$deleteMethod($identity, $domain);
+            $aclManipulator->$deleteMethod($identity, $domain);
 
         } else {
-            $aclManager->$revokeMethod($identity, $domain, $rights);
+            $aclManipulator->$revokeMethod($identity, $domain, $rights);
         }
 
         // display new rights
-        $mask = $aclManager->$getMethod($identity, $domain);
+        $mask = $aclManipulator->$getMethod($identity, $domain);
         $rights = AclUtils::convertToAclName($mask);
         $output->writeln(array('', "<info>Remaining $domainType rights:</info> [ ".implode(', ', $rights)." ]"));
     }
@@ -172,20 +171,20 @@ EOF
      */
     private function revokeFieldRights(OutputInterface $output, $identity, $rights, $domainType, $domain, $field)
     {
-        $aclManager = $this->getContainer()->get('sonatra.acl.manager');
+        $aclManipulator = $this->getContainer()->get('sonatra.acl.manipulator');
         $revokeMethod = 'revoke'.ucfirst($domainType).'FieldPermission';
         $deleteMethod = 'delete'.ucfirst($domainType).'FieldPermissions';
         $getMethod = 'get'.ucfirst($domainType).'FieldPermission';
 
         if (empty($rights)) {
-            $aclManager->$deleteMethod($identity, $domain, $field);
+            $aclManipulator->$deleteMethod($identity, $domain, $field);
 
         } else {
-            $aclManager->$revokeMethod($identity, $domain, $field, $rights);
+            $aclManipulator->$revokeMethod($identity, $domain, $field, $rights);
         }
 
         // display new rights
-        $mask = $aclManager->$getMethod($identity, $domain, $field);
+        $mask = $aclManipulator->$getMethod($identity, $domain, $field);
         $rights = AclUtils::convertToAclName($mask);
         $output->writeln(array('', "<info>Remaining $domainType field rights:</info> [ ".implode(', ', $rights)." ]"));
     }

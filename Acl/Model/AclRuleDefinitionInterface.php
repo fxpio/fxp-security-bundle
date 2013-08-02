@@ -11,6 +11,7 @@
 
 namespace Sonatra\Bundle\SecurityBundle\Acl\Model;
 
+use Symfony\Component\Security\Acl\Model\ObjectIdentityInterface;
 use Doctrine\ORM\EntityManager;
 use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 
@@ -32,13 +33,13 @@ interface AclRuleDefinitionInterface
      * Check if identity is granted on ACL Manager.
      *
      * @param AclRuleContextInterface $arc
-     * @param mixed                   $domainObject
+     * @param ObjectIdentityInterface $oid
      * @param array                   $masks
      * @param string                  $field
      *
      * @return boolean
      */
-    public function isGranted(AclRuleContextInterface $arc, $domainObject, array $masks, $field = null);
+    public function isGranted(AclRuleContextInterface $arc, ObjectIdentityInterface $oid, array $masks, $field = null);
 
     /**
      * Add Doctrine ORM SQL Filter Constraint.

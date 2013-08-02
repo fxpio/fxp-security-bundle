@@ -11,16 +11,14 @@
 
 namespace Sonatra\Bundle\SecurityBundle\Command\Host;
 
-use Symfony\Component\Console\Input\InputOption;
-
-use Symfony\Component\Console\Input\InputArgument;
-
 use Sonatra\Bundle\SecurityBundle\Command\InfoCommand as BaseInfoCommand;
+use Sonatra\Bundle\SecurityBundle\Core\Token\ConsoleToken;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Security\Acl\Domain\RoleSecurityIdentity;
 use Symfony\Component\Security\Core\Role\Role;
-use Symfony\Component\Security\Core\Role\RoleInterface;
-use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
 
 /**
  * @author François Pluchino <francois.pluchino@sonatra.com>
@@ -54,11 +52,11 @@ class InfoCommand extends BaseInfoCommand
         // get calculated roles
         if ($calculated) {
             $tokenRoles = array_keys($allRoles);
-            $token = new AnonymousToken('key', 'console.', $tokenRoles);
-            $identities = $this->getContainer()->get('sonatra.acl.manager')->getIdentities($token);
+            $token = new ConsoleToken('key', 'console.', $tokenRoles);
+            $identities = $this->getContainer()->get('sonatra.acl.manager')->getSecurityIdentities($token);
 
             foreach ($identities as $child) {
-                if ($child instanceof RoleInterface) {
+                if ($child instanceof RoleSecurityIdentity) {
                     if (!array_key_exists($child->getRole(), $allRoles)) {
                         $allRoles[$child->getRole()] = 'role hierarchy';
                     }

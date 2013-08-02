@@ -1,39 +1,62 @@
 parameters:
-    sonatra.acl.rule.manager.base.class: Sonatra\Bundle\SecurityBundle\Acl\Domain\AclRuleManager
-    sonatra.acl.manager.base.class: Sonatra\Bundle\SecurityBundle\Acl\Domain\AclManager
-    sonatra.security.acl_voter.base.class: Sonatra\Bundle\SecurityBundle\Core\Authorization\Voter\AclVoter
-    sonatra.acl.rule.extension.base.class: Sonatra\Bundle\SecurityBundle\Acl\DependencyInjection\RuleExtension
+    sonatra.acl.rule.manager.class: Sonatra\Bundle\SecurityBundle\Acl\Domain\AclRuleManager
+    sonatra.acl.manager.class: Sonatra\Bundle\SecurityBundle\Acl\Domain\AclManager
+    sonatra.acl.manipulator.class: Sonatra\Bundle\SecurityBundle\Acl\Domain\AclManipulator
+    sonatra.security.acl_voter.class: Sonatra\Bundle\SecurityBundle\Core\Authorization\Voter\AclVoter
+    sonatra.acl.rule.extension.class: Sonatra\Bundle\SecurityBundle\Acl\DependencyInjection\RuleExtension
+
+    # override standard security/object identity retriveal strategy
+    security.acl.security_identity_retrieval_strategy.class: Sonatra\Bundle\SecurityBundle\Acl\Domain\SecurityIdentityRetrievalStrategy
+    security.acl.object_identity_retrieval_strategy.class: Sonatra\Bundle\SecurityBundle\Acl\Domain\ObjectIdentityRetrievalStrategy
 
 services:
+    #Override security identity retriveal strategy service
+    security.acl.security_identity_retrieval_strategy:
+        class:  '%security.acl.security_identity_retrieval_strategy.class%'
+        public: false
+        arguments:
+            - '@security.role_hierarchy'
+            - '@security.authentication.trust_resolver'
+            - '@doctrine'
+
     #Rule Extension
     sonatra.acl.rule.extension:
-        class: '%sonatra.acl.rule.extension.base.class%'
+        class: '%sonatra.acl.rule.extension.class%'
         arguments: ['@service_container', ['@sonatra.acl.rule_definition']]
         public: false
 
     #Rule Manager
     sonatra.acl.rule.manager:
-        class: '%sonatra.acl.rule.manager.base.class%'
+        class: '%sonatra.acl.rule.manager.class%'
         arguments:
             - '@sonatra.acl.rule.extension'
             - '%sonatra_security.acl_default_rule%'
             - '%sonatra_security.acl_rules%'
 
-    #ACL Manager
-    sonatra.acl.manager:
-        class: '%sonatra.acl.manager.base.class%'
+    #ACL Manipulator
+    sonatra.acl.manipulator:
+        class: '%sonatra.acl.manipulator.class%'
         arguments:
             - '@security.acl.provider'
+            - '@security.acl.security_identity_retrieval_strategy'
+            - '@security.acl.object_identity_retrieval_strategy'
+
+    #ACL Manager
+    sonatra.acl.manager:
+        class: '%sonatra.acl.manager.class%'
+        arguments:
+            - '@security.acl.provider'
+            - '@security.acl.security_identity_retrieval_strategy'
             - '@security.acl.object_identity_retrieval_strategy'
             - '@sonatra.acl.rule.manager'
-            - '@?sonatra.security.group_role'
-            - '@?sonatra.security.role_hierarchy'
 
     #Voter
     sonatra.security.class_voter:
         public:    false
-        class:     '%sonatra.security.acl_voter.base.class%'
-        arguments: ['@sonatra.acl.manager']
+        class:     '%sonatra.security.acl_voter.class%'
+        arguments:
+            - '@sonatra.acl.manager'
+            - '@security.acl.security_identity_retrieval_strategy'
         tags:      [ { name: security.voter, priority: 260 } ]
 
     #Acl Rule Definitions

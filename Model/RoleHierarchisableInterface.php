@@ -14,6 +14,8 @@ namespace Sonatra\Bundle\SecurityBundle\Model;
 use Symfony\Component\Security\Core\Role\RoleInterface;
 
 /**
+ * Interface for role hierarchisable.
+ *
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
 interface RoleHierarchisableInterface extends RoleInterface

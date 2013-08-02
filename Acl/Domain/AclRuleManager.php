@@ -14,6 +14,7 @@ namespace Sonatra\Bundle\SecurityBundle\Acl\Domain;
 use Sonatra\Bundle\SecurityBundle\Exception\SecurityException;
 use Sonatra\Bundle\SecurityBundle\Acl\Model\AclRuleManagerInterface;
 use Sonatra\Bundle\SecurityBundle\Acl\DependencyInjection\RuleExtensionInterface;
+use Symfony\Component\Security\Core\Util\ClassUtils;
 
 /**
  * ACL Rule Manager.
@@ -25,7 +26,7 @@ class AclRuleManager implements AclRuleManagerInterface
     /**
      * @var RuleExtensionInterface
      */
-    protected $definition;
+    protected $ruleExtension;
 
     /**
      * @var string
@@ -45,15 +46,15 @@ class AclRuleManager implements AclRuleManagerInterface
     /**
      * Constructor.
      *
-     * @param RuleExtensionInterface $definition
+     * @param RuleExtensionInterface $ruleExtension
      * @param array                  $rules
      * @param string                 $defaultRule
      */
-    public function __construct(RuleExtensionInterface $definition,
+    public function __construct(RuleExtensionInterface $ruleExtension,
             $defaultRule,
             array $rules = array())
     {
-        $this->definition = $definition;
+        $this->ruleExtension = $ruleExtension;
         $this->rules = $rules;
         $this->defaultRule = $defaultRule;
     }
@@ -81,10 +82,7 @@ class AclRuleManager implements AclRuleManagerInterface
      */
     public function setRule($rule, $type, $classname, $fieldname = null)
     {
-        if (0 === strpos($classname, 'Proxies\__CG__\\')) {
-            $classname = substr($classname, 15);
-        }
-
+        $classname = ClassUtils::getRealClass($classname);
         $rule = $this->validateRuleName($rule);
         $type = $this->validateTypeName($type);
         $cacheName = strtolower("$type::$classname:$fieldname");
@@ -99,10 +97,7 @@ class AclRuleManager implements AclRuleManagerInterface
      */
     public function getRule($type, $classname, $fieldname = null)
     {
-        if (0 === strpos($classname, 'Proxies\__CG__\\')) {
-            $classname = substr($classname, 15);
-        }
-
+        $classname = ClassUtils::getRealClass($classname);
         $cacheName = strtolower("$type::$classname:$fieldname");
 
         if (isset($this->cache[$cacheName])) {
@@ -172,7 +167,7 @@ class AclRuleManager implements AclRuleManagerInterface
      */
     public function getDefinition($name)
     {
-        return $this->definition->getDefinition($name);
+        return $this->ruleExtension->getDefinition($name);
     }
 
     /**
@@ -180,7 +175,7 @@ class AclRuleManager implements AclRuleManagerInterface
      */
     public function hasDefinition($name)
     {
-        return $this->definition->hasDefinition($name);
+        return $this->ruleExtension->hasDefinition($name);
     }
 
     /**
@@ -210,7 +205,7 @@ class AclRuleManager implements AclRuleManagerInterface
     {
         $type = strtoupper($type);
 
-        if (!defined('Sonatra\Bundle\SecurityBundle\Acl\Model\AclManagerInterface::'.$type)) {
+        if (!defined('Symfony\Component\Security\Acl\Permission\MaskBuilder::MASK_'.$type)) {
             throw new SecurityException(sprintf('The type "%s" in configuration of Sonatra ACL Rules does not exist', $type));
         }
 

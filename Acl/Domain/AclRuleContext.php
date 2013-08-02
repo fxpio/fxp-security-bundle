@@ -36,7 +36,7 @@ class AclRuleContext implements AclRuleContextInterface
     /**
      * @var SecurityIdentityInterface
      */
-    protected $securityIdentities;
+    protected $sids;
 
     /**
      * @var UserInterface
@@ -48,14 +48,14 @@ class AclRuleContext implements AclRuleContextInterface
      *
      * @param AclManagerInterface     $am
      * @param AclRuleManagerInterface $arm
-     * @param array                   $securityIdentities
+     * @param array                   $sids
      */
     public function __construct(AclManagerInterface $am,
-            AclRuleManagerInterface $arm, array $securityIdentities)
+            AclRuleManagerInterface $arm, array $sids)
     {
         $this->am = $am;
         $this->arm = $arm;
-        $this->securityIdentities = $securityIdentities;
+        $this->sids = $sids;
     }
 
     /**
@@ -79,7 +79,7 @@ class AclRuleContext implements AclRuleContextInterface
      */
     public function getSecurityIdentities()
     {
-        return $this->securityIdentities;
+        return $this->sids;
     }
 
     /**
@@ -88,7 +88,7 @@ class AclRuleContext implements AclRuleContextInterface
     public function getUser()
     {
         if (null === $this->user) {
-            foreach ($this->securityIdentities as $identity) {
+            foreach ($this->sids as $identity) {
                 if ($identity instanceof UserInterface) {
                     $this->user = $identity;
                     break;

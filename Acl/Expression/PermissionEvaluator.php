@@ -32,18 +32,18 @@ class PermissionEvaluator
     }
 
     /**
-     * Check if token ha role (with role hierarchy and group).
+     * Check if token has permission of domain object.
      *
-     * @param TokenInterface $token
-     * @param mixed          $domainObject
-     * @param string         $mask
+     * @param TokenInterface                      $token
+     * @param DomainObjectInterface|object|string $domainObject
+     * @param int|string|array                    $mask
      *
      * @return boolean
      */
     public function hasPermission(TokenInterface $token, $domainObject, $mask)
     {
-        $sis = $this->aclManager->getIdentities($token);
+        $sids = $this->aclManager->getSecurityIdentities($token);
 
-        return $this->aclManager->isGranted($sis, $domainObject, $mask);
+        return $this->aclManager->isGranted($sids, $domainObject, $mask);
     }
 }

@@ -11,268 +11,81 @@
 
 namespace Sonatra\Bundle\SecurityBundle\Acl\Domain;
 
-use Symfony\Component\Security\Acl\Model\MutableAclProviderInterface;
-use Symfony\Component\Security\Acl\Model\ObjectIdentityRetrievalStrategyInterface;
-use Symfony\Component\Security\Acl\Model\ObjectIdentityInterface;
-use Symfony\Component\Security\Acl\Domain\ObjectIdentity;
-use Symfony\Component\Security\Acl\Permission\MaskBuilder;
-use Symfony\Component\Security\Acl\Permission\BasicPermissionMap;
-use Symfony\Component\Security\Acl\Exception\InvalidDomainObjectException;
-use Symfony\Component\Security\Acl\Exception\AclAlreadyExistsException;
+use Sonatra\Bundle\SecurityBundle\Acl\Model\AclManagerInterface;
+use Sonatra\Bundle\SecurityBundle\Acl\Model\AclRuleManagerInterface;
+use Sonatra\Bundle\SecurityBundle\Acl\Util\AclUtils;
 use Symfony\Component\Security\Acl\Exception\NoAceFoundException;
 use Symfony\Component\Security\Acl\Exception\AclNotFoundException;
+use Symfony\Component\Security\Acl\Model\MutableAclProviderInterface;
+use Symfony\Component\Security\Acl\Model\ObjectIdentityInterface;
+use Symfony\Component\Security\Acl\Model\ObjectIdentityRetrievalStrategyInterface;
+use Symfony\Component\Security\Acl\Model\SecurityIdentityRetrievalStrategyInterface;
+use Symfony\Component\Security\Acl\Permission\BasicPermissionMap;
 use Symfony\Component\Security\Acl\Voter\FieldVote;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
-use Sonatra\Bundle\SecurityBundle\Acl\Util\AclUtils;
-use Sonatra\Bundle\SecurityBundle\Acl\Model\AclRuleManagerInterface;
-use Sonatra\Bundle\SecurityBundle\Acl\Domain\AbstractAclManager;
-use Sonatra\Bundle\SecurityBundle\Exception\SecurityException;
-use Sonatra\Bundle\SecurityBundle\Core\Role\GroupRoleInterface;
 
 /**
  * ACL Manager.
  *
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-class AclManager extends AbstractAclManager
+class AclManager implements AclManagerInterface
 {
+    /**
+     * @var MutableAclProviderInterface
+     */
+    protected $aclProvider;
+
+    /**
+     * @var SecurityIdentityRetrievalStrategyInterface
+     */
+    protected $sidRetrievalStrategy;
+
+    /**
+     * @var ObjectIdentityRetrievalStrategyInterface
+     */
+    protected $oidRetrievalStrategy;
+
     /**
      * @var AclRuleManagerInterface
      */
     protected $aclRuleManager;
 
     /**
-     * @var GroupRoleInterface
-     */
-    protected $groupRole;
-
-    /**
-     * @var RoleHierarchyInterface
-     */
-    protected $roleHierarchy;
-
-    /**
-     * @var array
-     */
-    protected $tokenIdentityCache = array();
-
-    /**
      * Constructor.
      *
-     * @param MutableAclProviderInterface              $aclProvider
-     * @param ObjectIdentityRetrievalStrategyInterface $objectIdentityRetrievalStrategy
-     * @param AclRuleInterface                         $aclRule
+     * @param MutableAclProviderInterface                $aclProvider
+     * @param SecurityIdentityRetrievalStrategyInterface $sidRetrievalStrategy
+     * @param ObjectIdentityRetrievalStrategyInterface   $oidRetrievalStrategy
+     * @param AclRuleManagerInterface                    $aclRuleManager
      */
     public function __construct(MutableAclProviderInterface $aclProvider,
-            ObjectIdentityRetrievalStrategyInterface $objectIdentityRetrievalStrategy,
-            AclRuleManagerInterface $aclRuleManager,
-            GroupRoleInterface $groupRole = null,
-            RoleHierarchyInterface $roleHierarchy = null)
+            SecurityIdentityRetrievalStrategyInterface $sidRetrievalStrategy,
+            ObjectIdentityRetrievalStrategyInterface $oidRetrievalStrategy,
+            AclRuleManagerInterface $aclRuleManager)
     {
-        parent::__construct($aclProvider, $objectIdentityRetrievalStrategy);
-
+        $this->aclProvider = $aclProvider;
+        $this->sidRetrievalStrategy = $sidRetrievalStrategy;
+        $this->oidRetrievalStrategy = $oidRetrievalStrategy;
         $this->aclRuleManager = $aclRuleManager;
-        $this->groupRole = $groupRole;
-        $this->roleHierarchy = $roleHierarchy;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getClassPermission($securityIdentity, $domainObject)
+    public function getSecurityIdentities(TokenInterface $token = null)
     {
-        return $this->getPermission($securityIdentity, 'class', $domainObject);
+        if (null === $token) {
+            return array();
+        }
+
+        return $this->sidRetrievalStrategy->getSecurityIdentities($token);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getObjectPermission($securityIdentity, $domainObject)
-    {
-        return $this->getPermission($securityIdentity, 'object', $domainObject);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getClassFieldPermission($securityIdentity, $domainObject, $field)
-    {
-        return $this->getPermission($securityIdentity, 'class', $domainObject, $field);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getObjectFieldPermission($securityIdentity, $domainObject, $field)
-    {
-        return $this->getPermission($securityIdentity, 'object', $domainObject, $field);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function addClassPermission($securityIdentity, $domainObject, $mask, $index = 0, $granting = true, $grantingRule = null)
-    {
-        $this->addPermission($securityIdentity, 'class', $domainObject, $mask, false, null, $index, $granting, $grantingRule);
-
-        return $this;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function addObjectPermission($securityIdentity, $domainObject, $mask, $index = 0, $granting = true, $grantingRule = null)
-    {
-        $this->addPermission($securityIdentity, 'object', $domainObject, $mask, false, null, $index, $granting, $grantingRule);
-
-        return $this;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setClassPermission($securityIdentity, $domainObject, $mask, $index = 0, $granting = true, $grantingRule = null)
-    {
-        $this->setPermission($securityIdentity, 'class', $domainObject, $mask, null, $index, $granting, $grantingRule);
-
-        return $this;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setObjectPermission($securityIdentity, $domainObject, $mask, $index = 0, $granting = true, $grantingRule = null)
-    {
-        $this->setPermission($securityIdentity, 'object', $domainObject, $mask, null, $index, $granting, $grantingRule);
-
-        return $this;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function addClassFieldPermission($securityIdentity, $domainObject, $field, $mask, $index = 0, $granting = true, $grantingRule = null)
-    {
-        $this->addPermission($securityIdentity, 'class', $domainObject, $mask, false, $field, $index, $granting, $grantingRule);
-
-        return $this;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function addObjectFieldPermission($securityIdentity, $domainObject, $field, $mask, $index = 0, $granting = true, $grantingRule = null)
-    {
-        $this->addPermission($securityIdentity, 'object', $domainObject, $mask, false, $field, $index, $granting, $grantingRule);
-
-        return $this;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setClassFieldPermission($securityIdentity, $domainObject, $field, $mask, $index = 0, $granting = true, $grantingRule = null)
-    {
-        $this->setPermission($securityIdentity, 'class', $domainObject, $mask, $field, $index, $granting, $grantingRule);
-
-        return $this;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setObjectFieldPermission($securityIdentity, $domainObject, $field, $mask, $index = 0, $granting = true, $grantingRule = null)
-    {
-        $this->setPermission($securityIdentity, 'object', $domainObject, $mask, $field, $index, $granting, $grantingRule);
-
-        return $this;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function revokeClassPermission($securityIdentity, $domainObject, $mask)
-    {
-        $this->revokePermission($securityIdentity, 'class', $domainObject, $mask);
-
-        return $this;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function revokeObjectPermission($securityIdentity, $domainObject, $mask)
-    {
-        $this->revokePermission($securityIdentity, 'object', $domainObject, $mask);
-
-        return $this;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function deleteClassPermissions($securityIdentity, $domainObject)
-    {
-        $this->deletePermissions($securityIdentity, 'class', $domainObject);
-
-        return $this;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function deleteObjectPermissions($securityIdentity, $domainObject)
-    {
-        $this->deletePermissions($securityIdentity, 'object', $domainObject);
-
-        return $this;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function revokeClassFieldPermission($securityIdentity, $domainObject, $field, $mask)
-    {
-        $this->revokePermission($securityIdentity, 'class', $domainObject, $mask, $field);
-
-        return $this;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function revokeObjectFieldPermission($securityIdentity, $domainObject, $field, $mask)
-    {
-        $this->revokePermission($securityIdentity, 'object', $domainObject, $mask, $field);
-
-        return $this;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function deleteClassFieldPermissions($securityIdentity, $domainObject, $field)
-    {
-        $this->deletePermissions($securityIdentity, 'class', $domainObject, $field);
-
-        return $this;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function deleteObjectFieldPermissions($securityIdentity, $domainObject, $field)
-    {
-        $this->deletePermissions($securityIdentity, 'object', $domainObject, $field);
-
-        return $this;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function isGranted($securityIdentities, $domainObject, $mask)
+    public function isGranted($sids, $domainObject, $mask)
     {
         $granted = false;
         $field = null;
@@ -293,42 +106,27 @@ class AclManager extends AbstractAclManager
             $domainObject = $domainObject->getDomainObject();
         }
 
-        $securityIdentities = $this->doCreateSecurityIdentities($securityIdentities);
+        $sids = AclUtils::convertSecurityIdentities($sids);
+        $oid = $this->oidRetrievalStrategy->getObjectIdentity($domainObject);
         $rule = $this->getRule($mask, $domainObject, $field);
         $definition = $this->aclRuleManager->getDefinition($rule);
-        $arc = new AclRuleContext($this, $this->aclRuleManager, $securityIdentities);
+        $arc = new AclRuleContext($this, $this->aclRuleManager, $sids);
 
-        return $definition->isGranted($arc, $domainObject, $masks, $field);
+        return $definition->isGranted($arc, $oid, $masks, $field);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function isFieldGranted($securityIdentities, $domainObject, $field, $mask)
+    public function isFieldGranted($sids, $domainObject, $field, $mask)
     {
         // override the field in FieldVote with the new field name
         if ($domainObject instanceof FieldVote) {
             $domainObject = $domainObject->getDomainObject();
         }
 
-        return $this->isGranted($securityIdentities,
+        return $this->isGranted($sids,
                 new FieldVote($domainObject, $field), $mask);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function deleteAclFor($domainObject)
-    {
-        $oid = $this->getObjectIdentifier($domainObject);
-
-        if (null === $oid || 'object' === $oid->getIdentifier()) {
-            throw new InvalidDomainObjectException('The domain object identity is null');
-        }
-
-        $this->getAclProvider()->deleteAcl($oid);
-
-        return $this;
     }
 
     /**
@@ -339,16 +137,14 @@ class AclManager extends AbstractAclManager
         $oids = array();
 
         foreach ($objects as $object) {
-            $oid = $this->getObjectIdentityRetrievalStrategy()->getObjectIdentity($object);
+            $oid = $this->oidRetrievalStrategy->getObjectIdentity($object);
 
             if (null !== $oid) {
                 $oids[] = $oid;
             }
         }
 
-        $acls = $this->getAclProvider()->findAcls($oids);
-
-        return $acls;
+        return $this->aclProvider->findAcls($oids);
     }
 
     /**
@@ -364,7 +160,7 @@ class AclManager extends AbstractAclManager
             $type = AclUtils::convertToAclName($type);
         }
 
-        $classname = $this->getDomainObjectClassname($domainObject);
+        $classname = AclUtils::convertDomainObjectToClassname($domainObject);
 
         if ($domainObject instanceof FieldVote) {
             $field = $domainObject->getField();
@@ -376,279 +172,23 @@ class AclManager extends AbstractAclManager
     /**
      * {@inheritDoc}
      */
-    public function getIdentities(TokenInterface $token = null)
-    {
-        if (null === $token) {
-            return array();
-        }
-
-        if (isset($this->tokenIdentityCache[$token->getUsername()])) {
-            return $this->tokenIdentityCache[$token->getUsername()];
-        }
-
-        $identities = array($token);
-        $roles = $token->getRoles();
-
-        if (null !== $this->groupRole) {
-            $roles = $this->groupRole->getReachableRoles($token);
-        }
-
-        if (null === $this->roleHierarchy) {
-            return array_merge($identities, $roles);
-        }
-
-        $identities = array_merge($identities, $this->roleHierarchy->getReachableRoles($roles));
-        $this->tokenIdentityCache[$token->getUsername()] = $identities;
-
-        return $identities;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getSecurityIdentities($identities)
-    {
-        return $this->doCreateSecurityIdentities($identities);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getObjectIdentifier($domainObject)
-    {
-        if ($domainObject instanceof FieldVote) {
-            $domainObject = $domainObject->getDomainObject();
-        }
-
-        if ($domainObject instanceof ObjectIdentity) {
-            return $domainObject;
-        }
-
-        if (is_string($domainObject)) {
-            return new ObjectIdentity('class', $this->getDomainObjectClassname($domainObject));
-        }
-
-        // valid object identity with domain instance
-        $oid = $this->getObjectIdentityRetrievalStrategy()->getObjectIdentity($domainObject);
-
-        // object identity is not a valid object
-        if (null === $oid) {
-            return new ObjectIdentity('object', $this->getDomainObjectClassname($domainObject));
-        }
-
-        return $oid;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getDomainObjectClassname($domainObject)
-    {
-        if ($domainObject instanceof FieldVote) {
-            $domainObject = $domainObject->getDomainObject();
-        }
-
-        if ($domainObject instanceof ObjectIdentity) {
-            $domainObject = $domainObject->getType();
-        }
-
-        if (is_object($domainObject)) {
-            $domainObject = get_class($domainObject);
-        }
-
-        if (!is_string($domainObject)) {
-            throw new SecurityException('The domain object must be an string for "class"" type');
-        }
-
-        return $domainObject;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function doIsGranted(array $securityIdentities, array $masks, ObjectIdentityInterface $oid, $field = null)
+    public function doIsGranted(array $sids, array $masks, ObjectIdentityInterface $oid, $field = null)
     {
         try {
-            $acl = $this->getAclProvider()->findAcl($oid);
+            $acl = $this->aclProvider->findAcl($oid);
             $masks = $this->getAllMasks($masks, $oid);
 
             if (null === $field) {
-                return $acl->isGranted($masks, $securityIdentities);
+                return $acl->isGranted($masks, $sids);
             }
 
-            return $acl->isFieldGranted($field, $masks, $securityIdentities);
+            return $acl->isFieldGranted($field, $masks, $sids);
 
         } catch (AclNotFoundException $e) {
         } catch (NoAceFoundException $e) {
         }
 
         return false;
-    }
-
-    /**
-     * Get the permission on class or object or class field, or object field.
-     *
-     * @param UserInterface | TokenInterface | RoleInterface $securityIdentity
-     * @param string                                         $type
-     * @param mixed                                          $domainObject
-     * @param string                                         $field
-     *
-     * @return int
-     */
-    protected function getPermission($securityIdentity, $type, $domainObject, $field = null)
-    {
-        $oid = $this->getObjectIdentifier($domainObject);
-        $securityIdentity = $this->getSecurityIdentity($securityIdentity);
-
-        $rights = array();
-
-        try {
-            $acl = $this->getAclProvider()->findAcl($oid);
-
-        } catch (AclNotFoundException $e) {
-            return AclUtils::convertToMask($rights);
-
-        } catch (NoAceFoundException $e) {
-            return AclUtils::convertToMask($rights);
-        }
-
-        $aces = $this->getAces($acl, $type, $field);
-
-        foreach ($aces as $i => $ace) {
-            if ($ace->getSecurityIdentity() == $securityIdentity) {
-                $rights = array_merge($rights, AclUtils::convertToAclName($ace->getMask()));
-            }
-        }
-
-        // remove doublon
-        $rights = array_unique($rights);
-
-        return AclUtils::convertToMask($rights);
-    }
-
-    /**
-     * Add permission on class or object or class field or object field.
-     *
-     * @param UserInterface | TokenInterface | RoleInterface $securityIdentity
-     * @param string                                         $type
-     * @param mixed                                          $domainObject
-     * @param int | string | array                           $mask
-     * @param boolean                                        $replace_existing
-     * @param string                                         $field
-     * @param int                                            $index
-     * @param boolean                                        $granting
-     * @param string                                         $grantingRule
-     *
-     * @return AclManagerInterface
-     */
-    protected function addPermission($securityIdentity, $type, $domainObject, $mask, $replace_existing = false, $field = null, $index = 0, $granting = true, $grantingRule = null)
-    {
-        $oid = $this->getObjectIdentifier($domainObject);
-        $securityIdentity = $this->getSecurityIdentity($securityIdentity);
-        $mask = AclUtils::convertToMask($mask);
-        $context = $this->doCreatePermissionContext($type, $securityIdentity, $mask, $index, $granting, $grantingRule);
-
-        try {
-            $acl = $this->getAclProvider()->createAcl($oid);
-
-        } catch (AclAlreadyExistsException $e) {
-            $acl = $this->getAclProvider()->findAcl($oid);
-        }
-
-        $this->doApplyPermission($acl, $context, $replace_existing, $field);
-
-        $this->getAclProvider()->updateAcl($acl);
-
-        return $this;
-    }
-
-    /**
-     * Replace permission on class or object or class field or object field.
-     *
-     * @param UserInterface | TokenInterface | RoleInterface $securityIdentity
-     * @param string                                         $type
-     * @param mixed                                          $domainObject
-     * @param int | string | array                           $mask
-     * @param string                                         $field
-     * @param int                                            $index
-     * @param boolean                                        $granting
-     * @param string                                         $grantingRule
-     *
-     * @return AclManagerInterface
-     */
-    protected function setPermission($securityIdentity, $type, $domainObject, $mask, $field = null, $index = 0, $granting = true, $grantingRule = null)
-    {
-        $this->addPermission($securityIdentity, $type, $domainObject, $mask, true, $field, $index, $granting, $grantingRule);
-
-        return $this;
-    }
-
-    /**
-     * Revoke permission on class or object or class field or object field.
-     *
-     * @param UserInterface | TokenInterface | RoleInterface $securityIdentity
-     * @param string                                         $type
-     * @param object | string                                $domainObject
-     * @param int | string | array                           $mask
-     * @param string                                         $field
-     *
-     * @return AclManagerInterface
-     */
-    protected function revokePermission($securityIdentity, $type, $domainObject, $mask, $field = null)
-    {
-        $oid = $this->getObjectIdentifier($domainObject);
-        $securityIdentity = $this->getSecurityIdentity($securityIdentity);
-        $mask = AclUtils::convertToMask($mask);
-        $context = $this->doCreatePermissionContext($type, $securityIdentity, $mask);
-
-        $acl = $this->getAclProvider()->findAcl($oid);
-        $this->doRevokePermission($acl, $context, $field);
-        $this->getAclProvider()->updateAcl($acl);
-
-        return $this;
-    }
-
-    /**
-     * Revoke all permissions on class or object or class field or object field.
-     *
-     * @param UserInterface | TokenInterface | RoleInterface $securityIdentity
-     * @param string                                         $type
-     * @param mixed                                          $domainObject
-     * @param string                                         $field
-     *
-     * @return AclManagerInterface
-     */
-    protected function deletePermissions($securityIdentity, $type, $domainObject, $field = null)
-    {
-        $oid = $this->getObjectIdentifier($domainObject);
-        $securityIdentity = $this->getSecurityIdentity($securityIdentity);
-        $acl = $this->getAclProvider()->findAcl($oid);
-        $this->doDeletePermissions($acl, $securityIdentity, $type, $field);
-        $this->getAclProvider()->updateAcl($acl);
-
-        return $this;
-    }
-
-    /**
-     * Get security identity.
-     *
-     * @param string $securityIdentity
-     *
-     * @return SecurityIdentityInterface
-     */
-    protected function getSecurityIdentity($securityIdentity)
-    {
-        if (null === $securityIdentity) {
-            throw new SecurityException('The Security Identity must be present');
-        }
-
-        $securityIdentities = $this->doCreateSecurityIdentities($securityIdentity);
-
-        if (0 === count($securityIdentities)) {
-            throw new SecurityException('The Security Identity not found');
-        }
-
-        return $securityIdentities[0];
     }
 
     /**

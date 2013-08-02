@@ -13,10 +13,11 @@ namespace Sonatra\Bundle\SecurityBundle\Acl\Rule\Definition;
 
 use Sonatra\Bundle\SecurityBundle\Acl\Domain\AbstractAclRuleDefinition;
 use Sonatra\Bundle\SecurityBundle\Acl\Model\AclRuleContextInterface;
-use Doctrine\ORM\EntityManager;
-use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use Symfony\Component\Security\Acl\Domain\ObjectIdentity;
 use Symfony\Component\Security\Acl\Domain\UserSecurityIdentity;
+use Symfony\Component\Security\Acl\Model\ObjectIdentityInterface;
+use Doctrine\ORM\EntityManager;
+use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 
 /**
  * The Object ACL Rule Definition.
@@ -36,17 +37,16 @@ class ObjectDefinition extends AbstractAclRuleDefinition
     /**
      * {@inheritdoc}
      */
-    public function isGranted(AclRuleContextInterface $arc, $domainObject, array $masks, $field = null)
+    public function isGranted(AclRuleContextInterface $arc, ObjectIdentityInterface $oid, array $masks, $field = null)
     {
         $am = $arc->getAclManager();
-        $securityIdentities = $arc->getSecurityIdentities();
-        $oid = $am->getObjectIdentifier($domainObject);
+        $sids = $arc->getSecurityIdentities();
 
         if ('class' === $oid->getIdentifier()) {
             $oid = new ObjectIdentity('object', $oid->getType());
         }
 
-        return $am->doIsGranted($securityIdentities, $masks, $oid, $field);
+        return $am->doIsGranted($sids, $masks, $oid, $field);
     }
 
     /**
@@ -54,9 +54,9 @@ class ObjectDefinition extends AbstractAclRuleDefinition
      */
     public function addFilterConstraint(AclRuleContextInterface $arc, EntityManager $em, ClassMetadata $targetEntity, $targetTableAlias)
     {
-        $securityIdentities = $arc->getSecurityIdentities();
+        $identities = $arc->getSecurityIdentities();
 
-        if (0 === count($securityIdentities)) {
+        if (0 === count($identities)) {
             return '';
         }
 
@@ -64,7 +64,7 @@ class ObjectDefinition extends AbstractAclRuleDefinition
         $classname = $connection->quote($targetEntity->getName());
         $sids = array();
 
-        foreach ($securityIdentities as $sid) {
+        foreach ($identities as $sid) {
             if ($sid instanceof UserSecurityIdentity) {
                 $sids[] = 's.identifier = ' . $connection->quote($sid->getClass().'-'.$sid->getUsername());
                 continue;

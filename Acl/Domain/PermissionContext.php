@@ -11,9 +11,12 @@
 
 namespace Sonatra\Bundle\SecurityBundle\Acl\Domain;
 
-use Symfony\Component\Security\Acl\Model\SecurityIdentityInterface;
 use Symfony\Component\Security\Acl\Model\AuditableEntryInterface;
+use Symfony\Component\Security\Acl\Model\ObjectIdentityInterface;
+use Symfony\Component\Security\Acl\Model\SecurityIdentityInterface;
+use Sonatra\Bundle\SecurityBundle\Acl\Model\AclManipulatorInterface;
 use Sonatra\Bundle\SecurityBundle\Acl\Model\PermissionContextInterface;
+use Sonatra\Bundle\SecurityBundle\Acl\Util\AclUtils;
 
 /**
  * Implementation of persmission context.
@@ -22,45 +25,40 @@ use Sonatra\Bundle\SecurityBundle\Acl\Model\PermissionContextInterface;
  */
 class PermissionContext implements PermissionContextInterface
 {
-    protected $permissionMask;
-    protected $securityIdentity;
-    protected $permissionType;
-    protected $index = 0;
+    protected $sid;
+    protected $oid;
+    protected $field;
+    protected $type;
+    protected $mask;
+    protected $index;
     protected $granting;
-    protected $grantingRule;
+    protected $strategy;
 
     /**
-     * Set the mask.
+     * Constructor.
      *
-     * @param integer $mask permission mask, or null for all
-     *
-     * @return PermissionContextInterface
+     * @param SecurityIdentityInterface $sid
+     * @param ObjectIdentityInterface   $oid
+     * @param string                    $type
+     * @param int                       $mask
      */
-    public function setMask($mask)
+    public function __construct(SecurityIdentityInterface $sid,
+            ObjectIdentityInterface $oid, $type, $mask)
     {
-        $this->permissionMask = $mask;
-
-        return $this;
+        $this->setSecurityIdentity($sid);
+        $this->setObjectIdentity($oid);
+        $this->setType($type);
+        $this->setMask($mask);
+        $this->index = 0;
+        $this->granting = true;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getMask()
+    public function setSecurityIdentity(SecurityIdentityInterface $sid)
     {
-        return $this->permissionMask;
-    }
-
-    /**
-     * Set the security identity.
-     *
-     * @param SecurityIdentityInterface $securityIdentity
-     *
-     * @return PermissionContextInterface
-     */
-    public function setSecurityIdentity(SecurityIdentityInterface $securityIdentity)
-    {
-        $this->securityIdentity = $securityIdentity;
+        $this->sid = $sid;
 
         return $this;
     }
@@ -70,19 +68,15 @@ class PermissionContext implements PermissionContextInterface
      */
     public function getSecurityIdentity()
     {
-        return $this->securityIdentity;
+        return $this->sid;
     }
 
     /**
-     * Set the permission type.
-     *
-     * @param string $type
-     *
-     * @return PermissionContextInterface
+     * {@inheritDoc}
      */
-    public function setPermissionType($type)
+    public function setObjectIdentity(ObjectIdentityInterface $oid)
     {
-        $this->permissionType = $type;
+        $this->oid = $oid;
 
         return $this;
     }
@@ -90,19 +84,75 @@ class PermissionContext implements PermissionContextInterface
     /**
      * {@inheritDoc}
      */
-    public function getPermissionType()
+    public function getObjectIdentity()
     {
-        return $this->permissionType;
+        return $this->oid;
     }
 
     /**
-     * Set the index.
-     *
-     * @param int $index
-     *
-     * @return PermissionContextInterface
+     * {@inheritDoc}
      */
-    public function setIndex($index = 0)
+    public function setField($field)
+    {
+        $this->field = $field;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getField()
+    {
+        return $this->field;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setType($type)
+    {
+        $type = strtolower($type);
+
+        if (!in_array($type, array(AclManipulatorInterface::OBJECT_TYPE, AclManipulatorInterface::CLASS_TYPE))) {
+            throw new \InvalidArgumentException('The value of permission type must be "object" or "class"');
+        }
+
+        $this->type = $type;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setMask($mask)
+    {
+        $this->mask = AclUtils::convertToMask($mask);
+
+        return $this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getMask()
+    {
+        return $this->mask;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setIndex($index)
     {
         $this->index = $index;
 
@@ -118,11 +168,7 @@ class PermissionContext implements PermissionContextInterface
     }
 
     /**
-     * Set the granting.
-     *
-     * @param boolean $granting
-     *
-     * @return PermissionContextInterface
+     * {@inheritDoc}
      */
     public function setGranting($granting)
     {
@@ -140,15 +186,11 @@ class PermissionContext implements PermissionContextInterface
     }
 
     /**
-     * Set the granting rule.
-     *
-     * @param string $rule
-     *
-     * @return PermissionContextInterface
+     * {@inheritDoc}
      */
-    public function setGrantingRule($rule = null)
+    public function setStrategy($strategy)
     {
-        $this->grantingRule = $rule;
+        $this->strategy = $strategy;
 
         return $this;
     }
@@ -156,9 +198,9 @@ class PermissionContext implements PermissionContextInterface
     /**
      * {@inheritDoc}
      */
-    public function getGrantingRule()
+    public function getStrategy()
     {
-        return $this->grantingRule;
+        return $this->strategy;
     }
 
     /**

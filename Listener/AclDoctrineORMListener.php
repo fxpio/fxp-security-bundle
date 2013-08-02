@@ -12,14 +12,14 @@
 namespace Sonatra\Bundle\SecurityBundle\Listener;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Security\Acl\Voter\FieldVote;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Doctrine\ORM\EntityManager;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Proxy\Proxy;
 use Doctrine\ORM\PersistentCollection;
-use Symfony\Component\Security\Acl\Voter\FieldVote;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  * This class listens to all database activity and automatically adds constraints as acls / aces.
@@ -57,6 +57,10 @@ class AclDoctrineORMListener implements EventSubscriber
      */
     public function postLoad(LifecycleEventArgs $args)
     {
+        if (!$args->getEntityManager()->getFilters()->isEnabled('acl')) {
+            return;
+        }
+
         $object = $args->getEntity();
         $className = get_class($object);
         $rightClass = false;
@@ -114,6 +118,10 @@ class AclDoctrineORMListener implements EventSubscriber
      */
     public function onFlush(OnFlushEventArgs $args)
     {
+        if (!$args->getEntityManager()->getFilters()->isEnabled('acl')) {
+            return;
+        }
+
         $em = $args->getEntityManager();
         $uow = $em->getUnitOfWork();
         $sc = $this->container->get('security.context');
@@ -180,11 +188,9 @@ class AclDoctrineORMListener implements EventSubscriber
      */
     public function getSecurityIdentities()
     {
-        $manager = $this->container->get('sonatra.acl.manager');
         $token = $this->container->get('security.context')->getToken();
-        $identities = $manager->getIdentities($token);
 
-        return $manager->getSecurityIdentities($identities);
+        return $this->getAclManager()->getSecurityIdentities($token);
     }
 
     /**

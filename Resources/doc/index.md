@@ -79,4 +79,5 @@ Sonatra SecurityBundle, you are ready to learn about usages of the bundle.
 
 The following documents are available:
 
+- [ACL Manipulator](acl_manipulator.md)
 - [ACL Manager](acl_manager.md)

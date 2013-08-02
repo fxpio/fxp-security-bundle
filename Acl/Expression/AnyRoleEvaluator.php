@@ -12,15 +12,22 @@
 namespace Sonatra\Bundle\SecurityBundle\Acl\Expression;
 
 use Sonatra\Bundle\SecurityBundle\Acl\Model\AclManagerInterface;
+use Symfony\Component\Security\Acl\Domain\RoleSecurityIdentity;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use Symfony\Component\Security\Core\Role\RoleInterface;
 
 /**
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
 class AnyRoleEvaluator
 {
+    /**
+     * @var AclManagerInterface
+     */
     private $aclManager;
+
+    /**
+     * @var array
+     */
     private $cache;
 
     /**
@@ -49,11 +56,11 @@ class AnyRoleEvaluator
             return $this->cache[$cacheName];
         }
 
-        $identities = $this->aclManager->getIdentities($token);
+        $identities = $this->aclManager->getSecurityIdentities($token);
         $this->cache[$cacheName] = false;
 
         foreach ($identities as $i => $identity) {
-            if ($identity instanceof RoleInterface && in_array($identity->getRole(), $roles)) {
+            if ($identity instanceof RoleSecurityIdentity && in_array($identity->getRole(), $roles)) {
                 $this->cache[$cacheName] = true;
                 break;
             }

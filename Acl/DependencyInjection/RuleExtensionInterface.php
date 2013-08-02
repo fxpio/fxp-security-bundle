@@ -12,7 +12,7 @@
 namespace Sonatra\Bundle\SecurityBundle\Acl\DependencyInjection;
 
 /**
- * Interface for extensions which provide definition rules.
+ * Interface for extensions which provide rule definitions.
  *
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */

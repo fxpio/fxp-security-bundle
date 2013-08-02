@@ -16,7 +16,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Sonatra\Bundle\SecurityBundle\Acl\Domain\AclManager;
+use Symfony\Component\Security\Acl\Permission\MaskBuilder;
 use Sonatra\Bundle\SecurityBundle\Acl\Util\AclUtils;
 
 /**
@@ -41,7 +41,7 @@ class AddCommand extends ContainerAwareCommand
                 new InputOption('domainid', null, InputOption::VALUE_REQUIRED, 'This domain id (only for object)'),
                 new InputOption('index', null, InputOption::VALUE_REQUIRED, 'The ACE order', 0),
                 new InputOption('granting', null, InputOption::VALUE_REQUIRED, 'The ACE granting', true),
-                new InputOption('rule', null, InputOption::VALUE_REQUIRED, 'The ACE granting rule', 'all'),
+                new InputOption('strategy', null, InputOption::VALUE_REQUIRED, 'The ACE granting strategy', 'all'),
                 new InputOption('right', null, InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
                         'Specifies the right(s) to set on the given class for the given security identity')
         ))
@@ -64,22 +64,22 @@ EOF
         $rights = $input->getOption('right');
         $index = (int) $input->getOption('index');
         $granting = (bool) $input->getOption('granting');
-        $rule = $input->getOption('rule');
+        $strategy = $input->getOption('strategy');
 
         if (empty($rights)) {
             $rights = array(
-                    AclManager::VIEW,
-                    AclManager::CREATE,
-                    AclManager::EDIT,
-                    AclManager::DELETE,
-                    AclManager::UNDELETE
+                    MaskBuilder::MASK_VIEW,
+                    MaskBuilder::MASK_CREATE,
+                    MaskBuilder::MASK_EDIT,
+                    MaskBuilder::MASK_DELETE,
+                    MaskBuilder::MASK_UNDELETE
             );
 
             if (null !== $field) {
                 $rights = array(
-                        AclManager::VIEW,
-                        AclManager::CREATE,
-                        AclManager::EDIT
+                        MaskBuilder::MASK_VIEW,
+                        MaskBuilder::MASK_CREATE,
+                        MaskBuilder::MASK_EDIT
                 );
             }
         }
@@ -117,11 +117,11 @@ EOF
 
         // add domain rights
         if (null === $field) {
-            $this->addRights($output, $identity, $rights, $domainType, $domain, $index, $granting, $rule);
+            $this->addRights($output, $identity, $rights, $domainType, $domain, $index, $granting, $strategy);
 
         // add domain field rights
         } else {
-            $this->addFieldRights($output, $identity, $rights, $domainType, $domain, $field, $index, $granting, $rule);
+            $this->addFieldRights($output, $identity, $rights, $domainType, $domain, $field, $index, $granting, $strategy);
         }
     }
 
@@ -165,17 +165,17 @@ EOF
      * @param mixed           $domain     The classname or object instance
      * @param integer         $index      The ACE index
      * @param boolean         $granting   The ACE granting
-     * @param string          $rule       The ACE granting rule
+     * @param string          $strategy   The ACE granting strategy
      */
-    private function addRights(OutputInterface $output, $identity, $rights, $domainType, $domain, $index, $granting, $rule)
+    private function addRights(OutputInterface $output, $identity, $rights, $domainType, $domain, $index, $granting, $strategy)
     {
-        $aclManager = $this->getContainer()->get('sonatra.acl.manager');
+        $aclManipulator = $this->getContainer()->get('sonatra.acl.manipulator');
         $addMethod = 'add'.ucfirst($domainType).'Permission';
         $getMethod = 'get'.ucfirst($domainType).'Permission';
-        $aclManager->$addMethod($identity, $domain, $rights, $index, $granting, $rule);
+        $aclManipulator->$addMethod($identity, $domain, $rights, $index, $granting, $strategy);
 
         // display new rights
-        $mask = $aclManager->$getMethod($identity, $domain);
+        $mask = $aclManipulator->$getMethod($identity, $domain);
         $rights = AclUtils::convertToAclName($mask);
         $output->writeln(array('', "<info>Newing $domainType rights:</info> [ ".implode(', ', $rights)." ]"));
     }
@@ -191,17 +191,17 @@ EOF
      * @param string          $field      The field name
      * @param integer         $index      The ACE index
      * @param boolean         $granting   The ACE granting
-     * @param string          $rule       The ACE granting rule
+     * @param string          $strategy   The ACE granting strategy
      */
-    private function addFieldRights(OutputInterface $output, $identity, $rights, $domainType, $domain, $field, $index, $granting, $rule)
+    private function addFieldRights(OutputInterface $output, $identity, $rights, $domainType, $domain, $field, $index, $granting, $strategy)
     {
-        $aclManager = $this->getContainer()->get('sonatra.acl.manager');
+        $aclManipulator = $this->getContainer()->get('sonatra.acl.manipulator');
         $addMethod = 'add'.ucfirst($domainType).'FieldPermission';
         $getMethod = 'get'.ucfirst($domainType).'FieldPermission';
-        $aclManager->$addMethod($identity, $domain, $field, $rights, $index, $granting, $rule);
+        $aclManipulator->$addMethod($identity, $domain, $field, $rights, $index, $granting, $strategy);
 
         // display new rights
-        $mask = $aclManager->$getMethod($identity, $domain, $field);
+        $mask = $aclManipulator->$getMethod($identity, $domain, $field);
         $rights = AclUtils::convertToAclName($mask);
         $output->writeln(array('', "<info>Newing $domainType field rights:</info> [ ".implode(', ', $rights)." ]"));
     }
