@@ -31,6 +31,24 @@ interface AclManagerInterface
     public function getSecurityIdentities(TokenInterface $token = null);
 
     /**
+     * Retrieves the object identity from a domain object.
+     *
+     * @param object $domainObject
+     *
+     * @return ObjectIdentityInterface
+     */
+    public function getObjectIdentity($domainObject);
+
+    /**
+     * Retrieves the object identities from domain objects.
+     *
+     * @param object[] $domainObjects
+     *
+     * @return ObjectIdentityInterface[]
+     */
+    public function getObjectIdentities(array $domainObjects);
+
+    /**
      * Determines whether access is granted.
      *
      * @param RoleInterface[]|UserInterface[]|TokenInterface[]|string[]|SecurityIdentityInterface[] $sids

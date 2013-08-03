@@ -16,6 +16,7 @@ use Sonatra\Bundle\SecurityBundle\Acl\Model\AclRuleManagerInterface;
 use Sonatra\Bundle\SecurityBundle\Acl\Util\AclUtils;
 use Symfony\Component\Security\Acl\Exception\NoAceFoundException;
 use Symfony\Component\Security\Acl\Exception\AclNotFoundException;
+use Symfony\Component\Security\Acl\Exception\NotAllAclsFoundException;
 use Symfony\Component\Security\Acl\Model\MutableAclProviderInterface;
 use Symfony\Component\Security\Acl\Model\ObjectIdentityInterface;
 use Symfony\Component\Security\Acl\Model\ObjectIdentityRetrievalStrategyInterface;
@@ -85,6 +86,36 @@ class AclManager implements AclManagerInterface
     /**
      * {@inheritDoc}
      */
+    public function getObjectIdentity($domainObject)
+    {
+        if ($domainObject instanceof ObjectIdentityInterface) {
+            return $domainObject;
+        }
+
+        return $this->oidRetrievalStrategy->getObjectIdentity($domainObject);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getObjectIdentities(array $domainObjects)
+    {
+        $oids = array();
+
+        foreach ($domainObjects as $domainObject) {
+            $oid = $this->getObjectIdentity($domainObject);
+
+            if (null !== $oid) {
+                $oids[] = $oid;
+            }
+        }
+
+        return $oids;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function isGranted($sids, $domainObject, $mask)
     {
         $granted = false;
@@ -107,7 +138,7 @@ class AclManager implements AclManagerInterface
         }
 
         $sids = AclUtils::convertSecurityIdentities($sids);
-        $oid = $this->oidRetrievalStrategy->getObjectIdentity($domainObject);
+        $oid = $this->getObjectIdentity($domainObject);
         $rule = $this->getRule($mask, $domainObject, $field);
         $definition = $this->aclRuleManager->getDefinition($rule);
         $arc = new AclRuleContext($this, $this->aclRuleManager, $sids);
@@ -134,17 +165,17 @@ class AclManager implements AclManagerInterface
      */
     public function preloadAcls(array $objects)
     {
-        $oids = array();
+        $oids = $this->getObjectIdentities($objects);
 
-        foreach ($objects as $object) {
-            $oid = $this->oidRetrievalStrategy->getObjectIdentity($object);
+        try {
+            return $this->aclProvider->findAcls($oids);
 
-            if (null !== $oid) {
-                $oids[] = $oid;
-            }
+        } catch (NotAllAclsFoundException $ex) {
+            return $ex->getPartialResult();
+
+        } catch (AclNotFoundException $ex) {
+            return new \SplObjectStorage();
         }
-
-        return $this->aclProvider->findAcls($oids);
     }
 
     /**

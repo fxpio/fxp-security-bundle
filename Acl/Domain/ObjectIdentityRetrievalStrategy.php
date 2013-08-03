@@ -29,24 +29,26 @@ class ObjectIdentityRetrievalStrategy implements ObjectIdentityRetrievalStrategy
      */
     public function getObjectIdentity($domainObject)
     {
-        if ($domainObject instanceof FieldVote) {
-            $domainObject = $domainObject->getDomainObject();
-        }
-
         if ($domainObject instanceof ObjectIdentity) {
             return $domainObject;
+        }
+
+        if ($domainObject instanceof FieldVote) {
+            return $this->getObjectIdentity($domainObject->getDomainObject());
         }
 
         if (is_string($domainObject)) {
             return new ObjectIdentity(AclManipulator::CLASS_TYPE, AclUtils::convertDomainObjectToClassname($domainObject));
         }
 
+        return ObjectIdentity::fromDomainObject($domainObject);
+        /*
         // valid object identity with domain instance
         try {
             return ObjectIdentity::fromDomainObject($domainObject);
 
         } catch (InvalidDomainObjectException $failed) {
             return new ObjectIdentity(AclManipulator::OBJECT_TYPE, AclUtils::convertDomainObjectToClassname($domainObject));
-        }
+        }*/
     }
 }

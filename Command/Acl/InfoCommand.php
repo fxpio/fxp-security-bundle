@@ -11,21 +11,18 @@
 
 namespace Sonatra\Bundle\SecurityBundle\Command\Acl;
 
-use Symfony\Component\Security\Core\Role\RoleInterface;
-
-use FOS\UserBundle\Model\GroupInterface;
-
-use Symfony\Component\Security\Core\User\UserInterface;
-
-use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
-
 use Symfony\Component\Security\Core\Role\Role;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Security\Acl\Domain\ObjectIdentity;
 use Symfony\Component\Security\Acl\Voter\FieldVote;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\Role\RoleInterface;
+use FOS\UserBundle\Model\GroupInterface;
 use Sonatra\Bundle\SecurityBundle\Core\Token\ConsoleToken;
 use Sonatra\Bundle\SecurityBundle\Acl\Util\AclUtils;
 
@@ -75,10 +72,9 @@ EOF
         $identityClass = $this->getClassname($this->getContainer()->getParameter('sonatra_security.'.$identityType.'_class'));
         $identityRepo = $doctrine->getManagerForClass($identityClass)->getRepository($identityClass);
         $identity = $identityRepo->findOneBy(array(('user' === $identityType ? 'username' : 'name') => $identity));
-        $domainType = null !== $input->getOption('domainid') ? 'object' : 'class';
         $domainClass = $this->getClassname($input->getArgument('domain-class-name'));
+        $domain = new ObjectIdentity('class', $domainClass);
         $domainId = $input->getOption('domainid');
-        $domain = $domainClass;
         $field = $input->getArgument('domain-field-name');
         $fields = null === $field ? array() : array($field);
         $noHost = $input->getOption('no-host');
@@ -98,13 +94,8 @@ EOF
         }
 
         // get the domain instance
-        if ('object' === $domainType) {
-            $domainRepo = $doctrine->getManagerForClass($domainClass)->getRepository($domainClass);
-            $domain = $domainRepo->findOneBy(array('id' => $domainId));
-
-            if (null === $domain) {
-                throw new \InvalidArgumentException(sprintf('Domain instance "%s" on "%s" not found', $domainId, $domainClass));
-            }
+        if (null !== $domainId) {
+            $domain = new ObjectIdentity($domainId, $domainClass);
         }
 
         // init get acl rights
@@ -159,7 +150,7 @@ EOF
             $getMethod = 'getClassPermission';
             $getFieldMethod = 'getClassFieldPermission';
 
-            if (is_object($domain)) {
+            if ('class' !== $domain->getIdentifier()) {
                 $getMethod = 'getObjectPermission';
                 $getFieldMethod = 'getObjectFieldPermission';
             }

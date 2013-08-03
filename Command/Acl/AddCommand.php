@@ -16,6 +16,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Security\Acl\Domain\ObjectIdentity;
 use Symfony\Component\Security\Acl\Permission\MaskBuilder;
 use Sonatra\Bundle\SecurityBundle\Acl\Util\AclUtils;
 
@@ -86,8 +87,9 @@ EOF
 
         $doctrine = $this->getContainer()->get('doctrine');
         $domainClass = $this->getClassname($input->getArgument('domain-class-name'));
-        $domainType = null !== $input->getOption('domainid') ? 'object' : 'class';
-        $domain = $input->getOption('domainid');
+        $domain = new ObjectIdentity('class', $domainClass);
+        $domainId = $input->getOption('domainid');
+        $domainType = null !== $domainId ? 'object' : 'class';
         $identityType = strtolower($input->getArgument('identity-type'));
         $identity = $input->getArgument('identity-name');
         $identityClass = $this->getClassname($this->getContainer()->getParameter('sonatra_security.'.$identityType.'_class'));
@@ -103,16 +105,8 @@ EOF
         }
 
         // get the domain instance
-        if ('object' === $domainType) {
-            $domainRepo = $doctrine->getManagerForClass($domainClass)->getRepository($domainClass);
-            $domain = $domainRepo->findOneBy(array('id' => $domain));
-
-            if (null === $domain) {
-                throw new \InvalidArgumentException(sprintf('Domain instance "%s" on "%s" not found', $input->getOption('domainid'), $domainClass));
-            }
-
-        } else {
-            $domain = $domainClass;
+        if (null !== $domainId) {
+            $domain = new ObjectIdentity($domainId, $domainClass);
         }
 
         // add domain rights
