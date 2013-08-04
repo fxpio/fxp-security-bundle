@@ -14,7 +14,10 @@ namespace Sonatra\Bundle\SecurityBundle\Core\Role;
 use Symfony\Component\Security\Core\Role\RoleHierarchy as BaseRoleHierarchy;
 use Symfony\Component\Security\Core\Role\RoleInterface;
 use Symfony\Component\Security\Core\Role\Role;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Bridge\Doctrine\RegistryInterface;
+use Sonatra\Bundle\SecurityBundle\Event\ReachableRoleEvent;
+use Sonatra\Bundle\SecurityBundle\Events;
 use Sonatra\Bundle\SecurityBundle\Exception\SecurityException;
 
 /**
@@ -40,6 +43,11 @@ class RoleHierarchy extends BaseRoleHierarchy
     private $cache;
 
     /**
+     * @var EventDispatcherInterface
+     */
+    private $eventDispatcher;
+
+    /**
      * Constructor.
      *
      * @param array    $hierarchy     An array defining the hierarchy
@@ -53,6 +61,16 @@ class RoleHierarchy extends BaseRoleHierarchy
         $this->registry = $registry;
         $this->roleClassname = $roleClassname;
         $this->cache = array();
+    }
+
+    /**
+     * Set event dispatcher.
+     *
+     * @param EventDispatcherInterface $dispatcher
+     */
+    public function setEventDispatcher(EventDispatcherInterface $dispatcher)
+    {
+        $this->eventDispatcher = $dispatcher;
     }
 
     /**
@@ -95,6 +113,11 @@ class RoleHierarchy extends BaseRoleHierarchy
             $em->getFilters()->disable('sonatra_acl');
         }
 
+        if (null !== $this->eventDispatcher) {
+            $event = new ReachableRoleEvent($reachableRoles);
+            $this->eventDispatcher->dispatch(Events::PRE_REACHABLE_ROLES, $event);
+        }
+
         if (count($rolenames) > 0) {
             $entityRoles = $repo->findBy(array('name' => $rolenames));
         }
@@ -116,6 +139,11 @@ class RoleHierarchy extends BaseRoleHierarchy
 
         if ($filterIsEnabled) {
             $em->getFilters()->enable('sonatra_acl');
+        }
+
+        if (null !== $this->eventDispatcher) {
+            $event->setRreachableRoles($reachableRoles);
+            $this->eventDispatcher->dispatch(Events::POST_REACHABLE_ROLES, $event);
         }
 
         return $reachableRoles;

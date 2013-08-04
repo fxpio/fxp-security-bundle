@@ -7,3 +7,4 @@ services:
         class:     '%security.role_hierarchy.class%'
         public:    false
         arguments: ['%security.role_hierarchy.roles%', '@doctrine', '%sonatra_security.role_class%']
+        calls: [ ['setEventDispatcher', ['@?event_dispatcher']] ]
