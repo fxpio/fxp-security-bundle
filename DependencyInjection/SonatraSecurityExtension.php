@@ -63,14 +63,6 @@ class SonatraSecurityExtension extends Extension
         }
 
         // expression
-        if ($config['expression']['replace_has_role']) {
-            $loader->load('expression_has_role.yml');
-        }
-
-        if ($config['expression']['replace_has_any_role']) {
-            $loader->load('expression_has_any_role.yml');
-        }
-
         if ($config['expression']['replace_has_permission']) {
             $loader->load('expression_has_permission.yml');
         }

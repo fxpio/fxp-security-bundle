@@ -143,8 +143,6 @@ class Configuration implements ConfigurationInterface
         $node
             ->addDefaultsIfNotSet()
             ->children()
-                ->scalarNode('replace_has_role')->defaultTrue()->end()
-                ->scalarNode('replace_has_any_role')->defaultTrue()->end()
                 ->scalarNode('replace_has_permission')->defaultTrue()->end()
                 ->scalarNode('add_has_field_permission')->defaultTrue()->end()
             ->end()
