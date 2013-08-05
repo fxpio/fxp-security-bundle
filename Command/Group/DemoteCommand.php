@@ -51,7 +51,7 @@ class DemoteCommand extends ContainerAwareCommand
             throw new \InvalidArgumentException(sprintf('The group "%s" does not exist', $groupName));
         }
 
-        if ($group->hasRole($roleName)) {
+        if (!$group->hasRole($roleName)) {
             $output->writeln(sprintf('Group "%s" didn\'t have "%s" role.', $groupName, $roleName));
 
             return;
