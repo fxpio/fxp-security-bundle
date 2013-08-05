@@ -56,7 +56,7 @@ class AnonymousAuthenticationListener extends BaseListener
     public function handle(GetResponseEvent $event)
     {
         $token = $this->context->getToken();
-        $roles = array();
+        $hostRole = null;
         $anonymousRole = null;
         $hostname = '';
         $rolesForHosts = $this->container->getParameter('sonatra_security.anonymous_authentication.hosts');
@@ -74,16 +74,16 @@ class AnonymousAuthenticationListener extends BaseListener
 
         // find role for anonymous
         if (null !== $anonymousRole) {
-            $roles[] = new Role($anonymousRole);
+            $hostRole = new Role($anonymousRole);
         }
 
-        if (empty($roles)) {
+        if (null === $hostRole) {
             return;
         }
 
         // add anonymous token
         if (null === $token) {
-            $this->context->setToken(new AnonymousToken($this->key, 'anon.', $roles));
+            $this->context->setToken(new AnonymousToken($this->key, 'anon.', array($hostRole)));
 
             if (null !== $this->logger) {
                 $this->logger->info(sprintf('Populated SecurityContext with an anonymous Token using role '.$anonymousRole.' for host '.$hostname));
@@ -92,17 +92,19 @@ class AnonymousAuthenticationListener extends BaseListener
             return;
         }
 
-        //add anonymous role on existing token
-        $ref = new \ReflectionClass($token);
-        $prop = $ref->getParentClass()->getProperty('roles');
         $tRoles = $token->getRoles();
 
-        foreach ($roles as $role) {
-            if (!in_array($role, $tRoles)) {
-                $tRoles[] = $role;
+        foreach ($tRoles as $role) {
+            if ($hostRole->getRole() === $role->getRole()) {
+                return;
             }
         }
 
+        //add anonymous role on existing token
+        $tRoles[] = $hostRole;
+
+        $ref = new \ReflectionClass($token);
+        $prop = $ref->getParentClass()->getProperty('roles');
         $prop->setAccessible(true);
         $prop->setValue($token, $tRoles);
 
