@@ -27,4 +27,12 @@ class AllowDefinition extends AbstractAclRuleDefinition
     {
         return 'allow';
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTypes()
+    {
+        return array();
+    }
 }

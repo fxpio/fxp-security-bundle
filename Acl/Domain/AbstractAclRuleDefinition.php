@@ -27,6 +27,14 @@ abstract class AbstractAclRuleDefinition implements AclRuleDefinitionInterface
     /**
      * {@inheritdoc}
      */
+    public function getTypes()
+    {
+        return array(static::TYPE_SKIP_OPTIMIZATION);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function isGranted(AclRuleContextInterface $arc, ObjectIdentityInterface $oid, array $masks, $field = null)
     {
         return true;

@@ -22,12 +22,23 @@ use Doctrine\Common\Persistence\Mapping\ClassMetadata;
  */
 interface AclRuleDefinitionInterface
 {
+    const TYPE_CLASS             = 'class';
+    const TYPE_OBJECT            = 'object';
+    const TYPE_SKIP_OPTIMIZATION = 'skip';
+
     /**
      * Returns the name of this definition.
      *
      * @return string The name of this definition
      */
     public function getName();
+
+    /**
+     * Returns the prelaod type of this definition.
+     *
+     * @return array The preload types of this definition
+     */
+    public function getTypes();
 
     /**
      * Check if identity is granted on ACL Manager.

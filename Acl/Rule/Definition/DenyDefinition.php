@@ -27,6 +27,14 @@ class DenyDefinition extends AbstractAclRuleDefinition
     /**
      * {@inheritdoc}
      */
+    public function getTypes()
+    {
+        return array();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function isGranted(AclRuleContextInterface $arc, ObjectIdentityInterface $oid, array $masks, $field = null)
     {
         return false;

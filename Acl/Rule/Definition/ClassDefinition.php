@@ -14,7 +14,6 @@ namespace Sonatra\Bundle\SecurityBundle\Acl\Rule\Definition;
 use Sonatra\Bundle\SecurityBundle\Acl\Domain\AbstractAclRuleDefinition;
 use Sonatra\Bundle\SecurityBundle\Acl\Model\AclRuleContextInterface;
 use Sonatra\Bundle\SecurityBundle\Acl\Util\AclUtils;
-use Symfony\Component\Security\Acl\Domain\ObjectIdentity;
 use Symfony\Component\Security\Acl\Domain\UserSecurityIdentity;
 use Symfony\Component\Security\Acl\Model\ObjectIdentityInterface;
 use Doctrine\ORM\EntityManager;
@@ -38,13 +37,25 @@ class ClassDefinition extends AbstractAclRuleDefinition
     /**
      * {@inheritdoc}
      */
+    public function getTypes()
+    {
+        return array(static::TYPE_CLASS);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function isGranted(AclRuleContextInterface $arc, ObjectIdentityInterface $oid, array $masks, $field = null)
     {
         $am = $arc->getAclManager();
         $sids = $arc->getSecurityIdentities();
-        $coid = new ObjectIdentity('class', AclUtils::convertDomainObjectToClassname($oid));
+        $initOid = $oid;
 
-        return $am->doIsGranted($sids, $masks, $coid, $field);
+        if ('class' !== $oid->getType()) {
+            $oid = $am->createClassObjectIdentity($oid->getType());
+        }
+
+        return $am->doIsGranted($sids, $masks, $oid, $initOid, $field);
     }
 
     /**

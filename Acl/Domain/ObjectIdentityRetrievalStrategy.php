@@ -42,13 +42,5 @@ class ObjectIdentityRetrievalStrategy implements ObjectIdentityRetrievalStrategy
         }
 
         return ObjectIdentity::fromDomainObject($domainObject);
-        /*
-        // valid object identity with domain instance
-        try {
-            return ObjectIdentity::fromDomainObject($domainObject);
-
-        } catch (InvalidDomainObjectException $failed) {
-            return new ObjectIdentity(AclManipulator::OBJECT_TYPE, AclUtils::convertDomainObjectToClassname($domainObject));
-        }*/
     }
 }

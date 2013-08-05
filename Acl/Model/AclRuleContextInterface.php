@@ -21,28 +21,28 @@ interface AclRuleContextInterface
     /**
      * Get Acl Manager.
      *
-     * @return AclManagerInterface
+     * @return \Sonatra\Bundle\SecurityBundle\Acl\Model\AclManagerInterface
      */
     public function getAclManager();
 
     /**
      * Get Acl Rule Manager.
      *
-     * @return AclRuleManagerInterface
+     * @return \Sonatra\Bundle\SecurityBundle\Acl\Model\AclRuleManagerInterface
      */
     public function getAclRuleManager();
 
     /**
      * Get security identities.
      *
-     * @return SecurityIdentityInterface[]
+     * @return \Symfony\Component\Security\Acl\Model\SecurityIdentityInterface[]
      */
     public function getSecurityIdentities();
 
     /**
      * Get current user.
      *
-     * @return UserInterface|null
+     * @return \Symfony\Component\Security\Acl\User\UserInterface|null
      */
     public function getUser();
 

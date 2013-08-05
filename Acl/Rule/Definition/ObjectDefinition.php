@@ -37,16 +37,26 @@ class ObjectDefinition extends AbstractAclRuleDefinition
     /**
      * {@inheritdoc}
      */
+    public function getTypes()
+    {
+        return array(static::TYPE_OBJECT);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function isGranted(AclRuleContextInterface $arc, ObjectIdentityInterface $oid, array $masks, $field = null)
     {
         $am = $arc->getAclManager();
         $sids = $arc->getSecurityIdentities();
+        $initOid = $oid;
 
+        // force not found acl
         if ('class' === $oid->getIdentifier()) {
             $oid = new ObjectIdentity('object', $oid->getType());
         }
 
-        return $am->doIsGranted($sids, $masks, $oid, $field);
+        return $am->doIsGranted($sids, $masks, $oid, $initOid, $field);
     }
 
     /**

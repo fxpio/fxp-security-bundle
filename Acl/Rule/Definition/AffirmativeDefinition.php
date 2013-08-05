@@ -35,14 +35,22 @@ class AffirmativeDefinition extends AbstractAclRuleDefinition
     /**
      * {@inheritdoc}
      */
+    public function getTypes()
+    {
+        return array(static::TYPE_CLASS, static::TYPE_OBJECT);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function isGranted(AclRuleContextInterface $arc, ObjectIdentityInterface $oid, array $masks, $field = null)
     {
         $arm = $arc->getAclRuleManager();
         $oDef = $arm->getDefinition('object');
         $cDef = $arm->getDefinition('class');
 
-        return $cDef->isGranted($arc, $oid, $masks, $field)
-                || $oDef->isGranted($arc, $oid, $masks, $field);
+        return $oDef->isGranted($arc, $oid, $masks, $field)
+                || $cDef->isGranted($arc, $oid, $masks, $field);
     }
 
     /**

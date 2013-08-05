@@ -27,4 +27,12 @@ class DisabledDefinition extends AbstractAclRuleDefinition
     {
         return 'disabled';
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTypes()
+    {
+        return array();
+    }
 }

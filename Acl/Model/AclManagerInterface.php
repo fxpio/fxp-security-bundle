@@ -49,6 +49,26 @@ interface AclManagerInterface
     public function getObjectIdentities(array $domainObjects);
 
     /**
+     * Create class object identity.
+     * The Object Identity of Class created is cached for always obtain the
+     * same instance anywhere.
+     *
+     * @param string $type
+     *
+     * @param ObjectIdentityInterface
+     */
+    public function createClassObjectIdentity($type);
+
+    /**
+     * Get the all preload types (class and field) of class.
+     *
+     * @param FieldVote|ObjectIdentity|object|string $domainObject
+     *
+     * @return array THe list of preload type
+     */
+    public function getPreloadTypes($domainObject);
+
+    /**
      * Determines whether access is granted.
      *
      * @param RoleInterface[]|UserInterface[]|TokenInterface[]|string[]|SecurityIdentityInterface[] $sids
@@ -93,13 +113,60 @@ interface AclManagerInterface
     public function getRule($type, $domainObject, $field = null);
 
     /**
+     * Get the internal acl rules.
+     *
+     * @param object $domainObject The object or classname
+     * @param string $field        The field name
+     * @param array  $types        The list of acl type (empty = all types)
+     *
+     * @return array The map of rules
+     */
+    public function getRules($domainObject, $field = null, array $types = array());
+
+    /**
+     * Get all the rules for class and class fields.
+     *
+     * Return example:
+     *   array(
+     *       'class' => array(
+     *           'VIEW'     => 'allow',
+     *           'CREATE'   => 'allow',
+     *           'EDIT'     => 'allow',
+     *           'DELETE'   => 'class',
+     *           'UNDELETE' => 'class',
+     *           'OPERATOR' => 'class',
+     *           'MASTER'   => 'class',
+     *           'OWNER'    => 'class',
+     *       ),
+     *       'fields' => array(
+     *           'name' => array(
+     *               'VIEW'     => 'allow',
+     *               'CREATE'   => 'allow',
+     *               'EDIT'     => 'allow',
+     *               'DELETE'   => 'class',
+     *               'UNDELETE' => 'class',
+     *               'OPERATOR' => 'class',
+     *               'MASTER'   => 'class',
+     *               'OWNER'    => 'class',
+     *           )
+     *       ),
+     *   )
+     *
+     * @param DomainObjectInterface|object|string $domainObject The domainObject
+     *
+     * @return array The map contains 'class' map rules and 'fields' list map rules
+     */
+    public function getObjectRules($domainObject);
+
+    /**
      * Check if the security identities are granted on object identity.
      * Used in isGranted() by ACL Rule Definition.
      *
      * @param SecurityIdentityInterface[] $sids
      * @param array                       $masks
-     * @param ObjectIdentityInterface     $oid
+     * @param ObjectIdentityInterface     $oid     The current object identifier
+     * @param ObjectIdentityInterface     $initOid The initial object identifier
      * @param string                      $field
      */
-    public function doIsGranted(array $sids, array $masks, ObjectIdentityInterface $oid, $field = null);
+    public function doIsGranted(array $sids, array $masks, ObjectIdentityInterface $oid, ObjectIdentityInterface $initlOid, $field = null);
 }

@@ -9,6 +9,9 @@ parameters:
     security.acl.security_identity_retrieval_strategy.class: Sonatra\Bundle\SecurityBundle\Acl\Domain\SecurityIdentityRetrievalStrategy
     security.acl.object_identity_retrieval_strategy.class: Sonatra\Bundle\SecurityBundle\Acl\Domain\ObjectIdentityRetrievalStrategy
 
+    # override acl provider
+    security.acl.dbal.provider.class: Sonatra\Bundle\SecurityBundle\Acl\Dbal\MutableAclProvider
+
 services:
     #Override security identity retriveal strategy service
     security.acl.security_identity_retrieval_strategy:

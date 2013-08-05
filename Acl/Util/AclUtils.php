@@ -11,12 +11,12 @@
 
 namespace Sonatra\Bundle\SecurityBundle\Acl\Util;
 
-use Sonatra\Bundle\SecurityBundle\Exception\SecurityException;
 use Symfony\Component\Security\Acl\Domain\UserSecurityIdentity;
 use Symfony\Component\Security\Acl\Domain\RoleSecurityIdentity;
 use Symfony\Component\Security\Acl\Model\ObjectIdentityInterface;
 use Symfony\Component\Security\Acl\Model\SecurityIdentityInterface;
 use Symfony\Component\Security\Acl\Permission\MaskBuilder;
+use Symfony\Component\Security\Acl\Permission\BasicPermissionMap;
 use Symfony\Component\Security\Acl\Voter\FieldVote;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Util\ClassUtils;
@@ -44,7 +44,7 @@ class AclUtils
         }
 
         if (!is_string($mask) && !is_array($mask)) {
-            throw new SecurityException('The mask must be a string, or array of string or int (the symfony mask value)');
+            throw new \InvalidArgumentException('The mask must be a string, or array of string or int (the symfony mask value)');
         }
 
         // convert the rights to mask
@@ -59,7 +59,7 @@ class AclUtils
             }
 
         } catch (\Exception $e) {
-            throw new SecurityException(sprintf('The right "%s" does not exist', $maskConverted));
+            throw new \InvalidArgumentException(sprintf('The right "%s" does not exist', $maskConverted));
         }
 
         return $builder->get();
@@ -71,43 +71,49 @@ class AclUtils
      * @param int The mask
      *
      * @return array The list of permission (in string)
+     *
+     * @throw \InvalidArgumentException When the mask parameter is not a int
      */
     public static function convertToAclName($mask)
     {
+        if (!is_int($mask)) {
+            throw new \InvalidArgumentException("The mask must be a int");
+        }
+
         $mb = new MaskBuilder($mask);
         $pattern = $mb->getPattern();
         $rights = array();
 
         if (false !== strpos($pattern, MaskBuilder::CODE_VIEW)) {
-            $rights[] = 'VIEW';
+            $rights[] = BasicPermissionMap::PERMISSION_VIEW;
         }
 
         if (false !== strpos($pattern, MaskBuilder::CODE_CREATE)) {
-            $rights[] = 'CREATE';
+            $rights[] = BasicPermissionMap::PERMISSION_CREATE;
         }
 
         if (false !== strpos($pattern, MaskBuilder::CODE_EDIT)) {
-            $rights[] = 'EDIT';
+            $rights[] = BasicPermissionMap::PERMISSION_EDIT;
         }
 
         if (false !== strpos($pattern, MaskBuilder::CODE_DELETE)) {
-            $rights[] = 'DELETE';
+            $rights[] = BasicPermissionMap::PERMISSION_DELETE;
         }
 
         if (false !== strpos($pattern, MaskBuilder::CODE_UNDELETE)) {
-            $rights[] = 'UNDELETE';
+            $rights[] = BasicPermissionMap::PERMISSION_UNDELETE;
         }
 
         if (false !== strpos($pattern, MaskBuilder::CODE_OPERATOR)) {
-            $rights[] = 'OPERATOR';
+            $rights[] = BasicPermissionMap::PERMISSION_OPERATOR;
         }
 
         if (false !== strpos($pattern, MaskBuilder::CODE_MASTER)) {
-            $rights[] = 'MASTER';
+            $rights[] = BasicPermissionMap::PERMISSION_MASTER;
         }
 
         if (false !== strpos($pattern, MaskBuilder::CODE_OWNER)) {
-            $rights[] = 'OWNER';
+            $rights[] = BasicPermissionMap::PERMISSION_OWNER;
         }
 
         return $rights;
@@ -183,7 +189,7 @@ class AclUtils
      *
      * @param FieldVote|ObjectIdentity|object|string $domainObject
      *
-     * @throws SecurityException When the domain object is not a string for class type
+     * @throws InvalidArgumentException When the domain object is not a string for class type
      *
      * @return string
      */
@@ -202,7 +208,7 @@ class AclUtils
         }
 
         if (!is_string($domainObject)) {
-            throw new SecurityException('The domain object must be an string for "class"" type');
+            throw new \InvalidArgumentException('The domain object must be an string for "class" type');
         }
 
         return ClassUtils::getRealClass($domainObject);
