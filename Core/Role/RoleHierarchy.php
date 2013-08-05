@@ -134,6 +134,8 @@ class RoleHierarchy extends BaseRoleHierarchy
             }
         }
 
+        $reachableRoles = parent::getReachableRoles($reachableRoles);
+
         // insert in cache
         $this->cache[$cacheName] = $reachableRoles;
 
