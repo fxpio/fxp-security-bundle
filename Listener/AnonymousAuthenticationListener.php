@@ -42,6 +42,8 @@ class AnonymousAuthenticationListener extends BaseListener
      */
     public function __construct(SecurityContextInterface $context, $key, LoggerInterface $logger, ContainerInterface $container)
     {
+        parent::__construct($context, $key, $logger);
+
         $this->context = $context;
         $this->key = $key;
         $this->logger = $logger;
@@ -55,8 +57,9 @@ class AnonymousAuthenticationListener extends BaseListener
      */
     public function handle(GetResponseEvent $event)
     {
+        parent::handle($event);
+
         $token = $this->context->getToken();
-        $hostRole = null;
         $anonymousRole = null;
         $hostname = '';
         $rolesForHosts = $this->container->getParameter('sonatra_security.anonymous_authentication.hosts');
@@ -72,26 +75,11 @@ class AnonymousAuthenticationListener extends BaseListener
             }
         }
 
-        // find role for anonymous
-        if (null !== $anonymousRole) {
-            $hostRole = new Role($anonymousRole);
-        }
-
-        if (null === $hostRole) {
+        if (null === $anonymousRole) {
             return;
         }
 
-        // add anonymous token
-        if (null === $token) {
-            $this->context->setToken(new AnonymousToken($this->key, 'anon.', array($hostRole)));
-
-            if (null !== $this->logger) {
-                $this->logger->info(sprintf('Populated SecurityContext with an anonymous Token using role '.$anonymousRole.' for host '.$hostname));
-            }
-
-            return;
-        }
-
+        $hostRole = new Role($anonymousRole);
         $tRoles = $token->getRoles();
 
         foreach ($tRoles as $role) {
