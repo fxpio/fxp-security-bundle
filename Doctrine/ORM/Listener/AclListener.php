@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Bundle\SecurityBundle\Listener;
+namespace Sonatra\Bundle\SecurityBundle\Doctrine\ORM\Listener;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Security\Acl\Voter\FieldVote;
@@ -26,7 +26,7 @@ use Doctrine\ORM\PersistentCollection;
  *
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-class AclDoctrineORMListener implements EventSubscriber
+class AclListener implements EventSubscriber
 {
     protected $container;
 

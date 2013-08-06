@@ -14,7 +14,7 @@ namespace Sonatra\Bundle\SecurityBundle\Doctrine\ORM\Filter;
 use Doctrine\ORM\Query\Filter\SQLFilter;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Sonatra\Bundle\SecurityBundle\Acl\Domain\AclRuleContext;
-use Sonatra\Bundle\SecurityBundle\Listener\AclDoctrineORMListener;
+use Sonatra\Bundle\SecurityBundle\Doctrine\ORM\Listener\AclListener;
 
 /**
  * Acl filter.
@@ -45,7 +45,7 @@ class AclFilter extends SQLFilter
     /**
      * Get the ACL Doctrine ORM Listener.
      *
-     * @return AclDoctrineORMListener
+     * @return AclListener
      *
      * @throws \RuntimeException
      */
@@ -57,7 +57,7 @@ class AclFilter extends SQLFilter
 
             foreach ($evm->getListeners() as $listeners) {
                 foreach ($listeners as $listener) {
-                    if ($listener instanceof AclDoctrineORMListener) {
+                    if ($listener instanceof AclListener) {
                         $this->listener = $listener;
                         break 2;
                     }
@@ -65,7 +65,7 @@ class AclFilter extends SQLFilter
             }
 
             if (null === $this->listener) {
-                throw new \RuntimeException('Listener "AclDoctrineORMListener" was not added to the EventManager!');
+                throw new \RuntimeException('Listener "AclListener" was not added to the EventManager!');
             }
         }
 

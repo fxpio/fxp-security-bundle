@@ -1,5 +1,5 @@
 parameters:
-    sonatra.security.acl.listener.orm.base.class: Sonatra\Bundle\SecurityBundle\Listener\AclDoctrineORMListener
+    sonatra.security.acl.listener.orm.base.class: Sonatra\Bundle\SecurityBundle\Doctrine\ORM\Listener\AclListener
 
 services:
     sonatra.security.acl.listener.orm:
