@@ -126,29 +126,36 @@ class RoleHierarchy extends BaseRoleHierarchy
             $reachableRoles = array_merge($reachableRoles, $this->getAllChildren($eRole));
         }
 
-        $reachableRoles = array_values($reachableRoles);
+        $reachableRoles = parent::getReachableRoles($reachableRoles);
+
+        // cleaning double
+        $existingRoles = array();
+        $finalRoles = array();
 
         foreach ($reachableRoles as $index => $role) {
-            if (!($role instanceof Role)) {
-                $reachableRoles[$index] = new Role($role->getRole());
+            if (!in_array($role->getRole(), $existingRoles)) {
+                if (!($role instanceof Role)) {
+                    $role = new Role($role->getRole());
+                }
+
+                $existingRoles[] = $role->getRole();
+                $finalRoles[] = $role;
             }
         }
 
-        $reachableRoles = parent::getReachableRoles($reachableRoles);
-
         // insert in cache
-        $this->cache[$cacheName] = $reachableRoles;
+        $this->cache[$cacheName] = $finalRoles;
 
         if ($filterIsEnabled) {
             $em->getFilters()->enable('sonatra_acl');
         }
 
         if (null !== $this->eventDispatcher) {
-            $event->setRreachableRoles($reachableRoles);
+            $event->setRreachableRoles($finalRoles);
             $this->eventDispatcher->dispatch(Events::POST_REACHABLE_ROLES, $event);
         }
 
-        return $reachableRoles;
+        return $finalRoles;
     }
 
     /**
