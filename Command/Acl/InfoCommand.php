@@ -74,7 +74,6 @@ EOF
         $identityName = $identity;
         $identityClass = $this->getClassname($this->getContainer()->getParameter('sonatra_security.'.$identityType.'_class'));
         $identityRepo = $doctrine->getManagerForClass($identityClass)->getRepository($identityClass);
-        $identity = $identityRepo->findOneBy(array(('user' === $identityType ? 'username' : 'name') => $identity));
         $domainClass = $this->getClassname($input->getArgument('domain-class-name'));
         $domain = new ObjectIdentity('class', $domainClass);
         $domainId = $input->getOption('domainid');
@@ -84,12 +83,18 @@ EOF
         $host = $noHost ? null : $input->getOption('host');
         $calculated = $input->getOption('calc');
 
-        if ('group' === $identityType) {
-            $calculated = true;
-        }
+        if (!in_array($identityType, array('role', 'group', 'user'))) {
+            throw new \InvalidArgumentException('The "identity-type" argument must be "role", "group" or "user"');
 
-        if (!in_array($identityType, array('role', 'user', 'group'))) {
-            throw new \InvalidArgumentException('The "identity-type" argument must be "role", "user" or "group"');
+        } elseif ('user' === $identityType) {
+            $identity = $identityRepo->findOneBy(array('username' => $identity));
+
+        } elseif ('group' === $identityType) {
+            $calculated = true;
+            $identity = $identityRepo->findOneBy(array('name' => $identity));
+
+        } else {
+            $identity = new Role($identity);
         }
 
         if (null === $identity) {

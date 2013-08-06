@@ -17,6 +17,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Security\Acl\Domain\ObjectIdentity;
+use Symfony\Component\Security\Core\Role\Role;
 use Sonatra\Bundle\SecurityBundle\Acl\Util\AclUtils;
 
 /**
@@ -61,18 +62,23 @@ EOF
         $rights = $input->getOption('right');
 
         $doctrine = $this->getContainer()->get('doctrine');
-        $domainClass = $this->getClassname($input->getArgument('domain-class-name'));
-        $domain = new ObjectIdentity('class', $domainClass);
-        $domainId = $input->getOption('domainid');
-        $domainType = null !== $domainId ? 'object' : 'class';
         $identityType = strtolower($input->getArgument('identity-type'));
         $identity = $input->getArgument('identity-name');
         $identityClass = $this->getClassname($this->getContainer()->getParameter('sonatra_security.'.$identityType.'_class'));
         $identityRepo = $doctrine->getManagerForClass($identityClass)->getRepository($identityClass);
-        $identity = $identityRepo->findOneBy(array(('user' === $identityType ? 'username' : 'name') => $identity));
+        $domainClass = $this->getClassname($input->getArgument('domain-class-name'));
+        $domain = new ObjectIdentity('class', $domainClass);
+        $domainId = $input->getOption('domainid');
+        $domainType = null !== $domainId ? 'object' : 'class';
 
         if (!in_array($identityType, array('role', 'user'))) {
             throw new \InvalidArgumentException('The "identity-type" argument must be "role" or "user"');
+
+        } elseif ('user' === $identityType) {
+            $identity = $identityRepo->findOneBy(array('username' => $identity));
+
+        } else {
+            $identity = new Role($identity);
         }
 
         if (null === $identity) {
