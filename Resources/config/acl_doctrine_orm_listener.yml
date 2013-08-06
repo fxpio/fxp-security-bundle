@@ -1,10 +1,10 @@
 parameters:
-    sonatra.security.acl.listener.orm.base.class: Sonatra\Bundle\SecurityBundle\Doctrine\ORM\Listener\AclListener
+    sonatra_security.acl.orm.listener.class: Sonatra\Bundle\SecurityBundle\Doctrine\ORM\Listener\AclListener
 
 services:
-    sonatra.security.acl.listener.orm:
+    sonatra_security.acl.orm.listener:
         public:    false
-        class:     '%sonatra.security.acl.listener.orm.base.class%'
+        class:     '%sonatra_security.acl.orm.listener.class%'
         arguments: ['@service_container']
         tags:
             - { name: doctrine.event_subscriber, priority: 1 }

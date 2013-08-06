@@ -20,7 +20,7 @@ $comment = new Comment(); // create some entity
 $em->persist($comment);
 $em->flush();
 
-$aclManipulator = $this->get('sonatra.acl.manipulator');
+$aclManipulator = $this->get('sonatra_security.acl.manipulator');
 
 // Add owner object permission
 $aclManipulator->addObjectPermission($user, $comment, MaskBuilder::MASK_OWNER);

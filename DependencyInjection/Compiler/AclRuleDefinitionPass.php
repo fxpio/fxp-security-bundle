@@ -15,8 +15,8 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 
 /**
- * Adds all services with the tags "sonatra.acl.rule_definition" as arguments
- * of the "sonatra.acl.rule.extension" service.
+ * Adds all services with the tags "sonatra_security.acl.rule_definition" as arguments
+ * of the "sonatra_security.acl.rule_extension" service.
  *
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
@@ -27,14 +27,14 @@ class AclRuleDefinitionPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        if (!$container->hasDefinition('sonatra.acl.rule.extension')) {
+        if (!$container->hasDefinition('sonatra_security.acl.rule_extension')) {
             return;
         }
 
         // Builds an array with service IDs as keys and tag aliases as values
         $definitions = array();
 
-        foreach ($container->findTaggedServiceIds('sonatra.acl.rule_definition') as $serviceId => $tag) {
+        foreach ($container->findTaggedServiceIds('sonatra_security.acl.rule_definition') as $serviceId => $tag) {
             $alias = isset($tag[0]['alias'])
                 ? $tag[0]['alias']
                 : $serviceId;
@@ -43,6 +43,6 @@ class AclRuleDefinitionPass implements CompilerPassInterface
             $definitions[$alias] = $serviceId;
         }
 
-        $container->getDefinition('sonatra.acl.rule.extension')->replaceArgument(1, $definitions);
+        $container->getDefinition('sonatra_security.acl.rule_extension')->replaceArgument(1, $definitions);
     }
 }

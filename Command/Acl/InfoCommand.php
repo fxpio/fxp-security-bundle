@@ -104,7 +104,7 @@ EOF
         // init get acl rights
         $classRights = array();
         $fieldRights = array();
-        $aclManipulator = $this->getContainer()->get('sonatra.acl.manipulator');
+        $aclManipulator = $this->getContainer()->get('sonatra_security.acl.manipulator');
 
         if (null === $field) {
             $reflClass = new \ReflectionClass($domainClass);
@@ -231,7 +231,7 @@ EOF
             return array();
         }
 
-        $aclManipulator = $this->getContainer()->get('sonatra.acl.manipulator');
+        $aclManipulator = $this->getContainer()->get('sonatra_security.acl.manipulator');
         $out = array('', '  Class rights:');
         $rights = array();
         $width = 0;
@@ -263,7 +263,7 @@ EOF
             return array();
         }
 
-        $aclManipulator = $this->getContainer()->get('sonatra.acl.manipulator');
+        $aclManipulator = $this->getContainer()->get('sonatra_security.acl.manipulator');
         $out = array('');
         $fields = array();
         $width = 0;

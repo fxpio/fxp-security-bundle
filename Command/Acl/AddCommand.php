@@ -163,7 +163,7 @@ EOF
      */
     private function addRights(OutputInterface $output, $identity, $rights, $domainType, $domain, $index, $granting, $strategy)
     {
-        $aclManipulator = $this->getContainer()->get('sonatra.acl.manipulator');
+        $aclManipulator = $this->getContainer()->get('sonatra_security.acl.manipulator');
         $addMethod = 'add'.ucfirst($domainType).'Permission';
         $getMethod = 'get'.ucfirst($domainType).'Permission';
         $aclManipulator->$addMethod($identity, $domain, $rights, $index, $granting, $strategy);
@@ -189,7 +189,7 @@ EOF
      */
     private function addFieldRights(OutputInterface $output, $identity, $rights, $domainType, $domain, $field, $index, $granting, $strategy)
     {
-        $aclManipulator = $this->getContainer()->get('sonatra.acl.manipulator');
+        $aclManipulator = $this->getContainer()->get('sonatra_security.acl.manipulator');
         $addMethod = 'add'.ucfirst($domainType).'FieldPermission';
         $getMethod = 'get'.ucfirst($domainType).'FieldPermission';
         $aclManipulator->$addMethod($identity, $domain, $field, $rights, $index, $granting, $strategy);

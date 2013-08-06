@@ -168,7 +168,7 @@ class AclListener implements EventSubscriber
      */
     public function getAclManager()
     {
-        return $this->container->get('sonatra.acl.manager');
+        return $this->container->get('sonatra_security.acl.manager');
     }
 
     /**
@@ -178,7 +178,7 @@ class AclListener implements EventSubscriber
      */
     public function getAclRuleManager()
     {
-        return $this->container->get('sonatra.acl.rule.manager');
+        return $this->container->get('sonatra_security.acl.rule_manager');
     }
 
     /**

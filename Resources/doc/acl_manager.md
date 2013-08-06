@@ -16,7 +16,7 @@ If you'll be doing work on a lot of entities, use AclManager#preloadAcls():
 
 $products = $repo->findAll();
 
-$aclManager = $this->get('sonatra.acl.manager');
+$aclManager = $this->get('sonatra_security.acl.manager');
 $aclManager->preloadAcls($products);
 
 // ...

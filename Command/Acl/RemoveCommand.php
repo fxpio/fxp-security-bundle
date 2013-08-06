@@ -135,7 +135,7 @@ EOF
      */
     private function revokeRights(OutputInterface $output, $identity, $rights, $domainType, $domain)
     {
-        $aclManipulator = $this->getContainer()->get('sonatra.acl.manipulator');
+        $aclManipulator = $this->getContainer()->get('sonatra_security.acl.manipulator');
         $revokeMethod = 'revoke'.ucfirst($domainType).'Permission';
         $deleteMethod = 'delete'.ucfirst($domainType).'Permissions';
         $getMethod = 'get'.ucfirst($domainType).'Permission';
@@ -165,7 +165,7 @@ EOF
      */
     private function revokeFieldRights(OutputInterface $output, $identity, $rights, $domainType, $domain, $field)
     {
-        $aclManipulator = $this->getContainer()->get('sonatra.acl.manipulator');
+        $aclManipulator = $this->getContainer()->get('sonatra_security.acl.manipulator');
         $revokeMethod = 'revoke'.ucfirst($domainType).'FieldPermission';
         $deleteMethod = 'delete'.ucfirst($domainType).'FieldPermissions';
         $getMethod = 'get'.ucfirst($domainType).'FieldPermission';
