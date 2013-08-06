@@ -36,7 +36,7 @@ class AddCommand extends ContainerAwareCommand
         $this->setName('security:acl:add')
         ->setDescription('Add a specified right from a given identifier on a given domain (class or object).')
         ->setDefinition(array(
-                new InputArgument('identity-type', InputArgument::REQUIRED, 'The security identity type (role, user)'),
+                new InputArgument('identity-type', InputArgument::REQUIRED, 'The security identity type (role, user, group)'),
                 new InputArgument('identity-name', InputArgument::REQUIRED, 'The security identity name to use for the right'),
                 new InputArgument('domain-class-name', InputArgument::REQUIRED, 'The domain class name to get the right for'),
                 new InputArgument('domain-field-name', InputArgument::OPTIONAL, 'The domain class field name to get the right for'),
@@ -96,11 +96,14 @@ EOF
         $domainId = $input->getOption('domainid');
         $domainType = null !== $domainId ? 'object' : 'class';
 
-        if (!in_array($identityType, array('role', 'user'))) {
-            throw new \InvalidArgumentException('The "identity-type" argument must be "role" or "user"');
+        if (!in_array($identityType, array('role', 'group', 'user'))) {
+            throw new \InvalidArgumentException('The "identity-type" argument must be "role", "group" or "user"');
 
         } elseif ('user' === $identityType) {
             $identity = $identityRepo->findOneBy(array('username' => $identity));
+
+        } elseif ('group' === $identityType) {
+            $identity = $identityRepo->findOneBy(array('name' => $identity));
 
         } else {
             $identity = new Role($identity);

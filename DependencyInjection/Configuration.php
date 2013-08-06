@@ -58,6 +58,7 @@ class Configuration implements ConfigurationInterface
             ->children()
                 ->scalarNode('enabled')->defaultTrue()->end()
                 ->scalarNode('enabled_hierarchy')->defaultTrue()->end()
+                ->scalarNode('enabled_group_security_identity')->defaultTrue()->end()
                 ->scalarNode('doctrine_orm_listener')->defaultTrue()->end()
                 ->scalarNode('default_rule')->defaultValue('disabled')->end()
                 ->arrayNode('rules')

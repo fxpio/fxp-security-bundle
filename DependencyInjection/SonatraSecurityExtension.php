@@ -46,6 +46,10 @@ class SonatraSecurityExtension extends Extension
                 $loader->load('acl_hierarchy.yml');
             }
 
+            if ($config['acl']['enabled_group_security_identity']) {
+                $loader->load('group_security_identity_strategy.yml');
+            }
+
             $container->setParameter('sonatra_security.acl_default_rule', $config['acl']['default_rule']);
             $container->setParameter('sonatra_security.acl_rules', $config['acl']['rules']);
 

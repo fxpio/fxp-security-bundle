@@ -1,0 +1,13 @@
+parameters:
+    # override standard security identity retriveal strategy
+    security.acl.security_identity_retrieval_strategy.class: Sonatra\Bundle\SecurityBundle\Acl\Domain\SecurityIdentityRetrievalStrategy
+
+services:
+    #Override security identity retriveal strategy service
+    security.acl.security_identity_retrieval_strategy:
+        class:  '%security.acl.security_identity_retrieval_strategy.class%'
+        public: false
+        arguments:
+            - '@security.role_hierarchy'
+            - '@security.authentication.trust_resolver'
+            - '@doctrine'

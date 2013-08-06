@@ -90,7 +90,6 @@ EOF
             $identity = $identityRepo->findOneBy(array('username' => $identity));
 
         } elseif ('group' === $identityType) {
-            $calculated = true;
             $identity = $identityRepo->findOneBy(array('name' => $identity));
 
         } else {

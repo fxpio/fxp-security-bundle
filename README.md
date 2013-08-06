@@ -13,10 +13,10 @@ Features include:
 - Service manager (helper) for check granting on domain object (granted, field granted, preload ACLs)
 - ACL Rule Definition for optimize the ACL queries (and ability to create a sharing rule)
 - ACL Voter for use the `security.context` service
-- Ability to set permissions for roles or users
+- Ability to set permissions on roles or users, but also directly on groups
 - Ability to define a hierarchy of role (with all roles in all associated groups)
-- Merge the permissions of roles children of associated roles with user, role, and token
-- Define an anonymous role for various host with the direct injection of the role in token (regex compatible)
+- Merge the permissions of roles children of associated roles with user, role, group, and token
+- Define a role for various host with direct injection in token (regex compatible)
 - Execution cache system for the ACL/ACE getter
 - Execution cache system for the determination of all roles (of token, user, group and children role) of the token
 - Doctrine ORM Filter for filter the records in query (all type)
@@ -34,10 +34,10 @@ Features include:
  * associate/disassociate a user from a group
  * add/remove child of role
  * add/remove parent of role
- * grant/revoke permissions by user or by role for a defined class (or record entity)
- * display direct and indirect roles of user (anonymous role of host compatible)
- * display direct and indirect roles of group (anonymous role of host compatible)
- * display direct and indirect children of role (anonymous role of host compatible)
+ * grant/revoke permissions by user, by role or by group for a defined class (or record entity)
+ * display direct and indirect roles of user (host role compatible)
+ * display direct and indirect roles of group (host role compatible)
+ * display direct and indirect children of role (host role compatible)
  * display the permissions by user or by role for a defined class (or a record entity)
  * display the calculated permissions by user or by role for a defined class (or a record entity)
 

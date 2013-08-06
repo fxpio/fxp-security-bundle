@@ -11,6 +11,7 @@
 
 namespace Sonatra\Bundle\SecurityBundle\Acl\Util;
 
+use Sonatra\Bundle\SecurityBundle\Acl\Domain\GroupSecurityIdentity;
 use Symfony\Component\Security\Acl\Domain\UserSecurityIdentity;
 use Symfony\Component\Security\Acl\Domain\RoleSecurityIdentity;
 use Symfony\Component\Security\Acl\Model\ObjectIdentityInterface;
@@ -22,6 +23,7 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Util\ClassUtils;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\Role\RoleInterface;
+use FOS\UserBundle\Model\GroupInterface;
 
 /**
  * Class related functionality for acl manipulation.
@@ -161,6 +163,9 @@ class AclUtils
             } elseif ($identity instanceof UserInterface) {
                 $sids[] = UserSecurityIdentity::fromAccount($identity);
 
+            } elseif ($identity instanceof GroupInterface) {
+                $sids[] = GroupSecurityIdentity::fromAccount($identity);
+
             } elseif ($identity instanceof TokenInterface) {
                 $sids[] = UserSecurityIdentity::fromToken($identity);
 
@@ -171,7 +176,7 @@ class AclUtils
                 $sids[] = new RoleSecurityIdentity($identity);
 
             } else {
-                $str = 'Identity must implement one of: RoleInterface, UserInterface or string';
+                $str = 'Identity must implement one of: RoleInterface, UserInterface, GroupInterface or string';
 
                 if (is_object($identity)) {
                     $str .= sprintf(' (%s given)', get_class($identity));
