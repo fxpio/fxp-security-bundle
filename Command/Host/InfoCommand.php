@@ -17,8 +17,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Security\Acl\Domain\RoleSecurityIdentity;
-use Symfony\Component\Security\Core\Role\Role;
+use Symfony\Component\Security\Core\Role\RoleInterface;
 
 /**
  * @author François Pluchino <francois.pluchino@sonatra.com>
@@ -36,7 +35,7 @@ class InfoCommand extends BaseInfoCommand
             ->setDescription('Security infos of host role')
             ->setDefinition(array(
                 new InputArgument('name', InputArgument::OPTIONAL, 'The name', 'localhost'),
-                new InputOption('calc', 'c', InputOption::VALUE_NONE, 'Get all roles of hierarchical role (calculated)')
+                new InputOption('calc', 'c', InputOption::VALUE_NONE, 'Get all roles of role reachable (calculated)')
          ));
     }
 
@@ -53,15 +52,14 @@ class InfoCommand extends BaseInfoCommand
         if ($calculated) {
             $tokenRoles = array_keys($allRoles);
             $token = new ConsoleToken('key', 'console.', $tokenRoles);
-            $identities = $this->getContainer()->get('sonatra.acl.manager')->getSecurityIdentities($token);
+            $roles = $this->getContainer()->get('security.role_hierarchy')->getReachableRoles($token->getRoles());
 
-            foreach ($identities as $child) {
-                if ($child instanceof RoleSecurityIdentity) {
-                    if (!array_key_exists($child->getRole(), $allRoles)) {
-                        $allRoles[$child->getRole()] = 'role hierarchy';
+            foreach ($roles as $role) {
+                if ($role instanceof RoleInterface) {
+                    if (!array_key_exists($role->getRole(), $allRoles)) {
+                        $allRoles[$role->getRole()] = 'role hierarchy';
                     }
                 }
-
             }
         }
 

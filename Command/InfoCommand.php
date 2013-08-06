@@ -16,6 +16,9 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 /**
  * @author François Pluchino <francois.pluchino@sonatra.com>
@@ -31,7 +34,7 @@ abstract class InfoCommand extends ContainerAwareCommand
                 new InputArgument('name', InputArgument::OPTIONAL, 'The name'),
                 new InputOption('host', null, InputOption::VALUE_REQUIRED, 'The hostname pattern (for default anonymous role)', 'localhost'),
                 new InputOption('no-host', null, InputOption::VALUE_NONE, 'Not display the role of host'),
-                new InputOption('calc', 'c', InputOption::VALUE_NONE, 'Get all roles of hierarchical role (calculated)')
+                new InputOption('calc', 'c', InputOption::VALUE_NONE, 'Get all roles of role reachable (calculated)')
          ));
     }
 
@@ -118,20 +121,22 @@ abstract class InfoCommand extends ContainerAwareCommand
             return array();
         }
 
+        $_SERVER['SERVER_NAME'] = $hostname;
+        $request = Request::createFromGlobals();
+
+        $this->getContainer()->set('request', $request);
+        $this->getContainer()->enterScope('request');
+
+        $event = new GetResponseEvent($this->getApplication()->getKernel(), $request, HttpKernelInterface::MASTER_REQUEST);
+        $this->getContainer()->get('security.firewall')->onKernelRequest($event);
+
         $roles = array();
-        $anonymousRole = null;
-        $rolesForHosts = $this->getContainer()->getParameter('sonatra_security.anonymous_authentication.hosts');
+        $token = $this->getContainer()->get('security.context')->getToken();
 
-        foreach ($rolesForHosts as $host => $role) {
-            if (preg_match('/.'.$host.'/', $hostname)) {
-                $anonymousRole = $role;
-                break;
+        if (null !== $token) {
+            foreach ($token->getRoles() as $role) {
+                $roles[$role->getRole()] = 'host role';
             }
-        }
-
-        // find role for anonymous
-        if (null !== $anonymousRole) {
-            $roles[$anonymousRole] = 'token';
         }
 
         return $roles;

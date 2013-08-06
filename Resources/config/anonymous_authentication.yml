@@ -1,8 +1,0 @@
-services:
-    # Override SF2 anonymous listener
-    security.authentication.listener.anonymous:
-        class:     Sonatra\Bundle\SecurityBundle\Listener\AnonymousAuthenticationListener
-        public:    false
-        arguments: ['@security.context', '%sonatra_security.anonymous_authentication.key%', '@logger', '@service_container']
-        tags:
-            - { name: monolog.logger, channel: security }

@@ -11,7 +11,6 @@
 
 namespace Sonatra\Bundle\SecurityBundle\Command\Acl;
 
-use Symfony\Component\Security\Core\Role\Role;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -22,6 +21,10 @@ use Symfony\Component\Security\Acl\Voter\FieldVote;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\Role\RoleInterface;
+use Symfony\Component\Security\Core\Role\Role;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
 use FOS\UserBundle\Model\GroupInterface;
 use Sonatra\Bundle\SecurityBundle\Core\Token\ConsoleToken;
 use Sonatra\Bundle\SecurityBundle\Acl\Util\AclUtils;
@@ -116,7 +119,8 @@ EOF
             $sc = $this->getContainer()->get('security.context');
 
             if ($identity instanceof UserInterface) {
-                $sc->setToken(new UsernamePasswordToken($identity, '', 'key', $this->getHostRoles($host)));
+                $roles = array_merge($identity->getRoles(), $this->getHostRoles($host));
+                $sc->setToken(new UsernamePasswordToken($identity, '', 'key', $roles));
 
             } elseif ($identity instanceof GroupInterface) {
                 $roles = array_merge($identity->getRoles(), $this->getHostRoles($host));
@@ -324,20 +328,22 @@ EOF
             return array();
         }
 
+        $_SERVER['SERVER_NAME'] = $hostname;
+        $request = Request::createFromGlobals();
+
+        $this->getContainer()->set('request', $request);
+        $this->getContainer()->enterScope('request');
+
+        $event = new GetResponseEvent($this->getApplication()->getKernel(), $request, HttpKernelInterface::MASTER_REQUEST);
+        $this->getContainer()->get('security.firewall')->onKernelRequest($event);
+
         $roles = array();
-        $anonymousRole = null;
-        $rolesForHosts = $this->getContainer()->getParameter('sonatra_security.anonymous_authentication.hosts');
+        $token = $this->getContainer()->get('security.context')->getToken();
 
-        foreach ($rolesForHosts as $host => $role) {
-            if (preg_match('/.'.$host.'/', $hostname)) {
-                $anonymousRole = $role;
-                break;
+        if (null !== $token) {
+            foreach ($token->getRoles() as $role) {
+                $roles[] = $role;
             }
-        }
-
-        // find role for anonymous
-        if (null !== $anonymousRole) {
-            $roles[] = $anonymousRole;
         }
 
         return $roles;

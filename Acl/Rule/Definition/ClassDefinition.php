@@ -13,7 +13,6 @@ namespace Sonatra\Bundle\SecurityBundle\Acl\Rule\Definition;
 
 use Sonatra\Bundle\SecurityBundle\Acl\Domain\AbstractAclRuleDefinition;
 use Sonatra\Bundle\SecurityBundle\Acl\Model\AclRuleContextInterface;
-use Sonatra\Bundle\SecurityBundle\Acl\Util\AclUtils;
 use Symfony\Component\Security\Acl\Domain\UserSecurityIdentity;
 use Symfony\Component\Security\Acl\Model\ObjectIdentityInterface;
 use Doctrine\ORM\EntityManager;

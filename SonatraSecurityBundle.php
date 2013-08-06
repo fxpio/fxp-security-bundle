@@ -14,15 +14,19 @@ namespace Sonatra\Bundle\SecurityBundle;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Sonatra\Bundle\SecurityBundle\DependencyInjection\Compiler\AclRuleDefinitionPass;
+use Sonatra\Bundle\SecurityBundle\Factory\HostRoleFactory;
 
 /**
- * @author Fran�ois Pluchino <francois.pluchino@sonatra.com>
+ * @author François Pluchino <francois.pluchino@sonatra.com>
  */
 class SonatraSecurityBundle extends Bundle
 {
     public function build(ContainerBuilder $container)
     {
         parent::build($container);
+
+        $extension = $container->getExtension('security');
+        $extension->addSecurityListenerFactory(new HostRoleFactory());
 
         $container->addCompilerPass(new AclRuleDefinitionPass());
     }

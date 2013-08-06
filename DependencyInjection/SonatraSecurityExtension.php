@@ -37,13 +37,8 @@ class SonatraSecurityExtension extends Extension
         $container->setParameter('sonatra_security.role_class', $config['role_class']);
         $container->setParameter('sonatra_security.group_class', $config['group_class']);
 
-        // anonymous authentication
-        if ($config['anonymous_authentication']['enabled']) {
-            $container->setParameter('sonatra_security.anonymous_authentication.key', $config['anonymous_authentication']['key']);
-            $container->setParameter('sonatra_security.anonymous_authentication.hosts', $config['anonymous_authentication']['hosts']);
-
-            $loader->load('anonymous_authentication.yml');
-        }
+        // host role
+        $loader->load('host_role.yml');
 
         // acl
         if ($config['acl']['enabled']) {

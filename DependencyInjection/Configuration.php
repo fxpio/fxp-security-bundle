@@ -35,38 +35,12 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('role_class')->defaultValue('Symfony\Component\Security\Core\Role\RoleInterface')->end()
                 ->scalarNode('group_class')->defaultValue('FOS\UserBundle\Model\GroupInterface')->end()
             ->end()
-            ->append($this->getAnonymousRoleNode())
             ->append($this->getAclNode())
             ->append($this->getExpressionNode())
             ->append($this->getDoctrineListenerNode())
         ;
 
         return $treeBuilder;
-    }
-
-    /**
-     * Get anonymous role node.
-     *
-     * @return NodeDefinition
-     */
-    private function getAnonymousRoleNode()
-    {
-        $treeBuilder = new TreeBuilder();
-        $node = $treeBuilder->root('anonymous_authentication');
-
-        $node
-            ->addDefaultsIfNotSet()
-            ->children()
-                ->scalarNode('enabled')->defaultTrue()->end()
-                ->scalarNode('key')->defaultValue('key')->end()
-                ->arrayNode('hosts')
-                    ->example(array('*.domain.*' => 'ROLE_ANONYMOUS', '*' => 'ROLE_DEFAULT_ANONYMOUS'))
-                    ->prototype('scalar')->end()
-                ->end()
-            ->end()
-        ;
-
-        return $node;
     }
 
     /**

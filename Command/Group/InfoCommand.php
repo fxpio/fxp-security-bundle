@@ -15,7 +15,7 @@ use Sonatra\Bundle\SecurityBundle\Command\InfoCommand as BaseInfoCommand;
 use Sonatra\Bundle\SecurityBundle\Core\Token\ConsoleToken;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Security\Acl\Domain\RoleSecurityIdentity;
+use Symfony\Component\Security\Core\Role\RoleInterface;
 use FOS\UserBundle\Model\GroupInterface;
 
 /**
@@ -78,23 +78,15 @@ class InfoCommand extends BaseInfoCommand
 
         if ($calculated) {
             $tokenRoles = array_keys($allRoles);
-
-            if ($identity instanceof RoleInterface) {
-                $tokenRoles = array_merge($tokenRoles, array($identity));
-            }
-
             $token = new ConsoleToken('key', 'console.', $tokenRoles);
-            $identities = $this->getContainer()->get('sonatra.acl.manager')->getSecurityIdentities($token);
+            $roles = $this->getContainer()->get('security.role_hierarchy')->getReachableRoles($token->getRoles());
 
-            foreach ($identities as $child) {
-                if ($child instanceof RoleSecurityIdentity
-                        && (!($identity instanceof RoleInterface)
-                                || $child->getRole() !== $identity->getRole())) {
-                    if (!array_key_exists($child->getRole(), $allRoles)) {
-                        $allRoles[$child->getRole()] = 'role hierarchy';
+            foreach ($roles as $role) {
+                if ($role instanceof RoleInterface) {
+                    if (!array_key_exists($role->getRole(), $allRoles)) {
+                        $allRoles[$role->getRole()] = 'role hierarchy';
                     }
                 }
-
             }
         }
 
