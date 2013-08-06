@@ -17,9 +17,10 @@
         "symfony/framework-bundle": "~2.3",
         "friendsofsymfony/user-bundle": "~2.0"
     },
-    suggest: {
+    "suggest": {
         "jms/security-extra-bundle": "For JMS Security Extra Expression features",
         "doctrine/orm": "For ORM filter query feature"
+    },
     "autoload": {
         "psr-0": { "Sonatra\\Bundle\\SecurityBundle": "" }
     },
