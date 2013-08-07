@@ -40,16 +40,62 @@ interface AclRuleContextInterface
     public function getSecurityIdentities();
 
     /**
-     * Get current user.
-     *
-     * @return \Symfony\Component\Security\Acl\User\UserInterface|null
-     */
-    public function getUser();
-
-    /**
      * Get username.
      *
      * @return string|null
      */
     public function getUsername();
+
+    /**
+     * Check if the context has a role name.
+     *
+     * @param string $name
+     *
+     * @return boolean
+     */
+    public function hasRole($name);
+
+    /**
+     * Get all role names in context.
+     *
+     * @return array
+     */
+    public function getRoles();
+
+    /**
+     * Check if the context has a group name.
+     *
+     * @param string $name
+     *
+     * @return boolean
+     */
+    public function hasGroup($name);
+
+    /**
+     * Get all group names in context.
+     *
+     * @return array
+     */
+    public function getGroups();
+
+    /**
+     * Check if the context is authenticated anonymously.
+     *
+     * @return boolean
+     */
+    public function isAuthenticatedAnonymously();
+
+    /**
+     * Check if the context is authenticated remembered.
+     *
+     * @return boolean
+     */
+    public function isAuthenticatedRemembered();
+
+    /**
+     * Check if the context is authenticated fully.
+     *
+     * @return boolean
+     */
+    public function isAuthenticatedFully();
 }
