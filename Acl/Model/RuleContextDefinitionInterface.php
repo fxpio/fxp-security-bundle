@@ -16,7 +16,7 @@ namespace Sonatra\Bundle\SecurityBundle\Acl\Model;
  *
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-interface AclRuleContextDefinitionInterface extends AclRuleContextInterface
+interface RuleContextDefinitionInterface extends RuleContextInterface
 {
     /**
      * Get object identity.

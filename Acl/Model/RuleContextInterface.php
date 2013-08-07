@@ -16,7 +16,7 @@ namespace Sonatra\Bundle\SecurityBundle\Acl\Model;
  *
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-interface AclRuleContextInterface
+interface RuleContextInterface
 {
     /**
      * Get security identities.

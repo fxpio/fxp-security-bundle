@@ -179,6 +179,22 @@ class AclRuleManager implements AclRuleManagerInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getFilterDefinition($name, $type)
+    {
+        return $this->ruleExtension->getFilterDefinition($name, $type);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function hasFilterDefinition($name, $type)
+    {
+        return $this->ruleExtension->hasFilterDefinition($name, $type);
+    }
+
+    /**
      * Validate the rule name with existing constant.
      *
      * @param string $rule

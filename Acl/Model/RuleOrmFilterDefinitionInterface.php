@@ -12,23 +12,18 @@
 namespace Sonatra\Bundle\SecurityBundle\Acl\Model;
 
 /**
- * Acl Rule Context Doctrine ORM Filter Interface.
+ * Acl Rule Filter Definition Interface for Doctrine ORM Filter.
  *
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-interface AclRuleContextOrmFilterInterface extends AclRuleContextInterface
+interface RuleOrmFilterDefinitionInterface extends RuleFilterDefinitionInterface
 {
     /**
-     * Get the target entity class metadata.
+     * Add Doctrine ORM SQL Filter Constraint.
      *
-     * @return \Doctrine\Common\Persistence\Mapping\ClassMetadata
-     */
-    public function getClassMetadata();
-
-    /**
-     * Get the target table alias name.
+     * @param OrmFilterRuleContextDefinitionInterface $rcd
      *
      * @return string
      */
-    public function getTableAlias();
+    public function addFilterConstraint(OrmFilterRuleContextDefinitionInterface $rcd);
 }

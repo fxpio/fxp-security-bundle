@@ -14,13 +14,14 @@ namespace Sonatra\Bundle\SecurityBundle\Acl\Rule\Definition;
 use Sonatra\Bundle\SecurityBundle\Acl\Domain\AbstractRuleDefinition;
 use Sonatra\Bundle\SecurityBundle\Acl\Model\RuleContextDefinitionInterface;
 use Sonatra\Bundle\SecurityBundle\Acl\Model\AclManagerInterface;
+use Symfony\Component\Security\Acl\Domain\ObjectIdentity;
 
 /**
- * The Class ACL Rule Definition.
+ * The Object ACL Rule Definition.
  *
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-class ClassDefinition extends AbstractRuleDefinition
+class Object extends AbstractRuleDefinition
 {
     /**
      * @var AclManagerInterface
@@ -40,7 +41,7 @@ class ClassDefinition extends AbstractRuleDefinition
      */
     public function getName()
     {
-        return 'class';
+        return 'object';
     }
 
     /**
@@ -48,7 +49,7 @@ class ClassDefinition extends AbstractRuleDefinition
      */
     public function getTypes()
     {
-        return array(static::TYPE_CLASS);
+        return array(static::TYPE_OBJECT);
     }
 
     /**
@@ -62,8 +63,9 @@ class ClassDefinition extends AbstractRuleDefinition
         $field = $rcd->getField();
         $masks = $rcd->getMasks();
 
-        if ('class' !== $oid->getType()) {
-            $oid = $this->am->createClassObjectIdentity($oid->getType());
+        // force not found acl
+        if ('class' === $oid->getIdentifier()) {
+            $oid = new ObjectIdentity('object', $oid->getType());
         }
 
         return $this->am->doIsGranted($sids, $masks, $oid, $initOid, $field);

@@ -12,6 +12,7 @@ Features include:
 - Service manipulator (helper) for ACL/ACE manipulation (read, grant, revoke permissions)
 - Service manager (helper) for check granting on domain object (granted, field granted, preload ACLs)
 - ACL Rule Definition for optimize the ACL queries (and ability to create a sharing rule)
+- ACL Rule Filter Definition for filter the records in query
 - ACL Voter for use the `security.context` service
 - Ability to set permissions on roles or users, but also directly on groups
 - Ability to define a hierarchy of role (with all roles in all associated groups)
@@ -19,7 +20,7 @@ Features include:
 - Define a role for various host with direct injection in token (regex compatible)
 - Execution cache system for the ACL/ACE getter
 - Execution cache system for the determination of all roles (of token, user, group and children role) of the token
-- Doctrine ORM Filter for filter the records in query (all type)
+- Doctrine ORM Filter for filter the records in query (using ACL Rule Filter Definition)
 - Doctrine Listener for empty the record field value for all query type
 - Doctrine Listener for keep the old value in the record field value if the user has not the permission of action
 - Ability to define a role for a hostname (defined with regex)

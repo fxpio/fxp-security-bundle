@@ -16,7 +16,7 @@ namespace Sonatra\Bundle\SecurityBundle\Acl\Model;
  *
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-interface AclRuleDefinitionInterface
+interface RuleDefinitionInterface
 {
     const TYPE_CLASS             = 'class';
     const TYPE_OBJECT            = 'object';
@@ -53,18 +53,9 @@ interface AclRuleDefinitionInterface
     /**
      * Check if identity is granted on ACL Manager.
      *
-     * @param AclRuleContextInterface $arc
+     * @param RuleContextDefinitionInterface $rcd
      *
      * @return boolean
      */
-    public function isGranted(AclRuleContextDefinitionInterface $arc);
-
-    /**
-     * Add Doctrine ORM SQL Filter Constraint.
-     *
-     * @param AclRuleContextOrmFilterInterface $arc
-     *
-     * @return string
-     */
-    public function addFilterConstraint(AclRuleContextOrmFilterInterface $arc);
+    public function isGranted(RuleContextDefinitionInterface $rcd);
 }

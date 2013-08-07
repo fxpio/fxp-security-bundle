@@ -11,7 +11,7 @@
 
 namespace Sonatra\Bundle\SecurityBundle\Acl\Domain;
 
-use Sonatra\Bundle\SecurityBundle\Acl\Model\AclRuleContextInterface;
+use Sonatra\Bundle\SecurityBundle\Acl\Model\RuleContextInterface;
 use Symfony\Component\Security\Acl\Domain\UserSecurityIdentity;
 use Symfony\Component\Security\Acl\Domain\RoleSecurityIdentity;
 
@@ -20,7 +20,7 @@ use Symfony\Component\Security\Acl\Domain\RoleSecurityIdentity;
  *
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-abstract class AbstractAclRuleContext implements AclRuleContextInterface
+abstract class AbstractRuleContext implements RuleContextInterface
 {
     /**
      * @var SecurityIdentityInterface

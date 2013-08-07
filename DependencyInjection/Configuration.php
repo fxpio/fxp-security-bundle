@@ -60,6 +60,7 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('enabled_hierarchy')->defaultTrue()->end()
                 ->scalarNode('enabled_group_security_identity')->defaultTrue()->end()
                 ->scalarNode('doctrine_orm_listener')->defaultTrue()->end()
+                ->scalarNode('rule_doctrine_orm_filters')->defaultTrue()->end()
                 ->scalarNode('default_rule')->defaultValue('disabled')->end()
                 ->arrayNode('rules')
                     ->example(array('Vendor\Entity\Blog' => 'class', 'Vendor\Entity\Post' => 'affirmative'))

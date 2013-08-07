@@ -23,7 +23,7 @@ interface RuleExtensionInterface
      *
      * @param string $name The name of the definition
      *
-     * @return AclRuleDefinitionInterface The definition
+     * @return RuleDefinitionInterface The definition
      *
      * @throws \InvalidArgumentException if the given definition is not supported by this extension
      */
@@ -37,4 +37,27 @@ interface RuleExtensionInterface
      * @return Boolean Whether the definition is supported by this extension
      */
     public function hasDefinition($name);
+
+    /**
+     * Returns a filter definition by name and type.
+     *
+     * @param string $name The name of the filter definition
+     * @param string $type The type of the filter definition
+     *
+     * @return RuleFilterDefinitionInterface The filter definition
+     *
+     * @throws \InvalidArgumentException if the given filter definition is not supported by this extension
+     * @throws \InvalidArgumentException if the given filter definition is associated with inexisting rule definition
+     */
+    public function getFilterDefinition($name, $type);
+
+    /**
+     * Returns whether the given filter definition is supported.
+     *
+     * @param string $name The name of the filter definition
+     * @param string $type The type of the filter definition
+     *
+     * @return Boolean Whether the filter definition is supported by this extension
+     */
+    public function hasFilterDefinition($name, $type);
 }

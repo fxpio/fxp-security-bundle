@@ -13,7 +13,8 @@ namespace Sonatra\Bundle\SecurityBundle\Doctrine\ORM\Filter;
 
 use Doctrine\ORM\Query\Filter\SQLFilter;
 use Doctrine\ORM\Mapping\ClassMetadata;
-use Sonatra\Bundle\SecurityBundle\Acl\Domain\AclRuleContextOrmFilter;
+use Sonatra\Bundle\SecurityBundle\Acl\Domain\OrmFilterRuleContextDefinition;
+use Sonatra\Bundle\SecurityBundle\Acl\Domain\AbstractRuleOrmFilterDefinition;
 use Sonatra\Bundle\SecurityBundle\Doctrine\ORM\Listener\AclListener;
 
 /**
@@ -34,12 +35,17 @@ class AclFilter extends SQLFilter
         $arm = $this->getListener()->getAclRuleManager();
         $class = $targetEntity->getName();
         $rule = $arm->getRule('VIEW', $class);
-        $definition = $arm->getDefinition($rule);
-        $definition->setAclRuleManager($arm);
-        $identities = $this->getListener()->getSecurityIdentities();
-        $arc = new AclRuleContextOrmFilter($identities, $targetEntity, $targetTableAlias);
 
-        return $definition->addFilterConstraint($arc);
+        if ($arm->hasFilterDefinition($rule, AbstractRuleOrmFilterDefinition::TYPE)) {
+            $definition = $arm->getFilterDefinition($rule, AbstractRuleOrmFilterDefinition::TYPE);
+            $definition->setAclRuleManager($arm);
+            $identities = $this->getListener()->getSecurityIdentities();
+            $rcd = new OrmFilterRuleContextDefinition($identities, $targetEntity, $targetTableAlias);
+
+            return $definition->addFilterConstraint($rcd);
+        }
+
+        return '';
     }
 
     /**

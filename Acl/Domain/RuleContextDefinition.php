@@ -11,7 +11,7 @@
 
 namespace Sonatra\Bundle\SecurityBundle\Acl\Domain;
 
-use Sonatra\Bundle\SecurityBundle\Acl\Model\AclRuleContextDefinitionInterface;
+use Sonatra\Bundle\SecurityBundle\Acl\Model\RuleContextDefinitionInterface;
 use Symfony\Component\Security\Acl\Model\ObjectIdentityInterface;
 
 /**
@@ -19,7 +19,7 @@ use Symfony\Component\Security\Acl\Model\ObjectIdentityInterface;
  *
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-class AclRuleContextDefinition extends AbstractAclRuleContext implements AclRuleContextDefinitionInterface
+class RuleContextDefinition extends AbstractRuleContext implements RuleContextDefinitionInterface
 {
     /**
      * @var ObjectIdentityInterface

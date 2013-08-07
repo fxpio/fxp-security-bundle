@@ -15,7 +15,7 @@ services:
     #Rule Extension
     sonatra_security.acl.rule_extension:
         class: '%sonatra_security.acl.rule_extension.class%'
-        arguments: ['@service_container', ['@sonatra_security.acl.rule_definition']]
+        arguments: ['@service_container', ['@sonatra_security.acl.rule_definition'], ['@sonatra_security.acl.rule_filter_definition']]
         public: false
 
     #Rule Manager
@@ -54,31 +54,31 @@ services:
 
     #Acl Rule Definitions
     sonatra_security.acl.rule_definition.disabled:
-        class:  Sonatra\Bundle\SecurityBundle\Acl\Rule\Definition\DisabledDefinition
+        class:  Sonatra\Bundle\SecurityBundle\Acl\Rule\Definition\Disabled
         tags:   [ { name: sonatra_security.acl.rule_definition, alias: disabled } ]
 
     sonatra_security.acl.rule_definition.allow:
-        class:  Sonatra\Bundle\SecurityBundle\Acl\Rule\Definition\AllowDefinition
+        class:  Sonatra\Bundle\SecurityBundle\Acl\Rule\Definition\Allow
         tags:   [ { name: sonatra_security.acl.rule_definition, alias: allow } ]
 
     sonatra_security.acl.rule_definition.deny:
-        class:  Sonatra\Bundle\SecurityBundle\Acl\Rule\Definition\DenyDefinition
+        class:  Sonatra\Bundle\SecurityBundle\Acl\Rule\Definition\Deny
         tags:   [ { name: sonatra_security.acl.rule_definition, alias: deny } ]
 
     sonatra_security.acl.rule_definition.affirmative:
-        class:  Sonatra\Bundle\SecurityBundle\Acl\Rule\Definition\AffirmativeDefinition
+        class:  Sonatra\Bundle\SecurityBundle\Acl\Rule\Definition\Affirmative
         tags:   [ { name: sonatra_security.acl.rule_definition, alias: affirmative } ]
 
     sonatra_security.acl.rule_definition.unanimous:
-        class:  Sonatra\Bundle\SecurityBundle\Acl\Rule\Definition\UnanimousDefinition
+        class:  Sonatra\Bundle\SecurityBundle\Acl\Rule\Definition\Unanimous
         tags:   [ { name: sonatra_security.acl.rule_definition, alias: unanimous } ]
 
     sonatra_security.acl.rule_definition.object:
-        class:  Sonatra\Bundle\SecurityBundle\Acl\Rule\Definition\ObjectDefinition
-        arguments: ['@sonatra_security.acl.manager', '@doctrine.orm.entity_manager']
+        class:  Sonatra\Bundle\SecurityBundle\Acl\Rule\Definition\Object
+        arguments: ['@sonatra_security.acl.manager']
         tags:   [ { name: sonatra_security.acl.rule_definition, alias: object } ]
 
     sonatra_security.acl.rule_definition.class:
         class:  Sonatra\Bundle\SecurityBundle\Acl\Rule\Definition\ClassDefinition
-        arguments: ['@sonatra_security.acl.manager', '@doctrine.orm.entity_manager']
+        arguments: ['@sonatra_security.acl.manager']
         tags:   [ { name: sonatra_security.acl.rule_definition, alias: class } ]

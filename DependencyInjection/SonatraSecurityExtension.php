@@ -59,6 +59,11 @@ class SonatraSecurityExtension extends Extension
             if ($config['acl']['doctrine_orm_listener']) {
                 $loader->load('acl_doctrine_orm_listener.yml');
             }
+
+            // filters
+            if ($config['acl']['rule_doctrine_orm_filters']) {
+                $loader->load('acl_rule_doctrine_orm_filter.yml');
+            }
         }
 
         // expression

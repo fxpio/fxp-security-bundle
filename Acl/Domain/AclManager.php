@@ -14,7 +14,7 @@ namespace Sonatra\Bundle\SecurityBundle\Acl\Domain;
 use Sonatra\Bundle\SecurityBundle\Acl\Model\MutableAclProviderInterface;
 use Sonatra\Bundle\SecurityBundle\Acl\Model\AclManagerInterface;
 use Sonatra\Bundle\SecurityBundle\Acl\Model\AclRuleManagerInterface;
-use Sonatra\Bundle\SecurityBundle\Acl\Model\AclRuleDefinitionInterface;
+use Sonatra\Bundle\SecurityBundle\Acl\Model\RuleDefinitionInterface;
 use Sonatra\Bundle\SecurityBundle\Acl\Util\AclUtils;
 use Symfony\Component\Security\Acl\Domain\ObjectIdentity;
 use Symfony\Component\Security\Acl\Exception\NoAceFoundException;
@@ -171,8 +171,8 @@ class AclManager implements AclManagerInterface
             }
 
             // find types in class fields
-            if (!in_array(AclRuleDefinitionInterface::TYPE_CLASS, $preloadTypes)
-                    || !in_array(AclRuleDefinitionInterface::TYPE_OBJECT, $preloadTypes)) {
+            if (!in_array(RuleDefinitionInterface::TYPE_CLASS, $preloadTypes)
+                    || !in_array(RuleDefinitionInterface::TYPE_OBJECT, $preloadTypes)) {
                 foreach ($rules['fields'] as $field => $fieldRules) {
                     foreach ($fieldRules as $ruleName) {
                         $rule = $this->aclRuleManager->getDefinition($ruleName);
@@ -217,9 +217,9 @@ class AclManager implements AclManagerInterface
         $rule = $this->getRule($mask, $domainObject, $field);
         $definition = $this->aclRuleManager->getDefinition($rule);
         $definition->setAclRuleManager($this->aclRuleManager);
-        $arc = new AclRuleContextDefinition($sids, $oid, $masks, $field);
+        $rcd = new RuleContextDefinition($sids, $oid, $masks, $field);
 
-        return $definition->isGranted($arc);
+        return $definition->isGranted($rcd);
     }
 
     /**
@@ -258,7 +258,7 @@ class AclManager implements AclManagerInterface
             $preloadTypes = $this->getPreloadTypes($classname);
 
             // add class object identifier
-            if (in_array(AclRuleDefinitionInterface::TYPE_CLASS, $preloadTypes)) {
+            if (in_array(RuleDefinitionInterface::TYPE_CLASS, $preloadTypes)) {
                 if ('class' === $oid->getIdentifier()) {
                     $oids[$id] = $oid;
 
@@ -268,8 +268,8 @@ class AclManager implements AclManagerInterface
             }
 
             // add object identifier
-            if ((in_array(AclRuleDefinitionInterface::TYPE_OBJECT, $preloadTypes) && 'class' !== $oid->getIdentifier())
-                    || in_array(AclRuleDefinitionInterface::TYPE_SKIP_OPTIMIZATION, $preloadTypes)) {
+            if ((in_array(RuleDefinitionInterface::TYPE_OBJECT, $preloadTypes) && 'class' !== $oid->getIdentifier())
+                    || in_array(RuleDefinitionInterface::TYPE_SKIP_OPTIMIZATION, $preloadTypes)) {
                 $oids[$id] = $oid;
             }
         }

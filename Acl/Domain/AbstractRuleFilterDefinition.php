@@ -11,30 +11,20 @@
 
 namespace Sonatra\Bundle\SecurityBundle\Acl\Domain;
 
-use Sonatra\Bundle\SecurityBundle\Acl\Model\AclRuleDefinitionInterface;
+use Sonatra\Bundle\SecurityBundle\Acl\Model\RuleFilterDefinitionInterface;
 use Sonatra\Bundle\SecurityBundle\Acl\Model\AclRuleManagerInterface;
-use Sonatra\Bundle\SecurityBundle\Acl\Model\AclRuleContextDefinitionInterface;
-use Sonatra\Bundle\SecurityBundle\Acl\Model\AclRuleContextOrmFilterInterface;
 
 /**
- * Abstract class for Acl Rule Definition.
+ * Abstract class for Acl Rule Filter Definition.
  *
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-abstract class AbstractAclRuleDefinition implements AclRuleDefinitionInterface
+abstract class AbstractRuleFilterDefinition implements RuleFilterDefinitionInterface
 {
     /**
      * @var AclRuleManagerInterface
      */
     protected $arm;
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getTypes()
-    {
-        return array(static::TYPE_SKIP_OPTIMIZATION);
-    }
 
     /**
      * {@inheritdoc}
@@ -50,21 +40,5 @@ abstract class AbstractAclRuleDefinition implements AclRuleDefinitionInterface
     public function getAclRuleManager()
     {
         return $this->arm;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function isGranted(AclRuleContextDefinitionInterface $arc)
-    {
-        return true;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function addFilterConstraint(AclRuleContextOrmFilterInterface $arc)
-    {
-        return '';
     }
 }

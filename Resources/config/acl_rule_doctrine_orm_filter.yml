@@ -1,0 +1,23 @@
+services:
+    #Acl Rule Filter Definitions
+    sonatra_security.acl.rule_filter_definition.deny:
+        class:  Sonatra\Bundle\SecurityBundle\Acl\Rule\FilterDefinition\OrmDeny
+        tags:   [ { name: sonatra_security.acl.rule_filter_definition, alias: 'doctrine_orm_sqlfilter:deny' } ]
+
+    sonatra_security.acl.rule_filter_definition.affirmative:
+        class:  Sonatra\Bundle\SecurityBundle\Acl\Rule\FilterDefinition\OrmAffirmative
+        tags:   [ { name: sonatra_security.acl.rule_filter_definition, alias: 'doctrine_orm_sqlfilter:affirmative' } ]
+
+    sonatra_security.acl.rule_filter_definition.unanimous:
+        class:  Sonatra\Bundle\SecurityBundle\Acl\Rule\FilterDefinition\OrmUnanimous
+        tags:   [ { name: sonatra_security.acl.rule_filter_definition, alias: 'doctrine_orm_sqlfilter:unanimous' } ]
+
+    sonatra_security.acl.rule_filter_definition.object:
+        class:  Sonatra\Bundle\SecurityBundle\Acl\Rule\FilterDefinition\OrmObject
+        arguments: ['@doctrine.orm.entity_manager']
+        tags:   [ { name: sonatra_security.acl.rule_filter_definition, alias: 'doctrine_orm_sqlfilter:object' } ]
+
+    sonatra_security.acl.rule_filter_definition.class:
+        class:  Sonatra\Bundle\SecurityBundle\Acl\Rule\FilterDefinition\OrmClass
+        arguments: ['@doctrine.orm.entity_manager']
+        tags:   [ { name: sonatra_security.acl.rule_filter_definition, alias: 'doctrine_orm_sqlfilter:class' } ]

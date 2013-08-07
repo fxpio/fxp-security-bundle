@@ -11,14 +11,14 @@
 
 namespace Sonatra\Bundle\SecurityBundle\Acl\Rule\Definition;
 
-use Sonatra\Bundle\SecurityBundle\Acl\Domain\AbstractAclRuleDefinition;
+use Sonatra\Bundle\SecurityBundle\Acl\Domain\AbstractRuleDefinition;
 
 /**
  * The Disabled ACL Rule Definition.
  *
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-class DisabledDefinition extends AbstractAclRuleDefinition
+class Disabled extends AbstractRuleDefinition
 {
     /**
      * {@inheritdoc}

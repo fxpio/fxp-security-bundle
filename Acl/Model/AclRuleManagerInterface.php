@@ -63,7 +63,7 @@ interface AclRuleManagerInterface
      *
      * @param string $name
      *
-     * @return AclRuleDefinitionInterface
+     * @return RuleDefinitionInterface
      */
     public function getDefinition($name);
 
@@ -75,4 +75,24 @@ interface AclRuleManagerInterface
      * @return boolean
      */
     public function hasDefinition($name);
+
+    /**
+     * Get the acl rule filter definition.
+     *
+     * @param string $name
+     * @param string $type
+     *
+     * @return RuleFilterDefinitionInterface
+     */
+    public function getFilterDefinition($name, $type);
+
+    /**
+     * Check if the acl rule filter definition exist.
+     *
+     * @param string $name
+     * @param string $type
+     *
+     * @return boolean
+     */
+    public function hasFilterDefinition($name, $type);
 }

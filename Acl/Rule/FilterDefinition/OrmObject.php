@@ -9,39 +9,30 @@
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Bundle\SecurityBundle\Acl\Rule\Definition;
+namespace Sonatra\Bundle\SecurityBundle\Acl\Rule\FilterDefinition;
 
-use Sonatra\Bundle\SecurityBundle\Acl\Domain\AbstractAclRuleDefinition;
-use Sonatra\Bundle\SecurityBundle\Acl\Model\AclRuleContextDefinitionInterface;
-use Sonatra\Bundle\SecurityBundle\Acl\Model\AclRuleContextOrmFilterInterface;
-use Sonatra\Bundle\SecurityBundle\Acl\Model\AclManagerInterface;
-use Symfony\Component\Security\Acl\Domain\ObjectIdentity;
+use Sonatra\Bundle\SecurityBundle\Acl\Domain\AbstractRuleOrmFilterDefinition;
+use Sonatra\Bundle\SecurityBundle\Acl\Model\OrmFilterRuleContextDefinitionInterface;
 use Symfony\Component\Security\Acl\Domain\UserSecurityIdentity;
 use Doctrine\ORM\EntityManagerInterface;
 
 /**
- * The Object ACL Rule Definition.
+ * The Object ACL Rule Filter Definition.
  *
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-class ObjectDefinition extends AbstractAclRuleDefinition
+class OrmObject extends AbstractRuleOrmFilterDefinition
 {
-    /**
-     * @var AclManagerInterface
-     */
-    protected $am;
-
     /**
      * @var EntityManagerInterface
      */
     protected $em;
 
     /**
-     * @param AclManagerInterface $am
+     * @param EntityManagerInterface $em
      */
-    public function __construct(AclManagerInterface $am, EntityManagerInterface $em)
+    public function __construct(EntityManagerInterface $em)
     {
-        $this->am = $am;
         $this->em = $em;
     }
 
@@ -56,44 +47,17 @@ class ObjectDefinition extends AbstractAclRuleDefinition
     /**
      * {@inheritdoc}
      */
-    public function getTypes()
+    public function addFilterConstraint(OrmFilterRuleContextDefinitionInterface $rcd)
     {
-        return array(static::TYPE_OBJECT);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function isGranted(AclRuleContextDefinitionInterface $arc)
-    {
-        $sids = $arc->getSecurityIdentities();
-        $oid = $arc->getObjectIdentity();
-        $initOid = $oid;
-        $field = $arc->getField();
-        $masks = $arc->getMasks();
-
-        // force not found acl
-        if ('class' === $oid->getIdentifier()) {
-            $oid = new ObjectIdentity('object', $oid->getType());
-        }
-
-        return $this->am->doIsGranted($sids, $masks, $oid, $initOid, $field);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function addFilterConstraint(AclRuleContextOrmFilterInterface $arc)
-    {
-        $identities = $arc->getSecurityIdentities();
+        $identities = $rcd->getSecurityIdentities();
 
         if (0 === count($identities)) {
             return '';
         }
 
         $connection = $this->em->getConnection();
-        $classname = $connection->quote($arc->getClassMetadata()->getName());
-        $tableAlias = $arc->getTableAlias();
+        $classname = $connection->quote($rcd->getTargetEntity()->getName());
+        $tableAlias = $rcd->getTargetTableAlias();
         $sids = array();
 
         foreach ($identities as $sid) {

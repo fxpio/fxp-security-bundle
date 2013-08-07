@@ -31,7 +31,7 @@ class AclRuleDefinitionPass implements CompilerPassInterface
             return;
         }
 
-        // Builds an array with service IDs as keys and tag aliases as values
+        // Acl Rule Definitions: Builds an array with service IDs as keys and tag aliases as values
         $definitions = array();
 
         foreach ($container->findTaggedServiceIds('sonatra_security.acl.rule_definition') as $serviceId => $tag) {
@@ -39,10 +39,24 @@ class AclRuleDefinitionPass implements CompilerPassInterface
                 ? $tag[0]['alias']
                 : $serviceId;
 
-            // Flip, because we want tag aliases (= definition identifiers) as keys
+            // flip, because we want tag aliases (= definition identifiers) as keys
             $definitions[$alias] = $serviceId;
         }
 
         $container->getDefinition('sonatra_security.acl.rule_extension')->replaceArgument(1, $definitions);
+
+        // Acl Rule Filter Definitions: Builds an array with service IDs as keys and tag aliases as values
+        $filterDefinitions = array();
+
+        foreach ($container->findTaggedServiceIds('sonatra_security.acl.rule_filter_definition') as $serviceId => $tag) {
+            $alias = isset($tag[0]['alias'])
+            ? $tag[0]['alias']
+            : $serviceId;
+
+            // flip, because we want tag aliases (= definition identifiers) as keys
+            $filterDefinitions[$alias] = $serviceId;
+        }
+
+        $container->getDefinition('sonatra_security.acl.rule_extension')->replaceArgument(2, $filterDefinitions);
     }
 }
