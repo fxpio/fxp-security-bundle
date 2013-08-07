@@ -98,7 +98,7 @@ class AclManager implements AclManagerInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getSecurityIdentities(TokenInterface $token = null)
     {
@@ -110,7 +110,7 @@ class AclManager implements AclManagerInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getObjectIdentity($domainObject)
     {
@@ -122,7 +122,7 @@ class AclManager implements AclManagerInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getObjectIdentities(array $domainObjects)
     {
@@ -140,7 +140,7 @@ class AclManager implements AclManagerInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function createClassObjectIdentity($type)
     {
@@ -154,7 +154,7 @@ class AclManager implements AclManagerInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getPreloadTypes($domainObject)
     {
@@ -188,7 +188,7 @@ class AclManager implements AclManagerInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function isGranted($sids, $domainObject, $mask)
     {
@@ -223,7 +223,7 @@ class AclManager implements AclManagerInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function isFieldGranted($sids, $domainObject, $field, $mask)
     {
@@ -237,7 +237,7 @@ class AclManager implements AclManagerInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function preloadAcls(array $objects)
     {
@@ -294,7 +294,7 @@ class AclManager implements AclManagerInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getRule($type , $domainObject, $field = null)
     {
@@ -316,7 +316,7 @@ class AclManager implements AclManagerInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getRules($domainObject, $field = null, array $types = array())
     {
@@ -343,7 +343,7 @@ class AclManager implements AclManagerInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getObjectRules($domainObject)
     {
@@ -369,7 +369,7 @@ class AclManager implements AclManagerInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function doIsGranted(array $sids, array $masks,
             ObjectIdentityInterface $oid, ObjectIdentityInterface $initOid,

@@ -54,7 +54,7 @@ class PermissionContext implements PermissionContextInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function setSecurityIdentity(SecurityIdentityInterface $sid)
     {
@@ -64,7 +64,7 @@ class PermissionContext implements PermissionContextInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getSecurityIdentity()
     {
@@ -72,7 +72,7 @@ class PermissionContext implements PermissionContextInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function setObjectIdentity(ObjectIdentityInterface $oid)
     {
@@ -82,7 +82,7 @@ class PermissionContext implements PermissionContextInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getObjectIdentity()
     {
@@ -90,7 +90,7 @@ class PermissionContext implements PermissionContextInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function setField($field)
     {
@@ -100,7 +100,7 @@ class PermissionContext implements PermissionContextInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getField()
     {
@@ -108,7 +108,7 @@ class PermissionContext implements PermissionContextInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function setType($type)
     {
@@ -124,7 +124,7 @@ class PermissionContext implements PermissionContextInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getType()
     {
@@ -132,7 +132,7 @@ class PermissionContext implements PermissionContextInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function setMask($mask)
     {
@@ -142,7 +142,7 @@ class PermissionContext implements PermissionContextInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getMask()
     {
@@ -150,7 +150,7 @@ class PermissionContext implements PermissionContextInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function setIndex($index)
     {
@@ -160,7 +160,7 @@ class PermissionContext implements PermissionContextInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getIndex()
     {
@@ -168,7 +168,7 @@ class PermissionContext implements PermissionContextInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function setGranting($granting)
     {
@@ -178,7 +178,7 @@ class PermissionContext implements PermissionContextInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function isGranting()
     {
@@ -186,7 +186,7 @@ class PermissionContext implements PermissionContextInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function setStrategy($strategy)
     {
@@ -196,7 +196,7 @@ class PermissionContext implements PermissionContextInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getStrategy()
     {
@@ -204,7 +204,7 @@ class PermissionContext implements PermissionContextInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function equals(AuditableEntryInterface $ace)
     {
@@ -214,7 +214,7 @@ class PermissionContext implements PermissionContextInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function hasDifferentPermission(AuditableEntryInterface $ace)
     {

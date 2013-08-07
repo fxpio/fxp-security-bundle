@@ -24,7 +24,7 @@ use Symfony\Component\DependencyInjection\DefinitionDecorator;
 class HostRoleFactory implements SecurityFactoryInterface
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function create(ContainerBuilder $container, $id, $config, $userProvider, $defaultEntryPoint)
     {
@@ -43,7 +43,7 @@ class HostRoleFactory implements SecurityFactoryInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getPosition()
     {
@@ -51,7 +51,7 @@ class HostRoleFactory implements SecurityFactoryInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getKey()
     {
@@ -59,7 +59,7 @@ class HostRoleFactory implements SecurityFactoryInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function addConfiguration(NodeDefinition $builder)
     {

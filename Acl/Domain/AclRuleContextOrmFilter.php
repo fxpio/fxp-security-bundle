@@ -47,7 +47,7 @@ class AclRuleContextOrmFilter extends AbstractAclRuleContext implements AclRuleC
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getClassMetadata()
     {
@@ -55,7 +55,7 @@ class AclRuleContextOrmFilter extends AbstractAclRuleContext implements AclRuleC
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getTableAlias()
     {

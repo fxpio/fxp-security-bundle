@@ -24,7 +24,7 @@ use Sonatra\Bundle\SecurityBundle\Acl\Util\AclUtils;
 class ObjectIdentityRetrievalStrategy implements ObjectIdentityRetrievalStrategyInterface
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getObjectIdentity($domainObject)
     {

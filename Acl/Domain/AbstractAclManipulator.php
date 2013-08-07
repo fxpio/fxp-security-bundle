@@ -63,7 +63,7 @@ abstract class AbstractAclManipulator implements AclManipulatorInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function createContext($sid, $domainObject, $type, $mask, $field = null, $index = 0, $granting = true, $strategy = null)
     {

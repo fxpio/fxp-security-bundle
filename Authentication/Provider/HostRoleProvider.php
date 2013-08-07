@@ -22,7 +22,7 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 class HostRoleProvider implements AuthenticationProviderInterface
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function authenticate(TokenInterface $token)
     {
@@ -30,7 +30,7 @@ class HostRoleProvider implements AuthenticationProviderInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function supports(TokenInterface $token)
     {

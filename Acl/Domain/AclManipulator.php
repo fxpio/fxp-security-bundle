@@ -25,7 +25,7 @@ use Sonatra\Bundle\SecurityBundle\Acl\Util\AclUtils;
 class AclManipulator extends AbstractAclManipulator implements AclManipulatorInterface
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getClassPermission($sid, $domainObject)
     {
@@ -33,7 +33,7 @@ class AclManipulator extends AbstractAclManipulator implements AclManipulatorInt
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getObjectPermission($sid, $domainObject)
     {
@@ -41,7 +41,7 @@ class AclManipulator extends AbstractAclManipulator implements AclManipulatorInt
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getClassFieldPermission($sid, $domainObject, $field)
     {
@@ -49,7 +49,7 @@ class AclManipulator extends AbstractAclManipulator implements AclManipulatorInt
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getObjectFieldPermission($sid, $domainObject, $field)
     {
@@ -57,7 +57,7 @@ class AclManipulator extends AbstractAclManipulator implements AclManipulatorInt
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function addPermission(PermissionContextInterface $context)
     {
@@ -78,7 +78,7 @@ class AclManipulator extends AbstractAclManipulator implements AclManipulatorInt
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function addClassPermission($sid, $domainObject, $mask, $index = 0, $granting = true, $strategy = null)
     {
@@ -88,7 +88,7 @@ class AclManipulator extends AbstractAclManipulator implements AclManipulatorInt
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function addObjectPermission($sid, $domainObject, $mask, $index = 0, $granting = true, $strategy = null)
     {
@@ -98,7 +98,7 @@ class AclManipulator extends AbstractAclManipulator implements AclManipulatorInt
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function addClassFieldPermission($sid, $domainObject, $field, $mask, $index = 0, $granting = true, $strategy = null)
     {
@@ -108,7 +108,7 @@ class AclManipulator extends AbstractAclManipulator implements AclManipulatorInt
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function addObjectFieldPermission($sid, $domainObject, $field, $mask, $index = 0, $granting = true, $strategy = null)
     {
@@ -118,7 +118,7 @@ class AclManipulator extends AbstractAclManipulator implements AclManipulatorInt
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function setPermission(PermissionContextInterface $context)
     {
@@ -139,7 +139,7 @@ class AclManipulator extends AbstractAclManipulator implements AclManipulatorInt
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function setClassPermission($sid, $domainObject, $mask, $index = 0, $granting = true, $strategy = null)
     {
@@ -149,7 +149,7 @@ class AclManipulator extends AbstractAclManipulator implements AclManipulatorInt
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function setObjectPermission($sid, $domainObject, $mask, $index = 0, $granting = true, $strategy = null)
     {
@@ -159,7 +159,7 @@ class AclManipulator extends AbstractAclManipulator implements AclManipulatorInt
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function setClassFieldPermission($sid, $domainObject, $field, $mask, $index = 0, $granting = true, $strategy = null)
     {
@@ -169,7 +169,7 @@ class AclManipulator extends AbstractAclManipulator implements AclManipulatorInt
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function setObjectFieldPermission($sid, $domainObject, $field, $mask, $index = 0, $granting = true, $strategy = null)
     {
@@ -179,7 +179,7 @@ class AclManipulator extends AbstractAclManipulator implements AclManipulatorInt
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function revokePermission(PermissionContextInterface $context)
     {
@@ -193,7 +193,7 @@ class AclManipulator extends AbstractAclManipulator implements AclManipulatorInt
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function revokeClassPermission($sid, $domainObject, $mask)
     {
@@ -203,7 +203,7 @@ class AclManipulator extends AbstractAclManipulator implements AclManipulatorInt
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function revokeObjectPermission($sid, $domainObject, $mask)
     {
@@ -213,7 +213,7 @@ class AclManipulator extends AbstractAclManipulator implements AclManipulatorInt
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function revokeClassFieldPermission($sid, $domainObject, $field, $mask)
     {
@@ -223,7 +223,7 @@ class AclManipulator extends AbstractAclManipulator implements AclManipulatorInt
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function revokeObjectFieldPermission($sid, $domainObject, $field, $mask)
     {
@@ -233,7 +233,7 @@ class AclManipulator extends AbstractAclManipulator implements AclManipulatorInt
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function deleteClassPermissions($sid, $domainObject)
     {
@@ -241,7 +241,7 @@ class AclManipulator extends AbstractAclManipulator implements AclManipulatorInt
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function deleteObjectPermissions($sid, $domainObject)
     {
@@ -249,7 +249,7 @@ class AclManipulator extends AbstractAclManipulator implements AclManipulatorInt
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function deleteClassFieldPermissions($sid, $domainObject, $field)
     {
@@ -257,7 +257,7 @@ class AclManipulator extends AbstractAclManipulator implements AclManipulatorInt
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function deleteObjectFieldPermissions($sid, $domainObject, $field)
     {
@@ -265,7 +265,7 @@ class AclManipulator extends AbstractAclManipulator implements AclManipulatorInt
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function deleteAclFor($domainObject)
     {

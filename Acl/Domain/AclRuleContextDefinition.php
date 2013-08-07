@@ -54,7 +54,7 @@ class AclRuleContextDefinition extends AbstractAclRuleContext implements AclRule
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getObjectIdentity()
     {
@@ -62,7 +62,7 @@ class AclRuleContextDefinition extends AbstractAclRuleContext implements AclRule
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getField()
     {
@@ -70,7 +70,7 @@ class AclRuleContextDefinition extends AbstractAclRuleContext implements AclRule
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getMasks()
     {
