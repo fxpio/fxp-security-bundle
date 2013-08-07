@@ -19,20 +19,6 @@ namespace Sonatra\Bundle\SecurityBundle\Acl\Model;
 interface AclRuleContextInterface
 {
     /**
-     * Get Acl Manager.
-     *
-     * @return \Sonatra\Bundle\SecurityBundle\Acl\Model\AclManagerInterface
-     */
-    public function getAclManager();
-
-    /**
-     * Get Acl Rule Manager.
-     *
-     * @return \Sonatra\Bundle\SecurityBundle\Acl\Model\AclRuleManagerInterface
-     */
-    public function getAclRuleManager();
-
-    /**
      * Get security identities.
      *
      * @return \Symfony\Component\Security\Acl\Model\SecurityIdentityInterface[]

@@ -12,10 +12,8 @@
 namespace Sonatra\Bundle\SecurityBundle\Acl\Rule\Definition;
 
 use Sonatra\Bundle\SecurityBundle\Acl\Domain\AbstractAclRuleDefinition;
-use Sonatra\Bundle\SecurityBundle\Acl\Model\AclRuleContextInterface;
-use Symfony\Component\Security\Acl\Model\ObjectIdentityInterface;
-use Doctrine\ORM\EntityManager;
-use Doctrine\Common\Persistence\Mapping\ClassMetadata;
+use Sonatra\Bundle\SecurityBundle\Acl\Model\AclRuleContextDefinitionInterface;
+use Sonatra\Bundle\SecurityBundle\Acl\Model\AclRuleContextOrmFilterInterface;
 
 /**
  * The Deny ACL Rule Definition.
@@ -27,6 +25,14 @@ class DenyDefinition extends AbstractAclRuleDefinition
     /**
      * {@inheritdoc}
      */
+    public function getName()
+    {
+        return 'deny';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getTypes()
     {
         return array();
@@ -35,7 +41,7 @@ class DenyDefinition extends AbstractAclRuleDefinition
     /**
      * {@inheritdoc}
      */
-    public function isGranted(AclRuleContextInterface $arc, ObjectIdentityInterface $oid, array $masks, $field = null)
+    public function isGranted(AclRuleContextDefinitionInterface $arc)
     {
         return false;
     }
@@ -43,23 +49,15 @@ class DenyDefinition extends AbstractAclRuleDefinition
     /**
      * {@inheritdoc}
      */
-    public function addFilterConstraint(AclRuleContextInterface $arc, EntityManager $em, ClassMetadata $targetEntity, $targetTableAlias)
+    public function addFilterConstraint(AclRuleContextOrmFilterInterface $arc)
     {
         $id = 'id';
-        $identifier = $targetEntity->getIdentifierFieldNames();
+        $identifier = $arc->getClassMetadata()->getIdentifierFieldNames();
 
         if (0 < count($identifier)) {
             $id = $identifier[0];
         }
 
-        return ' '.$targetTableAlias.'.'.$id.' = -1';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return 'deny';
+        return ' '.$arc->getTableAlias().'.'.$id.' = -1';
     }
 }

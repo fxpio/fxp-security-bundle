@@ -216,9 +216,10 @@ class AclManager implements AclManagerInterface
         $oid = $this->getObjectIdentity($domainObject);
         $rule = $this->getRule($mask, $domainObject, $field);
         $definition = $this->aclRuleManager->getDefinition($rule);
-        $arc = new AclRuleContext($this, $this->aclRuleManager, $sids);
+        $definition->setAclRuleManager($this->aclRuleManager);
+        $arc = new AclRuleContextDefinition($sids, $oid, $masks, $field);
 
-        return $definition->isGranted($arc, $oid, $masks, $field);
+        return $definition->isGranted($arc);
     }
 
     /**

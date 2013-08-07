@@ -12,10 +12,8 @@
 namespace Sonatra\Bundle\SecurityBundle\Acl\Rule\Definition;
 
 use Sonatra\Bundle\SecurityBundle\Acl\Domain\AbstractAclRuleDefinition;
-use Sonatra\Bundle\SecurityBundle\Acl\Model\AclRuleContextInterface;
-use Symfony\Component\Security\Acl\Model\ObjectIdentityInterface;
-use Doctrine\ORM\EntityManager;
-use Doctrine\Common\Persistence\Mapping\ClassMetadata;
+use Sonatra\Bundle\SecurityBundle\Acl\Model\AclRuleContextDefinitionInterface;
+use Sonatra\Bundle\SecurityBundle\Acl\Model\AclRuleContextOrmFilterInterface;
 
 /**
  * The Affirmative ACL Rule Definition.
@@ -43,30 +41,29 @@ class AffirmativeDefinition extends AbstractAclRuleDefinition
     /**
      * {@inheritdoc}
      */
-    public function isGranted(AclRuleContextInterface $arc, ObjectIdentityInterface $oid, array $masks, $field = null)
+    public function isGranted(AclRuleContextDefinitionInterface $arc)
     {
-        $arm = $arc->getAclRuleManager();
-        $oDef = $arm->getDefinition('object');
-        $cDef = $arm->getDefinition('class');
+        $oDef = $this->arm->getDefinition('object');
+        $cDef = $this->arm->getDefinition('class');
 
-        return $oDef->isGranted($arc, $oid, $masks, $field)
-                || $cDef->isGranted($arc, $oid, $masks, $field);
+        return $oDef->isGranted($arc)
+                || $cDef->isGranted($arc);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function addFilterConstraint(AclRuleContextInterface $arc, EntityManager $em, ClassMetadata $targetEntity, $targetTableAlias)
+    public function addFilterConstraint(AclRuleContextOrmFilterInterface $arc)
     {
         if (0 === count($arc->getSecurityIdentities())) {
             return '';
         }
 
-        $oDef = $arc->getAclRuleManager()->getDefinition('object');
-        $cDef = $arc->getAclRuleManager()->getDefinition('class');
+        $oDef = $this->arm->getDefinition('object');
+        $cDef = $this->arm->getDefinition('class');
 
-        $oFilter = $oDef->addFilterConstraint($arc, $em, $targetEntity, $targetTableAlias);
-        $cFilter = $cDef->addFilterConstraint($arc, $em, $targetEntity, $targetTableAlias);
+        $oFilter = $oDef->addFilterConstraint($arc);
+        $cFilter = $cDef->addFilterConstraint($arc);
 
         if ('' !== $oFilter && '' !== $cFilter) {
             return " (".$oFilter.") OR (".$cFilter.")";

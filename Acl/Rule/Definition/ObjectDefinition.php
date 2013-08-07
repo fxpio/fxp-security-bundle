@@ -12,12 +12,12 @@
 namespace Sonatra\Bundle\SecurityBundle\Acl\Rule\Definition;
 
 use Sonatra\Bundle\SecurityBundle\Acl\Domain\AbstractAclRuleDefinition;
-use Sonatra\Bundle\SecurityBundle\Acl\Model\AclRuleContextInterface;
+use Sonatra\Bundle\SecurityBundle\Acl\Model\AclRuleContextDefinitionInterface;
+use Sonatra\Bundle\SecurityBundle\Acl\Model\AclRuleContextOrmFilterInterface;
+use Sonatra\Bundle\SecurityBundle\Acl\Model\AclManagerInterface;
 use Symfony\Component\Security\Acl\Domain\ObjectIdentity;
 use Symfony\Component\Security\Acl\Domain\UserSecurityIdentity;
-use Symfony\Component\Security\Acl\Model\ObjectIdentityInterface;
-use Doctrine\ORM\EntityManager;
-use Doctrine\Common\Persistence\Mapping\ClassMetadata;
+use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * The Object ACL Rule Definition.
@@ -26,6 +26,25 @@ use Doctrine\Common\Persistence\Mapping\ClassMetadata;
  */
 class ObjectDefinition extends AbstractAclRuleDefinition
 {
+    /**
+     * @var AclManagerInterface
+     */
+    protected $am;
+
+    /**
+     * @var EntityManagerInterface
+     */
+    protected $em;
+
+    /**
+     * @param AclManagerInterface $am
+     */
+    public function __construct(AclManagerInterface $am, EntityManagerInterface $em)
+    {
+        $this->am = $am;
+        $this->em = $em;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -45,24 +64,26 @@ class ObjectDefinition extends AbstractAclRuleDefinition
     /**
      * {@inheritdoc}
      */
-    public function isGranted(AclRuleContextInterface $arc, ObjectIdentityInterface $oid, array $masks, $field = null)
+    public function isGranted(AclRuleContextDefinitionInterface $arc)
     {
-        $am = $arc->getAclManager();
         $sids = $arc->getSecurityIdentities();
+        $oid = $arc->getObjectIdentity();
         $initOid = $oid;
+        $field = $arc->getField();
+        $masks = $arc->getMasks();
 
         // force not found acl
         if ('class' === $oid->getIdentifier()) {
             $oid = new ObjectIdentity('object', $oid->getType());
         }
 
-        return $am->doIsGranted($sids, $masks, $oid, $initOid, $field);
+        return $this->am->doIsGranted($sids, $masks, $oid, $initOid, $field);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function addFilterConstraint(AclRuleContextInterface $arc, EntityManager $em, ClassMetadata $targetEntity, $targetTableAlias)
+    public function addFilterConstraint(AclRuleContextOrmFilterInterface $arc)
     {
         $identities = $arc->getSecurityIdentities();
 
@@ -70,8 +91,9 @@ class ObjectDefinition extends AbstractAclRuleDefinition
             return '';
         }
 
-        $connection = $em->getConnection();
-        $classname = $connection->quote($targetEntity->getName());
+        $connection = $this->em->getConnection();
+        $classname = $connection->quote($arc->getClassMetadata()->getName());
+        $tableAlias = $arc->getTableAlias();
         $sids = array();
 
         foreach ($identities as $sid) {
@@ -92,15 +114,17 @@ class ObjectDefinition extends AbstractAclRuleDefinition
             acl_entries e
         JOIN
             acl_object_identities oid ON (
-            oid.class_id = e.class_id
-            AND oid.object_identifier != 'class'
-        )
-        JOIN acl_security_identities s ON (
-            s.id = e.security_identity_id
-        )
-        JOIN acl_classes class ON (
-            class.id = e.class_id
-        )
+                oid.class_id = e.class_id
+                AND oid.object_identifier != 'class'
+            )
+        JOIN
+            acl_security_identities s ON (
+                s.id = e.security_identity_id
+            )
+        JOIN
+            acl_classes class ON (
+                class.id = e.class_id
+            )
         WHERE
             {$connection->getDatabasePlatform()->getIsNotNullExpression('e.object_identity_id')}
             AND (e.mask in (4,6,12,16,20,30) OR e.mask >= 32 OR ((e.mask / 2) % 1) > 0)
@@ -111,6 +135,6 @@ class ObjectDefinition extends AbstractAclRuleDefinition
             oid.object_identifier
 SELECTCLAUSE;
 
-        return " $targetTableAlias.id IN (".$sql.")";
+        return " $tableAlias.id IN (".$sql.")";
     }
 }

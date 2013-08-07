@@ -75,8 +75,10 @@ services:
 
     sonatra_security.acl.rule_definition.object:
         class:  Sonatra\Bundle\SecurityBundle\Acl\Rule\Definition\ObjectDefinition
+        arguments: ['@sonatra_security.acl.manager', '@doctrine.orm.entity_manager']
         tags:   [ { name: sonatra_security.acl.rule_definition, alias: object } ]
 
     sonatra_security.acl.rule_definition.class:
         class:  Sonatra\Bundle\SecurityBundle\Acl\Rule\Definition\ClassDefinition
+        arguments: ['@sonatra_security.acl.manager', '@doctrine.orm.entity_manager']
         tags:   [ { name: sonatra_security.acl.rule_definition, alias: class } ]

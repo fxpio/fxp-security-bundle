@@ -13,7 +13,7 @@ namespace Sonatra\Bundle\SecurityBundle\Doctrine\ORM\Filter;
 
 use Doctrine\ORM\Query\Filter\SQLFilter;
 use Doctrine\ORM\Mapping\ClassMetadata;
-use Sonatra\Bundle\SecurityBundle\Acl\Domain\AclRuleContext;
+use Sonatra\Bundle\SecurityBundle\Acl\Domain\AclRuleContextOrmFilter;
 use Sonatra\Bundle\SecurityBundle\Doctrine\ORM\Listener\AclListener;
 
 /**
@@ -31,15 +31,15 @@ class AclFilter extends SQLFilter
      */
     public function addFilterConstraint(ClassMetadata $targetEntity, $targetTableAlias)
     {
-        $am = $this->getListener()->getAclManager();
         $arm = $this->getListener()->getAclRuleManager();
         $class = $targetEntity->getName();
         $rule = $arm->getRule('VIEW', $class);
         $definition = $arm->getDefinition($rule);
+        $definition->setAclRuleManager($arm);
         $identities = $this->getListener()->getSecurityIdentities();
-        $arc = new AclRuleContext($am, $arm, $identities);
+        $arc = new AclRuleContextOrmFilter($identities, $targetEntity, $targetTableAlias);
 
-        return $definition->addFilterConstraint($arc, $this->getEntityManager(), $targetEntity, $targetTableAlias);
+        return $definition->addFilterConstraint($arc);
     }
 
     /**

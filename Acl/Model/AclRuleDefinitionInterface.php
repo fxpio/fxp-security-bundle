@@ -11,10 +11,6 @@
 
 namespace Sonatra\Bundle\SecurityBundle\Acl\Model;
 
-use Symfony\Component\Security\Acl\Model\ObjectIdentityInterface;
-use Doctrine\ORM\EntityManager;
-use Doctrine\Common\Persistence\Mapping\ClassMetadata;
-
 /**
  * Acl Rule Definition Interface.
  *
@@ -41,26 +37,34 @@ interface AclRuleDefinitionInterface
     public function getTypes();
 
     /**
+     * Set acl rule manager.
+     *
+     * @param AclRuleManagerInterface $arm
+     */
+    public function setAclRuleManager(AclRuleManagerInterface $arm);
+
+    /**
+     * Get acl rule manager.
+     *
+     * @return AclRuleManagerInterface
+     */
+    public function getAclRuleManager();
+
+    /**
      * Check if identity is granted on ACL Manager.
      *
      * @param AclRuleContextInterface $arc
-     * @param ObjectIdentityInterface $oid
-     * @param array                   $masks
-     * @param string                  $field
      *
      * @return boolean
      */
-    public function isGranted(AclRuleContextInterface $arc, ObjectIdentityInterface $oid, array $masks, $field = null);
+    public function isGranted(AclRuleContextDefinitionInterface $arc);
 
     /**
      * Add Doctrine ORM SQL Filter Constraint.
      *
-     * @param AclRuleContextInterface $arc
-     * @param EntityManager           $em
-     * @param ClassMetadata           $targetEntity
-     * @param string                  $targetTableAlias
+     * @param AclRuleContextOrmFilterInterface $arc
      *
      * @return string
      */
-    public function addFilterConstraint(AclRuleContextInterface $arc, EntityManager $em, ClassMetadata $targetEntity, $targetTableAlias);
+    public function addFilterConstraint(AclRuleContextOrmFilterInterface $arc);
 }

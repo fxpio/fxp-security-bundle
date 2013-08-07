@@ -12,10 +12,9 @@
 namespace Sonatra\Bundle\SecurityBundle\Acl\Domain;
 
 use Sonatra\Bundle\SecurityBundle\Acl\Model\AclRuleDefinitionInterface;
-use Sonatra\Bundle\SecurityBundle\Acl\Model\AclRuleContextInterface;
-use Symfony\Component\Security\Acl\Model\ObjectIdentityInterface;
-use Doctrine\ORM\EntityManager;
-use Doctrine\Common\Persistence\Mapping\ClassMetadata;
+use Sonatra\Bundle\SecurityBundle\Acl\Model\AclRuleManagerInterface;
+use Sonatra\Bundle\SecurityBundle\Acl\Model\AclRuleContextDefinitionInterface;
+use Sonatra\Bundle\SecurityBundle\Acl\Model\AclRuleContextOrmFilterInterface;
 
 /**
  * Abstract class for Acl Rule Definition.
@@ -24,6 +23,11 @@ use Doctrine\Common\Persistence\Mapping\ClassMetadata;
  */
 abstract class AbstractAclRuleDefinition implements AclRuleDefinitionInterface
 {
+    /**
+     * @var AclRuleManagerInterface
+     */
+    protected $arm;
+
     /**
      * {@inheritdoc}
      */
@@ -35,7 +39,23 @@ abstract class AbstractAclRuleDefinition implements AclRuleDefinitionInterface
     /**
      * {@inheritdoc}
      */
-    public function isGranted(AclRuleContextInterface $arc, ObjectIdentityInterface $oid, array $masks, $field = null)
+    public function setAclRuleManager(AclRuleManagerInterface $arm)
+    {
+        $this->arm = $arm;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAclRuleManager()
+    {
+        return $this->arm;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isGranted(AclRuleContextDefinitionInterface $arc)
     {
         return true;
     }
@@ -43,7 +63,7 @@ abstract class AbstractAclRuleDefinition implements AclRuleDefinitionInterface
     /**
      * {@inheritdoc}
      */
-    public function addFilterConstraint(AclRuleContextInterface $arc, EntityManager $em, ClassMetadata $targetEntity, $targetTableAlias)
+    public function addFilterConstraint(AclRuleContextOrmFilterInterface $arc)
     {
         return '';
     }

@@ -12,28 +12,16 @@
 namespace Sonatra\Bundle\SecurityBundle\Acl\Domain;
 
 use Sonatra\Bundle\SecurityBundle\Acl\Model\AclRuleContextInterface;
-use Sonatra\Bundle\SecurityBundle\Acl\Model\AclManagerInterface;
-use Sonatra\Bundle\SecurityBundle\Acl\Model\AclRuleManagerInterface;
 use Symfony\Component\Security\Acl\Domain\UserSecurityIdentity;
 use Symfony\Component\Security\Acl\Domain\RoleSecurityIdentity;
 
 /**
- * Class for Acl Rule Context.
+ * Abstract class for Acl Rule Context.
  *
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-class AclRuleContext implements AclRuleContextInterface
+abstract class AbstractAclRuleContext implements AclRuleContextInterface
 {
-    /**
-     * @var AclManagerInterface
-     */
-    protected $am;
-
-    /**
-     * @var AclRuleManagerInterface
-     */
-    protected $arm;
-
     /**
      * @var SecurityIdentityInterface
      */
@@ -67,36 +55,15 @@ class AclRuleContext implements AclRuleContextInterface
     /**
      * Constructor.
      *
-     * @param AclManagerInterface     $am
-     * @param AclRuleManagerInterface $arm
-     * @param array                   $sids
+     * @param array $sids
      */
-    public function __construct(AclManagerInterface $am,
-            AclRuleManagerInterface $arm, array $sids)
+    public function __construct(array $sids)
     {
-        $this->am = $am;
-        $this->arm = $arm;
         $this->sids = $sids;
         $this->roles = array();
         $this->groups = array();
         $this->authenticated = array();
         $this->isSplited = false;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getAclManager()
-    {
-        return $this->am;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getAclRuleManager()
-    {
-        return $this->arm;
     }
 
     /**
