@@ -1,3 +1,11 @@
+parameters:
+    sonatra_security.acl.dbal.options:
+        class_table_name:         '%security.acl.dbal.class_table_name%'
+        entry_table_name:         '%security.acl.dbal.entry_table_name%'
+        oid_table_name:           '%security.acl.dbal.oid_table_name%'
+        oid_ancestors_table_name: '%security.acl.dbal.oid_ancestors_table_name%'
+        sid_table_name:           '%security.acl.dbal.sid_table_name%'
+
 services:
     #Acl Rule Filter Definitions
     sonatra_security.acl.rule_filter_definition.deny:
@@ -14,10 +22,10 @@ services:
 
     sonatra_security.acl.rule_filter_definition.object:
         class:  Sonatra\Bundle\SecurityBundle\Acl\Rule\FilterDefinition\OrmObject
-        arguments: ['@doctrine.orm.entity_manager']
+        arguments: ['@doctrine.orm.entity_manager', '%sonatra_security.acl.dbal.options%']
         tags:   [ { name: sonatra_security.acl.rule_filter_definition, alias: 'doctrine_orm_sqlfilter:object' } ]
 
     sonatra_security.acl.rule_filter_definition.class:
         class:  Sonatra\Bundle\SecurityBundle\Acl\Rule\FilterDefinition\OrmClass
-        arguments: ['@doctrine.orm.entity_manager']
+        arguments: ['@doctrine.orm.entity_manager', '%sonatra_security.acl.dbal.options%']
         tags:   [ { name: sonatra_security.acl.rule_filter_definition, alias: 'doctrine_orm_sqlfilter:class' } ]

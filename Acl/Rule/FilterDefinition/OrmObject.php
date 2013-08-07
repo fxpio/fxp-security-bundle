@@ -29,11 +29,18 @@ class OrmObject extends AbstractRuleOrmFilterDefinition
     protected $em;
 
     /**
-     * @param EntityManagerInterface $em
+     * @var array
      */
-    public function __construct(EntityManagerInterface $em)
+    protected $options;
+
+    /**
+     * @param EntityManagerInterface $em
+     * @param                        $options
+     */
+    public function __construct(EntityManagerInterface $em, array $options)
     {
         $this->em = $em;
+        $this->options = $options;
     }
 
     /**
@@ -75,18 +82,18 @@ class OrmObject extends AbstractRuleOrmFilterDefinition
         SELECT
             oid.object_identifier
         FROM
-            acl_entries e
+            {$this->options['entry_table_name']} e
         JOIN
-            acl_object_identities oid ON (
+            {$this->options['oid_table_name']} oid ON (
                 oid.class_id = e.class_id
                 AND oid.object_identifier != 'class'
             )
         JOIN
-            acl_security_identities s ON (
+            {$this->options['sid_table_name']} s ON (
                 s.id = e.security_identity_id
             )
         JOIN
-            acl_classes class ON (
+            {$this->options['class_table_name']} class ON (
                 class.id = e.class_id
             )
         WHERE
