@@ -21,7 +21,7 @@ use Sonatra\Bundle\SecurityBundle\Acl\Model\OrmFilterRuleContextDefinitionInterf
  */
 abstract class AbstractRuleOrmFilterDefinition extends AbstractRuleFilterDefinition implements RuleOrmFilterDefinitionInterface
 {
-    const TYPE = 'doctrine_orm_sqlfilter';
+    const TYPE = 'doctrine_orm';
 
     /**
      * {@inheritdoc}
