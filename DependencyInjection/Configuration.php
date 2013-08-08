@@ -34,13 +34,56 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('user_class')->defaultValue('FOS\UserBundle\Model\UserInterface')->end()
                 ->scalarNode('role_class')->defaultValue('Symfony\Component\Security\Core\Role\RoleInterface')->end()
                 ->scalarNode('group_class')->defaultValue('FOS\UserBundle\Model\GroupInterface')->end()
+                ->scalarNode('cache_dir')->cannotBeEmpty()->defaultValue('%kernel.cache_dir%/sonatra_security')->end()
             ->end()
+            ->append($this->getHostRoleNode())
+            ->append($this->getRoleHierarchyNode())
             ->append($this->getAclNode())
             ->append($this->getExpressionNode())
             ->append($this->getDoctrineListenerNode())
         ;
 
         return $treeBuilder;
+    }
+
+    /**
+     * Get expression node.
+     *
+     * @return NodeDefinition
+     */
+    private function getHostRoleNode()
+    {
+        $treeBuilder = new TreeBuilder();
+        $node = $treeBuilder->root('host_role');
+
+        $node
+            ->addDefaultsIfNotSet()
+            ->children()
+                ->scalarNode('enabled')->defaultTrue()->end()
+            ->end()
+        ;
+
+        return $node;
+    }
+
+    /**
+     * Get expression node.
+     *
+     * @return NodeDefinition
+     */
+    private function getRoleHierarchyNode()
+    {
+        $treeBuilder = new TreeBuilder();
+        $node = $treeBuilder->root('role_hierarchy');
+
+        $node
+            ->addDefaultsIfNotSet()
+            ->children()
+                ->scalarNode('enabled')->defaultTrue()->end()
+            ->end()
+        ;
+
+        return $node;
     }
 
     /**
@@ -57,10 +100,12 @@ class Configuration implements ConfigurationInterface
             ->addDefaultsIfNotSet()
             ->children()
                 ->scalarNode('enabled')->defaultTrue()->end()
-                ->scalarNode('enabled_hierarchy')->defaultTrue()->end()
-                ->scalarNode('enabled_group_security_identity')->defaultTrue()->end()
-                ->scalarNode('doctrine_orm_listener')->defaultTrue()->end()
-                ->scalarNode('rule_doctrine_orm_filters')->defaultTrue()->end()
+                ->arrayNode('security_identity')
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        ->scalarNode('group')->defaultTrue()->end()
+                    ->end()
+                ->end()
                 ->scalarNode('default_rule')->defaultValue('disabled')->end()
                 ->arrayNode('rules')
                     ->example(array('Vendor\Entity\Blog' => 'class', 'Vendor\Entity\Post' => 'affirmative'))
@@ -119,8 +164,8 @@ class Configuration implements ConfigurationInterface
         $node
             ->addDefaultsIfNotSet()
             ->children()
-                ->scalarNode('replace_has_permission')->defaultTrue()->end()
-                ->scalarNode('add_has_field_permission')->defaultTrue()->end()
+                ->scalarNode('has_permission')->defaultTrue()->end()
+                ->scalarNode('has_field_permission')->defaultTrue()->end()
             ->end()
         ;
 
@@ -135,12 +180,30 @@ class Configuration implements ConfigurationInterface
     private function getDoctrineListenerNode()
     {
         $treeBuilder = new TreeBuilder();
-        $node = $treeBuilder->root('doctrine_listener');
+        $node = $treeBuilder->root('doctrine');
 
         $node
             ->addDefaultsIfNotSet()
             ->children()
-                ->scalarNode('enabled')->defaultTrue()->end()
+                ->arrayNode('orm')
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        ->arrayNode('listener')
+                            ->addDefaultsIfNotSet()
+                            ->children()
+                                ->scalarNode('role_update_fields')->defaultTrue()->end()
+                                ->scalarNode('role_hierarchy')->defaultTrue()->end()
+                                ->scalarNode('acl_clean_fields')->defaultTrue()->end()
+                            ->end()
+                        ->end()
+                        ->arrayNode('filter')
+                            ->addDefaultsIfNotSet()
+                            ->children()
+                                ->scalarNode('rule_filters')->defaultTrue()->end()
+                            ->end()
+                        ->end()
+                    ->end()
+                ->end()
             ->end()
         ;
 

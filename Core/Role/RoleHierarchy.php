@@ -11,6 +11,8 @@
 
 namespace Sonatra\Bundle\SecurityBundle\Core\Role;
 
+use Sonatra\Bundle\SecurityBundle\Core\Role\Cache\CacheInterface;
+
 use Symfony\Component\Security\Core\Role\RoleHierarchy as BaseRoleHierarchy;
 use Symfony\Component\Security\Core\Role\RoleInterface;
 use Symfony\Component\Security\Core\Role\Role;
@@ -40,6 +42,11 @@ class RoleHierarchy extends BaseRoleHierarchy
     /**
      * @var array
      */
+    private $cacheExec;
+
+    /**
+     * @var CacheInterface
+     */
     private $cache;
 
     /**
@@ -54,13 +61,14 @@ class RoleHierarchy extends BaseRoleHierarchy
      * @param Registry $registry
      * @param string   $roleClassName
      */
-    public function __construct(array $hierarchy, RegistryInterface $registry, $roleClassname)
+    public function __construct(array $hierarchy, RegistryInterface $registry, $roleClassname, CacheInterface $cache)
     {
         parent::__construct($hierarchy);
 
         $this->registry = $registry;
         $this->roleClassname = $roleClassname;
-        $this->cache = array();
+        $this->cacheExec = array();
+        $this->cache = $cache;
     }
 
     /**
@@ -82,6 +90,10 @@ class RoleHierarchy extends BaseRoleHierarchy
      */
     public function getReachableRoles(array $roles)
     {
+        if (0 === count($roles)) {
+            return $roles;
+        }
+
         $rolenames = array();
 
         foreach ($roles as $role) {
@@ -94,19 +106,25 @@ class RoleHierarchy extends BaseRoleHierarchy
             $rolenames[] = ($role instanceof RoleInterface) ? $role->getRole() : $role;
         }
 
-        $cacheName = implode('__', $rolenames);
+        $id = sha1(implode('|', $rolenames));
 
-        // return the children in cache
-        if (isset($this->cache[$cacheName])) {
-            return $this->cache[$cacheName];
+        // find the hierarchy in excecution cache
+        if (isset($this->cacheExec[$id])) {
+            return $this->cacheExec[$id];
         }
 
-        //Get all children
+        // find the hierarchy in cache
+        $reachableRoles = $this->cache->read($id);
+
+        if (null !== $reachableRoles) {
+            return $reachableRoles;
+        }
+
+        // build hierarchy
         $reachableRoles = parent::getReachableRoles($roles);
         $em = $this->registry->getManagerForClass($this->roleClassname);
         $repo = $em->getRepository($this->roleClassname);
         $entityRoles = array();
-
         $filterIsEnabled = $em->getFilters()->isEnabled('sonatra_acl');
 
         if ($filterIsEnabled) {
@@ -115,7 +133,8 @@ class RoleHierarchy extends BaseRoleHierarchy
 
         if (null !== $this->eventDispatcher) {
             $event = new ReachableRoleEvent($reachableRoles);
-            $this->eventDispatcher->dispatch(Events::PRE_REACHABLE_ROLES, $event);
+            $event = $this->eventDispatcher->dispatch(Events::PRE_REACHABLE_ROLES, $event);
+            $reachableRoles = $event->geReachableRoles();
         }
 
         if (count($rolenames) > 0) {
@@ -123,10 +142,8 @@ class RoleHierarchy extends BaseRoleHierarchy
         }
 
         foreach ($entityRoles as $eRole) {
-            $reachableRoles = array_merge($reachableRoles, $this->getAllChildren($eRole));
+            $reachableRoles = array_merge($reachableRoles, $this->getReachableRoles($eRole->getChildren()->toArray()));
         }
-
-        $reachableRoles = parent::getReachableRoles($reachableRoles);
 
         // cleaning double
         $existingRoles = array();
@@ -144,39 +161,19 @@ class RoleHierarchy extends BaseRoleHierarchy
         }
 
         // insert in cache
-        $this->cache[$cacheName] = $finalRoles;
+        $this->cache->write($id, $finalRoles);
+        $this->cacheExec[$id] = $finalRoles;
+
+        if (null !== $this->eventDispatcher) {
+            $event->setRreachableRoles($finalRoles);
+            $event = $this->eventDispatcher->dispatch(Events::POST_REACHABLE_ROLES, $event);
+            $finalRoles = $event->geReachableRoles();
+        }
 
         if ($filterIsEnabled) {
             $em->getFilters()->enable('sonatra_acl');
         }
 
-        if (null !== $this->eventDispatcher) {
-            $event->setRreachableRoles($finalRoles);
-            $this->eventDispatcher->dispatch(Events::POST_REACHABLE_ROLES, $event);
-        }
-
         return $finalRoles;
-    }
-
-    /**
-     * Get the children role.
-     *
-     * @param RoleInterface $role
-     *
-     * @return RoleInterface[] The list of Role
-     */
-    private function getAllChildren($role)
-    {
-        $returnRoles = array();
-        $children = $role->getChildren();
-        $returnRoles[$role->getRole()] = $role;
-
-        if (!empty($children)) {
-            foreach ($children as $child) {
-                $returnRoles = array_merge($returnRoles, $this->getAllChildren($child));
-            }
-        }
-
-        return $returnRoles;
     }
 }

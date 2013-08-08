@@ -37,46 +37,73 @@ class SonatraSecurityExtension extends Extension
         $container->setParameter('sonatra_security.role_class', $config['role_class']);
         $container->setParameter('sonatra_security.group_class', $config['group_class']);
 
+        // cache dir
+        $cacheDir = $container->getParameterBag()->resolveValue($config['cache_dir']);
+
+        if (!is_dir($cacheDir)) {
+            if (false === @mkdir($cacheDir, 0777, true)) {
+                throw new \RuntimeException(sprintf('Could not create cache directory "%s".', $cacheDir));
+            }
+        }
+
         // host role
-        $loader->load('host_role.yml');
+        if ($config['host_role']['enabled']) {
+            $loader->load('host_role.yml');
+        }
 
-        // acl
-        if ($config['acl']['enabled']) {
-            if ($config['acl']['enabled_hierarchy']) {
-                $loader->load('acl_hierarchy.yml');
+        // role hierarchy
+        if ($config['role_hierarchy']['enabled']) {
+            $loader->load('role_hierarchy.yml');
+
+            // role hierarchy cache dir
+            if (!is_dir($cacheDir.'/role_hierarchy')) {
+                if (false === @mkdir($cacheDir.'/role_hierarchy', 0777, true)) {
+                    throw new \RuntimeException(sprintf('Could not create cache directory "%s".', $cacheDir.'/expressions'));
+                }
             }
 
-            if ($config['acl']['enabled_group_security_identity']) {
-                $loader->load('group_security_identity_strategy.yml');
-            }
+            $container->setParameter('sonatra_security.role_hierarchy.cache_dir', $cacheDir.'/role_hierarchy');
 
-            $container->setParameter('sonatra_security.acl_default_rule', $config['acl']['default_rule']);
-            $container->setParameter('sonatra_security.acl_rules', $config['acl']['rules']);
-
-            $loader->load('acl.yml');
-
-            // listener
-            if ($config['acl']['doctrine_orm_listener']) {
-                $loader->load('acl_doctrine_orm_listener.yml');
-            }
-
-            // filters
-            if ($config['acl']['rule_doctrine_orm_filters']) {
-                $loader->load('acl_rule_doctrine_orm_filter.yml');
+            // doctrine orm listener role hierarchy
+            if ($config['doctrine']['orm']['listener']['role_hierarchy']) {
+                $loader->load('orm_listener_role_hierarchy.yml');
             }
         }
 
         // expression
-        if ($config['expression']['replace_has_permission']) {
+        if ($config['expression']['has_permission']) {
             $loader->load('expression_has_permission.yml');
         }
 
-        if ($config['expression']['add_has_field_permission']) {
+        if ($config['expression']['has_field_permission']) {
             $loader->load('expression_has_field_permission.yml');
         }
 
-        if ($config['doctrine_listener']['enabled']) {
-            $loader->load('doctrine_listener_role.yml');
+        // role update fields
+        if ($config['doctrine']['orm']['listener']['role_update_fields']) {
+            $loader->load('orm_listener_role_update_fields.yml');
+        }
+
+        // acl
+        if ($config['acl']['enabled']) {
+            if ($config['acl']['security_identity']) {
+                $loader->load('group_security_identity_strategy.yml');
+            }
+
+            $loader->load('acl.yml');
+
+            $container->setParameter('sonatra_security.acl_default_rule', $config['acl']['default_rule']);
+            $container->setParameter('sonatra_security.acl_rules', $config['acl']['rules']);
+
+            // doctrine orm listener acl clean/restaure fields value
+            if ($config['doctrine']['orm']['listener']['acl_clean_fields']) {
+                $loader->load('orm_listener_acl_clean_fields.yml');
+            }
+
+            // doctrine orm rule filters
+            if ($config['doctrine']['orm']['filter']['rule_filters']) {
+                $loader->load('orm_rule_filter.yml');
+            }
         }
     }
 

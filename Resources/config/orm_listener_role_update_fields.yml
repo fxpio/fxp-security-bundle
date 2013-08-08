@@ -1,0 +1,10 @@
+parameters:
+    sonatra_security.orm.role_update_field.listener.class: Sonatra\Bundle\SecurityBundle\Doctrine\ORM\Listener\RoleAuthorizationListener
+
+services:
+    #Doctrine Listener Role
+    sonatra_security.orm.role_update_field.listener:
+        public:    false
+        class:     '%sonatra_security.orm.role_update_field.listener.class%'
+        tags:
+            - { name: doctrine.event_subscriber }

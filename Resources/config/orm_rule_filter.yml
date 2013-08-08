@@ -8,24 +8,24 @@ parameters:
 
 services:
     #Acl Rule Filter Definitions
-    sonatra_security.acl.rule_filter_definition.doctrine_orm.deny:
+    sonatra_security.acl.rule_filter_definition.orm.deny:
         class:  Sonatra\Bundle\SecurityBundle\Acl\Rule\FilterDefinition\OrmDeny
-        tags:   [ { name: sonatra_security.acl.rule_filter_definition, alias: 'doctrine_orm:deny' } ]
+        tags:   [ { name: sonatra_security.acl.rule_filter_definition, alias: 'orm:deny' } ]
 
-    sonatra_security.acl.rule_filter_definition.doctrine_orm.affirmative:
+    sonatra_security.acl.rule_filter_definition.orm.affirmative:
         class:  Sonatra\Bundle\SecurityBundle\Acl\Rule\FilterDefinition\OrmAffirmative
-        tags:   [ { name: sonatra_security.acl.rule_filter_definition, alias: 'doctrine_orm:affirmative' } ]
+        tags:   [ { name: sonatra_security.acl.rule_filter_definition, alias: 'orm:affirmative' } ]
 
-    sonatra_security.acl.rule_filter_definition.doctrine_orm.unanimous:
+    sonatra_security.acl.rule_filter_definition.orm.unanimous:
         class:  Sonatra\Bundle\SecurityBundle\Acl\Rule\FilterDefinition\OrmUnanimous
-        tags:   [ { name: sonatra_security.acl.rule_filter_definition, alias: 'doctrine_orm:unanimous' } ]
+        tags:   [ { name: sonatra_security.acl.rule_filter_definition, alias: 'orm:unanimous' } ]
 
-    sonatra_security.acl.rule_filter_definition.doctrine_orm.object:
+    sonatra_security.acl.rule_filter_definition.orm.object:
         class:  Sonatra\Bundle\SecurityBundle\Acl\Rule\FilterDefinition\OrmObject
         arguments: ['@doctrine.orm.entity_manager', '%sonatra_security.acl.dbal.options%']
-        tags:   [ { name: sonatra_security.acl.rule_filter_definition, alias: 'doctrine_orm:object' } ]
+        tags:   [ { name: sonatra_security.acl.rule_filter_definition, alias: 'orm:object' } ]
 
-    sonatra_security.acl.rule_filter_definition.doctrine_orm.class:
+    sonatra_security.acl.rule_filter_definition.orm.class:
         class:  Sonatra\Bundle\SecurityBundle\Acl\Rule\FilterDefinition\OrmClass
         arguments: ['@doctrine.orm.entity_manager', '%sonatra_security.acl.dbal.options%']
-        tags:   [ { name: sonatra_security.acl.rule_filter_definition, alias: 'doctrine_orm:class' } ]
+        tags:   [ { name: sonatra_security.acl.rule_filter_definition, alias: 'orm:class' } ]

@@ -1,0 +1,9 @@
+parameters:
+    sonatra_security.role_hierarchy.cache.listener.class: Sonatra\Bundle\SecurityBundle\Doctrine\ORM\Listener\RoleHierarchyListener
+
+services:
+    sonatra_security.role_hierarchy.cache.listener:
+        class:     '%sonatra_security.role_hierarchy.cache.listener.class%'
+        arguments: ['@sonatra_security.role_hierarchy.cache']
+        tags:
+            - { name: doctrine.event_subscriber }
