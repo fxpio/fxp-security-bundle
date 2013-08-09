@@ -34,4 +34,26 @@ final class Events
      * @var string
      */
     const POST_REACHABLE_ROLES = 'sonatra_security.reachable_roles.post';
+
+    /**
+     * The PRE_SECURITY_IDENTITY_RETRIEVAL event occurs before the retrieval of
+     * all security identities.
+     *
+     * The event listener method receives a
+     * Sonatra\Bundle\SecurityBundle\Event\SecurityIdentityEvent instance.
+     *
+     * @var string
+     */
+    const PRE_SECURITY_IDENTITY_RETRIEVAL = 'sonatra_security.security_identity_retrieval_strategy.pre';
+
+    /**
+     * The POST_SECURITY_IDENTITY_RETRIEVAL event occurs after the retrieval of
+     * all security identities.
+     *
+     * The event listener method receives a
+     * Sonatra\Bundle\SecurityBundle\Event\SecurityIdentityEvent instance.
+     *
+     * @var string
+     */
+    const POST_SECURITY_IDENTITY_RETRIEVAL = 'sonatra_security.security_identity_retrieval_strategy.post';
 }

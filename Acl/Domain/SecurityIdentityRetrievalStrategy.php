@@ -11,7 +11,10 @@
 
 namespace Sonatra\Bundle\SecurityBundle\Acl\Domain;
 
+use Sonatra\Bundle\SecurityBundle\Event\SecurityIdentityEvent;
+use Sonatra\Bundle\SecurityBundle\Events;
 use Symfony\Bridge\Doctrine\RegistryInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Security\Acl\Domain\SecurityIdentityRetrievalStrategy as BaseSecurityIdentityRetrievalStrategy;
 use Symfony\Component\Security\Core\Authentication\AuthenticationTrustResolver;
 use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
@@ -25,6 +28,21 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
  */
 class SecurityIdentityRetrievalStrategy extends BaseSecurityIdentityRetrievalStrategy
 {
+    /**
+     * @var EventDispatcherInterface
+     */
+    private $eventDispatcher;
+
+    /**
+     * Set event dispatcher.
+     *
+     * @param EventDispatcherInterface $dispatcher
+     */
+    public function setEventDispatcher(EventDispatcherInterface $dispatcher)
+    {
+        $this->eventDispatcher = $dispatcher;
+    }
+
     /**
      * @var RegistryInterface
      */
@@ -59,6 +77,14 @@ class SecurityIdentityRetrievalStrategy extends BaseSecurityIdentityRetrievalStr
             $em->getFilters()->disable('sonatra_acl');
         }
 
+        // dispatch pre event
+        if (null !== $this->eventDispatcher) {
+            $event = new SecurityIdentityEvent();
+            $event->setSecurityIdentities($sids);
+            $event = $this->eventDispatcher->dispatch(Events::PRE_SECURITY_IDENTITY_RETRIEVAL, $event);
+            $sids = $event->getSecurityIdentities();
+        }
+
         // add group security identity
         if (!$token instanceof AnonymousToken) {
             try {
@@ -67,6 +93,13 @@ class SecurityIdentityRetrievalStrategy extends BaseSecurityIdentityRetrievalStr
             } catch (\InvalidArgumentException $invalid) {
                 // ignore, group has no group security identity
             }
+        }
+
+        // dispatch post event
+        if (null !== $this->eventDispatcher) {
+            $event->setSecurityIdentities($sids);
+            $event = $this->eventDispatcher->dispatch(Events::POST_SECURITY_IDENTITY_RETRIEVAL, $event);
+            $sids = $event->getSecurityIdentities();
         }
 
         if ($filterIsEnabled) {
