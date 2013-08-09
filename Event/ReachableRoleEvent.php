@@ -32,12 +32,10 @@ class ReachableRoleEvent extends Event
 
     /**
      * Constructor.
-     *
-     * @param \Symfony\Component\Security\Core\Role\RoleInterface[] $reachableRoles
      */
-    public function __construct(array $reachableRoles = array())
+    public function __construct()
     {
-        $this->reachableRoles = $reachableRoles;
+        $this->reachableRoles = array();
     }
 
     /**
@@ -45,7 +43,7 @@ class ReachableRoleEvent extends Event
      *
      * @param \Symfony\Component\Security\Core\Role\RoleInterface[] $reachableRoles
      */
-    public function setRreachableRoles(array $reachableRoles)
+    public function setReachableRoles(array $reachableRoles)
     {
         $this->reachableRoles = $reachableRoles;
     }
@@ -53,7 +51,7 @@ class ReachableRoleEvent extends Event
     /**
      * Get reachable roles.
      *
-     * @return Symfony\Component\Security\Core\Role\RoleInterface[]
+     * @return \Symfony\Component\Security\Core\Role\RoleInterface[]
      */
     public function geReachableRoles()
     {

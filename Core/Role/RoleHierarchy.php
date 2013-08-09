@@ -132,7 +132,8 @@ class RoleHierarchy extends BaseRoleHierarchy
         }
 
         if (null !== $this->eventDispatcher) {
-            $event = new ReachableRoleEvent($reachableRoles);
+            $event = new ReachableRoleEvent();
+            $event->setReachableRoles($reachableRoles);
             $event = $this->eventDispatcher->dispatch(Events::PRE_REACHABLE_ROLES, $event);
             $reachableRoles = $event->geReachableRoles();
         }
@@ -165,7 +166,7 @@ class RoleHierarchy extends BaseRoleHierarchy
         $this->cacheExec[$id] = $finalRoles;
 
         if (null !== $this->eventDispatcher) {
-            $event->setRreachableRoles($finalRoles);
+            $event->setReachableRoles($finalRoles);
             $event = $this->eventDispatcher->dispatch(Events::POST_REACHABLE_ROLES, $event);
             $finalRoles = $event->geReachableRoles();
         }
