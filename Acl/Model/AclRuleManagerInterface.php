@@ -35,6 +35,44 @@ interface AclRuleManagerInterface
     public function getDefaultRule();
 
     /**
+     * Set disabled rule.
+     *
+     * @param string $rule
+     *
+     * @return AclRuleManagerInterface
+     */
+    public function setDisabledRule($rule);
+
+    /**
+     * Get disabled rule.
+     *
+     * @return string
+     */
+    public function getDisabledRule();
+
+    /**
+     * Check if rule manager return the disabled rule definition or the
+     * definition defined in configuration.
+     *
+     * @return boolean True the disabled rule, False the rule defined in config
+     */
+    public function isDisabled();
+
+    /**
+     * Force rule manager to return the rule definition defined in configuration.
+     *
+     * @return AclRuleManagerInterface
+     */
+    public function enable();
+
+    /**
+     * Force rule manager to return the disabled rule definition.
+     *
+     * @return AclRuleManagerInterface
+     */
+    public function disable();
+
+    /**
      * Set rule for classname/field classname.
      *
      * @param string $rule      The acl rule

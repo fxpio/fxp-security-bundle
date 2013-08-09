@@ -24,6 +24,7 @@ services:
         arguments:
             - '@sonatra_security.acl.rule_extension'
             - '%sonatra_security.acl_default_rule%'
+            - '%sonatra_security.acl_disabled_rule%'
             - '%sonatra_security.acl_rules%'
 
     #ACL Manipulator

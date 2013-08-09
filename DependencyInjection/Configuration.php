@@ -107,6 +107,7 @@ class Configuration implements ConfigurationInterface
                     ->end()
                 ->end()
                 ->scalarNode('default_rule')->defaultValue('disabled')->end()
+                ->scalarNode('disabled_rule')->defaultValue('disabled')->end()
                 ->arrayNode('rules')
                     ->example(array('Vendor\Entity\Blog' => 'class', 'Vendor\Entity\Post' => 'affirmative'))
                     ->prototype('array')

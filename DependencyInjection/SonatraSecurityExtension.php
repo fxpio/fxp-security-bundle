@@ -93,6 +93,7 @@ class SonatraSecurityExtension extends Extension
             $loader->load('acl.yml');
 
             $container->setParameter('sonatra_security.acl_default_rule', $config['acl']['default_rule']);
+            $container->setParameter('sonatra_security.acl_disabled_rule', $config['acl']['disabled_rule']);
             $container->setParameter('sonatra_security.acl_rules', $config['acl']['rules']);
 
             // doctrine orm listener acl clean/restaure fields value

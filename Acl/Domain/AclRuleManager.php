@@ -34,29 +34,44 @@ class AclRuleManager implements AclRuleManagerInterface
     protected $defaultRule;
 
     /**
+     * @var string
+     */
+    protected $disabledRule;
+
+    /**
      * @var array
      */
     protected $rules;
 
     /**
+     * @var boolean
+     */
+    protected $isDisabled;
+
+    /**
      * @var array
      */
-    private $cache = array();
+    private $cache;
 
     /**
      * Constructor.
      *
      * @param RuleExtensionInterface $ruleExtension
-     * @param array                  $rules
      * @param string                 $defaultRule
+     * @param string                 $disabledRule
+     * @param array                  $rules
      */
     public function __construct(RuleExtensionInterface $ruleExtension,
             $defaultRule,
+            $disabledRule,
             array $rules = array())
     {
         $this->ruleExtension = $ruleExtension;
-        $this->rules = $rules;
         $this->defaultRule = $defaultRule;
+        $this->disabledRule = $disabledRule;
+        $this->rules = $rules;
+        $this->isDisabled = false;
+        $this->cache = array();
     }
 
     /**
@@ -80,6 +95,52 @@ class AclRuleManager implements AclRuleManagerInterface
     /**
      * {@inheritdoc}
      */
+    public function setDisabledRule($rule)
+    {
+        $this->disabledRule = $rule;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDisabledRule()
+    {
+        return $this->disabledRule;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isDisabled()
+    {
+        return $this->isDisabled;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function enable()
+    {
+        $this->isDisabled = false;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function disable()
+    {
+        $this->isDisabled = true;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function setRule($rule, $type, $classname, $fieldname = null)
     {
         $classname = ClassUtils::getRealClass($classname);
@@ -97,6 +158,10 @@ class AclRuleManager implements AclRuleManagerInterface
      */
     public function getRule($type, $classname, $fieldname = null)
     {
+        if ($this->isDisabled()) {
+            return $this->disabledRule;
+        }
+
         $classname = ClassUtils::getRealClass($classname);
         $cacheName = strtolower("$type::$classname:$fieldname");
 
