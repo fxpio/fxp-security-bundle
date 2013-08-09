@@ -10,5 +10,4 @@ services:
         arguments:
             - '@security.role_hierarchy'
             - '@security.authentication.trust_resolver'
-            - '@doctrine'
         calls: [ ['setEventDispatcher', ['@?event_dispatcher']] ]

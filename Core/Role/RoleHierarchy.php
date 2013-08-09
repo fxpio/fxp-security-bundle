@@ -11,13 +11,12 @@
 
 namespace Sonatra\Bundle\SecurityBundle\Core\Role;
 
-use Sonatra\Bundle\SecurityBundle\Core\Role\Cache\CacheInterface;
-
 use Symfony\Component\Security\Core\Role\RoleHierarchy as BaseRoleHierarchy;
 use Symfony\Component\Security\Core\Role\RoleInterface;
 use Symfony\Component\Security\Core\Role\Role;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Bridge\Doctrine\RegistryInterface;
+use Sonatra\Bundle\SecurityBundle\Core\Role\Cache\CacheInterface;
 use Sonatra\Bundle\SecurityBundle\Event\ReachableRoleEvent;
 use Sonatra\Bundle\SecurityBundle\Events;
 use Sonatra\Bundle\SecurityBundle\Exception\SecurityException;
@@ -57,9 +56,10 @@ class RoleHierarchy extends BaseRoleHierarchy
     /**
      * Constructor.
      *
-     * @param array    $hierarchy     An array defining the hierarchy
-     * @param Registry $registry
-     * @param string   $roleClassName
+     * @param array          $hierarchy     An array defining the hierarchy
+     * @param Registry       $registry
+     * @param string         $roleClassName
+     * @param CacheInterface $cache
      */
     public function __construct(array $hierarchy, RegistryInterface $registry, $roleClassname, CacheInterface $cache)
     {
@@ -125,11 +125,6 @@ class RoleHierarchy extends BaseRoleHierarchy
         $em = $this->registry->getManagerForClass($this->roleClassname);
         $repo = $em->getRepository($this->roleClassname);
         $entityRoles = array();
-        $filterIsEnabled = $em->getFilters()->isEnabled('sonatra_acl');
-
-        if ($filterIsEnabled) {
-            $em->getFilters()->disable('sonatra_acl');
-        }
 
         if (null !== $this->eventDispatcher) {
             $event = new ReachableRoleEvent();
@@ -169,10 +164,6 @@ class RoleHierarchy extends BaseRoleHierarchy
             $event->setReachableRoles($finalRoles);
             $event = $this->eventDispatcher->dispatch(Events::POST_REACHABLE_ROLES, $event);
             $finalRoles = $event->geReachableRoles();
-        }
-
-        if ($filterIsEnabled) {
-            $em->getFilters()->enable('sonatra_acl');
         }
 
         return $finalRoles;
