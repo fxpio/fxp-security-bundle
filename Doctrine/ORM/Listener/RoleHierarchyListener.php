@@ -14,6 +14,7 @@ namespace Sonatra\Bundle\SecurityBundle\Doctrine\ORM\Listener;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Events;
+use Doctrine\ORM\PersistentCollection;
 use Sonatra\Bundle\SecurityBundle\Core\Role\Cache\CacheInterface;
 use Sonatra\Bundle\SecurityBundle\Model\RoleHierarchisableInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -58,36 +59,20 @@ class RoleHierarchyListener implements EventSubscriber
     public function onFlush(OnFlushEventArgs $args)
     {
         $uow = $args->getEntityManager()->getUnitOfWork();
-        $scheduledInsertions = $uow->getScheduledEntityInsertions($uow);
-        $scheduledUpdates = $uow->getScheduledEntityUpdates($uow);
-        $scheduledDeletations = $uow->getScheduledEntityDeletions($uow);
+        $collection = $uow->getScheduledEntityInsertions($uow);
+        $collection = array_merge($collection, $uow->getScheduledEntityUpdates($uow));
+        $collection = array_merge($collection, $uow->getScheduledEntityDeletions($uow));
+        $collection = array_merge($collection, $uow->getScheduledCollectionUpdates($uow));
+        $collection = array_merge($collection, $uow->getScheduledCollectionDeletions($uow));
         $invalidate = false;
 
         // check all scheduled insertions
-        foreach ($scheduledInsertions as $object) {
+        foreach ($collection as $object) {
             if ($invalidate) {
                 break;
             }
 
-            $invalidate = $this->invalidateCache($object);
-        }
-
-        // check all scheduled updates
-        foreach ($scheduledUpdates as $object) {
-            if ($invalidate) {
-                break;
-            }
-
-            $invalidate = $this->invalidateCache($object);
-        }
-
-        // check all scheduled deletations
-        foreach ($scheduledDeletations as $object) {
-            if ($invalidate) {
-                break;
-            }
-
-            $invalidate = $this->invalidateCache($object);
+            $invalidate = $this->invalidateCache($uow, $object);
         }
 
         if ($invalidate) {
@@ -98,16 +83,38 @@ class RoleHierarchyListener implements EventSubscriber
     /**
      * Check if the role hierarchy cache must be invalidated.
      *
-     * @param object $object
+     * @param UnitOfWork $uow
+     * @param object     $object
      *
      * @return boolean
      */
-    protected function invalidateCache($object)
+    protected function invalidateCache($uow, $object)
     {
         if ($object instanceof UserInterface
                 || $object instanceof RoleHierarchisableInterface
                 || $object instanceof GroupInterface) {
-            return true;
+            $fields = array_keys($uow->getEntityChangeSet($object));
+            $checkFields = array('roles');
+
+            if ($object instanceof RoleHierarchisableInterface) {
+                $checkFields = array_merge($checkFields, array('name'));
+            }
+
+            foreach ($fields as $field) {
+                if (in_array($field, $checkFields)) {
+                    return true;
+                }
+            }
+
+        } elseif ($object instanceof PersistentCollection) {
+            $mapping = $object->getMapping();
+            $ref = new \ReflectionClass($mapping['sourceEntity']);
+
+            if (in_array('Sonatra\\Bundle\\SecurityBundle\\Model\\RoleHierarchisableInterface', $ref->getInterfaceNames())
+                    && 'children' === $mapping['fieldName']) {
+                var_dump('cool collection change !');
+                return true;
+            }
         }
 
         return false;
