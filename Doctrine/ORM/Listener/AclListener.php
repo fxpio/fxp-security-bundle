@@ -14,6 +14,7 @@ namespace Sonatra\Bundle\SecurityBundle\Doctrine\ORM\Listener;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Security\Acl\Voter\FieldVote;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Sonatra\Bundle\SecurityBundle\Core\Token\ConsoleToken;
 use Doctrine\ORM\EntityManager;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LifecycleEventArgs;
@@ -67,7 +68,7 @@ class AclListener implements EventSubscriber
         $token = $this->container->get('security.context')->getToken();
 
         // when token is null (console)
-        if (null === $token || $token->getUser() === 'console.') {
+        if (null === $token || $token instanceof ConsoleToken) {
             return;
         }
 
