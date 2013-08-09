@@ -11,31 +11,22 @@
 
 namespace Sonatra\Bundle\SecurityBundle\Event;
 
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Component\EventDispatcher\GenericEvent;
 
 /**
  * This is a general purpose reachable role event.
  *
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-class ReachableRoleEvent extends Event
+class ReachableRoleEvent extends GenericEvent
 {
-    /**
-     * @var \Symfony\Component\Security\Core\Role\RoleInterface[]
-     */
-    protected $reachableRoles;
-
-    /**
-     * @var mixed
-     */
-    protected $data;
-
     /**
      * Constructor.
      */
     public function __construct()
     {
-        $this->reachableRoles = array();
+        $this->subject = array();
+        $this->arguments = array();
     }
 
     /**
@@ -45,7 +36,7 @@ class ReachableRoleEvent extends Event
      */
     public function setReachableRoles(array $reachableRoles)
     {
-        $this->reachableRoles = $reachableRoles;
+        $this->subject = $reachableRoles;
     }
 
     /**
@@ -55,26 +46,6 @@ class ReachableRoleEvent extends Event
      */
     public function geReachableRoles()
     {
-        return $this->reachableRoles;
-    }
-
-    /**
-     * Set data.
-     *
-     * @param mixed $data
-     */
-    public function setData($data)
-    {
-        $this->data = $data;
-    }
-
-    /**
-     * Get data.
-     *
-     * @return mixed
-     */
-    public function getData()
-    {
-        return $this->data;
+        return $this->subject;
     }
 }
