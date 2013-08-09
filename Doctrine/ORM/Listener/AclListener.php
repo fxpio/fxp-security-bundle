@@ -58,7 +58,7 @@ class AclListener implements EventSubscriber
      */
     public function postLoad(LifecycleEventArgs $args)
     {
-        if (!$args->getEntityManager()->getFilters()->isEnabled('sonatra_acl')) {
+        if ($this->getAclManager()->isDisabled()) {
             return;
         }
 
@@ -119,7 +119,7 @@ class AclListener implements EventSubscriber
      */
     public function onFlush(OnFlushEventArgs $args)
     {
-        if (!$args->getEntityManager()->getFilters()->isEnabled('sonatra_acl')) {
+        if ($this->getAclManager()->isDisabled()) {
             return;
         }
 

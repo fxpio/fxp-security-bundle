@@ -22,6 +22,35 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 interface AclManagerInterface
 {
     /**
+     * Check if acl manager is disabled.
+     *
+     * If the acl manager is disabled, all asked authorizations will be
+     * always accepted.
+     *
+     * If the acl manager is enabled, all asked authorizations will be accepted
+     * depending on the acl rules.
+     *
+     * @return boolean
+     */
+    public function isDisabled();
+
+    /**
+     * Enables the acl manager (the asked authorizations will be accepted
+     * depending on the acl rules).
+     *
+     * @return AclManagerInterface
+     */
+    public function enable();
+
+    /**
+     * Disables the acl manager (the asked authorizations will be always
+     * accepted).
+     *
+     * @return AclManagerInterface
+     */
+    public function disable();
+
+    /**
      * Get the security identities of token.
      *
      * @param TokenInterface $token

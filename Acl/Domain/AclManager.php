@@ -100,6 +100,34 @@ class AclManager implements AclManagerInterface
     /**
      * {@inheritdoc}
      */
+    public function isDisabled()
+    {
+        return $this->aclRuleManager->isDisabled();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function enable()
+    {
+        $this->aclRuleManager->enable();
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function disable()
+    {
+        $this->aclRuleManager->disable();
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getSecurityIdentities(TokenInterface $token = null)
     {
         if (null === $token) {

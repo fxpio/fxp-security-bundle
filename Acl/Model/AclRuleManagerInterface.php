@@ -88,6 +88,8 @@ interface AclRuleManagerInterface
      * Get rule for classname/field classname with Pre-Authorization Decisions
      * of Syfmony2 Advanced ACL Documentation.
      *
+     * Return the disabled rule name if the rule manager is disabled.
+     *
      * @param string $type      The acl mask name (VIEW, etc...)
      * @param string $classname The class name
      * @param string $fieldname The field name
