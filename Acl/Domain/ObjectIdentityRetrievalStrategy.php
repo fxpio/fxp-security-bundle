@@ -14,6 +14,7 @@ namespace Sonatra\Bundle\SecurityBundle\Acl\Domain;
 use Symfony\Component\Security\Acl\Model\ObjectIdentityRetrievalStrategyInterface;
 use Symfony\Component\Security\Acl\Domain\ObjectIdentity;
 use Symfony\Component\Security\Acl\Voter\FieldVote;
+use Symfony\Component\Security\Acl\Exception\InvalidDomainObjectException;
 use Sonatra\Bundle\SecurityBundle\Acl\Util\AclUtils;
 
 /**
@@ -40,6 +41,12 @@ class ObjectIdentityRetrievalStrategy implements ObjectIdentityRetrievalStrategy
             return new ObjectIdentity(AclManipulator::CLASS_TYPE, AclUtils::convertDomainObjectToClassname($domainObject));
         }
 
-        return ObjectIdentity::fromDomainObject($domainObject);
+        try {
+            return ObjectIdentity::fromDomainObject($domainObject);
+
+        } catch (InvalidDomainObjectException $ex) {
+        }
+
+        return new ObjectIdentity(AclManipulator::OBJECT_TYPE, AclUtils::convertDomainObjectToClassname($domainObject));
     }
 }
