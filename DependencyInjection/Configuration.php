@@ -124,7 +124,7 @@ class Configuration implements ConfigurationInterface
                                     ->end()
                                 ->end()
                             ->end()
-                            ->scalarNode('default_fields')->end()
+                            ->scalarNode('default_fields')->defaultValue('parent')->end()
                             ->arrayNode('fields')
                                 ->prototype('array')
                                     ->beforeNormalization()
