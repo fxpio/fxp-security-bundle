@@ -90,3 +90,8 @@ services:
         class:  Sonatra\Bundle\SecurityBundle\Acl\Rule\Definition\ClassDefinition
         arguments: ['@sonatra_security.acl.manager']
         tags:   [ { name: sonatra_security.acl.rule_definition, alias: class } ]
+
+    sonatra_security.acl.rule_definition.parent:
+        class:  Sonatra\Bundle\SecurityBundle\Acl\Rule\Definition\ParentDefinition
+        arguments: ['@sonatra_security.acl.manager']
+        tags:   [ { name: sonatra_security.acl.rule_definition, alias: parent } ]
