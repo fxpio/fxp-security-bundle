@@ -14,6 +14,7 @@ namespace Sonatra\Bundle\SecurityBundle;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Sonatra\Bundle\SecurityBundle\DependencyInjection\Compiler\AclRuleDefinitionPass;
+use Sonatra\Bundle\SecurityBundle\DependencyInjection\Compiler\AclObjectFilterPass;
 use Sonatra\Bundle\SecurityBundle\Factory\HostRoleFactory;
 
 /**
@@ -29,5 +30,6 @@ class SonatraSecurityBundle extends Bundle
         $extension->addSecurityListenerFactory(new HostRoleFactory());
 
         $container->addCompilerPass(new AclRuleDefinitionPass());
+        $container->addCompilerPass(new AclObjectFilterPass());
     }
 }

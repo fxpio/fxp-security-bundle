@@ -96,14 +96,19 @@ class SonatraSecurityExtension extends Extension
             $container->setParameter('sonatra_security.acl_disabled_rule', $config['acl']['disabled_rule']);
             $container->setParameter('sonatra_security.acl_rules', $config['acl']['rules']);
 
-            // doctrine orm listener acl clean/restaure fields value
-            if ($config['doctrine']['orm']['listener']['acl_clean_fields']) {
-                $loader->load('orm_listener_acl_clean_fields.yml');
+            // doctrine orm listener acl filter/restaure fields value
+            if ($config['doctrine']['orm']['listener']['acl_filter_fields']) {
+                $loader->load('orm_listener_acl_filter_fields.yml');
             }
 
             // doctrine orm rule filters
             if ($config['doctrine']['orm']['filter']['rule_filters']) {
                 $loader->load('orm_rule_filter.yml');
+            }
+
+            // doctrine orm object filter voters
+            if ($config['doctrine']['orm']['object_filter_voter']) {
+                $loader->load('orm_object_filter_voter.yml');
             }
         }
     }

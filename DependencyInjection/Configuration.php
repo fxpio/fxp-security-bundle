@@ -40,7 +40,7 @@ class Configuration implements ConfigurationInterface
             ->append($this->getRoleHierarchyNode())
             ->append($this->getAclNode())
             ->append($this->getExpressionNode())
-            ->append($this->getDoctrineListenerNode())
+            ->append($this->getDoctrineNode())
         ;
 
         return $treeBuilder;
@@ -178,7 +178,7 @@ class Configuration implements ConfigurationInterface
      *
      * @return NodeDefinition
      */
-    private function getDoctrineListenerNode()
+    private function getDoctrineNode()
     {
         $treeBuilder = new TreeBuilder();
         $node = $treeBuilder->root('doctrine');
@@ -194,9 +194,10 @@ class Configuration implements ConfigurationInterface
                             ->children()
                                 ->scalarNode('role_update_fields')->defaultTrue()->end()
                                 ->scalarNode('role_hierarchy')->defaultTrue()->end()
-                                ->scalarNode('acl_clean_fields')->defaultTrue()->end()
+                                ->scalarNode('acl_filter_fields')->defaultTrue()->end()
                             ->end()
                         ->end()
+                        ->scalarNode('object_filter_voter')->defaultTrue()->end()
                         ->arrayNode('filter')
                             ->addDefaultsIfNotSet()
                             ->children()

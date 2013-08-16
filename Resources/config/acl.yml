@@ -1,8 +1,10 @@
 parameters:
     sonatra_security.acl.rule_extension.class: Sonatra\Bundle\SecurityBundle\Acl\DependencyInjection\RuleExtension
+    sonatra_security.acl.object_filter_extension.class: Sonatra\Bundle\SecurityBundle\Acl\DependencyInjection\ObjectFilterExtension
     sonatra_security.acl.rule_manager.class: Sonatra\Bundle\SecurityBundle\Acl\Domain\AclRuleManager
     sonatra_security.acl.manipulator.class: Sonatra\Bundle\SecurityBundle\Acl\Domain\AclManipulator
     sonatra_security.acl.manager.class: Sonatra\Bundle\SecurityBundle\Acl\Domain\AclManager
+    sonatra_security.acl.object_filter.class: Sonatra\Bundle\SecurityBundle\Acl\Domain\AclObjectFilter
     sonatra_security.acl.voter.class: Sonatra\Bundle\SecurityBundle\Core\Authorization\Voter\AclVoter
     sonatra_security.acl.disable.listener.class: Sonatra\Bundle\SecurityBundle\Listener\DisableAclListener
 
@@ -17,6 +19,12 @@ services:
     sonatra_security.acl.rule_extension:
         class: '%sonatra_security.acl.rule_extension.class%'
         arguments: ['@service_container', ['@sonatra_security.acl.rule_definition'], ['@sonatra_security.acl.rule_filter_definition']]
+        public: false
+
+    #Object Filter Extension
+    sonatra_security.acl.object_filter_extension:
+        class: '%sonatra_security.acl.object_filter_extension.class%'
+        arguments: ['@service_container', ['@sonatra_security.acl.rule_definition']]
         public: false
 
     #Rule Manager
@@ -45,6 +53,14 @@ services:
             - '@security.acl.object_identity_retrieval_strategy'
             - '@sonatra_security.acl.rule_manager'
 
+    #ACL Object Filter
+    sonatra_security.acl.object_filter:
+        class: '%sonatra_security.acl.object_filter.class%'
+        arguments:
+            - '@sonatra_security.acl.object_filter_extension'
+            - '@sonatra_security.acl.manager'
+            - '@security.context'
+
     #Voter
     sonatra_security.acl.voter:
         public:    false
@@ -59,6 +75,11 @@ services:
         class: '%sonatra_security.acl.disable.listener.class%'
         arguments: ['@sonatra_security.acl.manager']
         tags: [ { name: kernel.event_subscriber } ]
+
+    #Acl Object Filter Voter
+    sonatra_security.acl.object_filter_voter.mixed:
+        class: Sonatra\Bundle\SecurityBundle\Acl\ObjectFilter\MixedValue
+        tags:   [ { name: sonatra_security.acl.object_filter_voter, priority: -255 } ]
 
     #Acl Rule Definitions
     sonatra_security.acl.rule_definition.disabled:
