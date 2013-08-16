@@ -93,7 +93,7 @@ interface AclManagerInterface
      *
      * @param FieldVote|ObjectIdentity|object|string $domainObject
      *
-     * @return array THe list of preload type
+     * @return array The list of preload type
      */
     public function getPreloadTypes($domainObject);
 
