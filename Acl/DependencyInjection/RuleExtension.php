@@ -12,6 +12,7 @@
 namespace Sonatra\Bundle\SecurityBundle\Acl\DependencyInjection;
 
 use Sonatra\Bundle\SecurityBundle\Acl\DependencyInjection\RuleExtensionInterface;
+use Sonatra\Bundle\SecurityBundle\Exception\InvalidArgumentException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -72,13 +73,13 @@ class RuleExtension implements RuleExtensionInterface
         }
 
         if (!isset($this->definitionServiceIds[$name])) {
-            throw new \InvalidArgumentException(sprintf('The rule definition "%s" is not registered with the service container.', $name));
+            throw new InvalidArgumentException(sprintf('The rule definition "%s" is not registered with the service container.', $name));
         }
 
         $definition = $this->container->get($this->definitionServiceIds[$name]);
 
         if ($definition->getName() !== $name) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                     sprintf('The rule definition name specified for the service "%s" does not match the actual name. Expected "%s", given "%s"',
                             $this->definitionServiceIds[$name],
                             $name,
@@ -109,13 +110,13 @@ class RuleExtension implements RuleExtensionInterface
         }
 
         if (!isset($this->filterDefinitionServiceIds[$type.':'.$name])) {
-            throw new \InvalidArgumentException(sprintf('The rule filter definition "%s" with "%s" type is not registered with the service container.', $name, $type));
+            throw new InvalidArgumentException(sprintf('The rule filter definition "%s" with "%s" type is not registered with the service container.', $name, $type));
         }
 
         $definition = $this->container->get($this->filterDefinitionServiceIds[$type.':'.$name]);
 
         if ($definition->getName() !== $name && $definition->getType() !== $type) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                     sprintf('The rule filter  definition name specified for the service "%s" does not match the actual name. Expected "%s" ("%s"), given "%s" ("%s")',
                             $this->filterDefinitionServiceIds[$name],
                             $name,
@@ -126,7 +127,7 @@ class RuleExtension implements RuleExtensionInterface
         }
 
         if (!$this->hasDefinition($definition->getName())) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                     sprintf('The filter definition "%s" is associated with unexisting rule definition',
                             $definition->getName()
                     ));

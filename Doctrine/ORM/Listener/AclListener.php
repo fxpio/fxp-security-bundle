@@ -13,8 +13,8 @@ namespace Sonatra\Bundle\SecurityBundle\Doctrine\ORM\Listener;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Security\Acl\Permission\BasicPermissionMap;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Sonatra\Bundle\SecurityBundle\Core\Token\ConsoleToken;
+use Sonatra\Bundle\SecurityBundle\Exception\AccessDeniedException;
 use Doctrine\ORM\EntityManager;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LifecycleEventArgs;

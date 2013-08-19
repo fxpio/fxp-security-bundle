@@ -17,6 +17,7 @@ use Symfony\Component\Security\Acl\Model\SecurityIdentityInterface;
 use Sonatra\Bundle\SecurityBundle\Acl\Model\AclManipulatorInterface;
 use Sonatra\Bundle\SecurityBundle\Acl\Model\PermissionContextInterface;
 use Sonatra\Bundle\SecurityBundle\Acl\Util\AclUtils;
+use Sonatra\Bundle\SecurityBundle\Exception\InvalidArgumentException;
 
 /**
  * Implementation of persmission context.
@@ -115,7 +116,7 @@ class PermissionContext implements PermissionContextInterface
         $type = strtolower($type);
 
         if (!in_array($type, array(AclManipulatorInterface::OBJECT_TYPE, AclManipulatorInterface::CLASS_TYPE))) {
-            throw new \InvalidArgumentException('The value of permission type must be "object" or "class"');
+            throw new InvalidArgumentException('The value of permission type must be "object" or "class"');
         }
 
         $this->type = $type;

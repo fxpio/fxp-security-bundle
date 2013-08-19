@@ -19,6 +19,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Sonatra\Bundle\SecurityBundle\Exception\LogicException;
 
 /**
  * @author François Pluchino <francois.pluchino@sonatra.com>
@@ -49,7 +50,7 @@ abstract class InfoCommand extends ContainerAwareCommand
                     'Please choose a name:',
                     function($name) {
                         if (empty($name)) {
-                            throw new \Exception('Name can not be empty');
+                            throw new LogicException('Name can not be empty');
                         }
 
                         return $name;

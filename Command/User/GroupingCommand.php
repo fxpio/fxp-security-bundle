@@ -15,6 +15,8 @@ use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Sonatra\Bundle\SecurityBundle\Exception\InvalidArgumentException;
+use Sonatra\Bundle\SecurityBundle\Exception\LogicException;
 
 /**
  * @author François Pluchino <francois.pluchino@sonatra.com>
@@ -47,7 +49,7 @@ class GroupingCommand extends ContainerAwareCommand
         $user = $repoUser->findOneBy(array('username' => $userName));
 
         if (null === $user) {
-            throw new \InvalidArgumentException(sprintf('The user "%s" does not exist', $userName));
+            throw new InvalidArgumentException(sprintf('The user "%s" does not exist', $userName));
         }
 
         // find group
@@ -58,7 +60,7 @@ class GroupingCommand extends ContainerAwareCommand
         $group = $repoGroup->findOneBy(array('name' => $groupName));
 
         if (null === $group) {
-            throw new \InvalidArgumentException(sprintf('The group "%s" does not exist', $groupName));
+            throw new InvalidArgumentException(sprintf('The group "%s" does not exist', $groupName));
         }
 
         if ($user->hasGroup($groupName)) {
@@ -78,7 +80,7 @@ class GroupingCommand extends ContainerAwareCommand
                 $msg = sprintf('%s%s: %s', PHP_EOL, $error->getPropertyPath(), $error->getMessage());
             }
 
-            throw new \Exception($msg);
+            throw new LogicException($msg);
         }
 
         $emUser->persist($user);
@@ -98,7 +100,7 @@ class GroupingCommand extends ContainerAwareCommand
                     'Please choose a username:',
                     function($username) {
                         if (empty($username)) {
-                            throw new \Exception('Username can not be empty');
+                            throw new LogicException('Username can not be empty');
                         }
 
                         return $username;
@@ -114,7 +116,7 @@ class GroupingCommand extends ContainerAwareCommand
                     'Please choose a group:',
                     function($group) {
                         if (empty($group)) {
-                            throw new \Exception('Group can not be empty');
+                            throw new LogicException('Group can not be empty');
                         }
 
                         return $group;

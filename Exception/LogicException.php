@@ -11,13 +11,11 @@
 
 namespace Sonatra\Bundle\SecurityBundle\Exception;
 
-use Symfony\Component\Security\Acl\Exception\Exception;
-
 /**
- * Base SecurityExcpetion for the Security component.
+ * Base LogicException for the Security component.
  *
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-class SecurityException extends Exception implements ExceptionInterface
+class LogicException extends \LogicException implements ExceptionInterface
 {
 }

@@ -16,6 +16,8 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Sonatra\Bundle\SecurityBundle\Exception\InvalidArgumentException;
+use Sonatra\Bundle\SecurityBundle\Exception\LogicException;
 
 /**
  * @author François Pluchino <francois.pluchino@sonatra.com>
@@ -81,7 +83,7 @@ abstract class CreateCommand extends ContainerAwareCommand
                 if (!$equalsPos) {
                     $semiColonPos = strpos ($field, ":");
                     if (!$semiColonPos) {
-                        throw new \InvalidArgumentException(sprintf('The field "%s" was misformatted or doesn\'t contain an = or : character.', $field));
+                        throw new InvalidArgumentException(sprintf('The field "%s" was misformatted or doesn\'t contain an = or : character.', $field));
 
                     } else {
                         // The : character was found, does the spilt
@@ -111,7 +113,7 @@ abstract class CreateCommand extends ContainerAwareCommand
                         $setterMethod = $reflectionRoleClass->getMethod($setterMethodName);
 
                     } catch (\Exception $e) {
-                        throw new \InvalidArgumentException(sprintf('The setter method "%s" that should be used for property "%s" seems not to exist. Please check your spelling in the command option or in your implementation class.', $setterMethodName, $fieldName));
+                        throw new InvalidArgumentException(sprintf('The setter method "%s" that should be used for property "%s" seems not to exist. Please check your spelling in the command option or in your implementation class.', $setterMethodName, $fieldName));
                     }
 
                     $entity->$setterMethodName($fieldValue);
@@ -125,7 +127,7 @@ abstract class CreateCommand extends ContainerAwareCommand
                         $targetEntity = $targetRepo->findBy(array('id' => $fieldValue));
 
                         if (null == $targetEntity) {
-                            throw new \InvalidArgumentException(sprintf('The specified mapped field "%s" couldn\'t be found with the Id "%s".', $fieldName, $fieldValue) );
+                            throw new InvalidArgumentException(sprintf('The specified mapped field "%s" couldn\'t be found with the Id "%s".', $fieldName, $fieldValue) );
                         }
 
                         $targetEntity = $targetEntity[0];
@@ -136,13 +138,13 @@ abstract class CreateCommand extends ContainerAwareCommand
                             $setterMethod = $reflectionRoleClass->getMethod($setterMethodName);
 
                         } catch (\Exception $e) {
-                            throw new \InvalidArgumentException(sprintf('The setter method "%s" that should be used for property "%s" seems not to exist. Please check your spelling in the command option or in your implementation class.', $setterMethodName, $fieldName));
+                            throw new InvalidArgumentException(sprintf('The setter method "%s" that should be used for property "%s" seems not to exist. Please check your spelling in the command option or in your implementation class.', $setterMethodName, $fieldName));
                         }
 
                         $entity->$setterMethodName($targetEntity);
 
                     } else {
-                        throw new \InvalidArgumentException(sprintf('The field "%s" seems not to exist in your "%s" class.', $fieldName, $shortName));
+                        throw new InvalidArgumentException(sprintf('The field "%s" seems not to exist in your "%s" class.', $fieldName, $shortName));
                     }
                 }
             }
@@ -157,7 +159,7 @@ abstract class CreateCommand extends ContainerAwareCommand
                 $msg = sprintf('%s%s: %s', PHP_EOL, $error->getPropertyPath(), $error->getMessage());
             }
 
-            throw new \Exception($msg);
+            throw new LogicException($msg);
         }
 
         $em->persist($entity);
@@ -177,7 +179,7 @@ abstract class CreateCommand extends ContainerAwareCommand
                     'Please choose a name:',
                     function($name) {
                         if (empty($name)) {
-                            throw new \Exception('Name can not be empty');
+                            throw new LogicException('Name can not be empty');
                         }
 
                         return $name;

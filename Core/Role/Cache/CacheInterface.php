@@ -23,8 +23,6 @@ interface CacheInterface
      *
      * @param string $id      The unique name
      * @param string $content The content to write in the cache
-     *
-     * @throws \RuntimeException When cache file can't be wrote
      */
     public function write($id, array $roles);
 

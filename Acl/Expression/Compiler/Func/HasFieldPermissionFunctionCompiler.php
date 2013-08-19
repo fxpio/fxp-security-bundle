@@ -15,7 +15,7 @@ use JMS\SecurityExtraBundle\Security\Authorization\Expression\Compiler\Func\Func
 use JMS\SecurityExtraBundle\Security\Authorization\Expression\ExpressionCompiler;
 use JMS\SecurityExtraBundle\Security\Authorization\Expression\Ast\FunctionExpression;
 use JMS\SecurityExtraBundle\Security\Authorization\Expression\Ast\VariableExpression;
-use JMS\SecurityExtraBundle\Exception\RuntimeException;
+use Sonatra\Bundle\SecurityBundle\Exception\JmsRuntimeException;
 
 /**
  * @author François Pluchino <francois.pluchino@sonatra.com>
@@ -36,7 +36,7 @@ class HasFieldPermissionFunctionCompiler implements FunctionCompilerInterface
     public function compilePreconditions(ExpressionCompiler $compiler, FunctionExpression $function)
     {
         if (3 !== count($function->args)) {
-            throw new RuntimeException(sprintf('The hasFieldPermission() function expects exactly three arguments, but got "%s".', var_export($function->args, true)));
+            throw new JmsRuntimeException(sprintf('The hasFieldPermission() function expects exactly three arguments, but got "%s".', var_export($function->args, true)));
         }
 
         $compiler->verifyItem('token', 'Symfony\Component\Security\Core\Authentication\Token\TokenInterface');

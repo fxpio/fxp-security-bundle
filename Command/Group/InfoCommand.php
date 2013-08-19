@@ -13,6 +13,7 @@ namespace Sonatra\Bundle\SecurityBundle\Command\Group;
 
 use Sonatra\Bundle\SecurityBundle\Command\InfoCommand as BaseInfoCommand;
 use Sonatra\Bundle\SecurityBundle\Core\Token\ConsoleToken;
+use Sonatra\Bundle\SecurityBundle\Exception\InvalidArgumentException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Security\Core\Role\RoleInterface;
@@ -49,7 +50,7 @@ class InfoCommand extends BaseInfoCommand
         $calculated = $input->getOption('calc');
 
         if (null === $identity) {
-            throw new \InvalidArgumentException(sprintf('Group instance "%s" on "%s" not found', $identityName, $identityClass));
+            throw new InvalidArgumentException(sprintf('Group instance "%s" on "%s" not found', $identityName, $identityClass));
         }
 
         $output->writeln(array('', sprintf('Security context for <info>%s</info> group:', $identity->getName())));

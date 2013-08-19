@@ -12,6 +12,7 @@
 namespace Sonatra\Bundle\SecurityBundle\Acl\Util;
 
 use Sonatra\Bundle\SecurityBundle\Acl\Domain\GroupSecurityIdentity;
+use Sonatra\Bundle\SecurityBundle\Exception\InvalidArgumentException;
 use Symfony\Component\Security\Acl\Domain\UserSecurityIdentity;
 use Symfony\Component\Security\Acl\Domain\RoleSecurityIdentity;
 use Symfony\Component\Security\Acl\Model\ObjectIdentityInterface;
@@ -46,7 +47,7 @@ class AclUtils
         }
 
         if (!is_string($mask) && !is_array($mask)) {
-            throw new \InvalidArgumentException('The mask must be a string, or array of string or int (the symfony mask value)');
+            throw new InvalidArgumentException('The mask must be a string, or array of string or int (the symfony mask value)');
         }
 
         // convert the rights to mask
@@ -61,7 +62,7 @@ class AclUtils
             }
 
         } catch (\Exception $e) {
-            throw new \InvalidArgumentException(sprintf('The right "%s" does not exist', $maskConverted));
+            throw new InvalidArgumentException(sprintf('The right "%s" does not exist', $maskConverted));
         }
 
         return $builder->get();
@@ -74,12 +75,12 @@ class AclUtils
      *
      * @return array The list of permission (in string)
      *
-     * @throw \InvalidArgumentException When the mask parameter is not a int
+     * @throws InvalidArgumentException When the mask parameter is not a int
      */
     public static function convertToAclName($mask)
     {
         if (!is_int($mask)) {
-            throw new \InvalidArgumentException("The mask must be a int");
+            throw new InvalidArgumentException("The mask must be a int");
         }
 
         $mb = new MaskBuilder($mask);
@@ -182,7 +183,7 @@ class AclUtils
                     $str .= sprintf(' (%s given)', get_class($identity));
                 }
 
-                throw new \InvalidArgumentException($str);
+                throw new InvalidArgumentException($str);
             }
         }
 
@@ -213,7 +214,7 @@ class AclUtils
         }
 
         if (!is_string($domainObject)) {
-            throw new \InvalidArgumentException('The domain object must be an string for "class" type');
+            throw new InvalidArgumentException('The domain object must be an string for "class" type');
         }
 
         return ClassUtils::getRealClass($domainObject);

@@ -11,13 +11,13 @@
 
 namespace Sonatra\Bundle\SecurityBundle\Exception;
 
-use Symfony\Component\Security\Acl\Exception\Exception;
+use JMS\SecurityExtraBundle\Exception\RuntimeException;
 
 /**
- * Base SecurityExcpetion for the Security component.
+ * Base JmsRuntimeException for the Security component.
  *
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-class SecurityException extends Exception implements ExceptionInterface
+class JmsRuntimeException extends RuntimeException implements ExceptionInterface
 {
 }

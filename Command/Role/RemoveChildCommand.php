@@ -15,6 +15,9 @@ use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Sonatra\Bundle\SecurityBundle\Exception\InvalidArgumentException;
+use Sonatra\Bundle\SecurityBundle\Exception\LogicException;
+use Sonatra\Bundle\SecurityBundle\Exception\RuntimeException;
 use Sonatra\Bundle\SecurityBundle\Model\RoleHierarchisableInterface;
 
 /**
@@ -50,17 +53,17 @@ class RemoveChildCommand extends ContainerAwareCommand
         $child = $repo->findOneBy(array('name' => $childName));
 
         if (null === $role) {
-            throw new \InvalidArgumentException(sprintf('The role "%s" does not exist', $roleName));
+            throw new InvalidArgumentException(sprintf('The role "%s" does not exist', $roleName));
         }
 
         if (null === $child) {
-            throw new \InvalidArgumentException(sprintf('The child "%s" does not exist', $childName));
+            throw new InvalidArgumentException(sprintf('The child "%s" does not exist', $childName));
         }
 
         if (!($role instanceof RoleHierarchisableInterface)) {
             $hierarchyInterface = 'Sonatra\Bundle\SecurityBundle\Model\RoleHierarchisableInterface';
 
-            throw new \RuntimeException(sprintf('The role "%s" must have a "%s" interface', $roleName, $hierarchyInterface));
+            throw new RuntimeException(sprintf('The role "%s" must have a "%s" interface', $roleName, $hierarchyInterface));
         }
 
         if (!$role->hasChild($childName)) {
@@ -80,7 +83,7 @@ class RemoveChildCommand extends ContainerAwareCommand
                 $msg = sprintf('%s%s: %s', PHP_EOL, $error->getPropertyPath(), $error->getMessage());
             }
 
-            throw new \Exception($msg);
+            throw new LogicException($msg);
         }
 
         $em->persist($role);
@@ -100,7 +103,7 @@ class RemoveChildCommand extends ContainerAwareCommand
                     'Please choose a role:',
                     function($role) {
                         if (empty($role)) {
-                            throw new \Exception('Role can not be empty');
+                            throw new LogicException('Role can not be empty');
                         }
 
                         return $role;
@@ -116,7 +119,7 @@ class RemoveChildCommand extends ContainerAwareCommand
                     'Please choose a child:',
                     function($child) {
                         if (empty($child)) {
-                            throw new \Exception('Child role can not be empty');
+                            throw new LogicException('Child role can not be empty');
                         }
 
                         return $child;

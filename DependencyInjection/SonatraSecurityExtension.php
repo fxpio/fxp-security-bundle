@@ -15,6 +15,8 @@ use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
+use Sonatra\Bundle\SecurityBundle\Exception\InvalidArgumentException;
+use Sonatra\Bundle\SecurityBundle\Exception\RuntimeException;
 
 /**
  * The extension that fulfills the infos for the container from configuration.
@@ -42,7 +44,7 @@ class SonatraSecurityExtension extends Extension
 
         if (!is_dir($cacheDir)) {
             if (false === @mkdir($cacheDir, 0777, true)) {
-                throw new \RuntimeException(sprintf('Could not create cache directory "%s".', $cacheDir));
+                throw new RuntimeException(sprintf('Could not create cache directory "%s".', $cacheDir));
             }
         }
 
@@ -58,7 +60,7 @@ class SonatraSecurityExtension extends Extension
             // role hierarchy cache dir
             if (!is_dir($cacheDir.'/role_hierarchy')) {
                 if (false === @mkdir($cacheDir.'/role_hierarchy', 0777, true)) {
-                    throw new \RuntimeException(sprintf('Could not create cache directory "%s".', $cacheDir.'/expressions'));
+                    throw new RuntimeException(sprintf('Could not create cache directory "%s".', $cacheDir.'/expressions'));
                 }
             }
 
@@ -120,13 +122,13 @@ class SonatraSecurityExtension extends Extension
     {
         foreach (array_keys($this->entityManagers) as $name) {
             if (!$container->hasDefinition(sprintf('doctrine.dbal.%s_connection', $name))) {
-                throw new \InvalidArgumentException(sprintf('Invalid %s config: DBAL connection "%s" not found', $this->getAlias(), $name));
+                throw new InvalidArgumentException(sprintf('Invalid %s config: DBAL connection "%s" not found', $this->getAlias(), $name));
             }
         }
 
         foreach (array_keys($this->documentManagers) as $name) {
             if (!$container->hasDefinition(sprintf('doctrine.odm.mongodb.%s_document_manager', $name))) {
-                throw new \InvalidArgumentException(sprintf('Invalid %s config: document manager "%s" not found', $this->getAlias(), $name));
+                throw new InvalidArgumentException(sprintf('Invalid %s config: document manager "%s" not found', $this->getAlias(), $name));
             }
         }
     }

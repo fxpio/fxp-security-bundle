@@ -45,12 +45,7 @@ class PhpCache implements CacheInterface
     }
 
     /**
-     * Writes cache.
-     *
-     * @param string $id      The unique name
-     * @param string $content The content to write in the cache
-     *
-     * @throws \RuntimeException When cache file can't be wrote
+     * {@inheritdoc}
      */
     public function write($id, array $roles)
     {
@@ -74,11 +69,7 @@ class PhpCache implements CacheInterface
     }
 
     /**
-     * Reads cache.
-     *
-     * @param string $id The unique name
-     *
-     * @return array|null The roles or null if file does not exist
+     * {@inheritdoc}
      */
     public function read($id)
     {
@@ -92,7 +83,7 @@ class PhpCache implements CacheInterface
     }
 
     /**
-     * Invalidates cache.
+     * {@inheritdoc}
      */
     public function flush()
     {

@@ -16,6 +16,7 @@ use Doctrine\ORM\Mapping\ClassMetadata;
 use Sonatra\Bundle\SecurityBundle\Acl\Domain\OrmFilterRuleContextDefinition;
 use Sonatra\Bundle\SecurityBundle\Acl\Domain\AbstractRuleOrmFilterDefinition;
 use Sonatra\Bundle\SecurityBundle\Doctrine\ORM\Listener\AclListener;
+use Sonatra\Bundle\SecurityBundle\Exception\RuntimeException;
 
 /**
  * Acl filter.
@@ -53,7 +54,7 @@ class AclFilter extends SQLFilter
      *
      * @return AclListener
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     protected function getListener()
     {
@@ -71,7 +72,7 @@ class AclFilter extends SQLFilter
             }
 
             if (null === $this->listener) {
-                throw new \RuntimeException('Listener "AclListener" was not added to the EventManager!');
+                throw new RuntimeException('Listener "AclListener" was not added to the EventManager!');
             }
         }
 

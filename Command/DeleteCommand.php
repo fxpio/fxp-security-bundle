@@ -15,6 +15,8 @@ use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Sonatra\Bundle\SecurityBundle\Exception\InvalidArgumentException;
+use Sonatra\Bundle\SecurityBundle\Exception\LogicException;
 
 /**
  * @author François Pluchino <francois.pluchino@sonatra.com>
@@ -38,7 +40,7 @@ abstract class DeleteCommand extends ContainerAwareCommand
      * @param string $entityName  The entity name
      * @param array  $filter      The filter for fond one by doctrine query
      *
-     * @throws \InvalidArgumentException When entity does not exist
+     * @throws InvalidArgumentException When entity does not exist
      */
     protected function doExecute(OutputInterface $output, $entityClass, $entityName, array $filter)
     {
@@ -49,7 +51,7 @@ abstract class DeleteCommand extends ContainerAwareCommand
         $entity = $repo->findOneBy($filter);
 
         if (null === $entity) {
-            throw new \InvalidArgumentException(sprintf('%s "%s" does not exist', $shortName, $entityName));
+            throw new InvalidArgumentException(sprintf('%s "%s" does not exist', $shortName, $entityName));
         }
 
         $em->remove($entity);
@@ -69,7 +71,7 @@ abstract class DeleteCommand extends ContainerAwareCommand
                     'Please choose a name:',
                     function($name) {
                         if (empty($name)) {
-                            throw new \Exception('Name can not be empty');
+                            throw new LogicException('Name can not be empty');
                         }
 
                         return $name;

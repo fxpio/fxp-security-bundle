@@ -11,12 +11,11 @@
 
 namespace Sonatra\Bundle\SecurityBundle\Acl\Domain;
 
-use Symfony\Component\Security\Acl\Exception\InvalidDomainObjectException;
 use Symfony\Component\Security\Acl\Exception\AclAlreadyExistsException;
 use Sonatra\Bundle\SecurityBundle\Acl\Model\AclManipulatorInterface;
 use Sonatra\Bundle\SecurityBundle\Acl\Model\PermissionContextInterface;
 use Sonatra\Bundle\SecurityBundle\Acl\Util\AclUtils;
-
+use Sonatra\Bundle\SecurityBundle\Exception\InvalidDomainObjectException;
 /**
  * ACL/ACE Manipulator implementation.
  *

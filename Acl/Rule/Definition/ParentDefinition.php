@@ -15,6 +15,7 @@ use Sonatra\Bundle\SecurityBundle\Acl\Domain\AbstractRuleDefinition;
 use Sonatra\Bundle\SecurityBundle\Acl\Domain\RuleContextDefinition;
 use Sonatra\Bundle\SecurityBundle\Acl\Model\RuleContextDefinitionInterface;
 use Sonatra\Bundle\SecurityBundle\Acl\Util\AclUtils;
+use Sonatra\Bundle\SecurityBundle\Exception\InvalidArgumentException;
 
 /**
  * The Parent ACL Rule Definition.
@@ -45,7 +46,7 @@ class ParentDefinition extends AbstractRuleDefinition
     public function isGranted(RuleContextDefinitionInterface $rcd)
     {
         if (null === $rcd->getField()) {
-            throw new \InvalidArgumentException('The rule definition "parent" must be only associated with class field');
+            throw new InvalidArgumentException('The rule definition "parent" must be only associated with class field');
         }
 
         $rcd = new RuleContextDefinition($rcd->getSecurityIdentities(), $rcd->getObjectIdentity(), $rcd->getMasks());

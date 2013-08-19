@@ -15,6 +15,9 @@ use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Sonatra\Bundle\SecurityBundle\Exception\InvalidArgumentException;
+use Sonatra\Bundle\SecurityBundle\Exception\LogicException;
+use Sonatra\Bundle\SecurityBundle\Exception\RuntimeException;
 use Sonatra\Bundle\SecurityBundle\Model\RoleHierarchisableInterface;
 
 /**
@@ -50,17 +53,17 @@ class AddParentCommand extends ContainerAwareCommand
         $parent = $repo->findOneBy(array('name' => $parentName));
 
         if (null === $role) {
-            throw new \InvalidArgumentException(sprintf('The role "%s" does not exist', $roleName));
+            throw new InvalidArgumentException(sprintf('The role "%s" does not exist', $roleName));
         }
 
         if (null === $parent) {
-            throw new \InvalidArgumentException(sprintf('The parent "%s" does not exist', $parentName));
+            throw new InvalidArgumentException(sprintf('The parent "%s" does not exist', $parentName));
         }
 
         if (!($role instanceof RoleHierarchisableInterface)) {
             $hierarchyInterface = 'Sonatra\Bundle\SecurityBundle\Model\RoleHierarchisableInterface';
 
-            throw new \RuntimeException(sprintf('The role "%s" must have a "%s" interface', $roleName, $hierarchyInterface));
+            throw new RuntimeException(sprintf('The role "%s" must have a "%s" interface', $roleName, $hierarchyInterface));
         }
 
         if ($role->hasParent($parentName)) {
@@ -80,7 +83,7 @@ class AddParentCommand extends ContainerAwareCommand
                 $msg = sprintf('%s%s: %s', PHP_EOL, $error->getPropertyPath(), $error->getMessage());
             }
 
-            throw new \Exception($msg);
+            throw new LogicException($msg);
         }
 
         $em->persist($role);
@@ -100,7 +103,7 @@ class AddParentCommand extends ContainerAwareCommand
                     'Please choose a role:',
                     function($role) {
                         if (empty($role)) {
-                            throw new \Exception('Role can not be empty');
+                            throw new LogicException('Role can not be empty');
                         }
 
                         return $role;
@@ -116,7 +119,7 @@ class AddParentCommand extends ContainerAwareCommand
                     'Please choose a parent:',
                     function($parent) {
                         if (empty($parent)) {
-                            throw new \Exception('Parent role can not be empty');
+                            throw new LogicException('Parent role can not be empty');
                         }
 
                         return $parent;

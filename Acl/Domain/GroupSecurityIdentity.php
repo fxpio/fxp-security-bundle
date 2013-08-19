@@ -14,6 +14,7 @@ namespace Sonatra\Bundle\SecurityBundle\Acl\Domain;
 use Symfony\Component\Security\Acl\Domain\UserSecurityIdentity;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Util\ClassUtils;
+use Sonatra\Bundle\SecurityBundle\Exception\InvalidArgumentException;
 use FOS\UserBundle\Model\GroupInterface;
 use FOS\UserBundle\Model\GroupableInterface;
 
@@ -61,6 +62,6 @@ final class GroupSecurityIdentity
             return $sids;
         }
 
-        throw new \InvalidArgumentException('The user class must implement "FOS\UserBundle\Model\GroupableInterface"');
+        throw new InvalidArgumentException('The user class must implement "FOS\UserBundle\Model\GroupableInterface"');
     }
 }

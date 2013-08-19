@@ -71,7 +71,7 @@ interface AclObjectFilterInterface
      *
      * @return void
      *
-     * @throw \InvalidArgumentException When $object is not a object instance
+     * @throws \InvalidArgumentException When $object is not a object instance
     */
     public function filter($object);
 
@@ -82,7 +82,7 @@ interface AclObjectFilterInterface
      *
      * @return void
      *
-     * @throw \InvalidArgumentException When $object is not a object instance
+     * @throws \InvalidArgumentException When $object is not a object instance
      */
     public function restore($object);
 }

@@ -14,6 +14,7 @@ namespace Sonatra\Bundle\SecurityBundle\Acl\Domain;
 use Sonatra\Bundle\SecurityBundle\Acl\Model\AclObjectFilterInterface;
 use Sonatra\Bundle\SecurityBundle\Acl\Model\AclManagerInterface;
 use Sonatra\Bundle\SecurityBundle\Acl\DependencyInjection\ObjectFilterExtensionInterface;
+use Sonatra\Bundle\SecurityBundle\Exception\InvalidArgumentException;
 use Symfony\Component\Security\Acl\Permission\BasicPermissionMap;
 use Symfony\Component\Security\Acl\Voter\FieldVote;
 use Symfony\Component\Security\Core\SecurityContextInterface;
@@ -148,7 +149,7 @@ class AclObjectFilter implements AclObjectFilterInterface
     public function filter($object)
     {
         if (!is_object($object)) {
-            throw new \InvalidArgumentException('The "object" parameter must be an object instance');
+            throw new InvalidArgumentException('The "object" parameter must be an object instance');
         }
 
         $id = spl_object_hash($object);
@@ -168,7 +169,7 @@ class AclObjectFilter implements AclObjectFilterInterface
     public function restore($object)
     {
         if (!is_object($object)) {
-            throw new \InvalidArgumentException('The "object" parameter must be an object instance');
+            throw new InvalidArgumentException('The "object" parameter must be an object instance');
         }
 
         $this->uow->attach($object);

@@ -21,6 +21,7 @@ use Symfony\Component\Security\Acl\Model\SecurityIdentityRetrievalStrategyInterf
 use Sonatra\Bundle\SecurityBundle\Acl\Model\PermissionContextInterface;
 use Sonatra\Bundle\SecurityBundle\Acl\Model\AclManipulatorInterface;
 use Sonatra\Bundle\SecurityBundle\Acl\Util\AclUtils;
+use Sonatra\Bundle\SecurityBundle\Exception\InvalidArgumentException;
 
 /**
  * Abstract class containing low-level functionality to be extended by
@@ -299,7 +300,7 @@ abstract class AbstractAclManipulator implements AclManipulatorInterface
      *
      * @param string $type
      *
-     * @throws \InvalidArgumentException When the type is not 'object' or 'class'
+     * @throws InvalidArgumentException When the type is not 'object' or 'class'
      *
      * @return string The type formated for used in ACL/ACE methods
      */
@@ -308,7 +309,7 @@ abstract class AbstractAclManipulator implements AclManipulatorInterface
         $type = strtolower($type);
 
         if (!in_array($type, array($this::OBJECT_TYPE, $this::CLASS_TYPE))) {
-            throw new \InvalidArgumentException('The permission type must be "object" or "class"');
+            throw new InvalidArgumentException('The permission type must be "object" or "class"');
         }
 
         return ucfirst($type);

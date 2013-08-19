@@ -11,13 +11,13 @@
 
 namespace Sonatra\Bundle\SecurityBundle\Exception;
 
-use Symfony\Component\Security\Acl\Exception\Exception;
+use Symfony\Component\Security\Acl\Exception\InvalidDomainObjectException as BaseInvalidDomainObjectException;
 
 /**
- * Base SecurityExcpetion for the Security component.
+ * Base InvalidDomainObjectException for the Security component.
  *
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-class SecurityException extends Exception implements ExceptionInterface
+class InvalidDomainObjectException extends BaseInvalidDomainObjectException implements ExceptionInterface
 {
 }

@@ -15,7 +15,7 @@ use JMS\SecurityExtraBundle\Security\Authorization\Expression\Compiler\Func\Func
 use JMS\SecurityExtraBundle\Security\Authorization\Expression\ExpressionCompiler;
 use JMS\SecurityExtraBundle\Security\Authorization\Expression\Ast\FunctionExpression;
 use JMS\SecurityExtraBundle\Security\Authorization\Expression\Ast\VariableExpression;
-use JMS\SecurityExtraBundle\Exception\RuntimeException;
+use Sonatra\Bundle\SecurityBundle\Exception\JmsRuntimeException;
 
 /**
  * @author François Pluchino <francois.pluchino@sonatra.com>
@@ -36,7 +36,7 @@ class HasPermissionFunctionCompiler implements FunctionCompilerInterface
     public function compilePreconditions(ExpressionCompiler $compiler, FunctionExpression $function)
     {
         if (2 !== count($function->args)) {
-            throw new RuntimeException(sprintf('The hasPermission() function expects exactly two arguments, but got "%s".', var_export($function->args, true)));
+            throw new JmsRuntimeException(sprintf('The hasPermission() function expects exactly two arguments, but got "%s".', var_export($function->args, true)));
         }
 
         $compiler->verifyItem('token', 'Symfony\Component\Security\Core\Authentication\Token\TokenInterface');

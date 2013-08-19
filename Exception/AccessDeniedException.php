@@ -11,13 +11,13 @@
 
 namespace Sonatra\Bundle\SecurityBundle\Exception;
 
-use Symfony\Component\Security\Acl\Exception\Exception;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException as BaseAccessDeniedException;
 
 /**
- * Base SecurityExcpetion for the Security component.
+ * Base AccessDeniedException for the Security component.
  *
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-class SecurityException extends Exception implements ExceptionInterface
+class AccessDeniedException extends BaseAccessDeniedException implements ExceptionInterface
 {
 }

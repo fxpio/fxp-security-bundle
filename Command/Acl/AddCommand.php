@@ -20,6 +20,7 @@ use Symfony\Component\Security\Acl\Domain\ObjectIdentity;
 use Symfony\Component\Security\Acl\Permission\MaskBuilder;
 use Symfony\Component\Security\Core\Role\Role;
 use Sonatra\Bundle\SecurityBundle\Acl\Util\AclUtils;
+use Sonatra\Bundle\SecurityBundle\Exception\InvalidArgumentException;
 
 /**
  * Add domain (class or object) rights.
@@ -97,7 +98,7 @@ EOF
         $domainType = null !== $domainId ? 'object' : 'class';
 
         if (!in_array($identityType, array('role', 'group', 'user'))) {
-            throw new \InvalidArgumentException('The "identity-type" argument must be "role", "group" or "user"');
+            throw new InvalidArgumentException('The "identity-type" argument must be "role", "group" or "user"');
 
         } elseif ('user' === $identityType) {
             $identity = $identityRepo->findOneBy(array('username' => $identity));
@@ -110,7 +111,7 @@ EOF
         }
 
         if (null === $identity) {
-            throw new \InvalidArgumentException(sprintf('Identity instance "%s" on "%s" not found', $input->getArgument('identity-name'), $identityClass));
+            throw new InvalidArgumentException(sprintf('Identity instance "%s" on "%s" not found', $input->getArgument('identity-name'), $identityClass));
         }
 
         // get the domain instance
