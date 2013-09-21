@@ -1,4 +1,4 @@
-﻿Sonatra Security Bundle
+Sonatra Security Bundle
 =======================
 
 The Sonatra SecurityBundle implements all functionnalities of 

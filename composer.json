@@ -2,7 +2,7 @@
     "name": "sonatra/security-bundle",
     "type": "symfony-bundle",
     "description": "Sonatra Security Bundle",
-    "keywords": ["ACL, ACE, Advanced ACL Concept Implementation, Rule definition, Sharing rule, ACL Voter, JMS Expression"],
+    "keywords": ["ACL", "ACE", "Advanced ACL Concept Implementation", "Rule definition", "Sharing rule", "ACL Voter", "JMS Expression"],
     "homepage": "http://sonatra.com",
     "license": "MIT",
     "authors": [
