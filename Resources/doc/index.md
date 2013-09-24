@@ -7,11 +7,12 @@ This version of the bundle requires Symfony 2.3+.
 
 ## Installation
 
-Installation is a quick, 3 step process:
+Installation is a quick, 4 step process:
 
 1. Download Sonatra SecurityBundle using composer
 2. Enable the bundle
-3. Configure the bundle
+3. Create your Role class
+4. Configure the bundle
 
 ### Step 1: Download Sonatra SecurityBundle using composer
 
@@ -50,7 +51,55 @@ public function registerBundles()
 }
 ```
 
-### Step 3: Configure the bundle
+### Step 3: Create your Role class
+
+#### Create the Role class
+
+``` php
+// src/Acme/CoreBundle/Entity/Role.php
+<?php
+
+namespace Acme\CoreBundle\Entity;
+
+use Sonatra\Bundle\SecurityBundle\Model\Role as BaseRole;
+
+class Role extends BaseRole
+{
+}
+```
+
+#### Create the Role mapping
+
+``` xml
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                  http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="Acme\CoreBundle\Entity\Role" table="core_role">
+        <id name="id" type="integer" column="id">
+            <generator strategy="AUTO"/>
+        </id>
+
+        <many-to-many field="parents" target-entity="Role" mappedBy="children" />
+
+        <many-to-many field="children" target-entity="Role" inversedBy="parents">
+            <join-table name="core_roles_children">
+                <join-columns>
+                    <join-column name="role_id" referenced-column-name="id" />
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="children_role_id" referenced-column-name="id" />
+                </inverse-join-columns>
+            </join-table>
+        </many-to-many>
+
+    </entity>
+</doctrine-mapping>
+```
+
+### Step 4: Configure the bundle
 
 You can override the default configuration adding `sonatra_security` tree in `app/config/config.yml`.
 For see the reference of Sonatra Security Configuration, execute command:

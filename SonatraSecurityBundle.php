@@ -16,6 +16,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Sonatra\Bundle\SecurityBundle\DependencyInjection\Compiler\AclRuleDefinitionPass;
 use Sonatra\Bundle\SecurityBundle\DependencyInjection\Compiler\AclObjectFilterPass;
 use Sonatra\Bundle\SecurityBundle\Factory\HostRoleFactory;
+use Doctrine\Bundle\DoctrineBundle\DependencyInjection\Compiler\DoctrineOrmMappingsPass;
 
 /**
  * @author François Pluchino <francois.pluchino@sonatra.com>
@@ -31,5 +32,17 @@ class SonatraSecurityBundle extends Bundle
 
         $container->addCompilerPass(new AclRuleDefinitionPass());
         $container->addCompilerPass(new AclObjectFilterPass());
+
+        $ormCompilerClass = 'Doctrine\Bundle\DoctrineBundle\DependencyInjection\Compiler\DoctrineOrmMappingsPass';
+        if (class_exists($ormCompilerClass)) {
+            $container->addCompilerPass(
+                DoctrineOrmMappingsPass::createXmlMappingDriver(
+                    array(
+                        realpath(__DIR__.'/Resources/config/doctrine/model') => 'Sonatra\Bundle\SecurityBundle\Model',
+                    ),
+                    array('fos_user.model_manager_name'),
+                    'fos_user.backend_type_orm'
+            ));
+        }
     }
 }
