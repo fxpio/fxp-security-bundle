@@ -87,7 +87,7 @@ class SonatraSecurityExtension extends Extension
         }
 
         // acl
-        if ($config['acl']['enabled'] 
+        if ($config['acl']['enabled']
                 && $container->hasParameter('security.acl.dbal.class_table_name')
                 && $container->hasParameter('security.acl.dbal.entry_table_name')
                 && $container->hasParameter('security.acl.dbal.oid_table_name')
