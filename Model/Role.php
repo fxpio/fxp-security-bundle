@@ -18,7 +18,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  *
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-abstract class Role implements RoleHierarchisableInterface, \Serializable
+abstract class Role implements RoleHierarchisableInterface
 {
     protected $id;
     protected $name;
@@ -184,26 +184,6 @@ abstract class Role implements RoleHierarchisableInterface, \Serializable
     public function hasChild($name)
     {
         return in_array($name, $this->getChildrenNames());
-    }
-
-    /**
-     * Serializes the content of the current Role objects.
-     *
-     * @return string
-     */
-    public function serialize()
-    {
-        return json_encode(array($this->name, $this->id));
-    }
-
-    /**
-     * Unserializes the given string in the current Role object.
-     *
-     * @param serialized
-     */
-    public function unserialize($serialized)
-    {
-        list($this->name, $this->id) = json_decode($serialized);
     }
 
     /**
