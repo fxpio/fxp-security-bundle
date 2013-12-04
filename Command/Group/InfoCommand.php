@@ -94,25 +94,15 @@ class InfoCommand extends BaseInfoCommand
         // prepare render
         $width = 0;
         $roles = array();
-        $authorizations = array();
 
         foreach ($allRoles as $name => $status) {
             $width = strlen($name) > $width ? strlen($name) : $width;
-
-            if (0 === strpos($name, 'ROLE_')) {
-                $roles[] = $name;
-
-                continue;
-            }
-
-            $authorizations[] = $name;
+            $roles[] = $name;
         }
 
         $roles = $this->sortRecords($roles, $allRoles);
-        $authorizations = $this->sortRecords($authorizations, $allRoles);
 
         // render
         $this->renderInfos($output, $roles, 'Roles', 'Contains no associated role', $width, true);
-        $this->renderInfos($output, $authorizations, 'Authorizations', 'Contains no associated authorization', $width);
     }
 }

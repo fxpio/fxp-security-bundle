@@ -89,18 +89,4 @@ interface RoleHierarchisableInterface extends RoleInterface
      * @param string $name
      */
     public function hasChild($name);
-
-    /**
-     * Set the authorization.
-     *
-     * @param boolean $authorization
-     */
-    public function setAuthorization($authorization);
-
-    /**
-     * Check if role is a authorization.
-     *
-     * @return boolean
-     */
-    public function isAuthorization();
 }

@@ -81,11 +81,6 @@ class SonatraSecurityExtension extends Extension
             $loader->load('expression_has_field_permission.yml');
         }
 
-        // role update fields
-        if ($config['doctrine']['orm']['listener']['role_update_fields']) {
-            $loader->load('orm_listener_role_update_fields.yml');
-        }
-
         // acl
         if ($config['acl']['enabled']
                 && $container->hasParameter('security.acl.dbal.class_table_name')

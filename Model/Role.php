@@ -24,7 +24,6 @@ abstract class Role implements RoleHierarchisableInterface, \Serializable
     protected $name;
     protected $parents;
     protected $children;
-    protected $authorization;
 
     /**
      * Constructor.
@@ -185,22 +184,6 @@ abstract class Role implements RoleHierarchisableInterface, \Serializable
     public function hasChild($name)
     {
         return in_array($name, $this->getChildrenNames());
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setAuthorization($authorization)
-    {
-        $this->authorization = $authorization;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function isAuthorization()
-    {
-        return $this->authorization;
     }
 
     /**
