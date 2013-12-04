@@ -15,6 +15,7 @@ use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Sonatra\Bundle\SecurityBundle\Exception\InvalidArgumentException;
 use Sonatra\Bundle\SecurityBundle\Exception\LogicException;
 
@@ -45,6 +46,11 @@ class DegroupingCommand extends ContainerAwareCommand
         $userClass = str_replace('/', '\\', $this->getContainer()->getParameter('sonatra_security.user_class'));
         $userName = $input->getArgument('username');
         $emUser = $this->getContainer()->get('doctrine')->getManagerForClass($userClass);
+
+        if (null === $emUser) {
+            throw new InvalidConfigurationException(sprintf('The class "%s" is not supported by the doctrine manager. Change the "sonatra_security.user_class" config', $userClass));
+        }
+
         $repoUser = $emUser->getRepository($userClass);
         $user = $repoUser->findOneBy(array('username' => $userName));
 

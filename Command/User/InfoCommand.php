@@ -13,10 +13,12 @@ namespace Sonatra\Bundle\SecurityBundle\Command\User;
 
 use Sonatra\Bundle\SecurityBundle\Command\InfoCommand as BaseInfoCommand;
 use Sonatra\Bundle\SecurityBundle\Core\Token\ConsoleToken;
+use Sonatra\Bundle\SecurityBundle\Exception\InvalidArgumentException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Security\Core\Role\Role;
 use Symfony\Component\Security\Core\Role\RoleInterface;
+use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use FOS\UserBundle\Model\GroupInterface;
 
 /**
@@ -43,14 +45,21 @@ class InfoCommand extends BaseInfoCommand
         $doctrine = $this->getContainer()->get('doctrine');
         $identityClass = str_replace('/', '\\', $this->getContainer()->getParameter('sonatra_security.user_class'));
         $identityName = $input->getArgument('name');
-        $identityRepo = $doctrine->getManagerForClass($identityClass)->getRepository($identityClass);
+        $em = $doctrine->getManagerForClass($identityClass);
+
+        if (null === $em) {
+            throw new InvalidConfigurationException(sprintf('The class "%s" is not supported by the doctrine manager. Change the "sonatra_security.user_class" config', $identityClass));
+        }
+
+        $identityRepo = $em->getRepository($identityClass);
+
         $identity = $identityRepo->findOneBy(array('username' => $identityName));
         $noHost = $input->getOption('no-host');
         $host = $noHost ? null : $input->getOption('host');
         $calculated = $input->getOption('calc');
 
         if (null === $identity) {
-            $identity = new Role($identityName);
+            throw new InvalidArgumentException(sprintf('User instance "%s" on "%s" not found', $identityName, $identityClass));
         }
 
         $output->writeln(array('', sprintf('Security context for <info>%s</info> user:', $identity->getUsername())));

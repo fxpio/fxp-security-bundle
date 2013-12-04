@@ -15,6 +15,7 @@ use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Sonatra\Bundle\SecurityBundle\Exception\InvalidArgumentException;
 use Sonatra\Bundle\SecurityBundle\Exception\LogicException;
 
@@ -46,6 +47,11 @@ class PromoteCommand extends ContainerAwareCommand
         $groupName = $input->getArgument('group');
         $roleName = $input->getArgument('role');
         $em = $this->getContainer()->get('doctrine')->getManagerForClass($groupClass);
+
+        if (null === $em) {
+            throw new InvalidConfigurationException(sprintf('The class "%s" is not supported by the doctrine manager. Change the "sonatra_security.group_class" config', $groupClass));
+        }
+
         $repo = $em->getRepository($groupClass);
         $group = $repo->findOneBy(array('name' => $groupName));
 

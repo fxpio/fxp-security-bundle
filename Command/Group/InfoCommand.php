@@ -17,6 +17,7 @@ use Sonatra\Bundle\SecurityBundle\Exception\InvalidArgumentException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Security\Core\Role\RoleInterface;
+use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use FOS\UserBundle\Model\GroupInterface;
 
 /**
@@ -43,7 +44,13 @@ class InfoCommand extends BaseInfoCommand
         $doctrine = $this->getContainer()->get('doctrine');
         $identityClass = str_replace('/', '\\', $this->getContainer()->getParameter('sonatra_security.group_class'));
         $identityName = $input->getArgument('name');
-        $identityRepo = $doctrine->getManagerForClass($identityClass)->getRepository($identityClass);
+        $em = $doctrine->getManagerForClass($identityClass);
+
+        if (null === $em) {
+            throw new InvalidConfigurationException(sprintf('The class "%s" is not supported by the doctrine manager. Change the "sonatra_security.group_class" config', $identityClass));
+        }
+
+        $identityRepo = $em->getRepository($identityClass);
         $identity = $identityRepo->findOneBy(array('name' => $identityName));
         $noHost = $input->getOption('no-host');
         $host = $noHost ? null : $input->getOption('host');

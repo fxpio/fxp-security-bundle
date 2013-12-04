@@ -18,6 +18,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Security\Core\Role\Role;
 use Symfony\Component\Security\Core\Role\RoleInterface;
+use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 
 /**
  * @author François Pluchino <francois.pluchino@sonatra.com>
@@ -43,7 +44,13 @@ class InfoCommand extends BaseInfoCommand
         $doctrine = $this->getContainer()->get('doctrine');
         $identityClass = str_replace('/', '\\', $this->getContainer()->getParameter('sonatra_security.role_class'));
         $identityName = $input->getArgument('name');
-        $identityRepo = $doctrine->getManagerForClass($identityClass)->getRepository($identityClass);
+        $em = $doctrine->getManagerForClass($identityClass);
+
+        if (null === $em) {
+            throw new InvalidConfigurationException(sprintf('The class "%s" is not supported by the doctrine manager. Change the "sonatra_security.role_class" config', $identityClass));
+        }
+
+        $identityRepo = $em->getRepository($identityClass);
         $identity = $identityRepo->findOneBy(array('name' => $identityName));
         $noHost = $input->getOption('no-host');
         $host = $noHost ? null : $input->getOption('host');

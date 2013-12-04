@@ -15,6 +15,7 @@ use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Sonatra\Bundle\SecurityBundle\Exception\InvalidArgumentException;
 use Sonatra\Bundle\SecurityBundle\Exception\LogicException;
 use Sonatra\Bundle\SecurityBundle\Exception\RuntimeException;
@@ -48,6 +49,11 @@ class AddChildCommand extends ContainerAwareCommand
         $roleName = $input->getArgument('role');
         $childName = $input->getArgument('child');
         $em = $this->getContainer()->get('doctrine')->getManagerForClass($roleClass);
+
+        if (null === $em) {
+            throw new InvalidConfigurationException(sprintf('The class "%s" is not supported by the doctrine manager. Change the "sonatra_security.role_class" config', $roleClass));
+        }
+
         $repo = $em->getRepository($roleClass);
         $role = $repo->findOneBy(array('name' => $roleName));
         $child = $repo->findOneBy(array('name' => $childName));

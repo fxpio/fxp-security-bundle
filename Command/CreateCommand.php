@@ -16,6 +16,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Sonatra\Bundle\SecurityBundle\Exception\InvalidArgumentException;
 use Sonatra\Bundle\SecurityBundle\Exception\LogicException;
 
@@ -55,6 +56,11 @@ abstract class CreateCommand extends ContainerAwareCommand
         $entityClass = str_replace('/', '\\', $entityClass);
         $shortName = substr($entityClass, strrpos($entityClass, '\\') + 1);
         $em = $this->getContainer()->get('doctrine')->getManagerForClass($entityClass);
+
+        if (null === $em) {
+            throw new InvalidConfigurationException(sprintf('The class "%s" is not supported by the doctrine manager. Change the "sonatra_security.role_class" config', $entityClass));
+        }
+
         $repo = $em->getRepository($entityClass);
         $em = $this->getContainer()->get('doctrine.orm.entity_manager');
         $entity = new $entityClass($entityName);

@@ -18,6 +18,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Security\Acl\Domain\ObjectIdentity;
 use Symfony\Component\Security\Core\Role\Role;
+use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Sonatra\Bundle\SecurityBundle\Acl\Util\AclUtils;
 use Sonatra\Bundle\SecurityBundle\Exception\InvalidArgumentException;
 
@@ -66,7 +67,13 @@ EOF
         $identityType = strtolower($input->getArgument('identity-type'));
         $identity = $input->getArgument('identity-name');
         $identityClass = $this->getClassname($this->getContainer()->getParameter('sonatra_security.'.$identityType.'_class'));
-        $identityRepo = $doctrine->getManagerForClass($identityClass)->getRepository($identityClass);
+        $em = $doctrine->getManagerForClass($identityClass);
+
+        if (null === $em) {
+            throw new InvalidConfigurationException(sprintf('The class "%s" is not supported by the doctrine manager. Change the "sonatra_security.%s_class" config', $identityClass, $identityType));
+        }
+
+        $identityRepo = $em->getRepository($identityClass);
         $domainClass = $this->getClassname($input->getArgument('domain-class-name'));
         $domain = new ObjectIdentity('class', $domainClass);
         $domainId = $input->getOption('domainid');
