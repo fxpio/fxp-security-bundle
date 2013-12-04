@@ -48,7 +48,7 @@ abstract class InfoCommand extends ContainerAwareCommand
             $name = $this->getHelper('dialog')->askAndValidate(
                     $output,
                     'Please choose a name:',
-                    function($name) {
+                    function ($name) {
                         if (empty($name)) {
                             throw new LogicException('Name can not be empty');
                         }

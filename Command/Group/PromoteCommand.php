@@ -88,7 +88,7 @@ class PromoteCommand extends ContainerAwareCommand
             $group = $this->getHelper('dialog')->askAndValidate(
                     $output,
                     'Please choose a group:',
-                    function($group) {
+                    function ($group) {
                         if (empty($group)) {
                             throw new LogicException('Group can not be empty');
                         }
@@ -104,7 +104,7 @@ class PromoteCommand extends ContainerAwareCommand
             $role = $this->getHelper('dialog')->askAndValidate(
                     $output,
                     'Please choose a role:',
-                    function($role) {
+                    function ($role) {
                         if (empty($role)) {
                             throw new LogicException('Role can not be empty');
                         }

@@ -101,7 +101,7 @@ class RemoveChildCommand extends ContainerAwareCommand
             $role = $this->getHelper('dialog')->askAndValidate(
                     $output,
                     'Please choose a role:',
-                    function($role) {
+                    function ($role) {
                         if (empty($role)) {
                             throw new LogicException('Role can not be empty');
                         }
@@ -117,7 +117,7 @@ class RemoveChildCommand extends ContainerAwareCommand
             $child = $this->getHelper('dialog')->askAndValidate(
                     $output,
                     'Please choose a child:',
-                    function($child) {
+                    function ($child) {
                         if (empty($child)) {
                             throw new LogicException('Child role can not be empty');
                         }

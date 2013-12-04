@@ -98,7 +98,7 @@ class DegroupingCommand extends ContainerAwareCommand
             $username = $this->getHelper('dialog')->askAndValidate(
                     $output,
                     'Please choose a username:',
-                    function($username) {
+                    function ($username) {
                         if (empty($username)) {
                             throw new LogicException('Username can not be empty');
                         }
@@ -114,7 +114,7 @@ class DegroupingCommand extends ContainerAwareCommand
             $group = $this->getHelper('dialog')->askAndValidate(
                     $output,
                     'Please choose a group:',
-                    function($group) {
+                    function ($group) {
                         if (empty($group)) {
                             throw new LogicException('Group can not be empty');
                         }
