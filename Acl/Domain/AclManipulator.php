@@ -16,6 +16,13 @@ use Sonatra\Bundle\SecurityBundle\Acl\Model\AclManipulatorInterface;
 use Sonatra\Bundle\SecurityBundle\Acl\Model\PermissionContextInterface;
 use Sonatra\Bundle\SecurityBundle\Acl\Util\AclUtils;
 use Sonatra\Bundle\SecurityBundle\Exception\InvalidDomainObjectException;
+use Symfony\Component\Security\Acl\Model\DomainObjectInterface;
+use Symfony\Component\Security\Acl\Model\MutableAclInterface;
+use Symfony\Component\Security\Acl\Model\SecurityIdentityInterface;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Role\RoleInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
+
 /**
  * ACL/ACE Manipulator implementation.
  *
@@ -184,6 +191,7 @@ class AclManipulator extends AbstractAclManipulator implements AclManipulatorInt
     {
         $oid = $context->getObjectIdentity();
 
+        /* @var MutableAclInterface $acl */
         $acl = $this->aclProvider->findAcl($oid);
         $this->doRevokePermission($acl, $context);
         $this->aclProvider->updateAcl($acl);
@@ -293,6 +301,7 @@ class AclManipulator extends AbstractAclManipulator implements AclManipulatorInt
     {
         $sid = AclUtils::convertSecurityIdentity($sid);
         $oid = $this->oidRetrievalStrategy->getObjectIdentity($domainObject);
+        /* @var MutableAclInterface $acl */
         $acl = $this->aclProvider->findAcl($oid);
         $this->doDeletePermissions($acl, $sid, $type, $field);
         $this->aclProvider->updateAcl($acl);

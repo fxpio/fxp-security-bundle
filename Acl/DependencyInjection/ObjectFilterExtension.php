@@ -11,6 +11,7 @@
 
 namespace Sonatra\Bundle\SecurityBundle\Acl\DependencyInjection;
 
+use Sonatra\Bundle\SecurityBundle\Acl\Model\ObjectFilterVoterInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -59,6 +60,8 @@ class ObjectFilterExtension implements ObjectFilterExtensionInterface
                 return $voter->getValue($value);
             }
         }
+
+        return null;
     }
 
     /**

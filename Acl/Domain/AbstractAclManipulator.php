@@ -13,6 +13,9 @@ namespace Sonatra\Bundle\SecurityBundle\Acl\Domain;
 
 use Symfony\Component\Security\Acl\Exception\AclNotFoundException;
 use Symfony\Component\Security\Acl\Exception\NoAceFoundException;
+use Symfony\Component\Security\Acl\Model\AuditableEntryInterface;
+use Symfony\Component\Security\Acl\Model\DomainObjectInterface;
+use Symfony\Component\Security\Acl\Model\EntryInterface;
 use Symfony\Component\Security\Acl\Model\MutableAclProviderInterface;
 use Symfony\Component\Security\Acl\Model\MutableAclInterface;
 use Symfony\Component\Security\Acl\Model\SecurityIdentityInterface;
@@ -22,6 +25,9 @@ use Sonatra\Bundle\SecurityBundle\Acl\Model\PermissionContextInterface;
 use Sonatra\Bundle\SecurityBundle\Acl\Model\AclManipulatorInterface;
 use Sonatra\Bundle\SecurityBundle\Acl\Util\AclUtils;
 use Sonatra\Bundle\SecurityBundle\Exception\InvalidArgumentException;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Role\RoleInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Abstract class containing low-level functionality to be extended by
@@ -97,6 +103,7 @@ abstract class AbstractAclManipulator implements AclManipulatorInterface
         $rights = array();
 
         try {
+            /* @var MutableAclInterface $acl */
             $acl = $this->aclProvider->findAcl($oid);
 
         } catch (AclNotFoundException $e) {
@@ -108,7 +115,8 @@ abstract class AbstractAclManipulator implements AclManipulatorInterface
 
         $aces = $this->getAces($acl, $type, $field);
 
-        foreach ($aces as $i => $ace) {
+        /* @var EntryInterface $ace */
+        foreach ($aces as $ace) {
             if ($ace->getSecurityIdentity() == $sid) {
                 $rights = array_merge($rights, AclUtils::convertToAclName($ace->getMask()));
             }
@@ -134,6 +142,7 @@ abstract class AbstractAclManipulator implements AclManipulatorInterface
         $type = $this->validateType($context->getType());
         $aces = $this->getAces($acl, $type, $field);
 
+        /* @var AuditableEntryInterface $ace */
         foreach ($aces as $i => $ace) {
             if ($context->equals($ace)) {
                 return;
@@ -208,6 +217,7 @@ abstract class AbstractAclManipulator implements AclManipulatorInterface
         $type = $this->validateType($context->getType());
         $aces = $this->getAces($acl, $context->getType(), $field);
 
+        /* @var AuditableEntryInterface $ace */
         foreach ($aces as $i => $ace) {
             if ($context->equals($ace)) {
                 // find ace for identity with equals permissions
@@ -263,6 +273,7 @@ abstract class AbstractAclManipulator implements AclManipulatorInterface
         $type = $this->validateType($type);
         $aces = $this->getAces($acl, $type, $field);
 
+        /* @var EntryInterface $ace */
         foreach ($aces as $i => $ace) {
             if ($ace->getSecurityIdentity() == $sid) {
                 if (null === $field) {

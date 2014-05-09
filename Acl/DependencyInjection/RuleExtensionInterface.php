@@ -10,6 +10,8 @@
  */
 
 namespace Sonatra\Bundle\SecurityBundle\Acl\DependencyInjection;
+use Sonatra\Bundle\SecurityBundle\Acl\Model\RuleDefinitionInterface;
+use Sonatra\Bundle\SecurityBundle\Acl\Model\RuleFilterDefinitionInterface;
 
 /**
  * Interface for extensions which provide rule definitions.

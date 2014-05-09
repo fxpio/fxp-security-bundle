@@ -12,6 +12,7 @@
 namespace Sonatra\Bundle\SecurityBundle\Acl\Expression;
 
 use Sonatra\Bundle\SecurityBundle\Acl\Model\AclManagerInterface;
+use Symfony\Component\Security\Acl\Model\DomainObjectInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
 /**

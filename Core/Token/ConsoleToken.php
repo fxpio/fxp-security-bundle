@@ -12,6 +12,7 @@
 namespace Sonatra\Bundle\SecurityBundle\Core\Token;
 
 use Symfony\Component\Security\Core\Authentication\Token\AbstractToken;
+use Symfony\Component\Security\Core\Role\RoleInterface;
 
 /**
  * ConsoleToken represents an console token.

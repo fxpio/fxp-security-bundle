@@ -15,6 +15,7 @@ use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Events;
 use Doctrine\ORM\PersistentCollection;
+use Doctrine\ORM\UnitOfWork;
 use Sonatra\Bundle\SecurityBundle\Core\Role\Cache\CacheInterface;
 use Sonatra\Bundle\SecurityBundle\Model\RoleHierarchisableInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
