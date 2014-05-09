@@ -34,7 +34,7 @@ interface PermissionContextInterface
     /**
      * get the security identity.
      *
-     * @return Symfony\Component\Security\Acl\Model\SecurityIdentityInterface
+     * @return \Symfony\Component\Security\Acl\Model\SecurityIdentityInterface
      */
     public function getSecurityIdentity();
 
@@ -50,7 +50,7 @@ interface PermissionContextInterface
     /**
      * get the object identity.
      *
-     * @return Symfony\Component\Security\Acl\Model\ObjectIdentityInterface
+     * @return \Symfony\Component\Security\Acl\Model\ObjectIdentityInterface
      */
     public function getObjectIdentity();
 
@@ -77,7 +77,7 @@ interface PermissionContextInterface
      *
      * @return PermissionContextInterface
      *
-     * @throw \InvlaidArgumentException When the type is not 'object' or 'class'
+     * @throw InvalidArgumentException When the type is not 'object' or 'class'
      */
     public function setType($type);
 

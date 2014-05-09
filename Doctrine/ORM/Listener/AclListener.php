@@ -11,11 +11,13 @@
 
 namespace Sonatra\Bundle\SecurityBundle\Doctrine\ORM\Listener;
 
+use Sonatra\Bundle\SecurityBundle\Acl\Model\AclManagerInterface;
+use Sonatra\Bundle\SecurityBundle\Acl\Model\AclRuleManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Security\Acl\Model\SecurityIdentityInterface;
 use Symfony\Component\Security\Acl\Permission\BasicPermissionMap;
 use Sonatra\Bundle\SecurityBundle\Core\Token\ConsoleToken;
 use Sonatra\Bundle\SecurityBundle\Exception\AccessDeniedException;
-use Doctrine\ORM\EntityManager;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\OnFlushEventArgs;
@@ -27,6 +29,7 @@ use Doctrine\ORM\Event\OnFlushEventArgs;
  */
 class AclListener implements EventSubscriber
 {
+    /* @var ContainerInterface */
     protected $container;
 
     /**
@@ -72,6 +75,8 @@ class AclListener implements EventSubscriber
      * This method is executed each time doctrine does a flush on an entitymanager.
      *
      * @param OnFlushEventArgs $args
+     *
+     * @throws AccessDeniedException When insufficient privilege for called action
      */
     public function onFlush(OnFlushEventArgs $args)
     {

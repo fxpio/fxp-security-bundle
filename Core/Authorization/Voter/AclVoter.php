@@ -11,6 +11,7 @@
 
 namespace Sonatra\Bundle\SecurityBundle\Core\Authorization\Voter;
 
+use Symfony\Component\Security\Acl\Model\SecurityIdentityInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Acl\Model\DomainObjectInterface;
@@ -104,6 +105,7 @@ class AclVoter implements VoterInterface
             return $result;
         }
 
+        /* @var SecurityIdentityInterface[] $sids */
         $sids = $this->sidRetrievalStrategy->getSecurityIdentities($token);
 
         foreach ($attributes as $attribute) {

@@ -14,7 +14,7 @@ namespace Sonatra\Bundle\SecurityBundle\Exception;
 use Symfony\Component\Security\Acl\Exception\Exception;
 
 /**
- * Base SecurityExcpetion for the Security component.
+ * Base SecurityException for the Security component.
  *
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */

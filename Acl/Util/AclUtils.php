@@ -13,6 +13,7 @@ namespace Sonatra\Bundle\SecurityBundle\Acl\Util;
 
 use Sonatra\Bundle\SecurityBundle\Acl\Domain\GroupSecurityIdentity;
 use Sonatra\Bundle\SecurityBundle\Exception\InvalidArgumentException;
+use Symfony\Component\Security\Acl\Domain\ObjectIdentity;
 use Symfony\Component\Security\Acl\Domain\UserSecurityIdentity;
 use Symfony\Component\Security\Acl\Domain\RoleSecurityIdentity;
 use Symfony\Component\Security\Acl\Model\ObjectIdentityInterface;
@@ -39,6 +40,9 @@ class AclUtils
      * @param int|string|array $mask
      *
      * @return integer
+     *
+     * @throws InvalidArgumentException When the mask is not a string, array of string or int (the symfony mask value)
+     * @throws InvalidArgumentException When the right does not exist
      */
     public static function convertToMask($mask)
     {
@@ -71,7 +75,7 @@ class AclUtils
     /**
      * Convert the mask to array of acl name.
      *
-     * @param int The mask
+     * @param int $mask The mask
      *
      * @return array The list of permission (in string)
      *
@@ -130,7 +134,7 @@ class AclUtils
      *
      * @return SecurityIdentityInterface
      *
-     * @throws InvalidIdentityException
+     * @throws InvalidArgumentException
      */
     public static function convertSecurityIdentity($identity)
     {
@@ -143,11 +147,11 @@ class AclUtils
      * Creates a new list of SecurityIdentityInterface from input implementing
      * one of UserInterface, RoleInterface or string representation.
      *
-     * @param RoleInterface[]|UserInterface[]|TokenInterface[]|string[]|SecurityIdentityInterface[] $identities
+     * @param RoleInterface|RoleInterface[]|UserInterface|UserInterface[]|TokenInterface|TokenInterface[]|string|string[]|SecurityIdentityInterface|SecurityIdentityInterface[] $identities
      *
      * @return SecurityIdentityInterface[]
      *
-     * @throws InvalidIdentityException
+     * @throws InvalidArgumentException
      */
     public static function convertSecurityIdentities($identities)
     {

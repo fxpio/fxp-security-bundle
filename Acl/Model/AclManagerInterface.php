@@ -11,8 +11,14 @@
 
 namespace Sonatra\Bundle\SecurityBundle\Acl\Model;
 
+use Symfony\Component\Security\Acl\Domain\ObjectIdentity;
+use Symfony\Component\Security\Acl\Model\DomainObjectInterface;
 use Symfony\Component\Security\Acl\Model\ObjectIdentityInterface;
+use Symfony\Component\Security\Acl\Model\SecurityIdentityInterface;
+use Symfony\Component\Security\Acl\Voter\FieldVote;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Role\RoleInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Acl Manager Interface.
@@ -126,7 +132,7 @@ interface AclManagerInterface
      *
      * @param object[] $objects
      *
-     * @return SplObjectStorage
+     * @return \SplObjectStorage
      */
     public function preloadAcls(array $objects);
 
@@ -144,9 +150,9 @@ interface AclManagerInterface
     /**
      * Get the internal acl rules.
      *
-     * @param object $domainObject The object or classname
-     * @param string $field        The field name
-     * @param array  $types        The list of acl type (empty = all types)
+     * @param string|int|array $domainObject The object or classname
+     * @param string           $field        The field name
+     * @param array            $types        The list of acl type (empty = all types)
      *
      * @return array The map of rules
      */
@@ -197,5 +203,5 @@ interface AclManagerInterface
      * @param ObjectIdentityInterface     $initOid The initial object identifier
      * @param string                      $field
      */
-    public function doIsGranted(array $sids, array $masks, ObjectIdentityInterface $oid, ObjectIdentityInterface $initlOid, $field = null);
+    public function doIsGranted(array $sids, array $masks, ObjectIdentityInterface $oid, ObjectIdentityInterface $initOid, $field = null);
 }

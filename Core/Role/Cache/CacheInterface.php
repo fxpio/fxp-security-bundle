@@ -21,8 +21,8 @@ interface CacheInterface
     /**
      * Writes cache.
      *
-     * @param string $id      The unique name
-     * @param string $content The content to write in the cache
+     * @param string $id    The unique name
+     * @param array  $roles The role names
      */
     public function write($id, array $roles);
 

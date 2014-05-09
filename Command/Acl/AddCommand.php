@@ -11,6 +11,7 @@
 
 namespace Sonatra\Bundle\SecurityBundle\Command\Acl;
 
+use Doctrine\ORM\EntityRepository;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -98,6 +99,7 @@ EOF
             throw new InvalidConfigurationException(sprintf('The class "%s" is not supported by the doctrine manager. Change the "sonatra_security.%s_class" config', $identityClass, $identityType));
         }
 
+        /* @var EntityRepository $identityRepo */
         $identityRepo = $em->getRepository($identityClass);
         $domainClass = $this->getClassname($input->getArgument('domain-class-name'));
         $domain = new ObjectIdentity('class', $domainClass);

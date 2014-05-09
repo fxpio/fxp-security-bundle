@@ -19,6 +19,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Sonatra\Bundle\SecurityBundle\Exception\InvalidArgumentException;
 use Sonatra\Bundle\SecurityBundle\Exception\LogicException;
+use Symfony\Component\Validator\ConstraintViolationInterface;
+use Symfony\Component\Validator\ConstraintViolationListInterface;
 
 /**
  * @author François Pluchino <francois.pluchino@sonatra.com>
@@ -40,16 +42,18 @@ abstract class CreateCommand extends ContainerAwareCommand
     /**
      * Execution of delete action
      *
-     * @param string $entityClass The entity class name
-     * @param string $entityName  The entity name
-     * @param array  $fields      The field values
+     * @param OutputInterface $output      The output console instance
+     * @param string          $entityClass The entity class name
+     * @param string          $entityName  The entity name
+     * @param array           $fields      The field values
      *
-     * @throws \InvalidArgumentException When the field is misformatted
-     * @throws \InvalidArgumentException When the setter method of class does not exist
-     * @throws \InvalidArgumentException When the specified mapped field could not be found
-     * @throws \InvalidArgumentException When the setter method that should be user for property seems not to exist
-     * @throws \InvalidArgumentException When the field seems not exist in class
-     * @throws \InvalidArgumentException When the validator has errors
+     * @throws InvalidConfigurationException When the class is not supported by the doctrine manager
+     * @throws InvalidArgumentException      When the field is misformatted
+     * @throws InvalidArgumentException      When the setter method of class does not exist
+     * @throws InvalidArgumentException      When the specified mapped field could not be found
+     * @throws InvalidArgumentException      When the setter method that should be user for property seems not to exist
+     * @throws InvalidArgumentException      When the field seems not exist in class
+     * @throws LogicException                When the validator has errors
      */
     protected function doExecute(OutputInterface $output, $entityClass, $entityName, array $fields)
     {
@@ -61,7 +65,7 @@ abstract class CreateCommand extends ContainerAwareCommand
             throw new InvalidConfigurationException(sprintf('The class "%s" is not supported by the doctrine manager. Change the "sonatra_security.role_class" config', $entityClass));
         }
 
-        $repo = $em->getRepository($entityClass);
+        $em->getRepository($entityClass);
         $em = $this->getContainer()->get('doctrine.orm.entity_manager');
         $entity = new $entityClass($entityName);
 
@@ -116,7 +120,7 @@ abstract class CreateCommand extends ContainerAwareCommand
 
                     try {
                         $reflectionRoleClass = new \ReflectionClass($entityClass);
-                        $setterMethod = $reflectionRoleClass->getMethod($setterMethodName);
+                        $reflectionRoleClass->getMethod($setterMethodName);
 
                     } catch (\Exception $e) {
                         throw new InvalidArgumentException(sprintf('The setter method "%s" that should be used for property "%s" seems not to exist. Please check your spelling in the command option or in your implementation class.', $setterMethodName, $fieldName));
@@ -141,7 +145,7 @@ abstract class CreateCommand extends ContainerAwareCommand
 
                         try {
                             $reflectionRoleClass = new \ReflectionClass($entityClass);
-                            $setterMethod = $reflectionRoleClass->getMethod($setterMethodName);
+                            $reflectionRoleClass->getMethod($setterMethodName);
 
                         } catch (\Exception $e) {
                             throw new InvalidArgumentException(sprintf('The setter method "%s" that should be used for property "%s" seems not to exist. Please check your spelling in the command option or in your implementation class.', $setterMethodName, $fieldName));
@@ -156,11 +160,13 @@ abstract class CreateCommand extends ContainerAwareCommand
             }
         }
 
+        /* @var ConstraintViolationListInterface $errorList */
         $errorList = $this->getContainer()->get('validator')->validate($entity);
 
         if (count($errorList) > 0) {
             $msg = sprintf('Validation errors for "%s":%s', get_class($entity), PHP_EOL);
 
+            /* @var ConstraintViolationInterface $error */
             foreach ($errorList as $error) {
                 $msg = sprintf('%s%s: %s', PHP_EOL, $error->getPropertyPath(), $error->getMessage());
             }

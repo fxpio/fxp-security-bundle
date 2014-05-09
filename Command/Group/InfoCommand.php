@@ -11,6 +11,7 @@
 
 namespace Sonatra\Bundle\SecurityBundle\Command\Group;
 
+use Doctrine\ORM\EntityRepository;
 use Sonatra\Bundle\SecurityBundle\Command\InfoCommand as BaseInfoCommand;
 use Sonatra\Bundle\SecurityBundle\Core\Token\ConsoleToken;
 use Sonatra\Bundle\SecurityBundle\Exception\InvalidArgumentException;
@@ -50,6 +51,7 @@ class InfoCommand extends BaseInfoCommand
             throw new InvalidConfigurationException(sprintf('The class "%s" is not supported by the doctrine manager. Change the "sonatra_security.group_class" config', $identityClass));
         }
 
+        /* @var EntityRepository $identityRepo */
         $identityRepo = $em->getRepository($identityClass);
         $identity = $identityRepo->findOneBy(array('name' => $identityName));
         $noHost = $input->getOption('no-host');

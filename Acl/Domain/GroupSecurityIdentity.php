@@ -46,6 +46,8 @@ final class GroupSecurityIdentity
      * @param TokenInterface $token
      *
      * @return UserSecurityIdentity[]
+     *
+     * @throws InvalidArgumentException When the user class not implements "FOS\UserBundle\Model\GroupableInterface"
      */
     public static function fromToken(TokenInterface $token)
     {

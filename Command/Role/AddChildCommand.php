@@ -11,6 +11,7 @@
 
 namespace Sonatra\Bundle\SecurityBundle\Command\Role;
 
+use Doctrine\ORM\EntityRepository;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -20,6 +21,7 @@ use Sonatra\Bundle\SecurityBundle\Exception\InvalidArgumentException;
 use Sonatra\Bundle\SecurityBundle\Exception\LogicException;
 use Sonatra\Bundle\SecurityBundle\Exception\RuntimeException;
 use Sonatra\Bundle\SecurityBundle\Model\RoleHierarchisableInterface;
+use Symfony\Component\Validator\ConstraintViolationInterface;
 
 /**
  * @author François Pluchino <francois.pluchino@sonatra.com>
@@ -54,8 +56,10 @@ class AddChildCommand extends ContainerAwareCommand
             throw new InvalidConfigurationException(sprintf('The class "%s" is not supported by the doctrine manager. Change the "sonatra_security.role_class" config', $roleClass));
         }
 
+        /* @var EntityRepository $repo */
         $repo = $em->getRepository($roleClass);
         $role = $repo->findOneBy(array('name' => $roleName));
+        /* @var RoleHierarchisableInterface $child */
         $child = $repo->findOneBy(array('name' => $childName));
 
         if (null === $role) {
@@ -85,6 +89,7 @@ class AddChildCommand extends ContainerAwareCommand
         if (count($errorList) > 0) {
             $msg = sprintf('Validation errors for "%s":%s', get_class($role), PHP_EOL);
 
+            /* @var ConstraintViolationInterface $error */
             foreach ($errorList as $error) {
                 $msg = sprintf('%s%s: %s', PHP_EOL, $error->getPropertyPath(), $error->getMessage());
             }

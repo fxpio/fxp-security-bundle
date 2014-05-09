@@ -12,6 +12,7 @@
 namespace Sonatra\Bundle\SecurityBundle\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -20,6 +21,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Sonatra\Bundle\SecurityBundle\Exception\LogicException;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
 /**
  * @author François Pluchino <francois.pluchino@sonatra.com>
@@ -125,14 +127,18 @@ abstract class InfoCommand extends ContainerAwareCommand
         $_SERVER['SERVER_NAME'] = $hostname;
         $request = Request::createFromGlobals();
 
+        /* @var Application $application */
+        $application = $this->getApplication();
+
         $this->getContainer()->set('request', $request);
         $this->getContainer()->enterScope('request');
 
-        $event = new GetResponseEvent($this->getApplication()->getKernel(), $request, HttpKernelInterface::MASTER_REQUEST);
+        $event = new GetResponseEvent($application->getKernel(), $request, HttpKernelInterface::MASTER_REQUEST);
         $this->getContainer()->get('security.firewall')->onKernelRequest($event);
 
-        $roles = array();
+        /* @var TokenInterface $token */
         $token = $this->getContainer()->get('security.context')->getToken();
+        $roles = array();
 
         if (null !== $token) {
             foreach ($token->getRoles() as $role) {

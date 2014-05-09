@@ -11,6 +11,7 @@
 
 namespace Sonatra\Bundle\SecurityBundle;
 
+use Symfony\Bundle\SecurityBundle\DependencyInjection\SecurityExtension;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Sonatra\Bundle\SecurityBundle\DependencyInjection\Compiler\AclRuleDefinitionPass;
@@ -27,6 +28,7 @@ class SonatraSecurityBundle extends Bundle
     {
         parent::build($container);
 
+        /* @var SecurityExtension $extension */
         $extension = $container->getExtension('security');
         $extension->addSecurityListenerFactory(new HostRoleFactory());
 

@@ -11,6 +11,7 @@
 
 namespace Sonatra\Bundle\SecurityBundle\Command\User;
 
+use Doctrine\ORM\EntityRepository;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -18,6 +19,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Sonatra\Bundle\SecurityBundle\Exception\InvalidArgumentException;
 use Sonatra\Bundle\SecurityBundle\Exception\LogicException;
+use Symfony\Component\Validator\ConstraintViolationInterface;
 
 /**
  * @author François Pluchino <francois.pluchino@sonatra.com>
@@ -51,6 +53,7 @@ class DegroupingCommand extends ContainerAwareCommand
             throw new InvalidConfigurationException(sprintf('The class "%s" is not supported by the doctrine manager. Change the "sonatra_security.user_class" config', $userClass));
         }
 
+        /* @var EntityRepository $repoUser */
         $repoUser = $emUser->getRepository($userClass);
         $user = $repoUser->findOneBy(array('username' => $userName));
 
@@ -62,6 +65,7 @@ class DegroupingCommand extends ContainerAwareCommand
         $groupClass = str_replace('/', '\\', $this->getContainer()->getParameter('sonatra_security.group_class'));
         $groupName = $input->getArgument('group');
         $emGroup = $this->getContainer()->get('doctrine')->getManagerForClass($groupClass);
+        /* @var EntityRepository $repoGroup */
         $repoGroup = $emGroup->getRepository($groupClass);
         $group = $repoGroup->findOneBy(array('name' => $groupName));
 
@@ -82,6 +86,7 @@ class DegroupingCommand extends ContainerAwareCommand
         if (count($errorList) > 0) {
             $msg = sprintf('Validation errors for "%s":%s', get_class($user), PHP_EOL);
 
+            /* @var ConstraintViolationInterface $error */
             foreach ($errorList as $error) {
                 $msg = sprintf('%s%s: %s', PHP_EOL, $error->getPropertyPath(), $error->getMessage());
             }
@@ -92,7 +97,7 @@ class DegroupingCommand extends ContainerAwareCommand
         $emUser->persist($user);
         $emUser->flush();
 
-        $output->writeln(sprintf('Group "%s" has been removed from user "%s".', groupName, $userName));
+        $output->writeln(sprintf('Group "%s" has been removed from user "%s".', $groupName, $userName));
     }
 
     /**

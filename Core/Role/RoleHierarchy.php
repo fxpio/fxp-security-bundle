@@ -11,6 +11,7 @@
 
 namespace Sonatra\Bundle\SecurityBundle\Core\Role;
 
+use Sonatra\Bundle\SecurityBundle\Model\RoleHierarchisableInterface;
 use Symfony\Component\Security\Core\Role\RoleHierarchy as BaseRoleHierarchy;
 use Symfony\Component\Security\Core\Role\RoleInterface;
 use Symfony\Component\Security\Core\Role\Role;
@@ -56,10 +57,10 @@ class RoleHierarchy extends BaseRoleHierarchy
     /**
      * Constructor.
      *
-     * @param array          $hierarchy     An array defining the hierarchy
-     * @param Registry       $registry
-     * @param string         $roleClassName
-     * @param CacheInterface $cache
+     * @param array             $hierarchy     An array defining the hierarchy
+     * @param RegistryInterface $registry
+     * @param string            $roleClassname
+     * @param CacheInterface    $cache
      */
     public function __construct(array $hierarchy, RegistryInterface $registry, $roleClassname, CacheInterface $cache)
     {
@@ -87,6 +88,8 @@ class RoleHierarchy extends BaseRoleHierarchy
      * @param RoleInterface[] $roles An array of RoleInterface instances
      *
      * @return RoleInterface[] An array of RoleInterface instances
+     *
+     * @throws SecurityException When the role class is not an instance of '\Symfony\Component\Security\Core\Role\RoleInterface'
      */
     public function getReachableRoles(array $roles)
     {
@@ -125,6 +128,8 @@ class RoleHierarchy extends BaseRoleHierarchy
         $em = $this->registry->getManagerForClass($this->roleClassname);
         $repo = $em->getRepository($this->roleClassname);
         $entityRoles = array();
+        /* @var ReachableRoleEvent $event */
+        $event = null;
 
         if (null !== $this->eventDispatcher) {
             $event = new ReachableRoleEvent();
@@ -137,6 +142,7 @@ class RoleHierarchy extends BaseRoleHierarchy
             $entityRoles = $repo->findBy(array('name' => $rolenames));
         }
 
+        /* @var RoleHierarchisableInterface $eRole */
         foreach ($entityRoles as $eRole) {
             $reachableRoles = array_merge($reachableRoles, $this->getReachableRoles($eRole->getChildren()->toArray()));
         }
@@ -145,7 +151,7 @@ class RoleHierarchy extends BaseRoleHierarchy
         $existingRoles = array();
         $finalRoles = array();
 
-        foreach ($reachableRoles as $index => $role) {
+        foreach ($reachableRoles as $role) {
             if (!in_array($role->getRole(), $existingRoles)) {
                 if (!($role instanceof Role)) {
                     $role = new Role($role->getRole());

@@ -11,6 +11,7 @@
 
 namespace Sonatra\Bundle\SecurityBundle\Command;
 
+use Doctrine\ORM\EntityRepository;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -37,11 +38,13 @@ abstract class DeleteCommand extends ContainerAwareCommand
     /**
      * Execution of delete action
      *
-     * @param string $entityClass The entity class name
-     * @param string $entityName  The entity name
-     * @param array  $filter      The filter for fond one by doctrine query
+     * @param OutputInterface $output      The output console instance
+     * @param string          $entityClass The entity class name
+     * @param string          $entityName  The entity name
+     * @param array           $filter      The filter for fond one by doctrine query
      *
-     * @throws InvalidArgumentException When entity does not exist
+     * @throws InvalidConfigurationException When the class is not supported by the doctrine manager
+     * @throws InvalidArgumentException      When entity does not exist
      */
     protected function doExecute(OutputInterface $output, $entityClass, $entityName, array $filter)
     {
@@ -53,6 +56,7 @@ abstract class DeleteCommand extends ContainerAwareCommand
             throw new InvalidConfigurationException(sprintf('The class "%s" is not supported by the doctrine manager. Change the "sonatra_security.role_class" config', $entityClass));
         }
 
+        /* @var EntityRepository $repo */
         $repo = $em->getRepository($entityClass);
         $entity = $repo->findOneBy($filter);
 

@@ -11,6 +11,7 @@
 
 namespace Sonatra\Bundle\SecurityBundle\Command\Group;
 
+use Doctrine\ORM\EntityRepository;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -18,6 +19,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Sonatra\Bundle\SecurityBundle\Exception\InvalidArgumentException;
 use Sonatra\Bundle\SecurityBundle\Exception\LogicException;
+use Symfony\Component\Validator\ConstraintViolationInterface;
 
 /**
  * @author François Pluchino <francois.pluchino@sonatra.com>
@@ -52,6 +54,7 @@ class DemoteCommand extends ContainerAwareCommand
             throw new InvalidConfigurationException(sprintf('The class "%s" is not supported by the doctrine manager. Change the "sonatra_security.group_class" config', $groupClass));
         }
 
+        /* @var EntityRepository $repo */
         $repo = $em->getRepository($groupClass);
         $group = $repo->findOneBy(array('name' => $groupName));
 
@@ -72,6 +75,7 @@ class DemoteCommand extends ContainerAwareCommand
         if (count($errorList) > 0) {
             $msg = sprintf('Validation errors for "%s":%s', get_class($group), PHP_EOL);
 
+            /* @var ConstraintViolationInterface $error */
             foreach ($errorList as $error) {
                 $msg = sprintf('%s%s: %s', PHP_EOL, $error->getPropertyPath(), $error->getMessage());
             }

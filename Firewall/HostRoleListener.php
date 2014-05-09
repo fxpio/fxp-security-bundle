@@ -43,6 +43,7 @@ class HostRoleListener implements ListenerInterface
      *
      * @param SecurityContextInterface $context
      * @param array                    $config
+     * @param ListenerInterface        $anonymousListener
      */
     public function __construct(SecurityContextInterface $context, array $config, ListenerInterface $anonymousListener)
     {

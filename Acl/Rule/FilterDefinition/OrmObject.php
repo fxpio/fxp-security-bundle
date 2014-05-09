@@ -13,6 +13,7 @@ namespace Sonatra\Bundle\SecurityBundle\Acl\Rule\FilterDefinition;
 
 use Sonatra\Bundle\SecurityBundle\Acl\Domain\AbstractRuleOrmFilterDefinition;
 use Sonatra\Bundle\SecurityBundle\Acl\Model\OrmFilterRuleContextDefinitionInterface;
+use Symfony\Component\Security\Acl\Domain\RoleSecurityIdentity;
 use Symfony\Component\Security\Acl\Domain\UserSecurityIdentity;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -67,8 +68,10 @@ class OrmObject extends AbstractRuleOrmFilterDefinition
         $tableAlias = $rcd->getTargetTableAlias();
         $sids = array();
 
+        /* @var RoleSecurityIdentity $sid */
         foreach ($identities as $sid) {
             if ($sid instanceof UserSecurityIdentity) {
+                /* @var UserSecurityIdentity $sid */
                 $sids[] = 's.identifier = ' . $connection->quote($sid->getClass().'-'.$sid->getUsername());
                 continue;
             }

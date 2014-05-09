@@ -11,10 +11,12 @@
 
 namespace Sonatra\Bundle\SecurityBundle\Doctrine\ORM\Filter;
 
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Query\Filter\SQLFilter;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Sonatra\Bundle\SecurityBundle\Acl\Domain\OrmFilterRuleContextDefinition;
 use Sonatra\Bundle\SecurityBundle\Acl\Domain\AbstractRuleOrmFilterDefinition;
+use Sonatra\Bundle\SecurityBundle\Acl\Model\RuleOrmFilterDefinitionInterface;
 use Sonatra\Bundle\SecurityBundle\Doctrine\ORM\Listener\AclListener;
 use Sonatra\Bundle\SecurityBundle\Exception\RuntimeException;
 
@@ -38,6 +40,7 @@ class AclFilter extends SQLFilter
         $rule = $arm->getRule('VIEW', $class);
 
         if ($arm->hasFilterDefinition($rule, AbstractRuleOrmFilterDefinition::TYPE)) {
+            /* @var RuleOrmFilterDefinitionInterface $definition */
             $definition = $arm->getFilterDefinition($rule, AbstractRuleOrmFilterDefinition::TYPE);
             $definition->setAclRuleManager($arm);
             $identities = $this->getListener()->getSecurityIdentities();

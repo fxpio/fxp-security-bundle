@@ -56,6 +56,8 @@ class SecurityIdentityRetrievalStrategy extends BaseSecurityIdentityRetrievalStr
             return $this->cacheExec[$id];
         }
 
+        /* @var SecurityIdentityEvent $event */
+        $event = null;
         $sids = parent::getSecurityIdentities($token);
 
         // add group security identity

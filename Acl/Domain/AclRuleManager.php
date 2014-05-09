@@ -265,6 +265,8 @@ class AclRuleManager implements AclRuleManagerInterface
      * @param string $rule
      *
      * @return string
+     *
+     * @throws SecurityException When the rule in configuration of Sonatra ACL Rules does not exist
      */
     protected function validateRuleName($rule)
     {
@@ -281,6 +283,8 @@ class AclRuleManager implements AclRuleManagerInterface
      * @param string $type
      *
      * @return string
+     *
+     * @throws SecurityException When the type in configuration of Sonatra ACL Rules does not exist
      */
     protected function validateTypeName($type)
     {
@@ -305,7 +309,7 @@ class AclRuleManager implements AclRuleManagerInterface
     {
         $pRules = $this->getParentRules($type);
 
-        foreach ($pRules as $i => $pRule) {
+        foreach ($pRules as $pRule) {
             if (isset($rules[$pRule])) {
                 return $rules[$pRule];
             }

@@ -11,7 +11,9 @@
 
 namespace Sonatra\Bundle\SecurityBundle\Command\Acl;
 
+use Doctrine\ORM\EntityRepository;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -81,6 +83,7 @@ EOF
             throw new InvalidConfigurationException(sprintf('The class "%s" is not supported by the doctrine manager. Change the "sonatra_security.%s_class" config', $identityClass, $identityType));
         }
 
+        /* @var EntityRepository $identityRepo */
         $identityRepo = $em->getRepository($identityClass);
         $domainClass = $this->getClassname($input->getArgument('domain-class-name'));
         $domain = new ObjectIdentity('class', $domainClass);
@@ -243,7 +246,6 @@ EOF
             return array();
         }
 
-        $aclManipulator = $this->getContainer()->get('sonatra_security.acl.manipulator');
         $out = array('', '  Class rights:');
         $rights = array();
         $width = 0;
@@ -275,7 +277,6 @@ EOF
             return array();
         }
 
-        $aclManipulator = $this->getContainer()->get('sonatra_security.acl.manipulator');
         $out = array('');
         $fields = array();
         $width = 0;
@@ -343,10 +344,13 @@ EOF
         $_SERVER['SERVER_NAME'] = $hostname;
         $request = Request::createFromGlobals();
 
+        /* @var Application $application */
+        $application = $this->getApplication();
+
         $this->getContainer()->set('request', $request);
         $this->getContainer()->enterScope('request');
 
-        $event = new GetResponseEvent($this->getApplication()->getKernel(), $request, HttpKernelInterface::MASTER_REQUEST);
+        $event = new GetResponseEvent($application->getKernel(), $request, HttpKernelInterface::MASTER_REQUEST);
         $this->getContainer()->get('security.firewall')->onKernelRequest($event);
 
         $roles = array();

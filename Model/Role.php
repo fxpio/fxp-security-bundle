@@ -12,6 +12,7 @@
 namespace Sonatra\Bundle\SecurityBundle\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Security\Core\Role\RoleInterface;
 
 /**
  * This is the domain class for the Role object.
@@ -119,6 +120,7 @@ abstract class Role implements RoleHierarchisableInterface
     {
         $names = array();
 
+        /* @var RoleInterface $parent */
         foreach ($this->getParents() as $parent) {
             $names[] = $parent->getRole();
         }
@@ -171,6 +173,7 @@ abstract class Role implements RoleHierarchisableInterface
     {
         $names = array();
 
+        /* @var RoleInterface $child */
         foreach ($this->getChildren() as $child) {
             $names[] = $child->getRole();
         }

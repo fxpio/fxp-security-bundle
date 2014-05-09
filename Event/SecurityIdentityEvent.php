@@ -32,7 +32,7 @@ class SecurityIdentityEvent extends GenericEvent
     /**
      * Set security identities.
      *
-     * @param \Symfony\Component\Security\Acl\Model\SecurityIdentityInterface[] $securityIdentity
+     * @param \Symfony\Component\Security\Acl\Model\SecurityIdentityInterface[] $securityIdentities
      */
     public function setSecurityIdentities(array $securityIdentities)
     {

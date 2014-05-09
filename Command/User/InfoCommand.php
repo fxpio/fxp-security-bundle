@@ -11,12 +11,12 @@
 
 namespace Sonatra\Bundle\SecurityBundle\Command\User;
 
+use Doctrine\ORM\EntityRepository;
 use Sonatra\Bundle\SecurityBundle\Command\InfoCommand as BaseInfoCommand;
 use Sonatra\Bundle\SecurityBundle\Core\Token\ConsoleToken;
 use Sonatra\Bundle\SecurityBundle\Exception\InvalidArgumentException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Security\Core\Role\Role;
 use Symfony\Component\Security\Core\Role\RoleInterface;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use FOS\UserBundle\Model\GroupInterface;
@@ -51,6 +51,7 @@ class InfoCommand extends BaseInfoCommand
             throw new InvalidConfigurationException(sprintf('The class "%s" is not supported by the doctrine manager. Change the "sonatra_security.user_class" config', $identityClass));
         }
 
+        /* @var EntityRepository $identityRepo */
         $identityRepo = $em->getRepository($identityClass);
 
         $identity = $identityRepo->findOneBy(array('username' => $identityName));
@@ -78,7 +79,6 @@ class InfoCommand extends BaseInfoCommand
     {
         // get all roles
         $allRoles = $this->getHostRoles($host);
-        $directRoles = array();
         $groups = array();
         $groupRoles = array();
 
@@ -96,7 +96,7 @@ class InfoCommand extends BaseInfoCommand
         if (method_exists($identity, 'getRoles')) {
             $directRoles = $identity->getRoles();
 
-            foreach ($identity->getRoles() as $child) {
+            foreach ($directRoles as $child) {
                 $child = ($child instanceof RoleInterface) ? $child->getRole() : $child;
                 $allRoles[$child] = 'direct';
 
