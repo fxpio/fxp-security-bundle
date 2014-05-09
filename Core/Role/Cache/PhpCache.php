@@ -65,7 +65,7 @@ class PhpCache implements CacheInterface
 
         $mode = 0666 & ~umask();
         $filesystem = new Filesystem();
-        $filesystem->dumpFile($this->cacheDir.'/'.$id.'.php', $content, $mode);
+        $filesystem->dumpFile(sprintf('%s/%s.php', $this->cacheDir, $id), $content, $mode);
     }
 
     /**
@@ -75,8 +75,8 @@ class PhpCache implements CacheInterface
     {
         $filesystem = new Filesystem();
 
-        if ($filesystem->exists($this->cacheDir.'/'.$id.'.php')) {
-            return include $this->cacheDir.'/'.$id.'.php';
+        if ($filesystem->exists($this->cacheDir . '/' . $id . '.php')) {
+            return include sprintf('%s/%s.php', $this->cacheDir, $id);
         }
 
         return null;
