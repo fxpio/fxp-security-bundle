@@ -15,7 +15,6 @@ use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
-use Sonatra\Bundle\SecurityBundle\Exception\InvalidArgumentException;
 use Sonatra\Bundle\SecurityBundle\Exception\RuntimeException;
 
 /**
@@ -113,35 +112,5 @@ class SonatraSecurityExtension extends Extension
                 $loader->load('orm_object_filter_voter.yml');
             }
         }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function configValidate(ContainerBuilder $container)
-    {
-        foreach (array_keys($this->entityManagers) as $name) {
-            if (!$container->hasDefinition(sprintf('doctrine.dbal.%s_connection', $name))) {
-                throw new InvalidArgumentException(sprintf('Invalid %s config: DBAL connection "%s" not found', $this->getAlias(), $name));
-            }
-        }
-
-        foreach (array_keys($this->documentManagers) as $name) {
-            if (!$container->hasDefinition(sprintf('doctrine.odm.mongodb.%s_document_manager', $name))) {
-                throw new InvalidArgumentException(sprintf('Invalid %s config: document manager "%s" not found', $this->getAlias(), $name));
-            }
-        }
-    }
-
-    /**
-     * This function analyses the classname to change / in \\ if there are some in the given classname.
-     *
-     * @param string $className The class name to be converted with antislashes
-     */
-    private function getNormalizedClassName($className)
-    {
-        $className = str_replace('/', '\\', $className);
-
-        return $className;
     }
 }

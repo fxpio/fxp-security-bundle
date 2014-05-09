@@ -201,7 +201,7 @@ class AclManager implements AclManagerInterface
             // find types in class fields
             if (!in_array(RuleDefinitionInterface::TYPE_CLASS, $preloadTypes)
                     || !in_array(RuleDefinitionInterface::TYPE_OBJECT, $preloadTypes)) {
-                foreach ($rules['fields'] as $field => $fieldRules) {
+                foreach ($rules['fields'] as $fieldRules) {
                     foreach ($fieldRules as $ruleName) {
                         $rule = $this->aclRuleManager->getDefinition($ruleName);
                         $preloadTypes = array_merge($preloadTypes, $rule->getTypes());
@@ -220,7 +220,6 @@ class AclManager implements AclManagerInterface
      */
     public function isGranted($sids, $domainObject, $mask)
     {
-        $granted = false;
         $field = null;
         $masks = array();
 
@@ -275,9 +274,6 @@ class AclManager implements AclManagerInterface
         foreach ($this->getObjectIdentities($objects) as $oid) {
             $classname = $oid->getType();
             $id = $classname.'__'.$oid->getIdentifier();
-            $hasClassRule = false;
-            $hasObjectRule = false;
-            $hasSkipRule = false;
 
             if (in_array($id, $this->excludedOids)) {
                 continue;
@@ -386,7 +382,7 @@ class AclManager implements AclManagerInterface
         $rules['fields'] = array();
         $ref = new \ReflectionClass($domainObject);
 
-        foreach ($ref->getProperties() as $i => $property) {
+        foreach ($ref->getProperties() as $property) {
             $name = $property->getName();
             $rules['fields'][$name] = $this->getRules($domainObject, $name);
         }
@@ -454,11 +450,12 @@ class AclManager implements AclManagerInterface
     /**
      * Exclude nonexistent Acls for next search.
      *
-     * @param \SplObjectStorage $result
-     * @param array             $oids
+     * @param \SplObjectStorage         $result
+     * @param ObjectIdentityInterface[] $oids
      */
     protected function excludeNonexistentAcls(\SplObjectStorage $result, array $oids)
     {
+        /* @var ObjectIdentityInterface $oid */
         foreach ($result as $oid) {
             $id = $oid->getType().'__'.$oid->getIdentifier();
 

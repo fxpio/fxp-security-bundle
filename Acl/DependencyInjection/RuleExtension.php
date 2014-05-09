@@ -11,7 +11,6 @@
 
 namespace Sonatra\Bundle\SecurityBundle\Acl\DependencyInjection;
 
-use Sonatra\Bundle\SecurityBundle\Acl\DependencyInjection\RuleExtensionInterface;
 use Sonatra\Bundle\SecurityBundle\Exception\InvalidArgumentException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
