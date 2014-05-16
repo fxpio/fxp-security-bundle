@@ -22,9 +22,8 @@
         "doctrine/orm": "For ORM filter query feature"
     },
     "autoload": {
-        "psr-0": { "Sonatra\\Bundle\\SecurityBundle": "" }
+        "psr-4": { "Sonatra\\Bundle\\SecurityBundle\\": "" }
     },
-    "target-dir": "Sonatra/Bundle/SecurityBundle",
     "extra": {
         "branch-alias": {
             "dev-master": "1.0.x-dev"
