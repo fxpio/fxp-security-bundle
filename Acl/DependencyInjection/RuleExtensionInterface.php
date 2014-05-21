@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  * This file is part of the Sonatra package.
  *
  * (c) François Pluchino <francois.pluchino@sonatra.com>
@@ -10,6 +10,7 @@
  */
 
 namespace Sonatra\Bundle\SecurityBundle\Acl\DependencyInjection;
+
 use Sonatra\Bundle\SecurityBundle\Acl\Model\RuleDefinitionInterface;
 use Sonatra\Bundle\SecurityBundle\Acl\Model\RuleFilterDefinitionInterface;
 
