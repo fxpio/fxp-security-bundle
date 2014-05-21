@@ -1,20 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<phpunit colors="true" bootstrap="./vendor/autoload.php">
-    <testsuites>
-        <testsuite name="Sonatra Security Bundle Test Suite">
-            <directory>./Tests/</directory>
-        </testsuite>
-    </testsuites>
+<phpunit backupGlobals="false"
+         backupStaticAttributes="false"
+         colors="true"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true"
+         convertWarningsToExceptions="true"
+         processIsolation="false"
+         stopOnFailure="false"
+         syntaxCheck="false"
+         bootstrap="vendor/autoload.php"
+        >
 
-    <filter>
-        <whitelist>
-            <directory>./</directory>
-            <exclude>
-                <directory>./Resources</directory>
-                <directory>./Tests</directory>
-                <directory>./vendor</directory>
-            </exclude>
-        </whitelist>
-    </filter>
+<testsuites>
+    <testsuite name="Sonatra SecurityBundle Test Suite">
+        <directory>./Tests/</directory>
+    </testsuite>
+</testsuites>
+
+<filter>
+    <whitelist>
+        <directory>./</directory>
+        <exclude>
+            <directory>./Tests</directory>
+            <directory>./Resources</directory>
+            <directory>./vendor</directory>
+        </exclude>
+    </whitelist>
+</filter>
 </phpunit>
