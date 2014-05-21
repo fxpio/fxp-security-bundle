@@ -37,10 +37,6 @@ class AclObjectFilterPass implements CompilerPassInterface
             $voters[$priority][] = $id;
         }
 
-        if (empty($voters)) {
-            return;
-        }
-
         // sort by priority and flatten
         krsort($voters);
         $voters = call_user_func_array('array_merge', $voters);
