@@ -24,8 +24,8 @@ Features include:
 - Doctrine Listener for empty the record field value for all query type
 - Doctrine Listener for keep the old value in the record field value if the user has not the permission of action
 - Ability to define a role for a hostname (defined with regex)
-- Ability to replace the 'hasPermission()' JMS Expression (and twig function)
-- Ability to add the 'hasFieldPermission()' JMS Expression (and twig function)
+- Ability to replace the `hasPermission()` JMS Expression (and twig function)
+- Ability to add the `hasFieldPermission()` JMS Expression (and twig function)
 - Commands for:
  * create/delete a user
  * create/delete a role
