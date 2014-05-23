@@ -1,14 +1,9 @@
-Sonatra SecurityBundle ACL Manipulator
-======================================
+ACL Manipulator
+===============
 
-## Prerequisites
+## Usage
 
-[Installation and Configuration](index.md)
-
-## Use
-
-``` php
-<?php
+```php
 // ...
 use Symfony\Component\Security\Acl\Permission\MaskBuilder;
 
@@ -36,11 +31,10 @@ $em->remove($comment);
 $em->flush();
 ```
 
-
-You can use the mask constant or integer of mask, or the string action (not case sensitive), but also the array of mask action.
+You can use the mask constant or integer of mask, or the string action (not case sensitive),
+but also the array of mask action.
 
 ```php
-<?php
 // ...
 // add read, create, edit permissions for a class 'My\\Entity\\Class\\Name'
 $aclManipulator->addClassPermission($user, 'My\\Entity\\Class\\Name', array(MaskBuilder::MASK_VIEW, 2, 'edit'));

@@ -1,5 +1,5 @@
-Getting Started With Sonatra SecurityBundle
-===========================================
+Getting Started
+===============
 
 ## Prerequisites
 
@@ -9,16 +9,16 @@ This version of the bundle requires Symfony 2.4+.
 
 Installation is a quick, 4 step process:
 
-1. Download Sonatra SecurityBundle using composer
+1. Download the bundle using composer
 2. Enable the bundle
 3. Create your Role class
 4. Configure the bundle
 
-### Step 1: Download Sonatra SecurityBundle using composer
+### Step 1: Download the bundle using composer
 
 Add Sonatra SecurityBundle in your composer.json:
 
-``` js
+```js
 {
     "require": {
         "sonatra/security-bundle": "~1.0"
@@ -28,7 +28,7 @@ Add Sonatra SecurityBundle in your composer.json:
 
 Or tell composer to download the bundle by running the command:
 
-``` bash
+```bash
 $ php composer.phar update sonatra/security-bundle
 ```
 
@@ -38,8 +38,7 @@ Composer will install the bundle to your project's `vendor/sonatra` directory.
 
 Enable the bundle in the kernel:
 
-``` php
-<?php
+```php
 // app/AppKernel.php
 
 public function registerBundles()
@@ -57,7 +56,6 @@ public function registerBundles()
 
 ``` php
 // src/Acme/CoreBundle/Entity/Role.php
-<?php
 
 namespace Acme\CoreBundle\Entity;
 
@@ -70,7 +68,7 @@ class Role extends BaseRole
 
 #### Create the Role mapping
 
-``` xml
+```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -104,13 +102,13 @@ class Role extends BaseRole
 You can override the default configuration adding `sonatra_security` tree in `app/config/config.yml`.
 For see the reference of Sonatra Security Configuration, execute command:
 
-``` bash
+```bash
 $ php app/console config:dump-reference SonatraSecurityBundle 
 ```
 
 If you haven't configured the ACL enable it in `app/config/security.yml`:
 
-``` yaml
+```yaml
 # app/config/security.yml
 security:
     acl:
@@ -119,7 +117,9 @@ security:
 
 Finally run the ACL init command
 
-    php app/console init:acl
+```bash
+$ php app/console init:acl
+```
 
 ### Next Steps
 
