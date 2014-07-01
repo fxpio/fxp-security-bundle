@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Sonatra package.
  *
  * (c) François Pluchino <francois.pluchino@sonatra.com>
