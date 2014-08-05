@@ -1,6 +1,9 @@
 Sonatra Security Bundle
 =======================
 
+[![Latest Stable Version](https://poser.pugx.org/sonatra/security-bundle/v/stable.svg)](https://packagist.org/packages/sonatra/security-bundle)
+[![Latest Unstable Version](https://poser.pugx.org/sonatra/security-bundle/v/unstable.svg)](https://packagist.org/packages/sonatra/security-bundle)
+
 The Sonatra SecurityBundle implements all functionnalities of 
 [Symfony2 Advanced ACL Concepts](http://symfony.com/doc/current/cookbook/security/acl_advanced.html) 
 and adds some interesting features.
