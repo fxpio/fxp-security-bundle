@@ -3,6 +3,7 @@ Sonatra Security Bundle
 
 [![Latest Stable Version](https://poser.pugx.org/sonatra/security-bundle/v/stable.svg)](https://packagist.org/packages/sonatra/security-bundle)
 [![Latest Unstable Version](https://poser.pugx.org/sonatra/security-bundle/v/unstable.svg)](https://packagist.org/packages/sonatra/security-bundle)
+[![Build Status](https://travis-ci.org/sonatra/SonatraSecurityBundle.svg)](https://travis-ci.org/sonatra/SonatraSecurityBundle)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/sonatra/SonatraSecurityBundle/badges/quality-score.png)](https://scrutinizer-ci.com/g/sonatra/SonatraSecurityBundle)
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/74707490-7a7f-4dd8-91c9-84af5de547a1/mini.png)](https://insight.sensiolabs.com/projects/74707490-7a7f-4dd8-91c9-84af5de547a1)
 
