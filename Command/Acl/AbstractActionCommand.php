@@ -11,11 +11,20 @@
 
 namespace Sonatra\Bundle\SecurityBundle\Command\Acl;
 
+use Doctrine\ORM\EntityRepository;
+use FOS\UserBundle\Model\GroupInterface;
+use Sonatra\Bundle\SecurityBundle\Exception\InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Sonatra\Bundle\SecurityBundle\Acl\Util\AclUtils;
+use Symfony\Component\Security\Acl\Domain\ObjectIdentity;
+use Symfony\Component\Security\Acl\Permission\MaskBuilder;
+use Symfony\Component\Security\Core\Role\Role;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Abstract class for action command.
@@ -38,6 +47,116 @@ abstract class AbstractActionCommand extends ContainerAwareCommand
                 new InputOption('domainid', null, InputOption::VALUE_REQUIRED, 'This domain id (only for object)'),
             ))
         ;
+    }
+
+    /**
+     * Gets the rights.
+     *
+     * @param array       $rights
+     * @param string|null $field
+     * @param bool        $all
+     *
+     * @return array
+     */
+    protected function getRights(array $rights, $field = null, $all = false)
+    {
+        if ($all && empty($rights)) {
+            $rights = array(
+                MaskBuilder::MASK_VIEW,
+                MaskBuilder::MASK_CREATE,
+                MaskBuilder::MASK_EDIT,
+                MaskBuilder::MASK_DELETE,
+                MaskBuilder::MASK_UNDELETE
+            );
+
+            if (null !== $field) {
+                $rights = array(
+                    MaskBuilder::MASK_VIEW,
+                    MaskBuilder::MASK_CREATE,
+                    MaskBuilder::MASK_EDIT
+                );
+            }
+        }
+
+        return $rights;
+    }
+
+    /**
+     * @param InputInterface $input
+     *
+     * @return Role|UserInterface|GroupInterface
+     *
+     * @throws InvalidArgumentException
+     * @throws InvalidConfigurationException
+     */
+    protected function getIdentity(InputInterface $input)
+    {
+        $doctrine = $this->getContainer()->get('doctrine');
+        $identityType = strtolower($input->getArgument('identity-type'));
+        $identity = $input->getArgument('identity-name');
+        $identityClass = $this->getClassname($this->getContainer()->getParameter('sonatra_security.'.$identityType.'_class'));
+        $em = $doctrine->getManagerForClass($identityClass);
+
+        if (null === $em) {
+            throw new InvalidConfigurationException(sprintf('The class "%s" is not supported by the doctrine manager. Change the "sonatra_security.%s_class" config', $identityClass, $identityType));
+        }
+
+        /* @var EntityRepository $identityRepo */
+        $identityRepo = $em->getRepository($identityClass);
+
+        if (!in_array($identityType, array('role', 'group', 'user'))) {
+            throw new InvalidArgumentException('The "identity-type" argument must be "role", "group" or "user"');
+
+        } elseif ('user' === $identityType) {
+            $identity = $identityRepo->findOneBy(array('username' => $identity));
+
+        } elseif ('group' === $identityType) {
+            $identity = $identityRepo->findOneBy(array('name' => $identity));
+
+        } else {
+            $identity = new Role($identity);
+        }
+
+        if (null === $identity) {
+            throw new InvalidArgumentException(sprintf('Identity instance "%s" on "%s" not found', $input->getArgument('identity-name'), $identityClass));
+        }
+
+        return $identity;
+    }
+
+    /**
+     * @param InputInterface $input
+     *
+     * @return ObjectIdentity
+     */
+    protected function getDomain(InputInterface $input)
+    {
+        $domainClass = $this->getClassname($input->getArgument('domain-class-name'));
+        $domain = new ObjectIdentity('class', $domainClass);
+        $domainId = $input->getOption('domainid');
+
+        // get the domain instance
+        if (null !== $domainId) {
+            $domain = new ObjectIdentity($domainId, $domainClass);
+        }
+
+        return $domain;
+    }
+
+    /**
+     * Gets the domain type.
+     *
+     * @param ObjectIdentity $domain
+     *
+     * @return string The domain type ('class' or 'object')
+     */
+    protected function getDomainType(ObjectIdentity $domain)
+    {
+        if ('class' !== $domain->getIdentifier()) {
+            return 'object';
+        }
+
+        return 'class';
     }
 
     /**
