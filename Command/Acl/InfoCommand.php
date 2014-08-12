@@ -12,9 +12,7 @@
 namespace Sonatra\Bundle\SecurityBundle\Command\Acl;
 
 use Doctrine\ORM\EntityRepository;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -38,30 +36,33 @@ use Sonatra\Bundle\SecurityBundle\Exception\InvalidArgumentException;
  *
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-class InfoCommand extends ContainerAwareCommand
+class InfoCommand extends AbstractActionCommand
 {
-    protected $rightsDisplayed = array('VIEW', 'CREATE', 'EDIT',
-                'DELETE', 'UNDELETE', 'OPERATOR', 'MASTER', 'OWNER');
+    protected $rightsDisplayed = array(
+        'VIEW',
+        'CREATE',
+        'EDIT',
+        'DELETE',
+        'UNDELETE',
+        'OPERATOR',
+        'MASTER',
+        'OWNER'
+    );
 
     /**
      * {@inheritdoc}
      */
     protected function configure()
     {
+        parent::configure();
+
         $this->setName('security:acl:info')
-        ->setDescription('Gets the rights for a specified class and identifier, and optionnally for a given field')
-        ->setDefinition(array(
-                new InputArgument('identity-type', InputArgument::REQUIRED, 'The security identity type (role, user, group)'),
-                new InputArgument('identity-name', InputArgument::REQUIRED, 'The security identity name to use for the right'),
-                new InputArgument('domain-class-name', InputArgument::REQUIRED, 'The domain class name to get the right for'),
-                new InputArgument('domain-field-name', InputArgument::OPTIONAL, 'The domain class field name to get the right for'),
-                new InputOption('domainid', null, InputOption::VALUE_REQUIRED, 'This domain id (only for object)'),
-                new InputOption('host', null, InputOption::VALUE_REQUIRED, 'The hostname pattern (for default anonymous role)', 'localhost'),
-                new InputOption('no-host', null, InputOption::VALUE_NONE, 'Not display the role of host'),
-                new InputOption('calc', 'c', InputOption::VALUE_NONE, 'Get the rights with granted method (calculated)')
-        ))
+        ->setDescription('Gets the rights for a specified class and identifier, and optionally for a given field')
+        ->addOption('host', null, InputOption::VALUE_REQUIRED, 'The hostname pattern (for default anonymous role)', 'localhost')
+        ->addOption('no-host', null, InputOption::VALUE_NONE, 'Not display the role of host')
+        ->addOption('calc', 'c', InputOption::VALUE_NONE, 'Get the rights with granted method (calculated)')
         ->setHelp(<<<EOF
-The <info>acl:right</info> command gets the existing rights for the
+The <info>security:acl:info</info> command gets the existing rights for the
 given security identity on a specified domain (class or object).
 EOF
         );
@@ -180,18 +181,15 @@ EOF
 
             // get fields rights
             foreach ($fields as $cField) {
-                $fieldRights[$cField] = array();
-
-                foreach ($this->rightsDisplayed as $right) {
-                    $fieldMask = $aclManipulator->$getFieldMethod($identity, $domain, $cField);
-                    $fieldRights[$cField] = AclUtils::convertToAclName($fieldMask);
-                }
+                $fieldMask = $aclManipulator->$getFieldMethod($identity, $domain, $cField);
+                $fieldRights[$cField] = AclUtils::convertToAclName($fieldMask);
             }
         }
 
         // display title
-        $out = array('',
-                $this->formatTitle($identityType, $identityName, $domainClass, $domainId, $field),
+        $out = array(
+            '',
+            $this->formatTitle($identityType, $identityName, $domainClass, $domainId, $field),
         );
 
         //display class
@@ -296,36 +294,6 @@ EOF
         }
 
         return array_merge($out, $fields);
-    }
-
-    /**
-     * Get classname from an entity name formated on the symfony way.
-     *
-     * @param string $entityName
-     *
-     * @return string The FQCN
-     */
-    protected function getClassname($entityName)
-    {
-        $entityName = str_replace('/', '\\', $entityName);
-
-        try {
-            if (false !== $pos = strpos($entityName, ':')) {
-                $bundle = substr($entityName, 0, $pos);
-                $entityName = substr($entityName, $pos + 1);
-
-                $cn = get_class($this->getContainer()->get('kernel')->getBundle($bundle));
-                $cn = substr($cn, 0, strrpos($cn, '\\'));
-
-                $entityName = $cn . '\Entity\\' . $entityName;
-            }
-
-        } catch (\Exception $ex) {
-        }
-
-        $entityName = new \ReflectionClass($entityName);
-
-        return $entityName->getName();
     }
 
     /**
