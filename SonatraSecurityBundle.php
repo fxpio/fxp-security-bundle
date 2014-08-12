@@ -36,11 +36,13 @@ class SonatraSecurityBundle extends Bundle
         $container->addCompilerPass(new AclObjectFilterPass());
 
         $ormCompilerClass = 'Doctrine\Bundle\DoctrineBundle\DependencyInjection\Compiler\DoctrineOrmMappingsPass';
+
         if (class_exists($ormCompilerClass)) {
+            $ref = new \ReflectionClass($this);
             $container->addCompilerPass(
                 DoctrineOrmMappingsPass::createXmlMappingDriver(
                     array(
-                        realpath(__DIR__.'/Resources/config/doctrine/model') => 'Sonatra\Bundle\SecurityBundle\Model',
+                        realpath(dirname($ref->getFileName()).'/Resources/config/doctrine/model') => 'Sonatra\Bundle\SecurityBundle\Model',
                     ),
                     array('fos_user.model_manager_name'),
                     'fos_user.backend_type_orm'
