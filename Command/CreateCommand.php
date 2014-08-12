@@ -116,7 +116,7 @@ abstract class CreateCommand extends ContainerAwareCommand
                 // Check the field existence here in columns
                 if ((in_array($fieldName, $realFieldNamesList))) {
                     // Field exists as column in the object
-                    $setterMethodName = "set".ucfirst($fieldName);
+                    $setterMethodName = sprintf('set%s', ucfirst($fieldName));
 
                     try {
                         $reflectionRoleClass = new \ReflectionClass($entityClass);
@@ -141,7 +141,7 @@ abstract class CreateCommand extends ContainerAwareCommand
                         }
 
                         $targetEntity = $targetEntity[0];
-                        $setterMethodName = "set".ucfirst($fieldName);
+                        $setterMethodName = sprintf('set%s', ucfirst($fieldName));
 
                         try {
                             $reflectionRoleClass = new \ReflectionClass($entityClass);

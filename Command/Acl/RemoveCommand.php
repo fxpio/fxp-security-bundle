@@ -155,9 +155,9 @@ EOF
     private function revokeRights(OutputInterface $output, $identity, $rights, $domainType, $domain)
     {
         $aclManipulator = $this->getContainer()->get('sonatra_security.acl.manipulator');
-        $revokeMethod = 'revoke'.ucfirst($domainType).'Permission';
-        $deleteMethod = 'delete'.ucfirst($domainType).'Permissions';
-        $getMethod = 'get'.ucfirst($domainType).'Permission';
+        $revokeMethod = sprintf('revoke%sPermission', ucfirst($domainType));
+        $deleteMethod = sprintf('delete%sPermissions', ucfirst($domainType));
+        $getMethod = sprintf('get%sPermission', ucfirst($domainType));
 
         if (empty($rights)) {
             $aclManipulator->$deleteMethod($identity, $domain);
@@ -185,9 +185,9 @@ EOF
     private function revokeFieldRights(OutputInterface $output, $identity, $rights, $domainType, $domain, $field)
     {
         $aclManipulator = $this->getContainer()->get('sonatra_security.acl.manipulator');
-        $revokeMethod = 'revoke'.ucfirst($domainType).'FieldPermission';
-        $deleteMethod = 'delete'.ucfirst($domainType).'FieldPermissions';
-        $getMethod = 'get'.ucfirst($domainType).'FieldPermission';
+        $revokeMethod = sprintf('revoke%sFieldPermission', ucfirst($domainType));
+        $deleteMethod = sprintf('delete%sFieldPermissions', ucfirst($domainType));
+        $getMethod = sprintf('get%sFieldPermission', ucfirst($domainType));
 
         if (empty($rights)) {
             $aclManipulator->$deleteMethod($identity, $domain, $field);
