@@ -19,13 +19,17 @@ services:
     #Rule Extension
     sonatra_security.acl.rule_extension:
         class: '%sonatra_security.acl.rule_extension.class%'
-        arguments: ['@service_container', ['@sonatra_security.acl.rule_definition'], ['@sonatra_security.acl.rule_filter_definition']]
+        arguments: [['@sonatra_security.acl.rule_definition'], ['@sonatra_security.acl.rule_filter_definition']]
+        properties:
+            container: '@service_container'
         public: false
 
     #Object Filter Extension
     sonatra_security.acl.object_filter_extension:
         class: '%sonatra_security.acl.object_filter_extension.class%'
-        arguments: ['@service_container', ['@sonatra_security.acl.rule_definition']]
+        arguments: [['@sonatra_security.acl.rule_definition']]
+        properties:
+            container: '@service_container'
         public: false
 
     #Rule Manager

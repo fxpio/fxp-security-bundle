@@ -43,7 +43,7 @@ class AclRuleDefinitionPass implements CompilerPassInterface
             $definitions[$alias] = $serviceId;
         }
 
-        $container->getDefinition('sonatra_security.acl.rule_extension')->replaceArgument(1, $definitions);
+        $container->getDefinition('sonatra_security.acl.rule_extension')->replaceArgument(0, $definitions);
 
         // Acl Rule Filter Definitions: Builds an array with service IDs as keys and tag aliases as values
         $filterDefinitions = array();
@@ -57,6 +57,6 @@ class AclRuleDefinitionPass implements CompilerPassInterface
             $filterDefinitions[$alias] = $serviceId;
         }
 
-        $container->getDefinition('sonatra_security.acl.rule_extension')->replaceArgument(2, $filterDefinitions);
+        $container->getDefinition('sonatra_security.acl.rule_extension')->replaceArgument(1, $filterDefinitions);
     }
 }

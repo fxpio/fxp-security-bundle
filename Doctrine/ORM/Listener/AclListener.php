@@ -12,8 +12,8 @@
 namespace Sonatra\Bundle\SecurityBundle\Doctrine\ORM\Listener;
 
 use Sonatra\Bundle\SecurityBundle\Acl\Model\AclManagerInterface;
+use Sonatra\Bundle\SecurityBundle\Acl\Model\AclObjectFilterInterface;
 use Sonatra\Bundle\SecurityBundle\Acl\Model\AclRuleManagerInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Security\Acl\Model\SecurityIdentityInterface;
 use Symfony\Component\Security\Acl\Permission\BasicPermissionMap;
 use Sonatra\Bundle\SecurityBundle\Core\Token\ConsoleToken;
@@ -21,6 +21,7 @@ use Sonatra\Bundle\SecurityBundle\Exception\AccessDeniedException;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\OnFlushEventArgs;
+use Symfony\Component\Security\Core\SecurityContextInterface;
 
 /**
  * This class listens to all database activity and automatically adds constraints as acls / aces.
@@ -29,17 +30,42 @@ use Doctrine\ORM\Event\OnFlushEventArgs;
  */
 class AclListener implements EventSubscriber
 {
-    /* @var ContainerInterface */
-    protected $container;
+    /**
+     * @var SecurityContextInterface
+     */
+    protected $securityContext;
 
     /**
-     * Constructor of the class, that stocks the service container in itself.
-     *
-     * @param ContainerInterface $container The service container
+     * @var AclManagerInterface
      */
-    public function __construct(ContainerInterface $container)
+    protected $aclManager;
+
+    /**
+     * @var AclRuleManagerInterface
+     */
+    protected $aclRuleManager;
+
+    /**
+     * @var AclObjectFilterInterface
+     */
+    protected $aclObjectFilter;
+
+    /**
+     * Constructor.
+     *
+     * @param SecurityContextInterface $securityContext
+     * @param AclManagerInterface      $aclManager
+     * @param AclRuleManagerInterface  $aclRuleManager
+     * @param AclObjectFilterInterface $aclObjectFilter
+     */
+    public function __construct(SecurityContextInterface $securityContext,
+        AclManagerInterface $aclManager, AclRuleManagerInterface $aclRuleManager,
+        AclObjectFilterInterface $aclObjectFilter)
     {
-        $this->container = $container;
+        $this->securityContext = $securityContext;
+        $this->aclManager = $aclManager;
+        $this->aclRuleManager = $aclRuleManager;
+        $this->aclObjectFilter = $aclObjectFilter;
     }
 
     /**
@@ -59,16 +85,15 @@ class AclListener implements EventSubscriber
      */
     public function postLoad(LifecycleEventArgs $args)
     {
-        $token = $this->container->get('security.context')->getToken();
+        $token = $this->securityContext->getToken();
 
-        if ($this->getAclManager()->isDisabled()
+        if ($this->aclManager->isDisabled()
                 || null === $token || $token instanceof ConsoleToken) {
             return;
         }
 
         $object = $args->getEntity();
-        $oFilter = $this->container->get('sonatra_security.acl.object_filter');
-        $oFilter->filter($object);
+        $this->aclObjectFilter->filter($object);
     }
 
     /**
@@ -80,45 +105,43 @@ class AclListener implements EventSubscriber
      */
     public function onFlush(OnFlushEventArgs $args)
     {
-        $sc = $this->container->get('security.context');
-        $token = $sc->getToken();
+        $token = $this->securityContext->getToken();
 
-        if ($this->getAclManager()->isDisabled()
+        if ($this->aclManager->isDisabled()
                 || null === $token || $token instanceof ConsoleToken) {
             return;
         }
 
         $em = $args->getEntityManager();
         $uow = $em->getUnitOfWork();
-        $oFilter = $this->container->get('sonatra_security.acl.object_filter');
-        $oFilter->beginTransaction();
+        $this->aclObjectFilter->beginTransaction();
 
         // check all scheduled insertions
         foreach ($uow->getScheduledEntityInsertions($uow) as $object) {
-            $oFilter->restore($object);
+            $this->aclObjectFilter->restore($object);
 
-            if (!$sc->isGranted(BasicPermissionMap::PERMISSION_CREATE, $object)) {
+            if (!$this->securityContext->isGranted(BasicPermissionMap::PERMISSION_CREATE, $object)) {
                 throw new AccessDeniedException('Insufficient privilege to create the entity');
             }
         }
 
         // check all scheduled updates
         foreach ($uow->getScheduledEntityUpdates($uow) as $object) {
-            $oFilter->restore($object);
+            $this->aclObjectFilter->restore($object);
 
-            if (!$sc->isGranted(BasicPermissionMap::PERMISSION_EDIT, $object)) {
+            if (!$this->securityContext->isGranted(BasicPermissionMap::PERMISSION_EDIT, $object)) {
                 throw new AccessDeniedException('Insufficient privilege to update the entity');
             }
         }
 
         // check all scheduled deletations
         foreach ($uow->getScheduledEntityDeletions($uow) as $object) {
-            if (!$sc->isGranted(BasicPermissionMap::PERMISSION_DELETE, $object)) {
+            if (!$this->securityContext->isGranted(BasicPermissionMap::PERMISSION_DELETE, $object)) {
                 throw new AccessDeniedException('Insufficient privilege to delete the entity');
             }
         }
 
-        $oFilter->commit();
+        $this->aclObjectFilter->commit();
     }
 
     /**
@@ -128,7 +151,7 @@ class AclListener implements EventSubscriber
      */
     public function getAclManager()
     {
-        return $this->container->get('sonatra_security.acl.manager');
+        return $this->aclManager;
     }
 
     /**
@@ -138,7 +161,7 @@ class AclListener implements EventSubscriber
      */
     public function getAclRuleManager()
     {
-        return $this->container->get('sonatra_security.acl.rule_manager');
+        return $this->aclRuleManager;
     }
 
     /**
@@ -148,8 +171,8 @@ class AclListener implements EventSubscriber
      */
     public function getSecurityIdentities()
     {
-        $token = $this->container->get('security.context')->getToken();
+        $token = $this->securityContext->getToken();
 
-        return $this->getAclManager()->getSecurityIdentities($token);
+        return $this->aclManager->getSecurityIdentities($token);
     }
 }

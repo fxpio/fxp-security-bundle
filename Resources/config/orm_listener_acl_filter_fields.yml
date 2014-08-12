@@ -5,6 +5,6 @@ services:
     sonatra_security.acl.orm.listener:
         public:    false
         class:     '%sonatra_security.acl.orm.listener.class%'
-        arguments: ['@service_container']
+        arguments: ['@security.context', '@sonatra_security.acl.manager', '@sonatra_security.acl.rule_manager', '@sonatra_security.acl.object_filter']
         tags:
             - { name: doctrine.event_subscriber, priority: 1 }

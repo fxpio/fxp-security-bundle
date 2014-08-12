@@ -24,7 +24,7 @@ class ObjectFilterExtension implements ObjectFilterExtensionInterface
     /**
      * @var ContainerInterface
      */
-    protected $container;
+    public $container;
 
     /**
      * @var array
@@ -39,12 +39,10 @@ class ObjectFilterExtension implements ObjectFilterExtensionInterface
     /**
      * Constructor.
      *
-     * @param ContainerInterface $container
-     * @param array              $voterServiceIds
+     * @param array $voterServiceIds
      */
-    public function __construct(ContainerInterface $container, array $voterServiceIds)
+    public function __construct(array $voterServiceIds)
     {
-        $this->container = $container;
         $this->voterServiceIds = $voterServiceIds;
     }
 

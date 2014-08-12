@@ -41,6 +41,6 @@ class AclObjectFilterPass implements CompilerPassInterface
         krsort($voters);
         $voters = call_user_func_array('array_merge', $voters);
 
-        $container->getDefinition('sonatra_security.acl.object_filter_extension')->replaceArgument(1, $voters);
+        $container->getDefinition('sonatra_security.acl.object_filter_extension')->replaceArgument(0, $voters);
     }
 }

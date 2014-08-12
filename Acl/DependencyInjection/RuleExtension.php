@@ -24,7 +24,7 @@ class RuleExtension implements RuleExtensionInterface
     /**
      * @var ContainerInterface
      */
-    protected $container;
+    public $container;
 
     /**
      * @var array
@@ -49,15 +49,12 @@ class RuleExtension implements RuleExtensionInterface
     /**
      * Constructor.
      *
-     * @param ContainerInterface $container
-     * @param array              $definitionServiceIds
-     * @param array              $filterDefinitionServiceIds
+     * @param array $definitionServiceIds
+     * @param array $filterDefinitionServiceIds
      */
-    public function __construct(ContainerInterface $container,
-            array $definitionServiceIds,
+    public function __construct(array $definitionServiceIds,
             array $filterDefinitionServiceIds)
     {
-        $this->container = $container;
         $this->definitionServiceIds = $definitionServiceIds;
         $this->filterDefinitionServiceIds = $filterDefinitionServiceIds;
     }
