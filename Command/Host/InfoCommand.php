@@ -73,6 +73,7 @@ class InfoCommand extends BaseInfoCommand
         }
 
         $roles = $this->sortRecords($roles, $allRoles);
+        $hostname = $this->getContainer()->get('request')->getUri();
 
         // render
         $output->writeln(array('', sprintf('Security context for <info>%s</info> host:', $hostname)));

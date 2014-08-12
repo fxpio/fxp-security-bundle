@@ -124,8 +124,11 @@ abstract class InfoCommand extends ContainerAwareCommand
             return array();
         }
 
-        $_SERVER['SERVER_NAME'] = $hostname;
-        $request = Request::createFromGlobals();
+        if (false === strpos($hostname, '://')) {
+            $hostname = 'http://' . $hostname;
+        }
+
+        $request = Request::create($hostname);
 
         /* @var Application $application */
         $application = $this->getApplication();
