@@ -9,16 +9,16 @@
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Bundle\SecurityBundle\Command\Group;
+namespace Sonatra\Bundle\SecurityBundle\Command\User;
 
-use Sonatra\Bundle\SecurityBundle\Command\DeleteCommand as BaseDeleteCommand;
+use Sonatra\Bundle\SecurityBundle\Command\AbstractDeleteCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-class DeleteCommand extends BaseDeleteCommand
+class DeleteUserCommand extends AbstractDeleteCommand
 {
     /**
      * {@inheritdoc}
@@ -27,8 +27,8 @@ class DeleteCommand extends BaseDeleteCommand
     {
         parent::configure();
 
-        $this->setName('security:group:delete')
-            ->setDescription('Delete a group');
+        $this->setName('security:user:delete')
+            ->setDescription('Delete a user');
     }
 
     /**
@@ -36,9 +36,9 @@ class DeleteCommand extends BaseDeleteCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $entityClass = $this->getContainer()->getParameter('sonatra_security.group_class');
+        $entityClass = $this->getContainer()->getParameter('sonatra_security.user_class');
         $entityName = $input->getArgument('name');
-        $filter = array('name' => $entityName);
+        $filter = array('username' => $entityName);
 
         $this->doExecute($output, $entityClass, $entityName, $filter);
     }

@@ -25,7 +25,7 @@ use Symfony\Component\Validator\ConstraintViolationListInterface;
 /**
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-abstract class CreateCommand extends ContainerAwareCommand
+abstract class AbstractCreateCommand extends ContainerAwareCommand
 {
     /**
      * {@inheritdoc}

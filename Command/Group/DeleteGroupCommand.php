@@ -9,16 +9,16 @@
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Bundle\SecurityBundle\Command\Role;
+namespace Sonatra\Bundle\SecurityBundle\Command\Group;
 
-use Sonatra\Bundle\SecurityBundle\Command\CreateCommand as BaseCreateCommand;
+use Sonatra\Bundle\SecurityBundle\Command\AbstractDeleteCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-class CreateCommand extends BaseCreateCommand
+class DeleteGroupCommand extends AbstractDeleteCommand
 {
     /**
      * {@inheritdoc}
@@ -27,8 +27,8 @@ class CreateCommand extends BaseCreateCommand
     {
         parent::configure();
 
-        $this->setName('security:role:create')
-            ->setDescription('Create a role');
+        $this->setName('security:group:delete')
+            ->setDescription('Delete a group');
     }
 
     /**
@@ -36,10 +36,10 @@ class CreateCommand extends BaseCreateCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $entityClass = $this->getContainer()->getParameter('sonatra_security.role_class');
+        $entityClass = $this->getContainer()->getParameter('sonatra_security.group_class');
         $entityName = $input->getArgument('name');
-        $fields = $input->getOption('field');
+        $filter = array('name' => $entityName);
 
-        $this->doExecute($output, $entityClass, $entityName, $fields);
+        $this->doExecute($output, $entityClass, $entityName, $filter);
     }
 }

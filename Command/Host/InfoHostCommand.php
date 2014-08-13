@@ -11,7 +11,7 @@
 
 namespace Sonatra\Bundle\SecurityBundle\Command\Host;
 
-use Sonatra\Bundle\SecurityBundle\Command\InfoCommand as BaseInfoCommand;
+use Sonatra\Bundle\SecurityBundle\Command\AbstractInfoCommand;
 use Sonatra\Bundle\SecurityBundle\Core\Token\ConsoleToken;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
@@ -22,7 +22,7 @@ use Symfony\Component\Security\Core\Role\RoleInterface;
 /**
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-class InfoCommand extends BaseInfoCommand
+class InfoHostCommand extends AbstractInfoCommand
 {
     /**
      * {@inheritdoc}

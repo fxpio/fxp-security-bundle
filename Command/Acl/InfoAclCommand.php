@@ -18,6 +18,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Security\Acl\Domain\ObjectIdentity;
 use Symfony\Component\Security\Acl\Voter\FieldVote;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\Role\RoleInterface;
@@ -36,7 +37,7 @@ use Sonatra\Bundle\SecurityBundle\Exception\InvalidArgumentException;
  *
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-class InfoCommand extends AbstractActionCommand
+class InfoAclCommand extends AbstractAclActionCommand
 {
     protected $rightsDisplayed = array(
         'VIEW',
@@ -325,6 +326,7 @@ EOF
         $this->getContainer()->get('security.firewall')->onKernelRequest($event);
 
         $roles = array();
+        /* @var TokenInterface|null $token */
         $token = $this->getContainer()->get('security.context')->getToken();
 
         if (null !== $token) {

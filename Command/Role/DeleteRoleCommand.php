@@ -11,14 +11,14 @@
 
 namespace Sonatra\Bundle\SecurityBundle\Command\Role;
 
-use Sonatra\Bundle\SecurityBundle\Command\DeleteCommand as BaseDeleteCommand;
+use Sonatra\Bundle\SecurityBundle\Command\AbstractDeleteCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-class DeleteCommand extends BaseDeleteCommand
+class DeleteRoleCommand extends AbstractDeleteCommand
 {
     /**
      * {@inheritdoc}

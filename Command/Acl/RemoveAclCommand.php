@@ -20,7 +20,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-class RemoveCommand extends AbstractActionCommand
+class RemoveAclCommand extends AbstractAclActionCommand
 {
     /**
      * {@inheritdoc}

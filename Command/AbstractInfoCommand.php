@@ -26,7 +26,7 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 /**
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-abstract class InfoCommand extends ContainerAwareCommand
+abstract class AbstractInfoCommand extends ContainerAwareCommand
 {
     /**
      * {@inheritdoc}

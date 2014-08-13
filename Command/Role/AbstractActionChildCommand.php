@@ -26,19 +26,19 @@ use Symfony\Component\Validator\ConstraintViolationInterface;
 /**
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-class AddParentCommand extends ContainerAwareCommand
+abstract class AbstractActionChildCommand extends ContainerAwareCommand
 {
     /**
      * {@inheritdoc}
      */
     protected function configure()
     {
-        $this->setName('security:role:parent:add')
-        ->setDescription('Add parent role')
-        ->setDefinition(array(
+        $this
+            ->setDefinition(array(
                 new InputArgument('role', InputArgument::OPTIONAL, 'The role'),
-                new InputArgument('parent', InputArgument::OPTIONAL, 'The parent role'),
-         ));
+                new InputArgument('child', InputArgument::OPTIONAL, 'The role child'),
+            ))
+        ;
     }
 
     /**
@@ -49,7 +49,7 @@ class AddParentCommand extends ContainerAwareCommand
         // find role
         $roleClass = str_replace('/', '\\', $this->getContainer()->getParameter('sonatra_security.role_class'));
         $roleName = $input->getArgument('role');
-        $parentName = $input->getArgument('parent');
+        $childName = $input->getArgument('child');
         $em = $this->getContainer()->get('doctrine')->getManagerForClass($roleClass);
 
         if (null === $em) {
@@ -59,15 +59,15 @@ class AddParentCommand extends ContainerAwareCommand
         /* @var EntityRepository $repo */
         $repo = $em->getRepository($roleClass);
         $role = $repo->findOneBy(array('name' => $roleName));
-        /* @var RoleHierarchisableInterface $parent */
-        $parent = $repo->findOneBy(array('name' => $parentName));
+        /* @var RoleHierarchisableInterface $child */
+        $child = $repo->findOneBy(array('name' => $childName));
 
         if (null === $role) {
             throw new InvalidArgumentException(sprintf('The role "%s" does not exist', $roleName));
         }
 
-        if (null === $parent) {
-            throw new InvalidArgumentException(sprintf('The parent "%s" does not exist', $parentName));
+        if (null === $child) {
+            throw new InvalidArgumentException(sprintf('The child "%s" does not exist', $childName));
         }
 
         if (!($role instanceof RoleHierarchisableInterface)) {
@@ -76,13 +76,9 @@ class AddParentCommand extends ContainerAwareCommand
             throw new RuntimeException(sprintf('The role "%s" must have a "%s" interface', $roleName, $hierarchyInterface));
         }
 
-        if ($role->hasParent($parentName)) {
-            $output->writeln(sprintf('Role "%s" did already have "%s" parent role.', $roleName, $parentName));
-
+        if (!$this->doExecute($output, $role, $child)) {
             return;
         }
-
-        $role->addParent($parent);
 
         $errorList = $this->getContainer()->get('validator')->validate($role);
 
@@ -100,8 +96,26 @@ class AddParentCommand extends ContainerAwareCommand
         $em->persist($role);
         $em->flush();
 
-        $output->writeln(sprintf('Parent role "%s" has been added to role "%s".', $parentName, $roleName));
+        $output->writeln(sprintf($this->getFinishMessage(), $childName, $roleName));
     }
+
+    /**
+     * Do execute.
+     *
+     * @param OutputInterface             $output
+     * @param RoleHierarchisableInterface $role
+     * @param RoleHierarchisableInterface $child
+     *
+     * @return bool
+     */
+    abstract protected function doExecute(OutputInterface $output, RoleHierarchisableInterface $role, RoleHierarchisableInterface$child);
+
+    /**
+     * Gets the finish message.
+     *
+     * @return string
+     */
+    abstract protected function getFinishMessage();
 
     /**
      * {@inheritdoc}
@@ -110,34 +124,34 @@ class AddParentCommand extends ContainerAwareCommand
     {
         if (!$input->getArgument('role')) {
             $role = $this->getHelper('dialog')->askAndValidate(
-                    $output,
-                    'Please choose a role:',
-                    function ($role) {
-                        if (empty($role)) {
-                            throw new LogicException('Role can not be empty');
-                        }
-
-                        return $role;
+                $output,
+                'Please choose a role:',
+                function ($role) {
+                    if (empty($role)) {
+                        throw new LogicException('Role can not be empty');
                     }
+
+                    return $role;
+                }
             );
 
             $input->setArgument('role', $role);
         }
 
-        if (!$input->getArgument('parent')) {
-            $parent = $this->getHelper('dialog')->askAndValidate(
-                    $output,
-                    'Please choose a parent:',
-                    function ($parent) {
-                        if (empty($parent)) {
-                            throw new LogicException('Parent role can not be empty');
-                        }
-
-                        return $parent;
+        if (!$input->getArgument('child')) {
+            $child = $this->getHelper('dialog')->askAndValidate(
+                $output,
+                'Please choose a child:',
+                function ($child) {
+                    if (empty($child)) {
+                        throw new LogicException('Child role can not be empty');
                     }
+
+                    return $child;
+                }
             );
 
-            $input->setArgument('parent', $parent);
+            $input->setArgument('child', $child);
         }
     }
 }

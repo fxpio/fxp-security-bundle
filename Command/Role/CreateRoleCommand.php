@@ -9,16 +9,16 @@
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Bundle\SecurityBundle\Command\Group;
+namespace Sonatra\Bundle\SecurityBundle\Command\Role;
 
-use Sonatra\Bundle\SecurityBundle\Command\CreateCommand as BaseCreateCommand;
+use Sonatra\Bundle\SecurityBundle\Command\AbstractCreateCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-class CreateCommand extends BaseCreateCommand
+class CreateRoleCommand extends AbstractCreateCommand
 {
     /**
      * {@inheritdoc}
@@ -27,8 +27,8 @@ class CreateCommand extends BaseCreateCommand
     {
         parent::configure();
 
-        $this->setName('security:group:create')
-            ->setDescription('Create a group');
+        $this->setName('security:role:create')
+            ->setDescription('Create a role');
     }
 
     /**
@@ -36,7 +36,7 @@ class CreateCommand extends BaseCreateCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $entityClass = $this->getContainer()->getParameter('sonatra_security.group_class');
+        $entityClass = $this->getContainer()->getParameter('sonatra_security.role_class');
         $entityName = $input->getArgument('name');
         $fields = $input->getOption('field');
 

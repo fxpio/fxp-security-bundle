@@ -11,12 +11,12 @@
 
 namespace Sonatra\Bundle\SecurityBundle\Command\User;
 
-use FOS\UserBundle\Command\PromoteUserCommand;
+use FOS\UserBundle\Command\DemoteUserCommand as BaseDemoteUserCommand;
 
 /**
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-class PromoteCommand extends PromoteUserCommand
+class DemoteUserCommand extends BaseDemoteUserCommand
 {
     /**
      * {@inheritdoc}
@@ -25,7 +25,7 @@ class PromoteCommand extends PromoteUserCommand
     {
         parent::configure();
 
-        $this->setName('security:user:promote')
-            ->setDescription($this->getDescription().' <comment>(fos:user:promote alias)</comment>');
+        $this->setName('security:user:demote')
+            ->setDescription($this->getDescription().' <comment>(fos:user:demote alias)</comment>');
     }
 }

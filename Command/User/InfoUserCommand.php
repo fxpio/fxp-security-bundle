@@ -12,7 +12,7 @@
 namespace Sonatra\Bundle\SecurityBundle\Command\User;
 
 use Doctrine\ORM\EntityRepository;
-use Sonatra\Bundle\SecurityBundle\Command\InfoCommand as BaseInfoCommand;
+use Sonatra\Bundle\SecurityBundle\Command\AbstractInfoCommand;
 use Sonatra\Bundle\SecurityBundle\Core\Token\ConsoleToken;
 use Sonatra\Bundle\SecurityBundle\Exception\InvalidArgumentException;
 use Symfony\Component\Console\Input\InputInterface;
@@ -24,7 +24,7 @@ use FOS\UserBundle\Model\GroupInterface;
 /**
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-class InfoCommand extends BaseInfoCommand
+class InfoUserCommand extends AbstractInfoCommand
 {
     /**
      * {@inheritdoc}

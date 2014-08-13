@@ -11,12 +11,12 @@
 
 namespace Sonatra\Bundle\SecurityBundle\Command\User;
 
-use FOS\UserBundle\Command\CreateUserCommand;
+use FOS\UserBundle\Command\PromoteUserCommand as BasePromoteUserCommand;
 
 /**
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-class CreateCommand extends CreateUserCommand
+class PromoteUserCommand extends BasePromoteUserCommand
 {
     /**
      * {@inheritdoc}
@@ -25,7 +25,7 @@ class CreateCommand extends CreateUserCommand
     {
         parent::configure();
 
-        $this->setName('security:user:create')
-            ->setDescription($this->getDescription().' <comment>(fos:user:create alias)</comment>');
+        $this->setName('security:user:promote')
+            ->setDescription($this->getDescription().' <comment>(fos:user:promote alias)</comment>');
     }
 }

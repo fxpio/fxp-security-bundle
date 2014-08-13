@@ -16,6 +16,7 @@ use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Sonatra\Bundle\SecurityBundle\Exception\InvalidArgumentException;
 use Sonatra\Bundle\SecurityBundle\Exception\LogicException;
 use Sonatra\Bundle\SecurityBundle\Exception\RuntimeException;
@@ -25,19 +26,19 @@ use Symfony\Component\Validator\ConstraintViolationInterface;
 /**
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-class RemoveParentCommand extends ContainerAwareCommand
+abstract class AbstractActionParentCommand extends ContainerAwareCommand
 {
     /**
      * {@inheritdoc}
      */
     protected function configure()
     {
-        $this->setName('security:role:parent:remove')
-        ->setDescription('Remove parent role')
-        ->setDefinition(array(
+        $this
+            ->setDefinition(array(
                 new InputArgument('role', InputArgument::OPTIONAL, 'The role'),
-                new InputArgument('parent', InputArgument::OPTIONAL, 'The parent role'),
-         ));
+                new InputArgument('parent', InputArgument::OPTIONAL, 'The role parent'),
+            ))
+        ;
     }
 
     /**
@@ -50,6 +51,11 @@ class RemoveParentCommand extends ContainerAwareCommand
         $roleName = $input->getArgument('role');
         $parentName = $input->getArgument('parent');
         $em = $this->getContainer()->get('doctrine')->getManagerForClass($roleClass);
+
+        if (null === $em) {
+            throw new InvalidConfigurationException(sprintf('The class "%s" is not supported by the doctrine manager. Change the "sonatra_security.role_class" config', $roleClass));
+        }
+
         /* @var EntityRepository $repo */
         $repo = $em->getRepository($roleClass);
         $role = $repo->findOneBy(array('name' => $roleName));
@@ -70,13 +76,9 @@ class RemoveParentCommand extends ContainerAwareCommand
             throw new RuntimeException(sprintf('The role "%s" must have a "%s" interface', $roleName, $hierarchyInterface));
         }
 
-        if (!$role->hasParent($parentName)) {
-            $output->writeln(sprintf('Role "%s" didn\'t have "%s" parent.', $roleName, $parentName));
-
+        if (!$this->doExecute($output, $role, $parent)) {
             return;
         }
-
-        $role->removeParent($parent);
 
         $errorList = $this->getContainer()->get('validator')->validate($role);
 
@@ -94,8 +96,26 @@ class RemoveParentCommand extends ContainerAwareCommand
         $em->persist($role);
         $em->flush();
 
-        $output->writeln(sprintf('Parent role "%s" has been removed from role "%s".', $parentName, $roleName));
+        $output->writeln(sprintf('Parent role "%s" has been added to role "%s".', $parentName, $roleName));
     }
+
+    /**
+     * Do execute.
+     *
+     * @param OutputInterface             $output
+     * @param RoleHierarchisableInterface $role
+     * @param RoleHierarchisableInterface $parent
+     *
+     * @return bool
+     */
+    abstract protected function doExecute(OutputInterface $output, RoleHierarchisableInterface $role, RoleHierarchisableInterface $parent);
+
+    /**
+     * Gets the finish message.
+     *
+     * @return string
+     */
+    abstract protected function getFinishMessage();
 
     /**
      * {@inheritdoc}
@@ -104,15 +124,15 @@ class RemoveParentCommand extends ContainerAwareCommand
     {
         if (!$input->getArgument('role')) {
             $role = $this->getHelper('dialog')->askAndValidate(
-                    $output,
-                    'Please choose a role:',
-                    function ($role) {
-                        if (empty($role)) {
-                            throw new LogicException('Role can not be empty');
-                        }
-
-                        return $role;
+                $output,
+                'Please choose a role:',
+                function ($role) {
+                    if (empty($role)) {
+                        throw new LogicException('Role can not be empty');
                     }
+
+                    return $role;
+                }
             );
 
             $input->setArgument('role', $role);
@@ -120,15 +140,15 @@ class RemoveParentCommand extends ContainerAwareCommand
 
         if (!$input->getArgument('parent')) {
             $parent = $this->getHelper('dialog')->askAndValidate(
-                    $output,
-                    'Please choose a parent:',
-                    function ($parent) {
-                        if (empty($parent)) {
-                            throw new LogicException('Parent role can not be empty');
-                        }
-
-                        return $parent;
+                $output,
+                'Please choose a parent:',
+                function ($parent) {
+                    if (empty($parent)) {
+                        throw new LogicException('Parent role can not be empty');
                     }
+
+                    return $parent;
+                }
             );
 
             $input->setArgument('parent', $parent);

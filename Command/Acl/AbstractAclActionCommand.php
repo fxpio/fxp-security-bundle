@@ -31,7 +31,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  *
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-abstract class AbstractActionCommand extends ContainerAwareCommand
+abstract class AbstractAclActionCommand extends ContainerAwareCommand
 {
     /**
      * {@inheritdoc}

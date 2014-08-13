@@ -23,7 +23,7 @@ use Sonatra\Bundle\SecurityBundle\Exception\LogicException;
 /**
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-abstract class DeleteCommand extends ContainerAwareCommand
+abstract class AbstractDeleteCommand extends ContainerAwareCommand
 {
     /**
      * {@inheritdoc}

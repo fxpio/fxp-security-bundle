@@ -12,6 +12,8 @@
 namespace Sonatra\Bundle\SecurityBundle\Command\User;
 
 use Doctrine\ORM\EntityRepository;
+use FOS\UserBundle\Model\GroupableInterface;
+use FOS\UserBundle\Model\GroupInterface;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -19,24 +21,25 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Sonatra\Bundle\SecurityBundle\Exception\InvalidArgumentException;
 use Sonatra\Bundle\SecurityBundle\Exception\LogicException;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\ConstraintViolationInterface;
 
 /**
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-class DegroupingCommand extends ContainerAwareCommand
+abstract class AbstractGroupUserCommand extends ContainerAwareCommand
 {
     /**
      * {@inheritdoc}
      */
     protected function configure()
     {
-        $this->setName('security:user:degrouping')
-        ->setDescription('Remove a group in user')
-        ->setDefinition(array(
+        $this
+            ->setDefinition(array(
                 new InputArgument('username', InputArgument::OPTIONAL, 'The username'),
                 new InputArgument('group', InputArgument::OPTIONAL, 'The group'),
-         ));
+            ))
+        ;
     }
 
     /**
@@ -55,6 +58,7 @@ class DegroupingCommand extends ContainerAwareCommand
 
         /* @var EntityRepository $repoUser */
         $repoUser = $emUser->getRepository($userClass);
+        /* @var GroupableInterface $user */
         $user = $repoUser->findOneBy(array('username' => $userName));
 
         if (null === $user) {
@@ -67,19 +71,16 @@ class DegroupingCommand extends ContainerAwareCommand
         $emGroup = $this->getContainer()->get('doctrine')->getManagerForClass($groupClass);
         /* @var EntityRepository $repoGroup */
         $repoGroup = $emGroup->getRepository($groupClass);
+        /* @var GroupInterface $group */
         $group = $repoGroup->findOneBy(array('name' => $groupName));
 
         if (null === $group) {
             throw new InvalidArgumentException(sprintf('The group "%s" does not exist', $groupName));
         }
 
-        if (!$user->hasGroup($groupName)) {
-            $output->writeln(sprintf('User "%s" didn\'t have "%s" group.', $userName, $groupName));
-
+        if (!$this->doExecute($output, $user, $group)) {
             return;
         }
-
-        $user->removeGroup($group);
 
         $errorList = $this->getContainer()->get('validator')->validate($user);
 
@@ -97,8 +98,26 @@ class DegroupingCommand extends ContainerAwareCommand
         $emUser->persist($user);
         $emUser->flush();
 
-        $output->writeln(sprintf('Group "%s" has been removed from user "%s".', $groupName, $userName));
+        $output->writeln(sprintf($this->getFinishMessage(), $groupName, $userName));
     }
+
+    /**
+     * Do execute.
+     *
+     * @param OutputInterface                  $output
+     * @param UserInterface|GroupableInterface $user
+     * @param GroupInterface                   $group
+     *
+     * @return bool
+     */
+    abstract protected function doExecute(OutputInterface $output, $user, GroupInterface $group);
+
+    /**
+     * Gets the finish message.
+     *
+     * @return string
+     */
+    abstract protected function getFinishMessage();
 
     /**
      * {@inheritdoc}
@@ -107,15 +126,15 @@ class DegroupingCommand extends ContainerAwareCommand
     {
         if (!$input->getArgument('username')) {
             $username = $this->getHelper('dialog')->askAndValidate(
-                    $output,
-                    'Please choose a username:',
-                    function ($username) {
-                        if (empty($username)) {
-                            throw new LogicException('Username can not be empty');
-                        }
-
-                        return $username;
+                $output,
+                'Please choose a username:',
+                function ($username) {
+                    if (empty($username)) {
+                        throw new LogicException('Username can not be empty');
                     }
+
+                    return $username;
+                }
             );
 
             $input->setArgument('username', $username);
@@ -123,15 +142,15 @@ class DegroupingCommand extends ContainerAwareCommand
 
         if (!$input->getArgument('group')) {
             $group = $this->getHelper('dialog')->askAndValidate(
-                    $output,
-                    'Please choose a group:',
-                    function ($group) {
-                        if (empty($group)) {
-                            throw new LogicException('Group can not be empty');
-                        }
-
-                        return $group;
+                $output,
+                'Please choose a group:',
+                function ($group) {
+                    if (empty($group)) {
+                        throw new LogicException('Group can not be empty');
                     }
+
+                    return $group;
+                }
             );
 
             $input->setArgument('group', $group);

@@ -20,7 +20,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-class AddCommand extends AbstractActionCommand
+class AddAclCommand extends AbstractAclActionCommand
 {
     /**
      * {@inheritdoc}

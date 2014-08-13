@@ -11,12 +11,12 @@
 
 namespace Sonatra\Bundle\SecurityBundle\Command\User;
 
-use FOS\UserBundle\Command\DemoteUserCommand;
+use FOS\UserBundle\Command\CreateUserCommand as BaseCreateUserCommand;
 
 /**
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-class DemoteCommand extends DemoteUserCommand
+class CreateUserCommand extends BaseCreateUserCommand
 {
     /**
      * {@inheritdoc}
@@ -25,7 +25,7 @@ class DemoteCommand extends DemoteUserCommand
     {
         parent::configure();
 
-        $this->setName('security:user:demote')
-            ->setDescription($this->getDescription().' <comment>(fos:user:demote alias)</comment>');
+        $this->setName('security:user:create')
+            ->setDescription($this->getDescription().' <comment>(fos:user:create alias)</comment>');
     }
 }

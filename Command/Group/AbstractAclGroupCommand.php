@@ -12,6 +12,7 @@
 namespace Sonatra\Bundle\SecurityBundle\Command\Group;
 
 use Doctrine\ORM\EntityRepository;
+use FOS\UserBundle\Model\GroupInterface;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -24,19 +25,19 @@ use Symfony\Component\Validator\ConstraintViolationInterface;
 /**
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-class DemoteCommand extends ContainerAwareCommand
+abstract class AbstractAclGroupCommand extends ContainerAwareCommand
 {
     /**
      * {@inheritdoc}
      */
     protected function configure()
     {
-        $this->setName('security:group:demote')
-        ->setDescription('Demote a group by removing a role')
-        ->setDefinition(array(
+        $this
+            ->setDefinition(array(
                 new InputArgument('group', InputArgument::OPTIONAL, 'The group'),
                 new InputArgument('role', InputArgument::OPTIONAL, 'The role'),
-         ));
+            ))
+        ;
     }
 
     /**
@@ -56,19 +57,16 @@ class DemoteCommand extends ContainerAwareCommand
 
         /* @var EntityRepository $repo */
         $repo = $em->getRepository($groupClass);
+        /* @var GroupInterface $group */
         $group = $repo->findOneBy(array('name' => $groupName));
 
         if (null === $group) {
             throw new InvalidArgumentException(sprintf('The group "%s" does not exist', $groupName));
         }
 
-        if (!$group->hasRole($roleName)) {
-            $output->writeln(sprintf('Group "%s" didn\'t have "%s" role.', $groupName, $roleName));
-
+        if (!$this->doExecute($output, $group, $roleName)) {
             return;
         }
-
-        $group->removeRole($roleName);
 
         $errorList = $this->getContainer()->get('validator')->validate($group);
 
@@ -86,8 +84,26 @@ class DemoteCommand extends ContainerAwareCommand
         $em->persist($group);
         $em->flush();
 
-        $output->writeln(sprintf('Role "%s" has been removed from group "%s".', $roleName, $groupName));
+        $output->writeln(sprintf($this->getFinishMessage(), $roleName, $groupName));
     }
+
+    /**
+     * Do execute.
+     *
+     * @param OutputInterface $output
+     * @param GroupInterface  $group
+     * @param string          $roleName
+     *
+     * @return bool
+     */
+    abstract protected function doExecute(OutputInterface $output, GroupInterface $group, $roleName);
+
+    /**
+     * Gets the finish message.
+     *
+     * @return string
+     */
+    abstract protected function getFinishMessage();
 
     /**
      * {@inheritdoc}
@@ -96,15 +112,15 @@ class DemoteCommand extends ContainerAwareCommand
     {
         if (!$input->getArgument('group')) {
             $group = $this->getHelper('dialog')->askAndValidate(
-                    $output,
-                    'Please choose a group:',
-                    function ($group) {
-                        if (empty($group)) {
-                            throw new LogicException('Group can not be empty');
-                        }
-
-                        return $group;
+                $output,
+                'Please choose a group:',
+                function ($group) {
+                    if (empty($group)) {
+                        throw new LogicException('Group can not be empty');
                     }
+
+                    return $group;
+                }
             );
 
             $input->setArgument('group', $group);
@@ -112,15 +128,15 @@ class DemoteCommand extends ContainerAwareCommand
 
         if (!$input->getArgument('role')) {
             $role = $this->getHelper('dialog')->askAndValidate(
-                    $output,
-                    'Please choose a role:',
-                    function ($role) {
-                        if (empty($role)) {
-                            throw new LogicException('Role can not be empty');
-                        }
-
-                        return $role;
+                $output,
+                'Please choose a role:',
+                function ($role) {
+                    if (empty($role)) {
+                        throw new LogicException('Role can not be empty');
                     }
+
+                    return $role;
+                }
             );
 
             $input->setArgument('role', $role);
