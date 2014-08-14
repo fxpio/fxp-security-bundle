@@ -196,13 +196,13 @@ abstract class AbstractAclActionCommand extends ContainerAwareCommand
      * @param mixed           $identity   The identifier instance
      * @param array           $rights     The list of right
      * @param string          $domainType The domain type (class or object)
-     * @param string|object   $domain     The classname or object instance
+     * @param ObjectIdentity  $domain     The domain
      * @param string|null     $field      The field name
      * @param integer         $index      The ACE index
      * @param boolean         $granting   The ACE granting
      * @param string          $strategy   The ACE granting strategy
      */
-    protected function addRights(OutputInterface $output, $identity, $rights, $domainType, $domain, $field, $index, $granting, $strategy)
+    protected function addRights(OutputInterface $output, $identity, $rights, $domainType,ObjectIdentity $domain, $field, $index, $granting, $strategy)
     {
         $aclManipulator = $this->getContainer()->get('sonatra_security.acl.manipulator');
         $fieldMethodName = null !== $field ? 'Field' : '';
@@ -230,10 +230,10 @@ abstract class AbstractAclActionCommand extends ContainerAwareCommand
      * @param mixed           $identity   The identifier instance
      * @param array           $rights     The list of right
      * @param string          $domainType The domain type (class or object)
-     * @param string|object   $domain     The classname or object instance
+     * @param ObjectIdentity  $domain     The domain
      * @param string|null     $field      The field name
      */
-    protected function revokeRights(OutputInterface $output, $identity, $rights, $domainType, $domain, $field)
+    protected function revokeRights(OutputInterface $output, $identity, $rights, $domainType, ObjectIdentity $domain, $field)
     {
         $aclManipulator = $this->getContainer()->get('sonatra_security.acl.manipulator');
         $fieldMethodName = null !== $field ? 'Field' : '';

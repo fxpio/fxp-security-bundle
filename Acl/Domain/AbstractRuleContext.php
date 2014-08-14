@@ -56,7 +56,7 @@ abstract class AbstractRuleContext implements RuleContextInterface
     /**
      * Constructor.
      *
-     * @param array $sids
+     * @param SecurityIdentityInterface[] $sids
      */
     public function __construct(array $sids)
     {
