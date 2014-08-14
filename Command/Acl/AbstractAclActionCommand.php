@@ -196,7 +196,7 @@ abstract class AbstractAclActionCommand extends ContainerAwareCommand
      * @param mixed           $identity   The identifier instance
      * @param array           $rights     The list of right
      * @param string          $domainType The domain type (class or object)
-     * @param mixed           $domain     The classname or object instance
+     * @param string|object   $domain     The classname or object instance
      * @param string|null     $field      The field name
      * @param integer         $index      The ACE index
      * @param boolean         $granting   The ACE granting
@@ -230,7 +230,7 @@ abstract class AbstractAclActionCommand extends ContainerAwareCommand
      * @param mixed           $identity   The identifier instance
      * @param array           $rights     The list of right
      * @param string          $domainType The domain type (class or object)
-     * @param mixed           $domain     The classname or object instance
+     * @param string|object   $domain     The classname or object instance
      * @param string|null     $field      The field name
      */
     protected function revokeRights(OutputInterface $output, $identity, $rights, $domainType, $domain, $field)

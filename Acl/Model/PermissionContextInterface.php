@@ -166,7 +166,7 @@ interface PermissionContextInterface
      *
      * @param AuditableEntryInterface $ace
      *
-     * @boolean
+     * @return boolean
      */
     public function hasDifferentPermission(AuditableEntryInterface $ace);
 }

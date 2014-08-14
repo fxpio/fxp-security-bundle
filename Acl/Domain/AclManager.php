@@ -426,8 +426,8 @@ class AclManager implements AclManagerInterface
      * Get the all masks for allow the access on greater permissions define by
      * the Symfony2 ACL Advanced Pre-Authorization Decisions Documentation.
      *
-     * @param array  $masks  The masks
-     * @param object $object The object
+     * @param array                   $masks  The masks
+     * @param ObjectIdentityInterface $object The object
      *
      * @return array The all masks to find the access
      */

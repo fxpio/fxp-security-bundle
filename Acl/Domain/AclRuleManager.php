@@ -323,7 +323,7 @@ class AclRuleManager implements AclRuleManagerInterface
      *
      * @param string $type
      *
-     * @return array
+     * @return string[]
      */
     protected function getParentRules($type)
     {

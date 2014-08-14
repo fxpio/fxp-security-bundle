@@ -13,6 +13,7 @@ namespace Sonatra\Bundle\SecurityBundle\Acl\Domain;
 
 use Sonatra\Bundle\SecurityBundle\Acl\Model\RuleContextDefinitionInterface;
 use Symfony\Component\Security\Acl\Model\ObjectIdentityInterface;
+use Symfony\Component\Security\Acl\Model\SecurityIdentityInterface;
 
 /**
  * Class for Acl Rule Context Definition.
@@ -39,10 +40,10 @@ class RuleContextDefinition extends AbstractRuleContext implements RuleContextDe
     /**
      * Constructor.
      *
-     * @param array                   $sids
-     * @param ObjectIdentityInterface $oid
-     * @param array                   $masks
-     * @param string                  $field
+     * @param SecurityIdentityInterface[] $sids
+     * @param ObjectIdentityInterface     $oid
+     * @param array                       $masks
+     * @param string                      $field
      */
     public function __construct(array $sids, ObjectIdentityInterface $oid, array $masks, $field = null)
     {

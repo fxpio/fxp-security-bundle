@@ -17,8 +17,6 @@ use Symfony\Component\Security\Acl\Model\ObjectIdentityInterface;
 use Symfony\Component\Security\Acl\Model\SecurityIdentityInterface;
 use Symfony\Component\Security\Acl\Voter\FieldVote;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use Symfony\Component\Security\Core\Role\RoleInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Acl Manager Interface.
@@ -106,9 +104,9 @@ interface AclManagerInterface
     /**
      * Determines whether access is granted.
      *
-     * @param RoleInterface[]|UserInterface[]|TokenInterface[]|string[]|SecurityIdentityInterface[] $sids
-     * @param DomainObjectInterface|object|string                                                   $domainObject
-     * @param int|string|array                                                                      $mask
+     * @param SecurityIdentityInterface[]|\Symfony\Component\Security\Core\Role\RoleInterface[]|\Symfony\Component\Security\Core\User\UserInterface[]|TokenInterface[]|string[] $sids
+     * @param DomainObjectInterface|object|string                                                                                                                               $domainObject
+     * @param int|string|array                                                                                                                                                  $mask
      *
      * @return boolean
      */
@@ -118,10 +116,10 @@ interface AclManagerInterface
      * Determines whether field access is granted. Alias of isGranted with
      * FieldVote class for Domain Object.
      *
-     * @param RoleInterface[]|UserInterface[]|TokenInterface[]|string[]|SecurityIdentityInterface[] $sids
-     * @param DomainObjectInterface|object|string                                                   $domainObject
-     * @param string                                                                                $field
-     * @param int|string|array                                                                      $mask
+     * @param SecurityIdentityInterface[]|\Symfony\Component\Security\Core\Role\RoleInterface[]|\Symfony\Component\Security\Core\User\UserInterface[]|TokenInterface[]|string[] $sids
+     * @param DomainObjectInterface|object|string                                                                                                                               $domainObject
+     * @param string                                                                                                                                                            $field
+     * @param int|string|array                                                                                                                                                  $mask
      *
      * @return boolean
      */

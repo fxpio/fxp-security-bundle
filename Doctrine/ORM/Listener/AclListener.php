@@ -59,7 +59,7 @@ class AclListener implements EventSubscriber
     /**
      * Specifies the list of listened events
      *
-     * @return array
+     * @return string[]
      */
     public function getSubscribedEvents()
     {

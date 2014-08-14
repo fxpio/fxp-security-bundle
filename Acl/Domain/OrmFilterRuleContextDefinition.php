@@ -13,6 +13,7 @@ namespace Sonatra\Bundle\SecurityBundle\Acl\Domain;
 
 use Sonatra\Bundle\SecurityBundle\Acl\Model\OrmFilterRuleContextDefinitionInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
+use Symfony\Component\Security\Acl\Model\SecurityIdentityInterface;
 
 /**
  * Class for Acl Rule Context Doctrine ORM Filter Definition.
@@ -34,9 +35,9 @@ class OrmFilterRuleContextDefinition extends AbstractRuleContext implements OrmF
     /**
      * Constructor.
      *
-     * @param array         $sids
-     * @param ClassMetadata $targetEntity
-     * @param string        $targetTableAlias
+     * @param SecurityIdentityInterface[] $sids
+     * @param ClassMetadata               $targetEntity
+     * @param string                      $targetTableAlias
      */
     public function __construct(array $sids, ClassMetadata $targetEntity, $targetTableAlias)
     {
