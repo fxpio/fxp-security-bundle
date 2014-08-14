@@ -41,6 +41,8 @@ abstract class AbstractRuleDefinition implements RuleDefinitionInterface
     public function setAclRuleManager(AclRuleManagerInterface $arm)
     {
         $this->arm = $arm;
+
+        return $this;
     }
 
     /**

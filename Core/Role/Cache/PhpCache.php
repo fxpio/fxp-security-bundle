@@ -66,6 +66,8 @@ class PhpCache implements CacheInterface
         $mode = 0666 & ~umask();
         $filesystem = new Filesystem();
         $filesystem->dumpFile(sprintf('%s/%s.php', $this->cacheDir, $id), $content, $mode);
+
+        return $this;
     }
 
     /**
@@ -90,5 +92,7 @@ class PhpCache implements CacheInterface
         $filesystem = new Filesystem();
         $filesystem->remove($this->cacheDir);
         $filesystem->mkdir($this->cacheDir, 0777);
+
+        return $this;
     }
 }

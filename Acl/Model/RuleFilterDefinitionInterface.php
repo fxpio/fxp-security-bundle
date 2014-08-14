@@ -36,6 +36,8 @@ interface RuleFilterDefinitionInterface
      * Set acl rule manager.
      *
      * @param AclRuleManagerInterface $arm
+     *
+     * @return self
      */
     public function setAclRuleManager(AclRuleManagerInterface $arm);
 

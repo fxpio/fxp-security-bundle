@@ -23,6 +23,8 @@ interface CacheInterface
      *
      * @param string $id    The unique name
      * @param array  $roles The role names
+     *
+     * @return self
      */
     public function write($id, array $roles);
 
@@ -37,6 +39,8 @@ interface CacheInterface
 
     /**
      * Invalidates cache.
+     *
+     * @return self
      */
     public function flush();
 }

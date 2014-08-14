@@ -32,6 +32,8 @@ abstract class AbstractRuleFilterDefinition implements RuleFilterDefinitionInter
     public function setAclRuleManager(AclRuleManagerInterface $arm)
     {
         $this->arm = $arm;
+
+        return $this;
     }
 
     /**
