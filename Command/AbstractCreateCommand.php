@@ -136,7 +136,7 @@ abstract class AbstractCreateCommand extends ContainerAwareCommand
                         $targetRepo = $em->getRepository($targetEntity);
                         $targetEntity = $targetRepo->findBy(array('id' => $fieldValue));
 
-                        if (null == $targetEntity) {
+                        if (null === $targetEntity) {
                             throw new InvalidArgumentException(sprintf('The specified mapped field "%s" couldn\'t be found with the Id "%s".', $fieldName, $fieldValue) );
                         }
 
