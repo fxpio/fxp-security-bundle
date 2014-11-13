@@ -7,12 +7,15 @@ This version of the bundle requires Symfony 2.4+.
 
 ## Installation
 
-Installation is a quick, 4 step process:
+Installation is a quick, 6 step process:
 
 1. Download the bundle using composer
 2. Enable the bundle
 3. Create your Role class
-4. Configure the bundle
+4. Configure your application's config.yml
+5. Update your database schema
+6. Configure the bundle
+
 
 ### Step 1: Download the bundle using composer
 
@@ -97,7 +100,44 @@ class Role extends BaseRole
 </doctrine-mapping>
 ```
 
-### Step 4: Configure the bundle
+### Step 4: Configure your application's config.yml
+
+Add the following configuration to your `config.yml`.
+
+```yaml
+# app/config/config.yml
+jms_security_extra:
+    secure_all_services:    false
+    expressions:            true
+    enable_iddqd_attribute: false
+    voters:
+        disable_role:       true
+        disable_acl:        true
+
+sonatra_security:
+    user_class:  Sonatra\CoreBundle\Entity\User
+    group_class: Sonatra\CoreBundle\Entity\Group
+    role_class:  Sonatra\CoreBundle\Entity\Role
+
+doctrine:
+    orm:
+        entity_managers:
+            default:
+                filters:
+                    sonatra_acl:
+                        class:   Sonatra\Bundle\SecurityBundle\Doctrine\ORM\Filter\AclFilter
+                        enabled: true
+```
+
+### Step 5: Update your database schema
+
+```bash
+$ php app/console doctrine:schema:update --force
+```
+
+
+
+### Step 6: Configure the bundle
 
 You can override the default configuration adding `sonatra_security` tree in `app/config/config.yml`.
 For see the reference of Sonatra Security Configuration, execute command:
