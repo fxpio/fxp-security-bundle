@@ -1,8 +1,7 @@
 Sonatra Security Bundle
 =======================
 
-[![Latest Stable Version](https://poser.pugx.org/sonatra/security-bundle/v/stable.svg)](https://packagist.org/packages/sonatra/security-bundle)
-[![Latest Unstable Version](https://poser.pugx.org/sonatra/security-bundle/v/unstable.svg)](https://packagist.org/packages/sonatra/security-bundle)
+[![Latest Version](https://img.shields.io/packagist/v/sonatra/security-bundle.svg)](https://packagist.org/packages/sonatra/security-bundle)
 [![Build Status](https://travis-ci.org/sonatra/SonatraSecurityBundle.svg)](https://travis-ci.org/sonatra/SonatraSecurityBundle)
 [![Coverage Status](https://img.shields.io/coveralls/sonatra/SonatraSecurityBundle.svg)](https://coveralls.io/r/sonatra/SonatraSecurityBundle)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/sonatra/SonatraSecurityBundle/badges/quality-score.png)](https://scrutinizer-ci.com/g/sonatra/SonatraSecurityBundle)
