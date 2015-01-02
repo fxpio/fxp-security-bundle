@@ -11,6 +11,7 @@
 
 namespace Sonatra\Bundle\SecurityBundle\Firewall;
 
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Http\Firewall\ListenerInterface;
 use Symfony\Component\Security\Core\Role\Role;
 use Symfony\Component\Security\Core\SecurityContextInterface;
@@ -59,29 +60,16 @@ class HostRoleListener implements ListenerInterface
      */
     public function handle(GetResponseEvent $event)
     {
-        if (0 === count($this->config)) {
-            return;
-        }
-
-        $token = $this->context->getToken();
-        $hostRole = null;
-        $hostname = $event->getRequest()->getHttpHost();
-
-        foreach ($this->config as $host => $role) {
-            if (preg_match('/.'.$host.'/', $hostname)) {
-                $hostRole = new Role($role);
-                break;
-            }
-        }
+        $hostRole = $this->getHostRole($event);
 
         if (null === $hostRole) {
             return;
         }
 
-        // add anonymous token
+        $token = $this->getToken($event);
+
         if (null === $token) {
-            $this->anonymousListener->handle($event);
-            $token = $this->context->getToken();
+            return;
         }
 
         $tRoles = $token->getRoles();
@@ -108,5 +96,47 @@ class HostRoleListener implements ListenerInterface
         }
 
         $this->context->setToken($token);
+    }
+
+    /**
+     * Get the host role.
+     *
+     * @param GetResponseEvent $event The response event
+     *
+     * @return Role|null
+     */
+    protected function getHostRole(GetResponseEvent $event)
+    {
+        $hostRole = null;
+        $hostname = $event->getRequest()->getHttpHost();
+
+        foreach ($this->config as $host => $role) {
+            if (preg_match('/.'.$host.'/', $hostname)) {
+                $hostRole = new Role($role);
+                break;
+            }
+        }
+
+        return $hostRole;
+    }
+
+    /**
+     * Get the token.
+     *
+     * @param GetResponseEvent $event The response event
+     *
+     * @return null|TokenInterface
+     */
+    protected function getToken(GetResponseEvent $event)
+    {
+        $token = $this->context->getToken();
+
+        // add anonymous token
+        if (null === $token) {
+            $this->anonymousListener->handle($event);
+            $token = $this->context->getToken();
+        }
+
+        return $token;
     }
 }
