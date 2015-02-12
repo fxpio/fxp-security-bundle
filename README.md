@@ -2,10 +2,10 @@ Sonatra Security Bundle
 =======================
 
 [![Latest Version](https://img.shields.io/packagist/v/sonatra/security-bundle.svg)](https://packagist.org/packages/sonatra/security-bundle)
-[![Build Status](https://travis-ci.org/sonatra/SonatraSecurityBundle.svg)](https://travis-ci.org/sonatra/SonatraSecurityBundle)
-[![Coverage Status](https://img.shields.io/coveralls/sonatra/SonatraSecurityBundle.svg)](https://coveralls.io/r/sonatra/SonatraSecurityBundle)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/sonatra/SonatraSecurityBundle/badges/quality-score.png)](https://scrutinizer-ci.com/g/sonatra/SonatraSecurityBundle)
-[![SensioLabsInsight](https://insight.sensiolabs.com/projects/74707490-7a7f-4dd8-91c9-84af5de547a1/mini.png)](https://insight.sensiolabs.com/projects/74707490-7a7f-4dd8-91c9-84af5de547a1)
+[![Build Status](https://img.shields.io/travis/sonatra/SonatraSecurityBundle/master.svg)](https://travis-ci.org/sonatra/SonatraSecurityBundle)
+[![Coverage Status](https://img.shields.io/coveralls/sonatra/SonatraSecurityBundle/master.svg)](https://coveralls.io/r/sonatra/SonatraSecurityBundle?branch=master)
+[![Scrutinizer Code Quality](https://img.shields.io/scrutinizer/g/sonatra/SonatraSecurityBundle/master.svg)](https://scrutinizer-ci.com/g/sonatra/SonatraSecurityBundle?branch=master)
+[![SensioLabsInsight](https://img.shields.io/sensiolabs/i/74707490-7a7f-4dd8-91c9-84af5de547a1.svg)](https://insight.sensiolabs.com/projects/74707490-7a7f-4dd8-91c9-84af5de547a1)
 
 The Sonatra SecurityBundle implements all functionnalities of 
 [Symfony2 Advanced ACL Concepts](http://symfony.com/doc/current/cookbook/security/acl_advanced.html) 
