@@ -63,7 +63,7 @@ class SonatraSecurityExtension extends Extension
                 }
             }
 
-            $container->setParameter('sonatra_security.role_hierarchy.cache_dir', $cacheDir.'/role_hierarchy');
+            $container->setParameter('sonatra_security.cache_dir', $cacheDir);
 
             // doctrine orm listener role hierarchy
             if ($config['doctrine']['orm']['listener']['role_hierarchy']) {

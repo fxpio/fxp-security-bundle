@@ -1,6 +1,6 @@
 parameters:
     security.role_hierarchy.class: Sonatra\Bundle\SecurityBundle\Core\Role\RoleHierarchy
-    sonatra_security.role_hierarchy.cache.class: Sonatra\Bundle\SecurityBundle\Core\Role\Cache\PhpCache
+    sonatra_security.role_hierarchy.cache.class: Sonatra\Component\Cache\Adapter\PhpCache
 
 services:
     #Override Security Role Hierachy
@@ -16,5 +16,4 @@ services:
 
     sonatra_security.role_hierarchy.cache:
         class: '%sonatra_security.role_hierarchy.cache.class%'
-        public: false
-        arguments: ['%sonatra_security.role_hierarchy.cache_dir%', '@filesystem']
+        arguments: ['%sonatra_security.cache_dir%', 'role_hierarchy', '@filesystem']

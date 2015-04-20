@@ -16,8 +16,8 @@ use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Events;
 use Doctrine\ORM\PersistentCollection;
 use Doctrine\ORM\UnitOfWork;
-use Sonatra\Bundle\SecurityBundle\Core\Role\Cache\CacheInterface;
 use Sonatra\Bundle\SecurityBundle\Model\RoleHierarchisableInterface;
+use Sonatra\Component\Cache\Adapter\CacheInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use FOS\UserBundle\Model\GroupInterface;
 
@@ -77,7 +77,7 @@ class RoleHierarchyListener implements EventSubscriber
         }
 
         if ($invalidate) {
-            $this->cache->flush();
+            $this->cache->flushAll();
         }
     }
 

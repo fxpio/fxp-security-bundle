@@ -12,12 +12,13 @@
 namespace Sonatra\Bundle\SecurityBundle\Core\Role;
 
 use Sonatra\Bundle\SecurityBundle\Model\RoleHierarchisableInterface;
+use Sonatra\Component\Cache\Adapter\CacheInterface;
+use Sonatra\Component\Cache\CacheElement;
 use Symfony\Component\Security\Core\Role\RoleHierarchy as BaseRoleHierarchy;
 use Symfony\Component\Security\Core\Role\RoleInterface;
 use Symfony\Component\Security\Core\Role\Role;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Bridge\Doctrine\RegistryInterface;
-use Sonatra\Bundle\SecurityBundle\Core\Role\Cache\CacheInterface;
 use Sonatra\Bundle\SecurityBundle\Event\ReachableRoleEvent;
 use Sonatra\Bundle\SecurityBundle\Events;
 use Sonatra\Bundle\SecurityBundle\Exception\SecurityException;
@@ -117,9 +118,10 @@ class RoleHierarchy extends BaseRoleHierarchy
         }
 
         // find the hierarchy in cache
-        $reachableRoles = $this->cache->read($id);
+        $element = $this->cache->get($id);
+        $reachableRoles = $element->getData();
 
-        if (null !== $reachableRoles) {
+        if (!$element->isExpired() && null !== $reachableRoles) {
             return $reachableRoles;
         }
 
@@ -163,7 +165,7 @@ class RoleHierarchy extends BaseRoleHierarchy
         }
 
         // insert in cache
-        $this->cache->write($id, $finalRoles);
+        $this->cache->set($id, $finalRoles, CacheElement::YEAR);
         $this->cacheExec[$id] = $finalRoles;
 
         if (null !== $this->eventDispatcher) {
