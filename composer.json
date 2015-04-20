@@ -15,7 +15,8 @@
         "php": ">=5.3.3",
         "symfony/framework-bundle": "~2.4",
         "symfony/expression-language": "~2.4",
-        "friendsofsymfony/user-bundle": "~2.0@dev"
+        "friendsofsymfony/user-bundle": "~2.0@dev",
+        "sonatra/cache": "~1.0@dev"
     },
     "require-dev": {
         "doctrine/doctrine-bundle": "~1.3",
