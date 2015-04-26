@@ -35,7 +35,7 @@ abstract class AbstractCreateCommand extends ContainerAwareCommand
         $this->setDefinition(array(
                 new InputArgument('name', InputArgument::OPTIONAL, 'The name'),
                 new InputOption('field', null, InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
-                                'Specifies the fields values, used as follow : --field="myFieldName=\'my value\'" or --field="myFieldName:\'my value\'" both can be accepted.')
+                                'Specifies the fields values, used as follow : --field="myFieldName=\'my value\'" or --field="myFieldName:\'my value\'" both can be accepted.'),
          ));
     }
 

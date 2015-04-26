@@ -37,7 +37,7 @@ abstract class AbstractInfoCommand extends ContainerAwareCommand
                 new InputArgument('name', InputArgument::OPTIONAL, 'The name'),
                 new InputOption('host', null, InputOption::VALUE_REQUIRED, 'The hostname pattern (for default anonymous role)', 'localhost'),
                 new InputOption('no-host', null, InputOption::VALUE_NONE, 'Not display the role of host'),
-                new InputOption('calc', 'c', InputOption::VALUE_NONE, 'Get all roles of role reachable (calculated)')
+                new InputOption('calc', 'c', InputOption::VALUE_NONE, 'Get all roles of role reachable (calculated)'),
          ));
     }
 

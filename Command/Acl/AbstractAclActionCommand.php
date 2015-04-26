@@ -66,14 +66,14 @@ abstract class AbstractAclActionCommand extends ContainerAwareCommand
                 MaskBuilder::MASK_CREATE,
                 MaskBuilder::MASK_EDIT,
                 MaskBuilder::MASK_DELETE,
-                MaskBuilder::MASK_UNDELETE
+                MaskBuilder::MASK_UNDELETE,
             );
 
             if (null !== $field) {
                 $rights = array(
                     MaskBuilder::MASK_VIEW,
                     MaskBuilder::MASK_CREATE,
-                    MaskBuilder::MASK_EDIT
+                    MaskBuilder::MASK_EDIT,
                 );
             }
         }

@@ -47,7 +47,7 @@ class InfoAclCommand extends AbstractAclActionCommand
         'UNDELETE',
         'OPERATOR',
         'MASTER',
-        'OWNER'
+        'OWNER',
     );
 
     /**

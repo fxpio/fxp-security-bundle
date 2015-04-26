@@ -35,7 +35,7 @@ class InfoHostCommand extends AbstractInfoCommand
             ->setDescription('Security infos of host role')
             ->setDefinition(array(
                 new InputArgument('name', InputArgument::OPTIONAL, 'The name', 'localhost'),
-                new InputOption('calc', 'c', InputOption::VALUE_NONE, 'Get all roles of role reachable (calculated)')
+                new InputOption('calc', 'c', InputOption::VALUE_NONE, 'Get all roles of role reachable (calculated)'),
          ));
     }
 

@@ -94,7 +94,7 @@ class UnitOfWork implements UnitOfWorkInterface
             if ($newValue !== $oldValue) {
                 $changeSet[$property->getName()] = array(
                         'old' => $oldValue,
-                        'new' => $newValue
+                        'new' => $newValue,
                 );
             }
         }
