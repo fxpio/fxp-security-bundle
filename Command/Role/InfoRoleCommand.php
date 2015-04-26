@@ -103,7 +103,6 @@ class InfoRoleCommand extends AbstractInfoCommand
                 if ($role instanceof RoleInterface) {
                     if ($role->getRole() === $identity->getRole()) {
                         $allRoles[$role->getRole()] = 'role';
-
                     } elseif (!array_key_exists($role->getRole(), $allRoles)) {
                         $allRoles[$role->getRole()] = 'role hierarchy';
                     }

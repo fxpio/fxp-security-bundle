@@ -64,7 +64,6 @@ class AclUtils
                 $maskConverted = strtoupper($m);
                 $builder->add($m);
             }
-
         } catch (\Exception $e) {
             throw new InvalidArgumentException(sprintf('The right "%s" does not exist', $maskConverted));
         }
@@ -164,22 +163,16 @@ class AclUtils
         foreach ($identities as $identity) {
             if ($identity instanceof SecurityIdentityInterface) {
                 $sids[] = $identity;
-
             } elseif ($identity instanceof UserInterface) {
                 $sids[] = UserSecurityIdentity::fromAccount($identity);
-
             } elseif ($identity instanceof GroupInterface) {
                 $sids[] = GroupSecurityIdentity::fromAccount($identity);
-
             } elseif ($identity instanceof TokenInterface) {
                 $sids[] = UserSecurityIdentity::fromToken($identity);
-
             } elseif ($identity instanceof RoleInterface) {
                 $sids[] = new RoleSecurityIdentity($identity->getRole());
-
             } elseif (is_string($identity)) {
                 $sids[] = new RoleSecurityIdentity($identity);
-
             } else {
                 $str = 'Identity must implement one of: RoleInterface, UserInterface, GroupInterface or string';
 

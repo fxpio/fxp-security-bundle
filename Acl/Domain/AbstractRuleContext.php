@@ -168,14 +168,11 @@ abstract class AbstractRuleContext implements RuleContextInterface
             if ($sid instanceof RoleSecurityIdentity
                     && 0 === strpos('IS_AUTHENTICATED_', $sid->getRole())) {
                 $this->authenticated[] = $sid->getRole();
-
             } elseif ($sid instanceof RoleSecurityIdentity) {
                 $this->roles[] = $sid->getRole();
-
             } elseif ($sid instanceof UserSecurityIdentity
                     && false !== strpos('User', $sid->getClass())) {
                 $this->username = $sid->getUsername();
-
             } elseif ($sid instanceof UserSecurityIdentity
                     && false !== strpos('Group', $sid->getClass())) {
                 $this->groups[] = $sid->getUsername();

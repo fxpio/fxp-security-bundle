@@ -106,7 +106,6 @@ class RoleHierarchyListener implements EventSubscriber
                     return true;
                 }
             }
-
         } elseif ($object instanceof PersistentCollection) {
             $mapping = $object->getMapping();
             $ref = new \ReflectionClass($mapping['sourceEntity']);

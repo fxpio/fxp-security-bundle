@@ -105,10 +105,8 @@ abstract class AbstractAclManipulator implements AclManipulatorInterface
         try {
             /* @var MutableAclInterface $acl */
             $acl = $this->aclProvider->findAcl($oid);
-
         } catch (AclNotFoundException $e) {
             return AclUtils::convertToMask($rights);
-
         } catch (NoAceFoundException $e) {
             return AclUtils::convertToMask($rights);
         }
@@ -154,13 +152,11 @@ abstract class AbstractAclManipulator implements AclManipulatorInterface
                 if ($override) {
                     if (null === $field) {
                         $acl->{"update{$type}Ace"}($i, $context->getMask(), $context->getStrategy());
-
                     } else {
                         $acl->{"update{$type}FieldAce"}($i, $field, $context->getMask(), $context->getStrategy());
                     }
 
                     return;
-
                 } else {
                     // Merge all existing permissions with new permissions
                     $newRights = AclUtils::convertToAclName($context->getMask());
@@ -173,7 +169,6 @@ abstract class AbstractAclManipulator implements AclManipulatorInterface
 
                     if (null === $field) {
                         $acl->{"update{$type}Ace"}($i, AclUtils::convertToMask($newRights), $context->getStrategy());
-
                     } else {
                         $acl->{"update{$type}FieldAce"}($i, $field, AclUtils::convertToMask($newRights, $context->getStrategy()));
                     }
@@ -192,7 +187,6 @@ abstract class AbstractAclManipulator implements AclManipulatorInterface
                 $context->isGranting(),
                 $context->getStrategy()
             );
-
         } else {
             $acl->{"insert{$type}FieldAce"}(
                 $field,
@@ -223,11 +217,9 @@ abstract class AbstractAclManipulator implements AclManipulatorInterface
                 // find ace for identity with equals permissions
                 if (null === $field) {
                     $acl->{"delete{$type}Ace"}($i);
-
                 } else {
                     $acl->{"delete{$type}FieldAce"}($i, $field);
                 }
-
             } elseif ($context->hasDifferentPermission($ace)) {
                 // find ace for identity but the permissions is different
                 // Remove permissions in current permissions
@@ -243,7 +235,6 @@ abstract class AbstractAclManipulator implements AclManipulatorInterface
                 // delete permissions
                 if (empty($currentRights) && null === $field) {
                     $acl->{"delete{$type}Ace"}($i);
-
                 } elseif (empty($currentRights)) {
                     $acl->{"delete{$type}FieldAce"}($i, $field);
                 }
@@ -251,7 +242,6 @@ abstract class AbstractAclManipulator implements AclManipulatorInterface
                 // update permissions
                 elseif (null === $field) {
                     $acl->{"update{$type}Ace"}($i, AclUtils::convertToMask($currentRights));
-
                 } else {
                     $acl->{"update{$type}FieldAce"}($i, $field, AclUtils::convertToMask($currentRights));
                 }
@@ -278,7 +268,6 @@ abstract class AbstractAclManipulator implements AclManipulatorInterface
             if ($ace->getSecurityIdentity() == $sid) {
                 if (null === $field) {
                     $acl->{"delete{$type}Ace"}($i);
-
                 } else {
                     $acl->{"delete{$type}FieldAce"}($i, $field);
                 }

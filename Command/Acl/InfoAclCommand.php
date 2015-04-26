@@ -98,13 +98,10 @@ EOF
 
         if (!in_array($identityType, array('role', 'group', 'user'))) {
             throw new InvalidArgumentException('The "identity-type" argument must be "role", "group" or "user"');
-
         } elseif ('user' === $identityType) {
             $identity = $identityRepo->findOneBy(array('username' => $identity));
-
         } elseif ('group' === $identityType) {
             $identity = $identityRepo->findOneBy(array('name' => $identity));
-
         } else {
             $identity = new Role($identity);
         }
@@ -138,11 +135,9 @@ EOF
             if ($identity instanceof UserInterface) {
                 $roles = array_merge($identity->getRoles(), $this->getHostRoles($host));
                 $sc->setToken(new UsernamePasswordToken($identity, '', 'key', $roles));
-
             } elseif ($identity instanceof GroupInterface) {
                 $roles = array_merge($identity->getRoles(), $this->getHostRoles($host));
                 $sc->setToken(new ConsoleToken('key', '', $roles));
-
             } elseif ($identity instanceof RoleInterface) {
                 $roles = array_merge(array($identityName), $this->getHostRoles($host));
                 $sc->setToken(new ConsoleToken('key', '', $roles));
@@ -223,7 +218,6 @@ EOF
             if (null !== $domainId) {
                 $type = sprintf(':<comment>%s</comment> field of class instance <comment>%s</comment>', $domainField, $domainId);
             }
-
         } elseif (null !== $domainId) {
             $type = sprintf(' class instance <comment>%s</comment>', $domainId);
         }

@@ -94,12 +94,10 @@ abstract class AbstractCreateCommand extends ContainerAwareCommand
                     $semiColonPos = strpos ($field, ":");
                     if (!$semiColonPos) {
                         throw new InvalidArgumentException(sprintf('The field "%s" was misformatted or doesn\'t contain an = or : character.', $field));
-
                     } else {
                         // The : character was found, does the spilt
                         $splited = explode(":", $field, 2);
                     }
-
                 } else {
                     // The = character was found, does the split
                     $splited = explode("=", $field, 2);
@@ -121,13 +119,11 @@ abstract class AbstractCreateCommand extends ContainerAwareCommand
                     try {
                         $reflectionRoleClass = new \ReflectionClass($entityClass);
                         $reflectionRoleClass->getMethod($setterMethodName);
-
                     } catch (\Exception $e) {
                         throw new InvalidArgumentException(sprintf('The setter method "%s" that should be used for property "%s" seems not to exist. Please check your spelling in the command option or in your implementation class.', $setterMethodName, $fieldName));
                     }
 
                     $entity->$setterMethodName($fieldValue);
-
                 } else {
                     // Here we are in a case of an association
                     if ((in_array($fieldName, $realAssociationsNamesList))) {
@@ -146,13 +142,11 @@ abstract class AbstractCreateCommand extends ContainerAwareCommand
                         try {
                             $reflectionRoleClass = new \ReflectionClass($entityClass);
                             $reflectionRoleClass->getMethod($setterMethodName);
-
                         } catch (\Exception $e) {
                             throw new InvalidArgumentException(sprintf('The setter method "%s" that should be used for property "%s" seems not to exist. Please check your spelling in the command option or in your implementation class.', $setterMethodName, $fieldName));
                         }
 
                         $entity->$setterMethodName($targetEntity);
-
                     } else {
                         throw new InvalidArgumentException(sprintf('The field "%s" seems not to exist in your "%s" class.', $fieldName, $shortName));
                     }

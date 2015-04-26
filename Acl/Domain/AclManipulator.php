@@ -71,7 +71,6 @@ class AclManipulator extends AbstractAclManipulator implements AclManipulatorInt
 
         try {
             $acl = $this->aclProvider->createAcl($oid);
-
         } catch (AclAlreadyExistsException $e) {
             $acl = $this->aclProvider->findAcl($oid);
         }
@@ -132,7 +131,6 @@ class AclManipulator extends AbstractAclManipulator implements AclManipulatorInt
 
         try {
             $acl = $this->aclProvider->createAcl($oid);
-
         } catch (AclAlreadyExistsException $e) {
             $acl = $this->aclProvider->findAcl($oid);
         }

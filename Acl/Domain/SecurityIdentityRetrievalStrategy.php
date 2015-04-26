@@ -72,7 +72,6 @@ class SecurityIdentityRetrievalStrategy extends BaseSecurityIdentityRetrievalStr
 
             try {
                 $sids = array_merge($sids, GroupSecurityIdentity::fromToken($token));
-
             } catch (\InvalidArgumentException $invalid) {
                 // ignore, group has no group security identity
             }

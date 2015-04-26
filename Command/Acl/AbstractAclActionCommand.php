@@ -106,13 +106,10 @@ abstract class AbstractAclActionCommand extends ContainerAwareCommand
 
         if (!in_array($identityType, array('role', 'group', 'user'))) {
             throw new InvalidArgumentException('The "identity-type" argument must be "role", "group" or "user"');
-
         } elseif ('user' === $identityType) {
             $identity = $identityRepo->findOneBy(array('username' => $identity));
-
         } elseif ('group' === $identityType) {
             $identity = $identityRepo->findOneBy(array('name' => $identity));
-
         } else {
             $identity = new Role($identity);
         }
@@ -180,7 +177,6 @@ abstract class AbstractAclActionCommand extends ContainerAwareCommand
 
                 $entityName = $cn . '\Entity\\' . $entityName;
             }
-
         } catch (\Exception $ex) {
         }
 
@@ -243,10 +239,8 @@ abstract class AbstractAclActionCommand extends ContainerAwareCommand
 
         if (empty($rights)) {
             $aclManipulator->$deleteMethod($identity, $domain, $field);
-
         } elseif (null !== $field) {
             $aclManipulator->$revokeMethod($identity, $domain, $field, $rights);
-
         } else {
             $aclManipulator->$revokeMethod($identity, $domain, $rights);
         }

@@ -46,10 +46,8 @@ class OrmUnanimous extends AbstractRuleOrmFilterDefinition
 
         if ('' !== $oFilter && '' !== $cFilter) {
             return " (".$oFilter.") AND (".$cFilter.")";
-
         } elseif ('' === $oFilter && '' !== $cFilter) {
             return $cFilter;
-
         } elseif ('' !== $oFilter && '' === $cFilter) {
             return $oFilter;
         }

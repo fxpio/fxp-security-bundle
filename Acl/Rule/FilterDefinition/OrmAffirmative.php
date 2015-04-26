@@ -46,10 +46,8 @@ class OrmAffirmative extends AbstractRuleOrmFilterDefinition
 
         if ('' !== $oFilter && '' !== $cFilter) {
             return " (".$oFilter.") OR (".$cFilter.")";
-
         } elseif ('' === $oFilter && '' !== $cFilter) {
             return ' '.$cFilter;
-
         } elseif ('' !== $oFilter && '' === $cFilter) {
             return ' '.$oFilter;
         }

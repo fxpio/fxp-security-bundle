@@ -285,7 +285,6 @@ class AclManager implements AclManagerInterface
             if (in_array(RuleDefinitionInterface::TYPE_CLASS, $preloadTypes)) {
                 if ('class' === $oid->getIdentifier()) {
                     $oids[$id] = $oid;
-
                 } else {
                     $tmpAddClassOids[] = $classname;
                 }
@@ -304,10 +303,8 @@ class AclManager implements AclManagerInterface
 
         try {
             $result = $this->aclProvider->findAcls(array_values($oids));
-
         } catch (NotAllAclsFoundException $ex) {
             $result = $ex->getPartialResult();
-
         } catch (AclNotFoundException $ex) {
             $result = new \SplObjectStorage();
         }
@@ -414,7 +411,6 @@ class AclManager implements AclManagerInterface
             }
 
             return $acl->isFieldGranted($field, $masks, $sids);
-
         } catch (\UnexpectedValueException $e) {
         } catch (NoAceFoundException $e) {
         }
