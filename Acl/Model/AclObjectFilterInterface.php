@@ -27,15 +27,11 @@ interface AclObjectFilterInterface
 
     /**
      * Begin the transaction.
-     *
-     * @return void
      */
     public function beginTransaction();
 
     /**
      * Execute the transaction.
-     *
-     * @return void
      */
     public function commit();
 
@@ -43,8 +39,6 @@ interface AclObjectFilterInterface
      * Attaches an object from the object filter management.
      *
      * @param object $object The object to attach.
-     *
-     * @return void
      */
     public function attach($object);
 
@@ -52,15 +46,11 @@ interface AclObjectFilterInterface
      * Detaches an object from the object filter management.
      *
      * @param object $object The object to detach.
-     *
-     * @return void
      */
     public function detach($object);
 
     /**
      * Clears the UnitOfWork.
-     *
-     * @return void
      */
     public function flush();
 
@@ -69,18 +59,14 @@ interface AclObjectFilterInterface
      *
      * @param object $object The object instance
      *
-     * @return void
-     *
      * @throws \InvalidArgumentException When $object is not a object instance
-    */
+     */
     public function filter($object);
 
     /**
      * Restoring the object fields with old value for unauthorized access field.
      *
      * @param object $object The object instance
-     *
-     * @return void
      *
      * @throws \InvalidArgumentException When $object is not a object instance
      */

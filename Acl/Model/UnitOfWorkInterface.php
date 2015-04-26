@@ -29,8 +29,6 @@ interface UnitOfWorkInterface
      * Attaches an object from the object filter management.
      *
      * @param object $object The object to attach.
-     *
-     * @return void
      */
     public function attach($object);
 
@@ -38,8 +36,6 @@ interface UnitOfWorkInterface
      * Detaches an object from the object filter management.
      *
      * @param object $object The object to detach.
-     *
-     * @return void
      */
     public function detach($object);
 
@@ -54,8 +50,6 @@ interface UnitOfWorkInterface
 
     /**
      * Clears the UnitOfWork.
-     *
-     * @return void
      */
     public function flush();
 }
