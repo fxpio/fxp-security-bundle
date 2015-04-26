@@ -107,6 +107,6 @@ class OrmClass extends AbstractRuleOrmFilterDefinition
             oid.object_identifier
 SELECTCLAUSE;
 
-        return " ".$sql." >= 1";
+        return ' '.$sql.' >= 1';
     }
 }

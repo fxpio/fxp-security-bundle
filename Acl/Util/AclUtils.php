@@ -83,7 +83,7 @@ class AclUtils
     public static function convertToAclName($mask)
     {
         if (!is_int($mask)) {
-            throw new InvalidArgumentException("The mask must be a int");
+            throw new InvalidArgumentException('The mask must be a int');
         }
 
         $mb = new MaskBuilder($mask);

@@ -45,7 +45,7 @@ class OrmAffirmative extends AbstractRuleOrmFilterDefinition
         $cFilter = $cDef->addFilterConstraint($rcd);
 
         if ('' !== $oFilter && '' !== $cFilter) {
-            return " (".$oFilter.") OR (".$cFilter.")";
+            return ' ('.$oFilter.') OR ('.$cFilter.')';
         } elseif ('' === $oFilter && '' !== $cFilter) {
             return ' '.$cFilter;
         } elseif ('' !== $oFilter && '' === $cFilter) {

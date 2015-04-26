@@ -109,6 +109,6 @@ class OrmObject extends AbstractRuleOrmFilterDefinition
             oid.object_identifier
 SELECTCLAUSE;
 
-        return " $tableAlias.id IN (".$sql.")";
+        return " $tableAlias.id IN (".$sql.')';
     }
 }

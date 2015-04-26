@@ -285,7 +285,7 @@ EOF
 
         // display fields
         foreach ($fieldRights as $field => $rights) {
-            $fields[] = sprintf("    <comment>%-${width}s</comment> : [ <info>%s</info> ]", $field, implode(", ", $rights));
+            $fields[] = sprintf("    <comment>%-${width}s</comment> : [ <info>%s</info> ]", $field, implode(', ', $rights));
         }
 
         return array_merge($out, $fields);

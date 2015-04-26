@@ -89,18 +89,18 @@ abstract class AbstractCreateCommand extends ContainerAwareCommand
             }
 
             foreach ($fields as $field) {
-                $equalsPos = strpos($field, "=");
+                $equalsPos = strpos($field, '=');
                 if (!$equalsPos) {
-                    $semiColonPos = strpos ($field, ":");
+                    $semiColonPos = strpos($field, ':');
                     if (!$semiColonPos) {
                         throw new InvalidArgumentException(sprintf('The field "%s" was misformatted or doesn\'t contain an = or : character.', $field));
                     } else {
                         // The : character was found, does the spilt
-                        $splited = explode(":", $field, 2);
+                        $splited = explode(':', $field, 2);
                     }
                 } else {
                     // The = character was found, does the split
-                    $splited = explode("=", $field, 2);
+                    $splited = explode('=', $field, 2);
                 }
 
                 $fieldName = $splited[0];

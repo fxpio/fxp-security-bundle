@@ -45,7 +45,7 @@ class OrmUnanimous extends AbstractRuleOrmFilterDefinition
         $cFilter = $cDef->addFilterConstraint($rcd);
 
         if ('' !== $oFilter && '' !== $cFilter) {
-            return " (".$oFilter.") AND (".$cFilter.")";
+            return ' ('.$oFilter.') AND ('.$cFilter.')';
         } elseif ('' === $oFilter && '' !== $cFilter) {
             return $cFilter;
         } elseif ('' !== $oFilter && '' === $cFilter) {
