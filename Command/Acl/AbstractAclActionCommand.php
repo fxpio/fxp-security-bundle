@@ -175,7 +175,7 @@ abstract class AbstractAclActionCommand extends ContainerAwareCommand
                 $cn = get_class($this->getContainer()->get('kernel')->getBundle($bundle));
                 $cn = substr($cn, 0, strrpos($cn, '\\'));
 
-                $entityName = $cn . '\Entity\\' . $entityName;
+                $entityName = $cn.'\Entity\\'.$entityName;
             }
         } catch (\Exception $ex) {
         }

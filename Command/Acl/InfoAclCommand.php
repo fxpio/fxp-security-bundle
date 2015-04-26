@@ -305,7 +305,7 @@ EOF
         }
 
         if (false === strpos($hostname, '://')) {
-            $hostname = 'http://' . $hostname;
+            $hostname = 'http://'.$hostname;
         }
 
         $request = Request::create($hostname);

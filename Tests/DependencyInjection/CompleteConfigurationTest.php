@@ -55,7 +55,7 @@ abstract class CompleteConfigurationTest extends \PHPUnit_Framework_TestCase
     {
         $container = $this->getContainer('container1');
 
-        $this->assertTrue(is_dir(sys_get_temp_dir() . '/test_sonatra_security_bundle/'));
+        $this->assertTrue(is_dir(sys_get_temp_dir().'/test_sonatra_security_bundle/'));
     }
 
     /**
@@ -73,7 +73,7 @@ abstract class CompleteConfigurationTest extends \PHPUnit_Framework_TestCase
         $container->registerExtension($baseSecurity);
         $container->registerExtension($security);
 
-        $container->setParameter('kernel.cache_dir', sys_get_temp_dir() . '/test_sonatra_security_bundle/');
+        $container->setParameter('kernel.cache_dir', sys_get_temp_dir().'/test_sonatra_security_bundle/');
 
         $securityBundle = new SecurityBundle();
         $bundle = new SonatraSecurityBundle();
@@ -97,7 +97,7 @@ abstract class CompleteConfigurationTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $fs = new Filesystem();
-        $fs->remove(sys_get_temp_dir() . '/test_sonatra_security_bundle/');
+        $fs->remove(sys_get_temp_dir().'/test_sonatra_security_bundle/');
     }
 
     /**
@@ -106,6 +106,6 @@ abstract class CompleteConfigurationTest extends \PHPUnit_Framework_TestCase
     public function tearDown()
     {
         $fs = new Filesystem();
-        $fs->remove(sys_get_temp_dir() . '/test_sonatra_security_bundle/');
+        $fs->remove(sys_get_temp_dir().'/test_sonatra_security_bundle/');
     }
 }

@@ -172,7 +172,7 @@ class AclManager implements AclManagerInterface
      */
     public function createClassObjectIdentity($type)
     {
-        $id = $type . '__class';
+        $id = $type.'__class';
 
         if (!isset($this->cacheCreatedClassOids[$id])) {
             $this->cacheCreatedClassOids[$id] = new ObjectIdentity('class', $type);
@@ -298,7 +298,7 @@ class AclManager implements AclManagerInterface
         }
 
         foreach ($tmpAddClassOids as $classname) {
-            $oids[$classname . '__class'] = $this->createClassObjectIdentity($classname);
+            $oids[$classname.'__class'] = $this->createClassObjectIdentity($classname);
         }
 
         try {

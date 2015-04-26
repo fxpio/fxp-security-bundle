@@ -72,14 +72,14 @@ class OrmObject extends AbstractRuleOrmFilterDefinition
         foreach ($identities as $sid) {
             if ($sid instanceof UserSecurityIdentity) {
                 /* @var UserSecurityIdentity $sid */
-                $sids[] = 's.identifier = ' . $connection->quote($sid->getClass().'-'.$sid->getUsername());
+                $sids[] = 's.identifier = '.$connection->quote($sid->getClass().'-'.$sid->getUsername());
                 continue;
             }
 
-            $sids[] = 's.identifier = ' . $connection->quote($sid->getRole());
+            $sids[] = 's.identifier = '.$connection->quote($sid->getRole());
         }
 
-        $sids =  '(' . implode(' OR ', $sids) . ')';
+        $sids =  '('.implode(' OR ', $sids).')';
 
         $sql = <<<SELECTCLAUSE
         SELECT
