@@ -10,6 +10,7 @@
  */
 
 namespace Sonatra\Bundle\SecurityBundle\Acl\Model;
+
 use Symfony\Component\Security\Acl\Model\DomainObjectInterface;
 use Symfony\Component\Security\Acl\Model\SecurityIdentityInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;

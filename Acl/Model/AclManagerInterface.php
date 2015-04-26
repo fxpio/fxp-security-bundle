@@ -87,7 +87,6 @@ interface AclManagerInterface
      * same instance anywhere.
      *
      * @param string $type
-     *
      * @param ObjectIdentityInterface
      */
     public function createClassObjectIdentity($type);
