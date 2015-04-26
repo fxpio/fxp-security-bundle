@@ -100,7 +100,7 @@ abstract class AbstractInfoCommand extends ContainerAwareCommand
             return;
         }
 
-        $output->writeln(array('',sprintf('  %s:', $title)));
+        $output->writeln(array('', sprintf('  %s:', $title)));
 
         foreach ($list as $name => $status) {
             $output->writeln(sprintf("    <comment>%-${width}s</comment> : <info>%s</info>", $name, $status));

@@ -198,7 +198,7 @@ abstract class AbstractAclActionCommand extends ContainerAwareCommand
      * @param bool            $granting   The ACE granting
      * @param string          $strategy   The ACE granting strategy
      */
-    protected function addRights(OutputInterface $output, $identity, $rights, $domainType,ObjectIdentity $domain, $field, $index, $granting, $strategy)
+    protected function addRights(OutputInterface $output, $identity, $rights, $domainType, ObjectIdentity $domain, $field, $index, $granting, $strategy)
     {
         $aclManipulator = $this->getContainer()->get('sonatra_security.acl.manipulator');
         $fieldMethodName = null !== $field ? 'Field' : '';

@@ -317,7 +317,7 @@ class AclManager implements AclManagerInterface
     /**
      * {@inheritdoc}
      */
-    public function getRule($type , $domainObject, $field = null)
+    public function getRule($type, $domainObject, $field = null)
     {
         if (is_array($type)) {
             $type = $type[0];
