@@ -249,7 +249,7 @@ abstract class AbstractAclManipulator implements AclManipulatorInterface
                 }
 
                 // update permissions
-                else if (null === $field) {
+                elseif (null === $field) {
                     $acl->{"update{$type}Ace"}($i, AclUtils::convertToMask($currentRights));
 
                 } else {
