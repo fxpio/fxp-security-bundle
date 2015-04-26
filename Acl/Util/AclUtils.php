@@ -39,7 +39,7 @@ class AclUtils
      *
      * @param int|string|array $mask
      *
-     * @return integer
+     * @return int
      *
      * @throws InvalidArgumentException When the mask is not a string, array of string or int (the symfony mask value)
      * @throws InvalidArgumentException When the right does not exist

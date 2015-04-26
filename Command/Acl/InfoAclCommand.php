@@ -234,8 +234,8 @@ EOF
     /**
      * Format class rights section.
      *
-     * @param array   $classRights
-     * @param boolean $hide
+     * @param array $classRights
+     * @param bool  $hide
      *
      * @return array The text for output console
      */

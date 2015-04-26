@@ -91,7 +91,7 @@ abstract class AbstractInfoCommand extends ContainerAwareCommand
      * @param string          $title
      * @param string|null     $message       The message for empty list
      * @param int             $width
-     * @param boolean         $emptyRendered
+     * @param bool            $emptyRendered
      */
     protected function renderInfos(OutputInterface $output, array $list,
             $title, $message = null, $width = 0, $emptyRendered = false)

@@ -44,7 +44,7 @@ class AclRuleManager implements AclRuleManagerInterface
     protected $rules;
 
     /**
-     * @var boolean
+     * @var bool
      */
     protected $isDisabled;
 

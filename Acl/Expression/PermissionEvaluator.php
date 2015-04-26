@@ -39,7 +39,7 @@ class PermissionEvaluator
      * @param DomainObjectInterface|object|string $domainObject
      * @param int|string|array                    $mask
      *
-     * @return boolean
+     * @return bool
      */
     public function hasPermission(TokenInterface $token, $domainObject, $mask)
     {

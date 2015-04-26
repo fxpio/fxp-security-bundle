@@ -54,7 +54,7 @@ interface AclRuleManagerInterface
      * Check if rule manager return the disabled rule definition or the
      * definition defined in configuration.
      *
-     * @return boolean True the disabled rule, False the rule defined in config
+     * @return bool True the disabled rule, False the rule defined in config
      */
     public function isDisabled();
 
@@ -112,7 +112,7 @@ interface AclRuleManagerInterface
      *
      * @param string $name
      *
-     * @return boolean
+     * @return bool
      */
     public function hasDefinition($name);
 
@@ -132,7 +132,7 @@ interface AclRuleManagerInterface
      * @param string $name
      * @param string $type
      *
-     * @return boolean
+     * @return bool
      */
     public function hasFilterDefinition($name, $type);
 }

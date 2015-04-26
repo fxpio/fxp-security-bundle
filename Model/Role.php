@@ -42,7 +42,7 @@ abstract class Role implements RoleHierarchisableInterface
     /**
      * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {

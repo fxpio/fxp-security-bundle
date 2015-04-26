@@ -37,7 +37,7 @@ interface RuleContextInterface
      *
      * @param string $name
      *
-     * @return boolean
+     * @return bool
      */
     public function hasRole($name);
 
@@ -53,7 +53,7 @@ interface RuleContextInterface
      *
      * @param string $name
      *
-     * @return boolean
+     * @return bool
      */
     public function hasGroup($name);
 
@@ -67,21 +67,21 @@ interface RuleContextInterface
     /**
      * Check if the context is authenticated anonymously.
      *
-     * @return boolean
+     * @return bool
      */
     public function isAuthenticatedAnonymously();
 
     /**
      * Check if the context is authenticated remembered.
      *
-     * @return boolean
+     * @return bool
      */
     public function isAuthenticatedRemembered();
 
     /**
      * Check if the context is authenticated fully.
      *
-     * @return boolean
+     * @return bool
      */
     public function isAuthenticatedFully();
 }

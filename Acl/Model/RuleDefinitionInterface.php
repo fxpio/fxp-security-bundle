@@ -57,7 +57,7 @@ interface RuleDefinitionInterface
      *
      * @param RuleContextDefinitionInterface $rcd
      *
-     * @return boolean
+     * @return bool
      */
     public function isGranted(RuleContextDefinitionInterface $rcd);
 }

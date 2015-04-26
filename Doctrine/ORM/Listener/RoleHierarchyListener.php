@@ -87,7 +87,7 @@ class RoleHierarchyListener implements EventSubscriber
      * @param UnitOfWork $uow
      * @param object     $object
      *
-     * @return boolean
+     * @return bool
      */
     protected function invalidateCache($uow, $object)
     {

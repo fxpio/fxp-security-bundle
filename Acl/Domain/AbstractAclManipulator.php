@@ -134,7 +134,7 @@ abstract class AbstractAclManipulator implements AclManipulatorInterface
      *
      * @param MutableAclInterface        $acl
      * @param PermissionContextInterface $context
-     * @param boolean                    $override
+     * @param bool                       $override
      */
     protected function doApplyPermission(MutableAclInterface $acl, PermissionContextInterface $context, $override = false)
     {

@@ -50,7 +50,7 @@ class AclObjectFilter implements AclObjectFilterInterface
      * If the action filtering/restoring is in a transaction, then the action
      * will be executing on the commit.
      *
-     * @var boolean
+     * @var bool
      */
     private $isTransactionnal = false;
 

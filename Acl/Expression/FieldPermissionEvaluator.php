@@ -40,7 +40,7 @@ class FieldPermissionEvaluator
      * @param string                              $field
      * @param int|string|array                    $mask
      *
-     * @return boolean
+     * @return bool
      */
     public function hasFieldPermission(TokenInterface $token, $domainObject, $field, $mask)
     {

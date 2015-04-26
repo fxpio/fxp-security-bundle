@@ -34,7 +34,7 @@ interface AclManagerInterface
      * If the acl manager is enabled, all asked authorizations will be accepted
      * depending on the acl rules.
      *
-     * @return boolean
+     * @return bool
      */
     public function isDisabled();
 
@@ -108,7 +108,7 @@ interface AclManagerInterface
      * @param DomainObjectInterface|object|string                                                                                                                               $domainObject
      * @param int|string|array                                                                                                                                                  $mask
      *
-     * @return boolean
+     * @return bool
      */
     public function isGranted($sids, $domainObject, $mask);
 
@@ -121,7 +121,7 @@ interface AclManagerInterface
      * @param string                                                                                                                                                            $field
      * @param int|string|array                                                                                                                                                  $mask
      *
-     * @return boolean
+     * @return bool
      */
     public function isFieldGranted($sids, $domainObject, $field, $mask);
 

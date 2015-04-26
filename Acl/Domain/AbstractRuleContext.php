@@ -49,7 +49,7 @@ abstract class AbstractRuleContext implements RuleContextInterface
     protected $authenticated;
 
     /**
-     * @var boolean
+     * @var bool
      */
     protected $isSplited;
 

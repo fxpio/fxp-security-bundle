@@ -198,8 +198,8 @@ abstract class AbstractAclActionCommand extends ContainerAwareCommand
      * @param string          $domainType The domain type (class or object)
      * @param ObjectIdentity  $domain     The domain
      * @param string|null     $field      The field name
-     * @param integer         $index      The ACE index
-     * @param boolean         $granting   The ACE granting
+     * @param int             $index      The ACE index
+     * @param bool            $granting   The ACE granting
      * @param string          $strategy   The ACE granting strategy
      */
     protected function addRights(OutputInterface $output, $identity, $rights, $domainType,ObjectIdentity $domain, $field, $index, $granting, $strategy)

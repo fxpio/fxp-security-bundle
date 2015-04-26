@@ -26,7 +26,7 @@ interface MutableAclProviderInterface extends BaseMutableAclProviderInterface
      *
      * @param ObjectIdentityInterface $domainObject
      *
-     * @return boolean
+     * @return bool
      */
     public function hasLoadedAcls(ObjectIdentityInterface $domainObject);
 }

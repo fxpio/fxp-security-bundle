@@ -123,7 +123,7 @@ interface PermissionContextInterface
     /**
      * Set the granting.
      *
-     * @param boolean $granting
+     * @param bool $granting
      *
      * @return PermissionContextInterface
      */
@@ -132,7 +132,7 @@ interface PermissionContextInterface
     /**
      * Check if granting.
      *
-     * @return boolean
+     * @return bool
      */
     public function isGranting();
 
@@ -157,7 +157,7 @@ interface PermissionContextInterface
      *
      * @param AuditableEntryInterface $ace
      *
-     * @return boolean
+     * @return bool
      */
     public function equals(AuditableEntryInterface $ace);
 
@@ -166,7 +166,7 @@ interface PermissionContextInterface
      *
      * @param AuditableEntryInterface $ace
      *
-     * @return boolean
+     * @return bool
      */
     public function hasDifferentPermission(AuditableEntryInterface $ace);
 }

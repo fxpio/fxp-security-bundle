@@ -72,7 +72,7 @@ class InfoUserCommand extends AbstractInfoCommand
      *
      * @param OutputInterface $output
      * @param object          $identity
-     * @param boolean         $calculated
+     * @param bool            $calculated
      * @param string          $host
      */
     protected function displayInfos(OutputInterface $output, $identity, $calculated = false, $host = null)

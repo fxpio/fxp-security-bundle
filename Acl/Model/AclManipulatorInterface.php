@@ -34,10 +34,10 @@ interface AclManipulatorInterface
      * @param RoleInterface|UserInterface|TokenInterface|string|SecurityIdentityInterface $sid
      * @param DomainObjectInterface|object|string                                         $domainObject
      * @param string                                                                      $type
-     * @param integer                                                                     $mask
+     * @param int                                                                         $mask
      * @param string                                                                      $field
-     * @param integer                                                                     $index
-     * @param boolean                                                                     $granting
+     * @param int                                                                         $index
+     * @param bool                                                                        $granting
      * @param string                                                                      $strategy
      *
      * @return PermissionContextInterface
@@ -104,7 +104,7 @@ interface AclManipulatorInterface
      * @param DomainObjectInterface|object|string                                         $domainObject
      * @param int|string|array                                                            $mask
      * @param int                                                                         $index
-     * @param boolean                                                                     $granting
+     * @param bool                                                                        $granting
      * @param string                                                                      $strategy
      *
      * @return AclManipulatorInterface
@@ -119,7 +119,7 @@ interface AclManipulatorInterface
      * @param DomainObjectInterface|object|string                                         $domainObject
      * @param int|string|array                                                            $mask
      * @param int                                                                         $index
-     * @param boolean                                                                     $granting
+     * @param bool                                                                        $granting
      * @param string                                                                      $strategy
      *
      * @return AclManipulatorInterface
@@ -135,7 +135,7 @@ interface AclManipulatorInterface
      * @param string                                                                      $field
      * @param int|string|array                                                            $mask
      * @param int                                                                         $index
-     * @param boolean                                                                     $granting
+     * @param bool                                                                        $granting
      * @param string                                                                      $strategy
      *
      * @return AclManipulatorInterface
@@ -151,7 +151,7 @@ interface AclManipulatorInterface
      * @param string                                                                      $field
      * @param int|string|array                                                            $mask
      * @param int                                                                         $index
-     * @param boolean                                                                     $granting
+     * @param bool                                                                        $granting
      * @param string                                                                      $strategy
      *
      * @return AclManipulatorInterface
@@ -176,7 +176,7 @@ interface AclManipulatorInterface
      * @param DomainObjectInterface|object|string                                         $domainObject
      * @param int|string|array                                                            $mask
      * @param int                                                                         $index
-     * @param boolean                                                                     $granting
+     * @param bool                                                                        $granting
      * @param string                                                                      $strategy
      *
      * @return AclManipulatorInterface
@@ -191,7 +191,7 @@ interface AclManipulatorInterface
      * @param DomainObjectInterface|object|string                                         $domainObject
      * @param int|string|array                                                            $mask
      * @param int                                                                         $index
-     * @param boolean                                                                     $granting
+     * @param bool                                                                        $granting
      * @param string                                                                      $strategy
      *
      * @return AclManipulatorInterface
@@ -207,7 +207,7 @@ interface AclManipulatorInterface
      * @param string                                                                      $field
      * @param int|string|array                                                            $mask
      * @param int                                                                         $index
-     * @param boolean                                                                     $granting
+     * @param bool                                                                        $granting
      * @param string                                                                      $strategy
      *
      * @return AclManipulatorInterface
@@ -223,7 +223,7 @@ interface AclManipulatorInterface
      * @param string                                                                      $field
      * @param int|string|array                                                            $mask
      * @param int                                                                         $index
-     * @param boolean                                                                     $granting
+     * @param bool                                                                        $granting
      * @param string                                                                      $strategy
      *
      * @return AclManipulatorInterface
