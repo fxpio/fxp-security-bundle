@@ -57,7 +57,7 @@ class AclListener implements EventSubscriber
     protected $aclObjectFilter;
 
     /**
-     * Specifies the list of listened events
+     * Specifies the list of listened events.
      *
      * @return string[]
      */

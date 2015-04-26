@@ -40,7 +40,7 @@ abstract class AbstractCreateCommand extends ContainerAwareCommand
     }
 
     /**
-     * Execution of delete action
+     * Execution of delete action.
      *
      * @param OutputInterface $output      The output console instance
      * @param string          $entityClass The entity class name
