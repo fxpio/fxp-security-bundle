@@ -249,7 +249,7 @@ EOF
         }
 
         foreach ($this->rightsDisplayed as $right) {
-            $value = in_array($right, $classRights) ? 'true': 'false';
+            $value = in_array($right, $classRights) ? 'true' : 'false';
             $rights[] = sprintf("    <comment>%-${width}s</comment> : <info>%s</info>", $right, $value);
         }
 
