@@ -33,6 +33,6 @@ class MixedValue implements ObjectFilterVoterInterface
      */
     public function getValue($value)
     {
-        return null;
+        return;
     }
 }

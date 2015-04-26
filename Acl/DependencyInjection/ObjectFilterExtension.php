@@ -59,7 +59,7 @@ class ObjectFilterExtension implements ObjectFilterExtensionInterface
             }
         }
 
-        return null;
+        return;
     }
 
     /**

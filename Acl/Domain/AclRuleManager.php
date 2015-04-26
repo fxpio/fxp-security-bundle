@@ -315,7 +315,7 @@ class AclRuleManager implements AclRuleManagerInterface
             }
         }
 
-        return null;
+        return;
     }
 
     /**
