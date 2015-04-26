@@ -259,8 +259,8 @@ EOF
     /**
      * Format fields rights section.
      *
-     * @param array   $fieldRights
-     * @param boolean $hideTitle
+     * @param array $fieldRights
+     * @param bool  $hideTitle
      *
      * @return array The text for output console
      */
