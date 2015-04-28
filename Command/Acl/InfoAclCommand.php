@@ -96,11 +96,11 @@ EOF
         $host = $noHost ? null : $input->getOption('host');
         $calculated = $input->getOption('calc');
 
-        if (!in_array($identityType, array('role', 'group', 'user'))) {
-            throw new InvalidArgumentException('The "identity-type" argument must be "role", "group" or "user"');
+        if (!in_array($identityType, array('role', 'group', 'user', 'organization'))) {
+            throw new InvalidArgumentException('The "identity-type" argument must be "role", "group", "user" or "organization"');
         } elseif ('user' === $identityType) {
             $identity = $identityRepo->findOneBy(array('username' => $identity));
-        } elseif ('group' === $identityType) {
+        } elseif ('group' === $identityType || 'organization' === $identityType) {
             $identity = $identityRepo->findOneBy(array('name' => $identity));
         } else {
             $identity = new Role($identity);

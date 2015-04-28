@@ -31,12 +31,17 @@ class SonatraSecurityExtension extends Extension
     {
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
-        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+
+        $ref = new \ReflectionClass($this);
+        $configPath = dirname(dirname($ref->getFileName())).'/Resources/config';
+        $loader = new Loader\YamlFileLoader($container, new FileLocator($configPath));
+        $loaderXml = new Loader\XmlFileLoader($container, new FileLocator($configPath));
 
         // entity classes
         $container->setParameter('sonatra_security.user_class', $config['user_class']);
         $container->setParameter('sonatra_security.role_class', $config['role_class']);
         $container->setParameter('sonatra_security.group_class', $config['group_class']);
+        $container->setParameter('sonatra_security.organization_class', $config['organization_class']);
 
         // cache dir
         $cacheDir = $container->getParameterBag()->resolveValue($config['cache_dir']);
@@ -111,6 +116,10 @@ class SonatraSecurityExtension extends Extension
             if ($config['doctrine']['orm']['object_filter_voter']) {
                 $loader->load('orm_object_filter_voter.yml');
             }
+        }
+
+        if ($config['organizational_context']['enabled']) {
+            $loaderXml->load('organizational_context.xml');
         }
     }
 }

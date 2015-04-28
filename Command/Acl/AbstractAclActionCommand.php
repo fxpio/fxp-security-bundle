@@ -14,6 +14,7 @@ namespace Sonatra\Bundle\SecurityBundle\Command\Acl;
 use Doctrine\ORM\EntityRepository;
 use FOS\UserBundle\Model\GroupInterface;
 use Sonatra\Bundle\SecurityBundle\Exception\InvalidArgumentException;
+use Sonatra\Bundle\SecurityBundle\Model\OrganizationInterface;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Console\Input\InputArgument;
@@ -84,7 +85,7 @@ abstract class AbstractAclActionCommand extends ContainerAwareCommand
     /**
      * @param InputInterface $input
      *
-     * @return Role|UserInterface|GroupInterface
+     * @return Role|UserInterface|GroupInterface|OrganizationInterface
      *
      * @throws InvalidArgumentException
      * @throws InvalidConfigurationException
@@ -104,11 +105,11 @@ abstract class AbstractAclActionCommand extends ContainerAwareCommand
         /* @var EntityRepository $identityRepo */
         $identityRepo = $em->getRepository($identityClass);
 
-        if (!in_array($identityType, array('role', 'group', 'user'))) {
-            throw new InvalidArgumentException('The "identity-type" argument must be "role", "group" or "user"');
+        if (!in_array($identityType, array('role', 'group', 'user', 'organization'))) {
+            throw new InvalidArgumentException('The "identity-type" argument must be "role", "group", "user" or "organization"');
         } elseif ('user' === $identityType) {
             $identity = $identityRepo->findOneBy(array('username' => $identity));
-        } elseif ('group' === $identityType) {
+        } elseif ('group' === $identityType || 'organization' === $identityType) {
             $identity = $identityRepo->findOneBy(array('name' => $identity));
         } else {
             $identity = new Role($identity);

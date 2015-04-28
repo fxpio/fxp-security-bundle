@@ -11,12 +11,15 @@
 
 namespace Sonatra\Bundle\SecurityBundle\Acl\Domain;
 
+use Sonatra\Bundle\SecurityBundle\Core\Organizational\OrganizationalContextInterface;
 use Sonatra\Bundle\SecurityBundle\Event\SecurityIdentityEvent;
 use Sonatra\Bundle\SecurityBundle\Events;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Security\Acl\Domain\SecurityIdentityRetrievalStrategy as BaseSecurityIdentityRetrievalStrategy;
+use Symfony\Component\Security\Core\Authentication\AuthenticationTrustResolver;
 use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
 
 /**
  * Strategy for retrieving security identities.
@@ -26,14 +29,37 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 class SecurityIdentityRetrievalStrategy extends BaseSecurityIdentityRetrievalStrategy
 {
     /**
-     * @var EventDispatcherInterface
+     * @var RoleHierarchyInterface
+     */
+    private $roleHierarchy;
+
+    /**
+     * @var EventDispatcherInterface|null
      */
     private $eventDispatcher;
+
+    /**
+     * @var OrganizationalContextInterface|null
+     */
+    private $context;
 
     /**
      * @var array
      */
     private $cacheExec = array();
+
+    /**
+     * Constructor.
+     *
+     * @param RoleHierarchyInterface      $roleHierarchy
+     * @param AuthenticationTrustResolver $authenticationTrustResolver
+     */
+    public function __construct(RoleHierarchyInterface $roleHierarchy, AuthenticationTrustResolver $authenticationTrustResolver)
+    {
+        $this->roleHierarchy = $roleHierarchy;
+
+        parent::__construct($roleHierarchy, $authenticationTrustResolver);
+    }
 
     /**
      * Set event dispatcher.
@@ -43,6 +69,16 @@ class SecurityIdentityRetrievalStrategy extends BaseSecurityIdentityRetrievalStr
     public function setEventDispatcher(EventDispatcherInterface $dispatcher)
     {
         $this->eventDispatcher = $dispatcher;
+    }
+
+    /**
+     * Set the organizational context.
+     *
+     * @param OrganizationalContextInterface $context The organizational context
+     */
+    public function setOrganizationalContext(OrganizationalContextInterface $context)
+    {
+        $this->context = $context;
     }
 
     /**
@@ -70,11 +106,8 @@ class SecurityIdentityRetrievalStrategy extends BaseSecurityIdentityRetrievalStr
                 $sids = $event->getSecurityIdentities();
             }
 
-            try {
-                $sids = array_merge($sids, GroupSecurityIdentity::fromToken($token));
-            } catch (\InvalidArgumentException $invalid) {
-                // ignore, group has no group security identity
-            }
+            $sids = $this->mergeSecurityIdentities($sids, $token, 'Sonatra\Bundle\SecurityBundle\Acl\Domain\OrganizationSecurityIdentity');
+            $sids = $this->mergeSecurityIdentities($sids, $token, 'Sonatra\Bundle\SecurityBundle\Acl\Domain\GroupSecurityIdentity');
 
             // dispatch post event
             if (null !== $this->eventDispatcher) {
@@ -84,6 +117,27 @@ class SecurityIdentityRetrievalStrategy extends BaseSecurityIdentityRetrievalStr
             }
 
             $this->cacheExec[$id] = $sids;
+        }
+
+        return $sids;
+    }
+
+    /**
+     * Merge the security identities.
+     *
+     * @param array          $sids  The security identities
+     * @param TokenInterface $token The token
+     * @param string         $class The OrganizationSecurityIdentity ou GroupSecurityIdentity class name
+     *
+     * @return array The security identities
+     */
+    protected function mergeSecurityIdentities(array $sids, TokenInterface $token, $class)
+    {
+        try {
+            /* @var OrganizationSecurityIdentity|GroupSecurityIdentity $class */
+            $sids = array_merge($sids, $class::fromToken($token, $this->context, $this->roleHierarchy));
+        } catch (\InvalidArgumentException $invalid) {
+            // ignore, group has no group security identity
         }
 
         return $sids;

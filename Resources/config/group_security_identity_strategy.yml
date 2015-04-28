@@ -10,4 +10,4 @@ services:
         arguments:
             - '@security.role_hierarchy'
             - '@security.authentication.trust_resolver'
-        calls: [ ['setEventDispatcher', ['@?event_dispatcher']] ]
+        calls: [ ['setEventDispatcher', ['@?event_dispatcher']], ['setOrganizationalContext', ['@?sonatra_security.organizational_context']] ]

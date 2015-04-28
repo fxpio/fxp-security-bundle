@@ -35,10 +35,12 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('user_class')->defaultValue('FOS\UserBundle\Model\UserInterface')->end()
                 ->scalarNode('role_class')->defaultValue('Symfony\Component\Security\Core\Role\RoleInterface')->end()
                 ->scalarNode('group_class')->defaultValue('FOS\UserBundle\Model\GroupInterface')->end()
+                ->scalarNode('organization_class')->defaultValue('Sonatra\Bundle\SecurityBundle\Model\OrganizationInterface')->end()
                 ->scalarNode('cache_dir')->cannotBeEmpty()->defaultValue('%kernel.cache_dir%/sonatra_security')->end()
             ->end()
             ->append($this->getHostRoleNode())
             ->append($this->getRoleHierarchyNode())
+            ->append($this->getOrganizationalContextNode())
             ->append($this->getAclNode())
             ->append($this->getExpressionNode())
             ->append($this->getDoctrineNode())
@@ -59,9 +61,7 @@ class Configuration implements ConfigurationInterface
 
         $node
             ->addDefaultsIfNotSet()
-            ->children()
-                ->scalarNode('enabled')->defaultTrue()->end()
-            ->end()
+            ->canBeDisabled()
         ;
 
         return $node;
@@ -79,9 +79,25 @@ class Configuration implements ConfigurationInterface
 
         $node
             ->addDefaultsIfNotSet()
-            ->children()
-                ->scalarNode('enabled')->defaultTrue()->end()
-            ->end()
+            ->canBeDisabled()
+        ;
+
+        return $node;
+    }
+
+    /**
+     * Get expression node.
+     *
+     * @return NodeDefinition
+     */
+    private function getOrganizationalContextNode()
+    {
+        $treeBuilder = new TreeBuilder();
+        $node = $treeBuilder->root('organizational_context');
+
+        $node
+            ->addDefaultsIfNotSet()
+            ->canBeEnabled()
         ;
 
         return $node;
