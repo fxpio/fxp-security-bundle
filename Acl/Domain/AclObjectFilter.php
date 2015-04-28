@@ -18,7 +18,6 @@ use Sonatra\Bundle\SecurityBundle\Exception\InvalidArgumentException;
 use Symfony\Component\Security\Acl\Permission\BasicPermissionMap;
 use Symfony\Component\Security\Acl\Voter\FieldVote;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-use Symfony\Component\Security\Core\SecurityContextInterface;
 
 /**
  * Acl Object Filter.
