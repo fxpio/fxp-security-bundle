@@ -64,7 +64,7 @@ services:
         arguments:
             - '@sonatra_security.acl.object_filter_extension'
             - '@sonatra_security.acl.manager'
-            - '@security.context'
+            - '@security.authorization_checker'
 
     #Voter
     sonatra_security.acl.voter:

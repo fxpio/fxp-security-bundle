@@ -7,7 +7,7 @@ ACL Manipulator
 // ...
 use Symfony\Component\Security\Acl\Permission\MaskBuilder;
 
-$user = $this->get('security.context')->getToken()->getUser();
+$user = $this->get('security.token_storage')->getToken()->getUser();
 $comment = new Comment(); // create some entity
 // ... do work on entity
 

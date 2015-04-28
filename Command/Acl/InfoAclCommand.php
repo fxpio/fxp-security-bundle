@@ -130,22 +130,23 @@ EOF
 
         // check with all acl voter
         if ($calculated) {
-            $sc = $this->getContainer()->get('security.context');
+            $ts = $this->getContainer()->get('security.token_storage');
+            $ac = $this->getContainer()->get('security.authorization_checker');
 
             if ($identity instanceof UserInterface) {
                 $roles = array_merge($identity->getRoles(), $this->getHostRoles($host));
-                $sc->setToken(new UsernamePasswordToken($identity, '', 'key', $roles));
+                $ts->setToken(new UsernamePasswordToken($identity, '', 'key', $roles));
             } elseif ($identity instanceof GroupInterface) {
                 $roles = array_merge($identity->getRoles(), $this->getHostRoles($host));
-                $sc->setToken(new ConsoleToken('key', '', $roles));
+                $ts->setToken(new ConsoleToken('key', '', $roles));
             } elseif ($identity instanceof RoleInterface) {
                 $roles = array_merge(array($identityName), $this->getHostRoles($host));
-                $sc->setToken(new ConsoleToken('key', '', $roles));
+                $ts->setToken(new ConsoleToken('key', '', $roles));
             }
 
             // get class rights
             foreach ($this->rightsDisplayed as $right) {
-                if ($sc->isGranted($right, $domain)) {
+                if ($ac->isGranted($right, $domain)) {
                     $classRights[] = $right;
                 }
             }
@@ -155,7 +156,7 @@ EOF
                 $fieldRights[$cField] = array();
 
                 foreach ($this->rightsDisplayed as $right) {
-                    if ($sc->isGranted($right, new FieldVote($domain, $cField))) {
+                    if ($ac->isGranted($right, new FieldVote($domain, $cField))) {
                         $fieldRights[$cField][] = $right;
                     }
                 }
@@ -321,7 +322,7 @@ EOF
 
         $roles = array();
         /* @var TokenInterface|null $token */
-        $token = $this->getContainer()->get('security.context')->getToken();
+        $token = $this->getContainer()->get('security.token_storage')->getToken();
 
         if (null !== $token) {
             foreach ($token->getRoles() as $role) {

@@ -19,7 +19,7 @@ Features include:
 - Service manager (helper) for check granting on domain object (granted, field granted, preload ACLs)
 - ACL Rule Definition for optimize the ACL queries (and ability to create a sharing rule)
 - ACL Rule Filter Definition for filter the records in query
-- ACL Voter for use the `security.context` service
+- ACL Voter for use the `security.authorization_checker` service
 - Ability to set permissions on roles or users, but also directly on groups
 - Ability to define a hierarchy of role (with all roles in all associated groups)
 - Merge the permissions of roles children of associated roles with user, role, group, and token

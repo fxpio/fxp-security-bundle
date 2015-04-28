@@ -11,10 +11,10 @@
 
 namespace Sonatra\Bundle\SecurityBundle\Firewall;
 
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Http\Firewall\ListenerInterface;
 use Symfony\Component\Security\Core\Role\Role;
-use Symfony\Component\Security\Core\SecurityContextInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 
 /**
@@ -25,9 +25,9 @@ use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 class HostRoleListener implements ListenerInterface
 {
     /**
-     * @var SecurityContextInterface
+     * @var TokenStorageInterface
      */
-    protected $context;
+    protected $tokenStorage;
 
     /**
      * @var array
@@ -42,13 +42,13 @@ class HostRoleListener implements ListenerInterface
     /**
      * Constructor.
      *
-     * @param SecurityContextInterface $context
-     * @param array                    $config
-     * @param ListenerInterface        $anonymousListener
+     * @param TokenStorageInterface $tokenStorage
+     * @param array                 $config
+     * @param ListenerInterface     $anonymousListener
      */
-    public function __construct(SecurityContextInterface $context, array $config, ListenerInterface $anonymousListener)
+    public function __construct(TokenStorageInterface $tokenStorage, array $config, ListenerInterface $anonymousListener)
     {
-        $this->context = $context;
+        $this->tokenStorage = $tokenStorage;
         $this->config = $config;
         $this->anonymousListener = $anonymousListener;
     }
@@ -95,7 +95,7 @@ class HostRoleListener implements ListenerInterface
             $prop->setValue($token, true);
         }
 
-        $this->context->setToken($token);
+        $this->tokenStorage->setToken($token);
     }
 
     /**
@@ -129,12 +129,12 @@ class HostRoleListener implements ListenerInterface
      */
     protected function getToken(GetResponseEvent $event)
     {
-        $token = $this->context->getToken();
+        $token = $this->tokenStorage->getToken();
 
         // add anonymous token
         if (null === $token) {
             $this->anonymousListener->handle($event);
-            $token = $this->context->getToken();
+            $token = $this->tokenStorage->getToken();
         }
 
         return $token;

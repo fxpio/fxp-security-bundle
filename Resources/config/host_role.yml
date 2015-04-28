@@ -9,4 +9,4 @@ services:
 
     sonatra_security.host_role.authentication.listener:
         class: '%sonatra_security.host_role.authentication.listener.class%'
-        arguments: ['@security.context', [], '@security.authentication.listener.anonymous']
+        arguments: ['@security.token_storage', [], '@security.authentication.listener.anonymous']

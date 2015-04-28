@@ -140,7 +140,7 @@ abstract class AbstractInfoCommand extends ContainerAwareCommand
         $this->getContainer()->get('security.firewall')->onKernelRequest($event);
 
         /* @var TokenInterface $token */
-        $token = $this->getContainer()->get('security.context')->getToken();
+        $token = $this->getContainer()->get('security.token_storage')->getToken();
         $roles = array();
 
         if (null !== $token) {

@@ -17,6 +17,7 @@ use Sonatra\Bundle\SecurityBundle\Acl\DependencyInjection\ObjectFilterExtensionI
 use Sonatra\Bundle\SecurityBundle\Exception\InvalidArgumentException;
 use Symfony\Component\Security\Acl\Permission\BasicPermissionMap;
 use Symfony\Component\Security\Acl\Voter\FieldVote;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 
 /**
@@ -42,9 +43,9 @@ class AclObjectFilter implements AclObjectFilterInterface
     private $am;
 
     /**
-     * @var SecurityContextInterface
+     * @var AuthorizationCheckerInterface
      */
-    private $sc;
+    private $ac;
 
     /**
      * If the action filtering/restoring is in a transaction, then the action
@@ -73,14 +74,14 @@ class AclObjectFilter implements AclObjectFilterInterface
      *
      * @param ObjectFilterExtensionInterface $ofe
      * @param AclManagerInterface            $am
-     * @param SecurityContextInterface       $sc
+     * @param AuthorizationCheckerInterface  $ac
      */
-    public function __construct(ObjectFilterExtensionInterface $ofe, AclManagerInterface $am, SecurityContextInterface $sc)
+    public function __construct(ObjectFilterExtensionInterface $ofe, AclManagerInterface $am, AuthorizationCheckerInterface  $ac)
     {
         $this->uow = new UnitOfWork();
         $this->ofe = $ofe;
         $this->am = $am;
-        $this->sc = $sc;
+        $this->ac = $ac;
     }
 
     /**
@@ -191,7 +192,7 @@ class AclObjectFilter implements AclObjectFilterInterface
         $id = spl_object_hash($object);
         array_splice($this->toFilter, array_search($id, $this->toFilter), 1);
 
-        if (!$this->sc->isGranted(BasicPermissionMap::PERMISSION_VIEW, $object)) {
+        if (!$this->ac->isGranted(BasicPermissionMap::PERMISSION_VIEW, $object)) {
             $clearAll = true;
         }
 
@@ -201,7 +202,7 @@ class AclObjectFilter implements AclObjectFilterInterface
             $property->setAccessible(true);
             $value = $property->getValue($object);
 
-            if (null !== $value && ($clearAll || !$this->sc->isGranted(BasicPermissionMap::PERMISSION_VIEW, new FieldVote($object, $property->getName())))) {
+            if (null !== $value && ($clearAll || !$this->ac->isGranted(BasicPermissionMap::PERMISSION_VIEW, new FieldVote($object, $property->getName())))) {
                 $value = $this->ofe->filterValue($value);
                 $property->setValue($object, $value);
             }
@@ -221,10 +222,10 @@ class AclObjectFilter implements AclObjectFilterInterface
         foreach ($changeSet as $field => $values) {
             $fv = new FieldVote($object, $field);
 
-            if (!$this->sc->isGranted('VIEW', $fv)
-                    || (null === $values['old'] && null !== $values['new'] && !$this->sc->isGranted(BasicPermissionMap::PERMISSION_CREATE, $fv) && !$this->sc->isGranted(BasicPermissionMap::PERMISSION_EDIT, $fv))
-                    || (null !== $values['old'] && null !== $values['new'] && !$this->sc->isGranted(BasicPermissionMap::PERMISSION_EDIT, $fv))
-                    || (null !== $values['old'] && null === $values['new'] && !$this->sc->isGranted(BasicPermissionMap::PERMISSION_DELETE, $fv) && !$this->sc->isGranted(BasicPermissionMap::PERMISSION_EDIT, $fv))) {
+            if (!$this->ac->isGranted('VIEW', $fv)
+                    || (null === $values['old'] && null !== $values['new'] && !$this->ac->isGranted(BasicPermissionMap::PERMISSION_CREATE, $fv) && !$this->ac->isGranted(BasicPermissionMap::PERMISSION_EDIT, $fv))
+                    || (null !== $values['old'] && null !== $values['new'] && !$this->ac->isGranted(BasicPermissionMap::PERMISSION_EDIT, $fv))
+                    || (null !== $values['old'] && null === $values['new'] && !$this->ac->isGranted(BasicPermissionMap::PERMISSION_DELETE, $fv) && !$this->ac->isGranted(BasicPermissionMap::PERMISSION_EDIT, $fv))) {
                 $property = $ref->getProperty($field);
                 $property->setAccessible(true);
                 $property->setValue($object, $values['old']);

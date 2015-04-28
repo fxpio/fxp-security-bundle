@@ -22,7 +22,8 @@ use Sonatra\Bundle\SecurityBundle\Exception\AccessDeniedException;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\OnFlushEventArgs;
-use Symfony\Component\Security\Core\SecurityContextInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 /**
  * This class listens to all database activity and automatically adds constraints as acls / aces.
@@ -37,9 +38,14 @@ class AclListener implements EventSubscriber
     public $container;
 
     /**
-     * @var SecurityContextInterface
+     * @var TokenStorageInterface
      */
-    protected $securityContext;
+    protected $tokenStorage;
+
+    /**
+     * @var AuthorizationCheckerInterface
+     */
+    protected $authChecker;
 
     /**
      * @var AclManagerInterface
@@ -73,7 +79,7 @@ class AclListener implements EventSubscriber
      */
     public function postLoad(LifecycleEventArgs $args)
     {
-        $token = $this->getSecurityContext()->getToken();
+        $token = $this->getTokenStorage()->getToken();
 
         if ($this->aclManager->isDisabled()
                 || null === $token || $token instanceof ConsoleToken) {
@@ -93,7 +99,7 @@ class AclListener implements EventSubscriber
      */
     public function onFlush(OnFlushEventArgs $args)
     {
-        $token = $this->getSecurityContext()->getToken();
+        $token = $this->getTokenStorage()->getToken();
 
         if ($this->aclManager->isDisabled()
                 || null === $token || $token instanceof ConsoleToken) {
@@ -108,7 +114,7 @@ class AclListener implements EventSubscriber
         foreach ($uow->getScheduledEntityInsertions($uow) as $object) {
             $this->getAclObjectFilter()->restore($object);
 
-            if (!$this->getSecurityContext()->isGranted(BasicPermissionMap::PERMISSION_CREATE, $object)) {
+            if (!$this->getAuthorizationChecker()->isGranted(BasicPermissionMap::PERMISSION_CREATE, $object)) {
                 throw new AccessDeniedException('Insufficient privilege to create the entity');
             }
         }
@@ -117,14 +123,14 @@ class AclListener implements EventSubscriber
         foreach ($uow->getScheduledEntityUpdates($uow) as $object) {
             $this->getAclObjectFilter()->restore($object);
 
-            if (!$this->getSecurityContext()->isGranted(BasicPermissionMap::PERMISSION_EDIT, $object)) {
+            if (!$this->getAuthorizationChecker()->isGranted(BasicPermissionMap::PERMISSION_EDIT, $object)) {
                 throw new AccessDeniedException('Insufficient privilege to update the entity');
             }
         }
 
         // check all scheduled deletations
         foreach ($uow->getScheduledEntityDeletions($uow) as $object) {
-            if (!$this->getSecurityContext()->isGranted(BasicPermissionMap::PERMISSION_DELETE, $object)) {
+            if (!$this->getAuthorizationChecker()->isGranted(BasicPermissionMap::PERMISSION_DELETE, $object)) {
                 throw new AccessDeniedException('Insufficient privilege to delete the entity');
             }
         }
@@ -133,15 +139,27 @@ class AclListener implements EventSubscriber
     }
 
     /**
-     * Gets security context.
+     * Gets security token storage.
      *
-     * @return SecurityContextInterface
+     * @return TokenStorageInterface
      */
-    public function getSecurityContext()
+    public function getTokenStorage()
     {
         $this->init();
 
-        return $this->securityContext;
+        return $this->tokenStorage;
+    }
+
+    /**
+     * Gets security authorization checker.
+     *
+     * @return AuthorizationCheckerInterface
+     */
+    public function getAuthorizationChecker()
+    {
+        $this->init();
+
+        return $this->authChecker;
     }
 
     /**
@@ -187,7 +205,7 @@ class AclListener implements EventSubscriber
      */
     public function getSecurityIdentities()
     {
-        $token = $this->getSecurityContext()->getToken();
+        $token = $this->getTokenStorage()->getToken();
 
         return $this->aclManager->getSecurityIdentities($token);
     }
@@ -198,7 +216,8 @@ class AclListener implements EventSubscriber
     private function init()
     {
         if (null !== $this->container) {
-            $this->securityContext = $this->container->get('security.context');
+            $this->tokenStorage = $this->container->get('security.token_storage');
+            $this->authChecker = $this->container->get('security.authorization_checker');
             $this->aclManager = $this->container->get('sonatra_security.acl.manager');
             $this->aclRuleManager = $this->container->get('sonatra_security.acl.rule_manager');
             $this->aclObjectFilter = $this->container->get('sonatra_security.acl.object_filter');
