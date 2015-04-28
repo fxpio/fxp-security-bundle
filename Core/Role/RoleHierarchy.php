@@ -99,6 +99,7 @@ class RoleHierarchy extends BaseRoleHierarchy
         }
 
         $rolenames = array();
+        $nRoles = array();
 
         foreach ($roles as $role) {
             if (!is_string($role) && !($role instanceof RoleInterface)) {
@@ -108,8 +109,10 @@ class RoleHierarchy extends BaseRoleHierarchy
             }
 
             $rolenames[] = ($role instanceof RoleInterface) ? $role->getRole() : $role;
+            $nRoles[] = ($role instanceof RoleInterface) ? $role : new Role((string) $role);
         }
 
+        $roles = $nRoles;
         $id = sha1(implode('|', $rolenames));
 
         // find the hierarchy in execution cache
