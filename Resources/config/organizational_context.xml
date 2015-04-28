@@ -6,11 +6,18 @@
 
     <parameters>
         <parameter key="sonatra_security.organizational_context.class">Sonatra\Bundle\SecurityBundle\Core\Organizational\OrganizationalContext</parameter>
+        <parameter key="sonatra_security.access.organizational_role_hierarchy_voter.class">Sonatra\Bundle\SecurityBundle\Core\Authorization\Voter\OrganizationalRoleHierarchyVoter</parameter>
     </parameters>
 
     <services>
         <service id="sonatra_security.organizational_context" class="%sonatra_security.organizational_context.class%">
             <argument type="service" id="security.token_storage" />
+        </service>
+
+        <!-- Override Symfony Role Hierarchy Voter -->
+        <service id="security.access.role_hierarchy_voter" class="%sonatra_security.access.organizational_role_hierarchy_voter.class%" public="false">
+            <argument type="service" id="security.acl.security_identity_retrieval_strategy" />
+            <tag name="security.voter" priority="245" />
         </service>
     </services>
 
