@@ -55,7 +55,7 @@ class OrganizationalContext implements OrganizationalContextInterface
     {
         $this->getToken('organization');
 
-        if (null === $organization || $organization instanceof OrganizationInterface) {
+        if (null === $organization || false === $organization || $organization instanceof OrganizationInterface) {
             $this->organization = $organization;
         }
     }
@@ -78,7 +78,7 @@ class OrganizationalContext implements OrganizationalContextInterface
             }
         }
 
-        return $this->organization;
+        return false !== $this->organization ? $this->organization : null;
     }
 
     /**
@@ -89,16 +89,16 @@ class OrganizationalContext implements OrganizationalContextInterface
         $token = $this->getToken('organization user');
         $user = $token->getUser();
         $this->organizationUser = null;
+        $org = null;
 
         if ($user instanceof UserInterface
                 && $user->getUsername() === $organizationUser->getUser()->getUsername()) {
             if ($organizationUser instanceof OrganizationUserInterface) {
                 $this->organizationUser = $organizationUser;
-                $this->setCurrentOrganization($organizationUser->getOrganization());
-            } else {
-                $this->setCurrentOrganization(null);
+                $org = $organizationUser->getOrganization();
             }
         }
+        $this->setCurrentOrganization($org);
     }
 
     /**

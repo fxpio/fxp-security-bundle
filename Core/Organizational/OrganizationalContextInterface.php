@@ -24,7 +24,7 @@ interface OrganizationalContextInterface
     /**
      * Set the current used organization.
      *
-     * @param OrganizationInterface|null $organization The current organization
+     * @param OrganizationInterface|false|null $organization The current organization
      */
     public function setCurrentOrganization($organization);
 
