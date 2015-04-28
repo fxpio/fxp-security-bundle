@@ -86,7 +86,7 @@ class SecurityIdentityRetrievalStrategy extends BaseSecurityIdentityRetrievalStr
      */
     public function getSecurityIdentities(TokenInterface $token)
     {
-        $id = spl_object_hash($token);
+        $id = $this->buildId($token);
 
         if (isset($this->cacheExec[$id])) {
             return $this->cacheExec[$id];
@@ -141,5 +141,27 @@ class SecurityIdentityRetrievalStrategy extends BaseSecurityIdentityRetrievalStr
         }
 
         return $sids;
+    }
+
+    /**
+     * Build the unique identifier for execution cache.
+     *
+     * @param TokenInterface $token The token
+     *
+     * @return string
+     */
+    protected function buildId(TokenInterface $token)
+    {
+        $id = spl_object_hash($token);
+
+        if (null !== $this->context) {
+            $org = $this->context->getCurrentOrganization();
+
+            if (null !== $org) {
+                $id .= '_'.$org->getId();
+            }
+        }
+
+        return $id;
     }
 }
