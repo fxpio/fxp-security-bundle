@@ -13,8 +13,8 @@
     ],
     "require": {
         "php": ">=5.4.0",
-        "symfony/framework-bundle": "~2.4",
-        "symfony/expression-language": "~2.4",
+        "symfony/framework-bundle": "~2.6",
+        "symfony/expression-language": "~2.6",
         "friendsofsymfony/user-bundle": "~2.0@dev",
         "sonatra/cache": "~1.0@dev"
     },
