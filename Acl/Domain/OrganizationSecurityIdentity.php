@@ -128,7 +128,7 @@ final class OrganizationSecurityIdentity
     protected static function getOrganizationRoles(OrganizationUserInterface $user, $roleHierarchy = null)
     {
         $roles = $user->getRoles();
-        $id = $user->getOrganization()->getId();
+        $id = strtoupper($user->getOrganization()->getName());
         $size = count($roles);
 
         for ($i = 0; $i < $size; $i++) {
