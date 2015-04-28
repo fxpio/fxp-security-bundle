@@ -112,7 +112,7 @@ class RoleHierarchy extends BaseRoleHierarchy
 
         $id = sha1(implode('|', $rolenames));
 
-        // find the hierarchy in excecution cache
+        // find the hierarchy in execution cache
         if (isset($this->cacheExec[$id])) {
             return $this->cacheExec[$id];
         }
