@@ -55,7 +55,6 @@ class OrganizationalRoleHierarchyVoter extends RoleVoter
                 $roles[] = new Role($sid->getRole());
             }
         }
-        var_dump($roles);
 
         return $roles;
     }
