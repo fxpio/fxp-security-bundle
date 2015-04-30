@@ -12,18 +12,18 @@
 namespace Sonatra\Bundle\SecurityBundle\Core\Authorization\Voter;
 
 /**
- * GroupableVoter to determine the groups granted on current user defined in token.
+ * OrganizationVoter to determine the organization granted on current user defined in token.
  *
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-class GroupableVoter extends AbstractIdentityVoter
+class OrganizationVoter extends AbstractIdentityVoter
 {
     /**
      * {@inheritdoc}
      */
     protected function getValidClass()
     {
-        return 'FOS\UserBundle\Model\GroupInterface';
+        return 'Sonatra\Bundle\SecurityBundle\Model\OrganizationInterface';
     }
 
     /**
@@ -31,6 +31,6 @@ class GroupableVoter extends AbstractIdentityVoter
      */
     protected function getDefaultPrefix()
     {
-        return 'GROUP_';
+        return 'ORG_';
     }
 }
