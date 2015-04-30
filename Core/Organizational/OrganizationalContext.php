@@ -91,12 +91,10 @@ class OrganizationalContext implements OrganizationalContextInterface
         $this->organizationUser = null;
         $org = null;
 
-        if ($user instanceof UserInterface
+        if ($user instanceof UserInterface && $organizationUser instanceof OrganizationUserInterface
                 && $user->getUsername() === $organizationUser->getUser()->getUsername()) {
-            if ($organizationUser instanceof OrganizationUserInterface) {
-                $this->organizationUser = $organizationUser;
-                $org = $organizationUser->getOrganization();
-            }
+            $this->organizationUser = $organizationUser;
+            $org = $organizationUser->getOrganization();
         }
         $this->setCurrentOrganization($org);
     }
