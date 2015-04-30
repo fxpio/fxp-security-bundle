@@ -82,6 +82,7 @@ final class OrganizationSecurityIdentity
 
         foreach ($user->getUserOrganizations() as $userOrg) {
             $sids[] = self::fromAccount($userOrg->getOrganization());
+            $sids = array_merge($sids, static::getOrganizationGroups($userOrg));
             $roles = static::getOrganizationRoles($userOrg, $roleHierarchy);
 
             foreach ($roles as $role) {
@@ -112,6 +113,7 @@ final class OrganizationSecurityIdentity
 
         $userOrg = $context->getCurrentOrganizationUser();
         if (null !== $userOrg) {
+            $sids = array_merge($sids, static::getOrganizationGroups($userOrg));
             $roles = static::getOrganizationRoles($userOrg, $roleHierarchy);
             foreach ($roles as $role) {
                 $sids[] = new RoleSecurityIdentity($role->getRole());
@@ -144,5 +146,27 @@ final class OrganizationSecurityIdentity
         }
 
         return $roles;
+    }
+
+    /**
+     * Get the security identities for organization groups of user.
+     *
+     * @param OrganizationUserInterface $user
+     *
+     * @return array
+     */
+    protected static function getOrganizationGroups(OrganizationUserInterface $user)
+    {
+        $sids = array();
+
+        foreach ($user->getGroups() as $group) {
+            try {
+                $sids[] = GroupSecurityIdentity::fromAccount($group, $user->getOrganization()->getName());
+            } catch (\InvalidArgumentException $invalid) {
+                // ignore, group has no group security identity
+            }
+        }
+
+        return $sids;
     }
 }

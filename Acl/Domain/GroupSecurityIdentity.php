@@ -32,12 +32,16 @@ final class GroupSecurityIdentity
      * Creates a group security identity from a GroupInterface.
      *
      * @param GroupInterface $group
+     * @param string|null    $suffix
      *
      * @return UserSecurityIdentity
      */
-    public static function fromAccount(GroupInterface $group)
+    public static function fromAccount(GroupInterface $group, $suffix = null)
     {
-        return new UserSecurityIdentity($group->getName(), ClassUtils::getRealClass($group));
+        $suffix = null === $suffix ? '' : '__'.$suffix;
+        $name = strtoupper($group->getName().$suffix);
+
+        return new UserSecurityIdentity($name, ClassUtils::getRealClass($group));
     }
 
     /**
