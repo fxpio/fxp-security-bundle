@@ -93,6 +93,8 @@ final class OrganizationSecurityIdentity
     }
 
     /**
+     * Get the security identities for the current organization of user.
+     *
      * @param OrganizationalContextInterface $context       The organizational context
      * @param RoleHierarchyInterface|null    $roleHierarchy The role hierarchy
      *
@@ -120,6 +122,8 @@ final class OrganizationSecurityIdentity
     }
 
     /**
+     * Get the organization roles of user.
+     *
      * @param OrganizationUserInterface   $user
      * @param RoleHierarchyInterface|null $roleHierarchy
      *
