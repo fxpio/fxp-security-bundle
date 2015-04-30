@@ -4,6 +4,6 @@ parameters:
 services:
     sonatra_security.role_hierarchy.cache.listener:
         class:     '%sonatra_security.role_hierarchy.cache.listener.class%'
-        arguments: ['@sonatra_security.role_hierarchy.cache']
+        arguments: ['@sonatra_security.role_hierarchy.cache', '@security.acl.security_identity_retrieval_strategy', '@?sonatra_security.organizational_context']
         tags:
             - { name: doctrine.event_subscriber }

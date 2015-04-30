@@ -98,7 +98,7 @@ class RoleHierarchy extends BaseRoleHierarchy
             return $roles;
         }
 
-        $rolenames = array();
+        $roleNames = array();
         $nRoles = array();
 
         foreach ($roles as $role) {
@@ -108,12 +108,12 @@ class RoleHierarchy extends BaseRoleHierarchy
                 throw new SecurityException(sprintf('The Role class must be an instance of "%s"', $roleClass));
             }
 
-            $rolenames[] = ($role instanceof RoleInterface) ? $role->getRole() : $role;
+            $roleNames[] = ($role instanceof RoleInterface) ? $role->getRole() : $role;
             $nRoles[] = ($role instanceof RoleInterface) ? $role : new Role((string) $role);
         }
 
         $roles = $nRoles;
-        $id = sha1(implode('|', $rolenames));
+        $id = $this->getUniqueId($roleNames);
 
         // find the hierarchy in execution cache
         if (isset($this->cacheExec[$id])) {
@@ -143,8 +143,8 @@ class RoleHierarchy extends BaseRoleHierarchy
             $reachableRoles = $event->geReachableRoles();
         }
 
-        if (count($rolenames) > 0) {
-            $entityRoles = $repo->findBy(array('name' => $rolenames));
+        if (count($roleNames) > 0) {
+            $entityRoles = $repo->findBy(array('name' => $roleNames));
         }
 
         /* @var RoleHierarchisableInterface $eRole */
@@ -178,5 +178,17 @@ class RoleHierarchy extends BaseRoleHierarchy
         }
 
         return $finalRoles;
+    }
+
+    /**
+     * Get the unique id.
+     *
+     * @param array $roleNames The role names
+     *
+     * @return string
+     */
+    protected function getUniqueId(array $roleNames)
+    {
+        return sha1(implode('|', $roleNames));
     }
 }

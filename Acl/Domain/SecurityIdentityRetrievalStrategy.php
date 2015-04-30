@@ -82,6 +82,14 @@ class SecurityIdentityRetrievalStrategy extends BaseSecurityIdentityRetrievalStr
     }
 
     /**
+     * Invalidate the execution cache.
+     */
+    public function invalidateCache()
+    {
+        $this->cacheExec = array();
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getSecurityIdentities(TokenInterface $token)
