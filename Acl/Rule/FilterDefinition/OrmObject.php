@@ -76,6 +76,10 @@ class OrmObject extends AbstractRuleOrmFilterDefinition
                 continue;
             }
 
+            if ($sid instanceof RoleSecurityIdentity && 0 === strpos($sid->getRole(), 'IS_')) {
+                continue;
+            }
+
             $sids[] = 's.identifier = '.$connection->quote($sid->getRole());
         }
 
