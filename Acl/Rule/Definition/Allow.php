@@ -12,6 +12,8 @@
 namespace Sonatra\Bundle\SecurityBundle\Acl\Rule\Definition;
 
 use Sonatra\Bundle\SecurityBundle\Acl\Domain\AbstractRuleDefinition;
+use Sonatra\Bundle\SecurityBundle\Acl\Model\AclManagerInterface;
+use Sonatra\Bundle\SecurityBundle\Acl\Model\RuleContextDefinitionInterface;
 
 /**
  * The Allow ACL Rule Definition.
@@ -20,6 +22,19 @@ use Sonatra\Bundle\SecurityBundle\Acl\Domain\AbstractRuleDefinition;
  */
 class Allow extends AbstractRuleDefinition
 {
+    /**
+     * @var AclManagerInterface
+     */
+    protected $am;
+
+    /**
+     * @param AclManagerInterface $am
+     */
+    public function __construct(AclManagerInterface $am)
+    {
+        $this->am = $am;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -34,5 +49,22 @@ class Allow extends AbstractRuleDefinition
     public function getTypes()
     {
         return array();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isGranted(RuleContextDefinitionInterface $rcd)
+    {
+        if (null !== $rcd->getField()) {
+            $sids = $rcd->getSecurityIdentities();
+            $oid = $rcd->getObjectIdentity();
+            $initOid = $oid;
+            $masks = $rcd->getMasks();
+
+            return $this->am->doIsGranted($sids, $masks, $oid, $initOid);
+        }
+
+        return true;
     }
 }
