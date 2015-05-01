@@ -1,5 +1,0 @@
-services:
-    #Acl Object Filter Voter
-    sonatra_security.acl.object_filter_voter.doctrine_orm_collection:
-        class: Sonatra\Bundle\SecurityBundle\Acl\ObjectFilter\DoctrineOrmCollectionValue
-        tags:   [ { name: sonatra_security.acl.object_filter_voter } ]
