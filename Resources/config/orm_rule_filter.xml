@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+
+        <parameter key="sonatra_security.acl.dbal.options" type="collection">
+            <parameter key="class_table_name">%security.acl.dbal.class_table_name%</parameter>
+            <parameter key="entry_table_name">%security.acl.dbal.entry_table_name%</parameter>
+            <parameter key="oid_table_name">%security.acl.dbal.oid_table_name%</parameter>
+            <parameter key="oid_ancestors_table_name">%security.acl.dbal.oid_ancestors_table_name%</parameter>
+            <parameter key="sid_table_name">%security.acl.dbal.sid_table_name%</parameter>
+        </parameter>
+
+    </parameters>
+
+    <services>
+
+        <!-- Acl Rule Filter Definitions -->
+        <service id="sonatra_security.acl.rule_filter_definition.orm.deny"
+                 class="Sonatra\Bundle\SecurityBundle\Acl\Rule\FilterDefinition\OrmDeny">
+            <tag name="sonatra_security.acl.rule_filter_definition" alias="orm:deny"/>
+        </service>
+
+        <service id="sonatra_security.acl.rule_filter_definition.orm.affirmative"
+                 class="Sonatra\Bundle\SecurityBundle\Acl\Rule\FilterDefinition\OrmAffirmative">
+            <tag name="sonatra_security.acl.rule_filter_definition" alias="orm:affirmative"/>
+        </service>
+
+        <service id="sonatra_security.acl.rule_filter_definition.orm.unanimous"
+                 class="Sonatra\Bundle\SecurityBundle\Acl\Rule\FilterDefinition\OrmUnanimous">
+            <tag name="sonatra_security.acl.rule_filter_definition" alias="orm:unanimous"/>
+        </service>
+
+        <service id="sonatra_security.acl.rule_filter_definition.orm.object"
+                 class="Sonatra\Bundle\SecurityBundle\Acl\Rule\FilterDefinition\OrmObject">
+            <argument type="service" id="doctrine.orm.entity_manager"/>
+            <argument>%sonatra_security.acl.dbal.options%</argument>
+            <tag name="sonatra_security.acl.rule_filter_definition" alias="orm:object"/>
+        </service>
+
+        <service id="sonatra_security.acl.rule_filter_definition.orm.class"
+                 class="Sonatra\Bundle\SecurityBundle\Acl\Rule\FilterDefinition\OrmClass">
+            <argument type="service" id="doctrine.orm.entity_manager"/>
+            <argument>%sonatra_security.acl.dbal.options%</argument>
+            <tag name="sonatra_security.acl.rule_filter_definition" alias="orm:class"/>
+        </service>
+
+    </services>
+
+</container>

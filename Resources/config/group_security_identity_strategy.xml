@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+
+        <!-- Override standard security identity retrieval strategy -->
+        <parameter key="security.acl.security_identity_retrieval_strategy.class">Sonatra\Bundle\SecurityBundle\Acl\Domain\SecurityIdentityRetrievalStrategy</parameter>
+        <parameter key="security.access.groupable_voter.class">Sonatra\Bundle\SecurityBundle\Core\Authorization\Voter\GroupableVoter</parameter>
+
+    </parameters>
+
+    <services>
+
+        <!-- Override security identity retrieval strategy service -->
+        <service id="security.acl.security_identity_retrieval_strategy"
+                 class="%security.acl.security_identity_retrieval_strategy.class%"
+                 public="false">
+            <argument type="service" id="security.role_hierarchy"/>
+            <argument type="service" id="security.authentication.trust_resolver"/>
+            <call method="setEventDispatcher">
+                <argument type="service" id="event_dispatcher" on-invalid="ignored"/>
+            </call>
+            <call method="setOrganizationalContext">
+                <argument type="service" id="sonatra_security.organizational_context" on-invalid="ignored"/>
+            </call>
+        </service>
+
+        <service id="security.access.groupable_voter"
+                 class="%security.access.groupable_voter.class%"
+                 public="false">
+            <argument type="service" id="security.acl.security_identity_retrieval_strategy"/>
+            <tag name="security.voter" priority="245"/>
+        </service>
+
+    </services>
+
+</container>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+
+        <parameter key="security.role_hierarchy.class">Sonatra\Bundle\SecurityBundle\Core\Role\OrganizationalRoleHierarchy</parameter>
+        <parameter key="sonatra_security.role_hierarchy.cache.class">Sonatra\Component\Cache\Adapter\PhpCache</parameter>
+
+    </parameters>
+
+    <services>
+
+        <!-- Override Security Role Hierarchy -->
+        <service id="security.role_hierarchy"
+                 class="%security.role_hierarchy.class%"
+                public="false">
+            <argument>%security.role_hierarchy.roles%</argument>
+            <argument type="service" id="doctrine"/>
+            <argument>%sonatra_security.role_class%</argument>
+            <argument type="service" id="sonatra_security.role_hierarchy.cache"/>
+            <argument type="service" id="sonatra_security.organizational_context" on-invalid="ignored"/>
+            <call method="setEventDispatcher">
+                <argument type="service" id="event_dispatcher"/>
+            </call>
+        </service>
+
+        <service id="sonatra_security.role_hierarchy.cache"
+                class="%sonatra_security.role_hierarchy.cache.class%">
+            <argument>%sonatra_security.cache_dir%</argument>
+            <argument>role_hierarchy</argument>
+            <argument type="service" id="filesystem"/>
+        </service>
+
+    </services>
+
+</container>

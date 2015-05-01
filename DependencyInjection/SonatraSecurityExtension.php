@@ -34,8 +34,7 @@ class SonatraSecurityExtension extends Extension
 
         $ref = new \ReflectionClass($this);
         $configPath = dirname(dirname($ref->getFileName())).'/Resources/config';
-        $loader = new Loader\YamlFileLoader($container, new FileLocator($configPath));
-        $loaderXml = new Loader\XmlFileLoader($container, new FileLocator($configPath));
+        $loader = new Loader\XmlFileLoader($container, new FileLocator($configPath));
 
         // entity classes
         $container->setParameter('sonatra_security.user_class', $config['user_class']);
@@ -54,12 +53,12 @@ class SonatraSecurityExtension extends Extension
 
         // host role
         if ($config['host_role']['enabled']) {
-            $loader->load('host_role.yml');
+            $loader->load('host_role.xml');
         }
 
         // role hierarchy
         if ($config['role_hierarchy']['enabled']) {
-            $loader->load('role_hierarchy.yml');
+            $loader->load('role_hierarchy.xml');
 
             // role hierarchy cache dir
             if (!is_dir($cacheDir.'/role_hierarchy')) {
@@ -72,17 +71,17 @@ class SonatraSecurityExtension extends Extension
 
             // doctrine orm listener role hierarchy
             if ($config['doctrine']['orm']['listener']['role_hierarchy']) {
-                $loader->load('orm_listener_role_hierarchy.yml');
+                $loader->load('orm_listener_role_hierarchy.xml');
             }
         }
 
         // expression
         if ($config['expression']['has_permission']) {
-            $loader->load('expression_has_permission.yml');
+            $loader->load('expression_has_permission.xml');
         }
 
         if ($config['expression']['has_field_permission']) {
-            $loader->load('expression_has_field_permission.yml');
+            $loader->load('expression_has_field_permission.xml');
         }
 
         // acl
@@ -93,10 +92,10 @@ class SonatraSecurityExtension extends Extension
                 && $container->hasParameter('security.acl.dbal.oid_ancestors_table_name')
                 && $container->hasParameter('security.acl.dbal.sid_table_name')) {
             if ($config['acl']['security_identity']) {
-                $loader->load('group_security_identity_strategy.yml');
+                $loader->load('group_security_identity_strategy.xml');
             }
 
-            $loader->load('acl.yml');
+            $loader->load('acl.xml');
 
             $container->setParameter('sonatra_security.acl_default_rule', $config['acl']['default_rule']);
             $container->setParameter('sonatra_security.acl_disabled_rule', $config['acl']['disabled_rule']);
@@ -104,22 +103,22 @@ class SonatraSecurityExtension extends Extension
 
             // doctrine orm listener acl filter/restaure fields value
             if ($config['doctrine']['orm']['listener']['acl_filter_fields']) {
-                $loader->load('orm_listener_acl_filter_fields.yml');
+                $loader->load('orm_listener_acl_filter_fields.xml');
             }
 
             // doctrine orm rule filters
             if ($config['doctrine']['orm']['filter']['rule_filters']) {
-                $loader->load('orm_rule_filter.yml');
+                $loader->load('orm_rule_filter.xml');
             }
 
             // doctrine orm object filter voters
             if ($config['doctrine']['orm']['object_filter_voter']) {
-                $loader->load('orm_object_filter_voter.yml');
+                $loader->load('orm_object_filter_voter.xml');
             }
         }
 
         if ($config['organizational_context']['enabled']) {
-            $loaderXml->load('organizational_context.xml');
+            $loader->load('organizational_context.xml');
         }
     }
 }

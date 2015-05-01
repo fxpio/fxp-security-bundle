@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+
+        <parameter key="sonatra_security.acl.rule_extension.class">Sonatra\Bundle\SecurityBundle\Acl\DependencyInjection\RuleExtension</parameter>
+        <parameter key="sonatra_security.acl.object_filter_extension.class">Sonatra\Bundle\SecurityBundle\Acl\DependencyInjection\ObjectFilterExtension</parameter>
+        <parameter key="sonatra_security.acl.rule_manager.class">Sonatra\Bundle\SecurityBundle\Acl\Domain\AclRuleManager</parameter>
+        <parameter key="sonatra_security.acl.manipulator.class">Sonatra\Bundle\SecurityBundle\Acl\Domain\AclManipulator</parameter>
+        <parameter key="sonatra_security.acl.manager.class">Sonatra\Bundle\SecurityBundle\Acl\Domain\AclManager</parameter>
+        <parameter key="sonatra_security.acl.object_filter.class">Sonatra\Bundle\SecurityBundle\Acl\Domain\AclObjectFilter</parameter>
+        <parameter key="sonatra_security.acl.voter.class">Sonatra\Bundle\SecurityBundle\Core\Authorization\Voter\AclVoter</parameter>
+        <parameter key="sonatra_security.acl.disable.listener.class">Sonatra\Bundle\SecurityBundle\Listener\DisableAclListener</parameter>
+        <parameter key="sonatra_security.acl_exception.base.class">Sonatra\Bundle\SecurityBundle\EventListener\AclExceptionListener</parameter>
+        <!-- Override standard object identity retrieval strategy -->
+        <parameter key="security.acl.object_identity_retrieval_strategy.class">Sonatra\Bundle\SecurityBundle\Acl\Domain\ObjectIdentityRetrievalStrategy</parameter>
+        <!-- Override acl provider -->
+        <parameter key="security.acl.dbal.provider.class">Sonatra\Bundle\SecurityBundle\Acl\Dbal\MutableAclProvider</parameter>
+
+    </parameters>
+
+    <services>
+
+        <!-- Rule Extension -->
+        <service id="sonatra_security.acl.rule_extension"
+                 class="%sonatra_security.acl.rule_extension.class%"
+                 public="false">
+            <argument type="collection"/>
+            <argument type="collection"/>
+            <property name="container" type="service" id="service_container"/>
+        </service>
+
+        <!-- Object Filter Extension -->
+        <service id="sonatra_security.acl.object_filter_extension"
+                 class="%sonatra_security.acl.object_filter_extension.class%"
+                 public="false">
+            <argument type="collection"/>
+            <property name="container" type="service" id="service_container"/>
+        </service>
+
+        <!-- Rule Manager -->
+        <service id="sonatra_security.acl.rule_manager"
+                 class="%sonatra_security.acl.rule_manager.class%">
+            <argument type="service" id="sonatra_security.acl.rule_extension"/>
+            <argument>%sonatra_security.acl_default_rule%</argument>
+            <argument>%sonatra_security.acl_disabled_rule%</argument>
+            <argument>%sonatra_security.acl_rules%</argument>
+        </service>
+
+        <!-- ACL Manipulator -->
+        <service id="sonatra_security.acl.manipulator"
+                 class="%sonatra_security.acl.manipulator.class%">
+            <argument type="service" id="security.acl.provider"/>
+            <argument type="service" id="security.acl.security_identity_retrieval_strategy"/>
+            <argument type="service" id="security.acl.object_identity_retrieval_strategy"/>
+        </service>
+
+        <!-- ACL Manager -->
+        <service id="sonatra_security.acl.manager"
+                 class="%sonatra_security.acl.manager.class%">
+            <argument type="service" id="security.acl.provider"/>
+            <argument type="service" id="security.acl.security_identity_retrieval_strategy"/>
+            <argument type="service" id="security.acl.object_identity_retrieval_strategy"/>
+            <argument type="service" id="sonatra_security.acl.rule_manager"/>
+        </service>
+
+        <!-- ACL Object Filter -->
+        <service id="sonatra_security.acl.object_filter"
+                 class="%sonatra_security.acl.object_filter.class%">
+            <argument type="service" id="sonatra_security.acl.object_filter_extension"/>
+            <argument type="service" id="sonatra_security.acl.manager"/>
+            <argument type="service" id="security.authorization_checker"/>
+        </service>
+
+        <!-- Voter -->
+        <service id="sonatra_security.acl.voter"
+                 class="%sonatra_security.acl.voter.class%"
+                 public="false">
+            <argument type="service" id="sonatra_security.acl.manager"/>
+            <argument type="service" id="security.acl.security_identity_retrieval_strategy"/>
+            <tag name="security.voter" priority="260"/>
+        </service>
+
+        <!-- Disable ACL Listener -->
+        <service id="sonatra_security.acl.disable.listener"
+                 class="%sonatra_security.acl.disable.listener.class%">
+            <argument type="service" id="sonatra_security.acl.manager"/>
+            <tag name="kernel.event_subscriber"/>
+        </service>
+
+        <service id="sonatra_security.acl_exception.listener"
+                 class="%sonatra_security.acl_exception.base.class%">
+            <tag name="kernel.event_listener" event="kernel.exception" method="onKernelException"/>
+        </service>
+
+        <!-- Acl Object Filter Voter -->
+        <service id="sonatra_security.acl.object_filter_voter.mixed"
+                 class="Sonatra\Bundle\SecurityBundle\Acl\ObjectFilter\MixedValue">
+            <tag name="sonatra_security.acl.object_filter_voter" priority="-255"/>
+        </service>
+
+        <!-- Acl Rule Definitions -->
+        <service id="sonatra_security.acl.rule_definition.disabled"
+                 class="Sonatra\Bundle\SecurityBundle\Acl\Rule\Definition\Disabled">
+            <tag name="sonatra_security.acl.rule_definition" alias="disabled"/>
+        </service>
+
+        <service id="sonatra_security.acl.rule_definition.allow"
+                 class="Sonatra\Bundle\SecurityBundle\Acl\Rule\Definition\Allow">
+            <tag name="sonatra_security.acl.rule_definition" alias="allow"/>
+        </service>
+
+        <service id="sonatra_security.acl.rule_definition.deny"
+                 class="Sonatra\Bundle\SecurityBundle\Acl\Rule\Definition\Deny">
+            <tag name="sonatra_security.acl.rule_definition" alias="deny"/>
+        </service>
+
+        <service id="sonatra_security.acl.rule_definition.affirmative"
+                 class="Sonatra\Bundle\SecurityBundle\Acl\Rule\Definition\Affirmative">
+            <tag name="sonatra_security.acl.rule_definition" alias="affirmative"/>
+        </service>
+
+        <service id="sonatra_security.acl.rule_definition.unanimous"
+                 class="Sonatra\Bundle\SecurityBundle\Acl\Rule\Definition\Unanimous">
+            <tag name="sonatra_security.acl.rule_definition" alias="unanimous"/>
+        </service>
+
+        <service id="sonatra_security.acl.rule_definition.object"
+                 class="Sonatra\Bundle\SecurityBundle\Acl\Rule\Definition\Object">
+            <argument type="service" id="sonatra_security.acl.manager"/>
+            <tag name="sonatra_security.acl.rule_definition" alias="object"/>
+        </service>
+
+        <service id="sonatra_security.acl.rule_definition.class"
+                 class="Sonatra\Bundle\SecurityBundle\Acl\Rule\Definition\ClassDefinition">
+            <argument type="service" id="sonatra_security.acl.manager"/>
+            <tag name="sonatra_security.acl.rule_definition" alias="class"/>
+        </service>
+
+        <service id="sonatra_security.acl.rule_definition.parent"
+                 class="Sonatra\Bundle\SecurityBundle\Acl\Rule\Definition\ParentDefinition">
+            <tag name="sonatra_security.acl.rule_definition" alias="parent"/>
+        </service>
+
+    </services>
+
+</container>
