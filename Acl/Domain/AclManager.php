@@ -324,7 +324,7 @@ class AclManager implements AclManagerInterface
         }
 
         if (is_int($type)) {
-            $type = AclUtils::convertToAclName($type);
+            $type = current(AclUtils::convertToAclName($type));
         }
 
         $classname = AclUtils::convertDomainObjectToClassname($domainObject);
