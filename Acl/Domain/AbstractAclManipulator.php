@@ -11,12 +11,12 @@
 
 namespace Sonatra\Bundle\SecurityBundle\Acl\Domain;
 
+use Symfony\Component\Security\Acl\Dbal\MutableAclProvider;
 use Symfony\Component\Security\Acl\Exception\AclNotFoundException;
 use Symfony\Component\Security\Acl\Exception\NoAceFoundException;
 use Symfony\Component\Security\Acl\Model\AuditableEntryInterface;
 use Symfony\Component\Security\Acl\Model\DomainObjectInterface;
 use Symfony\Component\Security\Acl\Model\EntryInterface;
-use Symfony\Component\Security\Acl\Model\MutableAclProviderInterface;
 use Symfony\Component\Security\Acl\Model\MutableAclInterface;
 use Symfony\Component\Security\Acl\Model\SecurityIdentityInterface;
 use Symfony\Component\Security\Acl\Model\ObjectIdentityRetrievalStrategyInterface;
@@ -41,7 +41,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 abstract class AbstractAclManipulator implements AclManipulatorInterface
 {
     /**
-     * @var MutableAclProviderInterface
+     * @var MutableAclProvider
      */
     protected $aclProvider;
 
@@ -58,11 +58,11 @@ abstract class AbstractAclManipulator implements AclManipulatorInterface
     /**
      * Constructor.
      *
-     * @param MutableAclProviderInterface                $aclProvider
+     * @param MutableAclProvider                         $aclProvider
      * @param SecurityIdentityRetrievalStrategyInterface $sidRetrievalStrategy
      * @param ObjectIdentityRetrievalStrategyInterface   $oidRetrievalStrategy
      */
-    public function __construct(MutableAclProviderInterface $aclProvider, SecurityIdentityRetrievalStrategyInterface $sidRetrievalStrategy, ObjectIdentityRetrievalStrategyInterface $oidRetrievalStrategy)
+    public function __construct(MutableAclProvider $aclProvider, SecurityIdentityRetrievalStrategyInterface $sidRetrievalStrategy, ObjectIdentityRetrievalStrategyInterface $oidRetrievalStrategy)
     {
         $this->aclProvider = $aclProvider;
         $this->sidRetrievalStrategy = $sidRetrievalStrategy;
