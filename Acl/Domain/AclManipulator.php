@@ -11,9 +11,8 @@
 
 namespace Sonatra\Bundle\SecurityBundle\Acl\Domain;
 
-use FOS\UserBundle\Model\GroupInterface;
 use Sonatra\Bundle\SecurityBundle\Exception\InvalidArgumentException;
-use Sonatra\Bundle\SecurityBundle\Model\OrganizationInterface;
+use Symfony\Component\Security\Acl\Domain\RoleSecurityIdentity;
 use Symfony\Component\Security\Acl\Domain\UserSecurityIdentity;
 use Symfony\Component\Security\Acl\Exception\AclAlreadyExistsException;
 use Sonatra\Bundle\SecurityBundle\Acl\Model\AclManipulatorInterface;
@@ -292,9 +291,18 @@ class AclManipulator extends AbstractAclManipulator implements AclManipulatorInt
     /**
      * {@inheritdoc}
      */
-    public function updateUserSecurityIdentity($sid, $oldName)
+    public function updateSecurityIdentity($sid, $oldName)
     {
-        $this->aclProvider->updateUserSecurityIdentity($this->getUserSecurityIdentity($sid), $oldName);
+        $sid = AclUtils::convertSecurityIdentity($sid);
+
+        if ($sid instanceof UserSecurityIdentity) {
+            $this->aclProvider->updateUserSecurityIdentity($sid, $oldName);
+        } elseif ($sid instanceof RoleSecurityIdentity) {
+            $this->aclProvider->updateRoleSecurityIdentity($sid, $oldName);
+        } else {
+            $str = 'Identity must implement one of: UserInterface, GroupInterface, OrganizationInterface, TokenInterface, UserSecurityIdentity or RoleSecurityIdentity';
+            throw new InvalidArgumentException($str);
+        }
     }
 
     /**
@@ -302,29 +310,9 @@ class AclManipulator extends AbstractAclManipulator implements AclManipulatorInt
      */
     public function deleteSecurityIdentity($sid)
     {
-        $this->aclProvider->deleteSecurityIdentity($this->getUserSecurityIdentity($sid));
-    }
-
-    /**
-     * Get the user security identity.
-     *
-     * @param UserInterface|GroupInterface|OrganizationInterface|TokenInterface $sid
-     *
-     * @return UserSecurityIdentity
-     *
-     * @throws InvalidArgumentException When the security identity is not a User, Group, Organization or a token with user
-     */
-    protected function getUserSecurityIdentity($sid)
-    {
         $sid = AclUtils::convertSecurityIdentity($sid);
 
-        if (!$sid instanceof UserSecurityIdentity) {
-            $str = 'Identity must implement one of: UserInterface, GroupInterface, OrganizationInterface or TokenInterface';
-
-            throw new InvalidArgumentException($str);
-        }
-
-        return $sid;
+        $this->aclProvider->deleteSecurityIdentity($sid);
     }
 
     /**

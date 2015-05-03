@@ -11,8 +11,8 @@
 
 namespace Sonatra\Bundle\SecurityBundle\Acl\Model;
 
-use FOS\UserBundle\Model\GroupInterface;
 use Sonatra\Bundle\SecurityBundle\Exception\InvalidArgumentException;
+use Sonatra\Bundle\SecurityBundle\Model\GroupInterface;
 use Sonatra\Bundle\SecurityBundle\Model\OrganizationInterface;
 use Symfony\Component\Security\Acl\Model\DomainObjectInterface;
 use Symfony\Component\Security\Acl\Model\SecurityIdentityInterface;
@@ -341,17 +341,17 @@ interface AclManipulatorInterface
     public function deleteAclFor($domainObject);
 
     /**
-     * @param UserInterface|GroupInterface|OrganizationInterface|TokenInterface $sid
-     * @param string                                                            $oldName
+     * @param UserInterface|RoleInterface|GroupInterface|OrganizationInterface|TokenInterface $sid
+     * @param string                                                                          $oldName
      *
-     * @throws InvalidArgumentException When the security identity is not a User, Group, Organization or a Token with user
+     * @throws InvalidArgumentException When the security identity is not a User, Role, Group, Organization or a Token with user
      */
-    public function updateUserSecurityIdentity($sid, $oldName);
+    public function updateSecurityIdentity($sid, $oldName);
 
     /**
-     * @param UserInterface|GroupInterface|OrganizationInterface|TokenInterface $sid
+     * @param UserInterface|RoleInterface|GroupInterface|OrganizationInterface|TokenInterface $sid
      *
-     * @throws InvalidArgumentException When the security identity is not a User, Group, Organization or a Token with user
+     * @throws InvalidArgumentException When the security identity is not a User, Role, Group, Organization or a Token with user
      */
     public function deleteSecurityIdentity($sid);
 }
