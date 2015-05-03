@@ -34,7 +34,7 @@ class Configuration implements ConfigurationInterface
             ->children()
                 ->scalarNode('user_class')->defaultValue('FOS\UserBundle\Model\UserInterface')->end()
                 ->scalarNode('role_class')->defaultValue('Symfony\Component\Security\Core\Role\RoleInterface')->end()
-                ->scalarNode('group_class')->defaultValue('FOS\UserBundle\Model\GroupInterface')->end()
+                ->scalarNode('group_class')->defaultValue('Sonatra\Bundle\SecurityBundle\Model\GroupInterface')->end()
                 ->scalarNode('organization_class')->defaultValue('Sonatra\Bundle\SecurityBundle\Model\OrganizationInterface')->end()
                 ->scalarNode('cache_dir')->cannotBeEmpty()->defaultValue('%kernel.cache_dir%/sonatra_security')->end()
             ->end()

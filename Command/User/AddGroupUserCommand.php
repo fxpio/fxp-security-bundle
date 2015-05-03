@@ -11,7 +11,7 @@
 
 namespace Sonatra\Bundle\SecurityBundle\Command\User;
 
-use FOS\UserBundle\Model\GroupInterface;
+use Sonatra\Bundle\SecurityBundle\Model\GroupInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**

@@ -23,7 +23,7 @@ class GroupableVoter extends AbstractIdentityVoter
      */
     protected function getValidClass()
     {
-        return 'FOS\UserBundle\Model\GroupInterface';
+        return 'Sonatra\Bundle\SecurityBundle\Model\GroupInterface';
     }
 
     /**

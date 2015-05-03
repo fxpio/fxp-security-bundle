@@ -13,7 +13,7 @@ namespace Sonatra\Bundle\SecurityBundle\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use FOS\UserBundle\Model\GroupInterface;
+use FOS\UserBundle\Model\GroupInterface as FosGroupInterface;
 use FOS\UserBundle\Model\User;
 
 /**
@@ -195,7 +195,7 @@ abstract class OrganizationUser implements OrganizationUserInterface
     /**
      * {@inheritdoc}
      */
-    public function addGroup(GroupInterface $group)
+    public function addGroup(FosGroupInterface $group)
     {
         if (!$this->getGroups()->contains($group)) {
             $this->getGroups()->add($group);
@@ -207,7 +207,7 @@ abstract class OrganizationUser implements OrganizationUserInterface
     /**
      * {@inheritdoc}
      */
-    public function removeGroup(GroupInterface $group)
+    public function removeGroup(FosGroupInterface $group)
     {
         if ($this->getGroups()->contains($group)) {
             $this->getGroups()->removeElement($group);

@@ -14,6 +14,7 @@ namespace Sonatra\Bundle\SecurityBundle\Acl\Util;
 use Sonatra\Bundle\SecurityBundle\Acl\Domain\GroupSecurityIdentity;
 use Sonatra\Bundle\SecurityBundle\Acl\Domain\OrganizationSecurityIdentity;
 use Sonatra\Bundle\SecurityBundle\Exception\InvalidArgumentException;
+use Sonatra\Bundle\SecurityBundle\Model\GroupInterface;
 use Sonatra\Bundle\SecurityBundle\Model\OrganizationInterface;
 use Symfony\Component\Security\Acl\Domain\ObjectIdentity;
 use Symfony\Component\Security\Acl\Domain\UserSecurityIdentity;
@@ -27,7 +28,6 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Util\ClassUtils;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\Role\RoleInterface;
-use FOS\UserBundle\Model\GroupInterface;
 
 /**
  * Class related functionality for acl manipulation.

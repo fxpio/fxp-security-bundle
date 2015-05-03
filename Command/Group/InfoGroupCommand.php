@@ -15,11 +15,11 @@ use Doctrine\ORM\EntityRepository;
 use Sonatra\Bundle\SecurityBundle\Command\AbstractInfoCommand;
 use Sonatra\Bundle\SecurityBundle\Core\Token\ConsoleToken;
 use Sonatra\Bundle\SecurityBundle\Exception\InvalidArgumentException;
+use Sonatra\Bundle\SecurityBundle\Model\GroupInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Security\Core\Role\RoleInterface;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
-use FOS\UserBundle\Model\GroupInterface;
 
 /**
  * @author François Pluchino <francois.pluchino@sonatra.com>

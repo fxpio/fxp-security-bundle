@@ -12,8 +12,8 @@
 namespace Sonatra\Bundle\SecurityBundle\Command\Acl;
 
 use Doctrine\ORM\EntityRepository;
-use FOS\UserBundle\Model\GroupInterface;
 use Sonatra\Bundle\SecurityBundle\Exception\InvalidArgumentException;
+use Sonatra\Bundle\SecurityBundle\Model\GroupInterface;
 use Sonatra\Bundle\SecurityBundle\Model\OrganizationInterface;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;

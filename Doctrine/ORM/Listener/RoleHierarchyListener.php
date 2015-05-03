@@ -18,13 +18,13 @@ use Doctrine\ORM\PersistentCollection;
 use Doctrine\ORM\UnitOfWork;
 use Sonatra\Bundle\SecurityBundle\Acl\Domain\SecurityIdentityRetrievalStrategy;
 use Sonatra\Bundle\SecurityBundle\Core\Organizational\OrganizationalContextInterface;
+use Sonatra\Bundle\SecurityBundle\Model\GroupInterface;
 use Sonatra\Bundle\SecurityBundle\Model\OrganizationInterface;
 use Sonatra\Bundle\SecurityBundle\Model\OrganizationUserInterface;
 use Sonatra\Bundle\SecurityBundle\Model\RoleHierarchisableInterface;
 use Sonatra\Component\Cache\Adapter\CacheInterface;
 use Symfony\Component\Security\Acl\Model\SecurityIdentityRetrievalStrategyInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
-use FOS\UserBundle\Model\GroupInterface;
 
 /**
  * Invalidate the role hierarchy cache when users, roles or groups is inserted,

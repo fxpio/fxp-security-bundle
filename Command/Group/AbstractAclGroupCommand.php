@@ -12,7 +12,7 @@
 namespace Sonatra\Bundle\SecurityBundle\Command\Group;
 
 use Doctrine\ORM\EntityRepository;
-use FOS\UserBundle\Model\GroupInterface;
+use Sonatra\Bundle\SecurityBundle\Model\GroupInterface;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;

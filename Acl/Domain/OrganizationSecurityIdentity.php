@@ -161,7 +161,7 @@ final class OrganizationSecurityIdentity
 
         foreach ($user->getGroups() as $group) {
             try {
-                $sids[] = GroupSecurityIdentity::fromAccount($group, $user->getOrganization()->getName());
+                $sids[] = GroupSecurityIdentity::fromAccount($group);
             } catch (\InvalidArgumentException $invalid) {
                 // ignore, group has no group security identity
             }

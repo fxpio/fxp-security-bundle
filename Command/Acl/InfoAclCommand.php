@@ -12,6 +12,7 @@
 namespace Sonatra\Bundle\SecurityBundle\Command\Acl;
 
 use Doctrine\ORM\EntityRepository;
+use Sonatra\Bundle\SecurityBundle\Model\GroupInterface;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -27,7 +28,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
-use FOS\UserBundle\Model\GroupInterface;
 use Sonatra\Bundle\SecurityBundle\Core\Token\ConsoleToken;
 use Sonatra\Bundle\SecurityBundle\Acl\Util\AclUtils;
 use Sonatra\Bundle\SecurityBundle\Exception\InvalidArgumentException;

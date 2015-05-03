@@ -12,7 +12,6 @@
 namespace Sonatra\Bundle\SecurityBundle\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use FOS\UserBundle\Model\GroupInterface;
 use Symfony\Component\Security\Core\Role\RoleInterface;
 
 /**
