@@ -40,9 +40,7 @@ abstract class Role implements RoleHierarchisableInterface
     }
 
     /**
-     * Get id.
-     *
-     * @return int
+     * {@inheritdoc}
      */
     public function getId()
     {
@@ -58,9 +56,7 @@ abstract class Role implements RoleHierarchisableInterface
     }
 
     /**
-     * Gets the role name.
-     *
-     * @return string the role name
+     * {@inheritdoc}
      */
     public function getName()
     {
@@ -68,11 +64,7 @@ abstract class Role implements RoleHierarchisableInterface
     }
 
     /**
-     * Sets the role name.
-     *
-     * @param string $name
-     *
-     * @return Role the current object
+     * {@inheritdoc}
      */
     public function setName($name = null)
     {
@@ -190,9 +182,7 @@ abstract class Role implements RoleHierarchisableInterface
     }
 
     /**
-     * Convert the role to string.
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function __toString()
     {

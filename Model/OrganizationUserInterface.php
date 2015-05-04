@@ -12,7 +12,6 @@
 namespace Sonatra\Bundle\SecurityBundle\Model;
 
 use FOS\UserBundle\Model\GroupableInterface;
-use Symfony\Component\Security\Core\Role\RoleInterface;
 
 /**
  * Organization user interface.
