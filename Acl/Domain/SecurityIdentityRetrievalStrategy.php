@@ -13,7 +13,7 @@ namespace Sonatra\Bundle\SecurityBundle\Acl\Domain;
 
 use Sonatra\Bundle\SecurityBundle\Core\Organizational\OrganizationalContextInterface;
 use Sonatra\Bundle\SecurityBundle\Event\SecurityIdentityEvent;
-use Sonatra\Bundle\SecurityBundle\Events;
+use Sonatra\Bundle\SecurityBundle\IdentityRetrievalEvents;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Security\Acl\Domain\SecurityIdentityRetrievalStrategy as BaseSecurityIdentityRetrievalStrategy;
 use Symfony\Component\Security\Core\Authentication\AuthenticationTrustResolver;
@@ -110,7 +110,7 @@ class SecurityIdentityRetrievalStrategy extends BaseSecurityIdentityRetrievalStr
             if (null !== $this->eventDispatcher) {
                 $event = new SecurityIdentityEvent();
                 $event->setSecurityIdentities($sids);
-                $event = $this->eventDispatcher->dispatch(Events::PRE_SECURITY_IDENTITY_RETRIEVAL, $event);
+                $event = $this->eventDispatcher->dispatch(IdentityRetrievalEvents::PRE, $event);
                 $sids = $event->getSecurityIdentities();
             }
 
@@ -120,7 +120,7 @@ class SecurityIdentityRetrievalStrategy extends BaseSecurityIdentityRetrievalStr
             // dispatch post event
             if (null !== $this->eventDispatcher) {
                 $event->setSecurityIdentities($sids);
-                $event = $this->eventDispatcher->dispatch(Events::POST_SECURITY_IDENTITY_RETRIEVAL, $event);
+                $event = $this->eventDispatcher->dispatch(IdentityRetrievalEvents::POST, $event);
                 $sids = $event->getSecurityIdentities();
             }
 

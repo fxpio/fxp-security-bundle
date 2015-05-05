@@ -12,6 +12,7 @@
 namespace Sonatra\Bundle\SecurityBundle\Core\Role;
 
 use Sonatra\Bundle\SecurityBundle\Model\RoleHierarchisableInterface;
+use Sonatra\Bundle\SecurityBundle\ReachableRoleEvents;
 use Sonatra\Component\Cache\Adapter\CacheInterface;
 use Sonatra\Component\Cache\CacheElement;
 use Symfony\Component\Security\Core\Role\RoleHierarchy as BaseRoleHierarchy;
@@ -20,7 +21,6 @@ use Symfony\Component\Security\Core\Role\Role;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Sonatra\Bundle\SecurityBundle\Event\ReachableRoleEvent;
-use Sonatra\Bundle\SecurityBundle\Events;
 use Sonatra\Bundle\SecurityBundle\Exception\SecurityException;
 
 /**
@@ -139,7 +139,7 @@ class RoleHierarchy extends BaseRoleHierarchy
         if (null !== $this->eventDispatcher) {
             $event = new ReachableRoleEvent();
             $event->setReachableRoles($reachableRoles);
-            $event = $this->eventDispatcher->dispatch(Events::PRE_REACHABLE_ROLES, $event);
+            $event = $this->eventDispatcher->dispatch(ReachableRoleEvents::PRE, $event);
             $reachableRoles = $event->geReachableRoles();
         }
 
@@ -173,7 +173,7 @@ class RoleHierarchy extends BaseRoleHierarchy
 
         if (null !== $this->eventDispatcher) {
             $event->setReachableRoles($finalRoles);
-            $event = $this->eventDispatcher->dispatch(Events::POST_REACHABLE_ROLES, $event);
+            $event = $this->eventDispatcher->dispatch(ReachableRoleEvents::POST, $event);
             $finalRoles = $event->geReachableRoles();
         }
 

@@ -11,10 +11,11 @@
 
 namespace Sonatra\Bundle\SecurityBundle\Listener;
 
+use Sonatra\Bundle\SecurityBundle\IdentityRetrievalEvents;
+use Sonatra\Bundle\SecurityBundle\ReachableRoleEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\EventDispatcher\GenericEvent;
 use Sonatra\Bundle\SecurityBundle\Acl\Model\AclManagerInterface;
-use Sonatra\Bundle\SecurityBundle\Events;
 
 /**
  * Listener for disable/re-enable the acl doctrine orm filter.
@@ -44,10 +45,10 @@ class DisableAclListener implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-                Events::PRE_SECURITY_IDENTITY_RETRIEVAL => array('disableAcl', -255),
-                Events::PRE_REACHABLE_ROLES => array('disableAcl', -255),
-                Events::POST_SECURITY_IDENTITY_RETRIEVAL => array('enableAcl', 255),
-                Events::POST_REACHABLE_ROLES => array('enableAcl', 255),
+            IdentityRetrievalEvents::PRE  => array('disableAcl', -255),
+            ReachableRoleEvents::PRE      => array('disableAcl', -255),
+            IdentityRetrievalEvents::POST => array('enableAcl', 255),
+            ReachableRoleEvents::POST     => array('enableAcl', 255),
         );
     }
 
