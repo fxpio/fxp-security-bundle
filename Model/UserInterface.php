@@ -12,6 +12,7 @@
 namespace Sonatra\Bundle\SecurityBundle\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use FOS\UserBundle\Model\GroupableInterface;
 use FOS\UserBundle\Model\UserInterface as BaseUserInterface;
 
 /**
@@ -19,7 +20,7 @@ use FOS\UserBundle\Model\UserInterface as BaseUserInterface;
  *
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-interface UserInterface extends BaseUserInterface
+interface UserInterface extends BaseUserInterface, GroupableInterface
 {
     /**
      * Get the organizations of user.
