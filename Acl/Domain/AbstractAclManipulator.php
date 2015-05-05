@@ -12,6 +12,9 @@
 namespace Sonatra\Bundle\SecurityBundle\Acl\Domain;
 
 use Sonatra\Bundle\SecurityBundle\Acl\Model\MutableAclProviderInterface;
+use Sonatra\Bundle\SecurityBundle\AclManipulatorEvents;
+use Sonatra\Bundle\SecurityBundle\Event\AclManipulatorEvent;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Security\Acl\Exception\AclNotFoundException;
 use Symfony\Component\Security\Acl\Exception\NoAceFoundException;
 use Symfony\Component\Security\Acl\Model\AuditableEntryInterface;
@@ -56,17 +59,27 @@ abstract class AbstractAclManipulator implements AclManipulatorInterface
     protected $oidRetrievalStrategy;
 
     /**
+     * @var EventDispatcherInterface
+     */
+    protected $dispatcher;
+
+    /**
      * Constructor.
      *
      * @param MutableAclProviderInterface                $aclProvider
      * @param SecurityIdentityRetrievalStrategyInterface $sidRetrievalStrategy
      * @param ObjectIdentityRetrievalStrategyInterface   $oidRetrievalStrategy
+     * @param EventDispatcherInterface                   $dispatcher
      */
-    public function __construct(MutableAclProviderInterface $aclProvider, SecurityIdentityRetrievalStrategyInterface $sidRetrievalStrategy, ObjectIdentityRetrievalStrategyInterface $oidRetrievalStrategy)
+    public function __construct(MutableAclProviderInterface $aclProvider,
+                                SecurityIdentityRetrievalStrategyInterface $sidRetrievalStrategy,
+                                ObjectIdentityRetrievalStrategyInterface $oidRetrievalStrategy,
+                                EventDispatcherInterface $dispatcher)
     {
         $this->aclProvider = $aclProvider;
         $this->sidRetrievalStrategy = $sidRetrievalStrategy;
         $this->oidRetrievalStrategy = $oidRetrievalStrategy;
+        $this->dispatcher = $dispatcher;
     }
 
     /**
@@ -102,20 +115,23 @@ abstract class AbstractAclManipulator implements AclManipulatorInterface
         $oid = $this->oidRetrievalStrategy->getObjectIdentity($domainObject);
         $rights = array();
 
+        $ctx = $this->createContext($sid, $oid, $type, 0, $field);
+        $this->dispatcher->dispatch(AclManipulatorEvents::GET, new AclManipulatorEvent($ctx));
+
         try {
             /* @var MutableAclInterface $acl */
-            $acl = $this->aclProvider->findAcl($oid);
+            $acl = $this->aclProvider->findAcl($ctx->getObjectIdentity());
         } catch (AclNotFoundException $e) {
             return AclUtils::convertToMask($rights);
         } catch (NoAceFoundException $e) {
             return AclUtils::convertToMask($rights);
         }
 
-        $aces = $this->getAces($acl, $type, $field);
+        $aces = $this->getAces($acl, $ctx->getType(), $ctx->getField());
 
         /* @var EntryInterface $ace */
         foreach ($aces as $ace) {
-            if ($ace->getSecurityIdentity() == $sid) {
+            if ($ace->getSecurityIdentity() == $ctx->getSecurityIdentity()) {
                 $rights = array_merge($rights, AclUtils::convertToAclName($ace->getMask()));
             }
         }

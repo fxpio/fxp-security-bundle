@@ -11,6 +11,8 @@
 
 namespace Sonatra\Bundle\SecurityBundle\Acl\Domain;
 
+use Sonatra\Bundle\SecurityBundle\AclManipulatorEvents;
+use Sonatra\Bundle\SecurityBundle\Event\AclManipulatorEvent;
 use Sonatra\Bundle\SecurityBundle\Exception\InvalidArgumentException;
 use Symfony\Component\Security\Acl\Domain\RoleSecurityIdentity;
 use Symfony\Component\Security\Acl\Domain\UserSecurityIdentity;
@@ -70,6 +72,7 @@ class AclManipulator extends AbstractAclManipulator implements AclManipulatorInt
      */
     public function addPermission(PermissionContextInterface $context)
     {
+        $this->dispatcher->dispatch(AclManipulatorEvents::ADD, new AclManipulatorEvent($context));
         $oid = $context->getObjectIdentity();
 
         try {
@@ -130,6 +133,7 @@ class AclManipulator extends AbstractAclManipulator implements AclManipulatorInt
      */
     public function setPermission(PermissionContextInterface $context)
     {
+        $this->dispatcher->dispatch(AclManipulatorEvents::SET, new AclManipulatorEvent($context));
         $oid = $context->getObjectIdentity();
 
         try {
@@ -190,6 +194,7 @@ class AclManipulator extends AbstractAclManipulator implements AclManipulatorInt
      */
     public function revokePermission(PermissionContextInterface $context)
     {
+        $this->dispatcher->dispatch(AclManipulatorEvents::REVOKE, new AclManipulatorEvent($context));
         $oid = $context->getObjectIdentity();
 
         /* @var MutableAclInterface $acl */
@@ -329,9 +334,11 @@ class AclManipulator extends AbstractAclManipulator implements AclManipulatorInt
     {
         $sid = AclUtils::convertSecurityIdentity($sid);
         $oid = $this->oidRetrievalStrategy->getObjectIdentity($domainObject);
+        $ctx = $this->createContext($sid, $oid, $type, 0, $field);
+        $this->dispatcher->dispatch(AclManipulatorEvents::DELETE, new AclManipulatorEvent($ctx));
         /* @var MutableAclInterface $acl */
-        $acl = $this->aclProvider->findAcl($oid);
-        $this->doDeletePermissions($acl, $sid, $type, $field);
+        $acl = $this->aclProvider->findAcl($ctx->getObjectIdentity());
+        $this->doDeletePermissions($acl, $ctx->getSecurityIdentity(), $ctx->getType(), $ctx->getField());
         $this->aclProvider->updateAcl($acl);
 
         return $this;
