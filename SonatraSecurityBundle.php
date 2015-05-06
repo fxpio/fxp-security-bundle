@@ -46,7 +46,8 @@ class SonatraSecurityBundle extends Bundle
                     ),
                     array('fos_user.model_manager_name'),
                     'fos_user.backend_type_orm'
-            ));
+                )
+            );
         }
     }
 }
