@@ -219,6 +219,14 @@ abstract class OrganizationUser implements OrganizationUserInterface
     /**
      * {@inheritdoc}
      */
+    public function isAdmin()
+    {
+        return in_array('ROLE_ADMIN', $this->getRoles());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function __toString()
     {
         return $this->organization->getName().':'.$this->user->getUsername();

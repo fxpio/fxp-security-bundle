@@ -114,6 +114,13 @@ interface OrganizationUserInterface extends GroupableInterface
     public function getRoles();
 
     /**
+     * Check if the organization user is an admin (contain the ROLE_ADMIN).
+     *
+     * @return bool
+     */
+    public function isAdmin();
+
+    /**
      * @return string
      */
     public function __toString();
