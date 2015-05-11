@@ -28,6 +28,17 @@ final class IdentityRetrievalEvents
     const PRE = 'sonatra_security.security_identity_retrieval_strategy.pre';
 
     /**
+     * The IdentityRetrievalEvents::ADD event occurs when the security
+     * identities are adding.
+     *
+     * The event listener method receives a
+     * Sonatra\Bundle\SecurityBundle\Event\SecurityIdentityEvent instance.
+     *
+     * @var string
+     */
+    const ADD = 'sonatra_security.security_identity_retrieval_strategy.add';
+
+    /**
      * The IdentityRetrievalEvents::POST event occurs after the retrieval of
      * all security identities.
      *

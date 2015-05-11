@@ -91,8 +91,13 @@ class SonatraSecurityExtension extends Extension
                 && $container->hasParameter('security.acl.dbal.oid_table_name')
                 && $container->hasParameter('security.acl.dbal.oid_ancestors_table_name')
                 && $container->hasParameter('security.acl.dbal.sid_table_name')) {
-            if ($config['acl']['security_identity']) {
-                $loader->load('group_security_identity_strategy.xml');
+            if ($config['acl']['security_identity']['enabled']) {
+                $loader->load('security_identity_strategy.xml');
+            }
+
+            if ($config['acl']['access_voter']['enabled']
+                    && $config['acl']['access_voter']['groupable']) {
+                $loader->load('access_voter_groupable.xml');
             }
 
             $loader->load('acl.xml');

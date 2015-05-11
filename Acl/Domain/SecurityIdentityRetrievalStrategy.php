@@ -11,10 +11,11 @@
 
 namespace Sonatra\Bundle\SecurityBundle\Acl\Domain;
 
-use Sonatra\Bundle\SecurityBundle\Core\Organizational\OrganizationalContextInterface;
 use Sonatra\Bundle\SecurityBundle\Event\SecurityIdentityEvent;
 use Sonatra\Bundle\SecurityBundle\IdentityRetrievalEvents;
+use Sonatra\Bundle\SecurityBundle\Listener\EventStrategyIdentityInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Security\Acl\Domain\SecurityIdentityRetrievalStrategy as BaseSecurityIdentityRetrievalStrategy;
 use Symfony\Component\Security\Core\Authentication\AuthenticationTrustResolver;
 use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
@@ -29,19 +30,9 @@ use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
 class SecurityIdentityRetrievalStrategy extends BaseSecurityIdentityRetrievalStrategy
 {
     /**
-     * @var RoleHierarchyInterface
+     * @var EventDispatcherInterface
      */
-    private $roleHierarchy;
-
-    /**
-     * @var EventDispatcherInterface|null
-     */
-    private $eventDispatcher;
-
-    /**
-     * @var OrganizationalContextInterface|null
-     */
-    private $context;
+    private $dispatcher;
 
     /**
      * @var array
@@ -51,34 +42,17 @@ class SecurityIdentityRetrievalStrategy extends BaseSecurityIdentityRetrievalStr
     /**
      * Constructor.
      *
+     * @param EventDispatcherInterface    $dispatcher
      * @param RoleHierarchyInterface      $roleHierarchy
      * @param AuthenticationTrustResolver $authenticationTrustResolver
      */
-    public function __construct(RoleHierarchyInterface $roleHierarchy, AuthenticationTrustResolver $authenticationTrustResolver)
+    public function __construct(EventDispatcherInterface $dispatcher,
+                                RoleHierarchyInterface $roleHierarchy,
+                                AuthenticationTrustResolver $authenticationTrustResolver)
     {
-        $this->roleHierarchy = $roleHierarchy;
+        $this->dispatcher = $dispatcher;
 
         parent::__construct($roleHierarchy, $authenticationTrustResolver);
-    }
-
-    /**
-     * Set event dispatcher.
-     *
-     * @param EventDispatcherInterface $dispatcher
-     */
-    public function setEventDispatcher(EventDispatcherInterface $dispatcher)
-    {
-        $this->eventDispatcher = $dispatcher;
-    }
-
-    /**
-     * Set the organizational context.
-     *
-     * @param OrganizationalContextInterface $context The organizational context
-     */
-    public function setOrganizationalContext(OrganizationalContextInterface $context)
-    {
-        $this->context = $context;
     }
 
     /**
@@ -105,47 +79,19 @@ class SecurityIdentityRetrievalStrategy extends BaseSecurityIdentityRetrievalStr
         $sids = parent::getSecurityIdentities($token);
 
         // add group security identity
-        if (!$token instanceof AnonymousToken) {
+        if ($token instanceof TokenInterface && !$token instanceof AnonymousToken) {
             // dispatch pre event
-            if (null !== $this->eventDispatcher) {
-                $event = new SecurityIdentityEvent();
-                $event->setSecurityIdentities($sids);
-                $event = $this->eventDispatcher->dispatch(IdentityRetrievalEvents::PRE, $event);
-                $sids = $event->getSecurityIdentities();
-            }
-
-            $sids = $this->mergeSecurityIdentities($sids, $token, 'Sonatra\Bundle\SecurityBundle\Acl\Domain\OrganizationSecurityIdentity');
-            $sids = $this->mergeSecurityIdentities($sids, $token, 'Sonatra\Bundle\SecurityBundle\Acl\Domain\GroupSecurityIdentity');
-
+            $event = new SecurityIdentityEvent($token);
+            $event->setSecurityIdentities($sids);
+            $this->dispatcher->dispatch(IdentityRetrievalEvents::PRE, $event);
+            // dispatch add event
+            $event->setSecurityIdentities($sids);
+            $this->dispatcher->dispatch(IdentityRetrievalEvents::ADD, $event);
+            $sids = $event->getSecurityIdentities();
             // dispatch post event
-            if (null !== $this->eventDispatcher) {
-                $event->setSecurityIdentities($sids);
-                $event = $this->eventDispatcher->dispatch(IdentityRetrievalEvents::POST, $event);
-                $sids = $event->getSecurityIdentities();
-            }
+            $this->dispatcher->dispatch(IdentityRetrievalEvents::POST, $event);
 
             $this->cacheExec[$id] = $sids;
-        }
-
-        return $sids;
-    }
-
-    /**
-     * Merge the security identities.
-     *
-     * @param array          $sids  The security identities
-     * @param TokenInterface $token The token
-     * @param string         $class The OrganizationSecurityIdentity ou GroupSecurityIdentity class name
-     *
-     * @return array The security identities
-     */
-    protected function mergeSecurityIdentities(array $sids, TokenInterface $token, $class)
-    {
-        try {
-            /* @var OrganizationSecurityIdentity|GroupSecurityIdentity $class */
-            $sids = array_merge($sids, $class::fromToken($token, $this->context, $this->roleHierarchy));
-        } catch (\InvalidArgumentException $invalid) {
-            // ignore, group has no group security identity
         }
 
         return $sids;
@@ -160,13 +106,13 @@ class SecurityIdentityRetrievalStrategy extends BaseSecurityIdentityRetrievalStr
      */
     protected function buildId(TokenInterface $token)
     {
+        /* @var EventSubscriberInterface[] $listeners */
+        $listeners = $this->dispatcher->getListeners(IdentityRetrievalEvents::ADD);
         $id = spl_object_hash($token);
 
-        if (null !== $this->context) {
-            $org = $this->context->getCurrentOrganization();
-
-            if (null !== $org) {
-                $id .= '_'.$org->getId();
+        foreach ($listeners as $listener) {
+            if ($listener instanceof EventStrategyIdentityInterface) {
+                $id .= '_'.$listener->getCacheId();
             }
         }
 

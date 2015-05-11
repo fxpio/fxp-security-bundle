@@ -9,6 +9,7 @@
         <parameter key="sonatra_security.organizational_context.class">Sonatra\Bundle\SecurityBundle\Core\Organizational\OrganizationalContext</parameter>
         <parameter key="sonatra_security.access.organizational_role_hierarchy_voter.class">Sonatra\Bundle\SecurityBundle\Core\Authorization\Voter\OrganizationalRoleHierarchyVoter</parameter>
         <parameter key="security.access.organization_voter.class">Sonatra\Bundle\SecurityBundle\Core\Authorization\Voter\OrganizationVoter</parameter>
+        <parameter key="security.acl.security_identity_retrieval_strategy.listener.organization.class">Sonatra\Bundle\SecurityBundle\Listener\OrganizationStrategyIdentitySubscriber</parameter>
 
     </parameters>
 
@@ -29,6 +30,13 @@
                  public="false">
             <argument type="service" id="security.acl.security_identity_retrieval_strategy"/>
             <tag name="security.voter" priority="245"/>
+        </service>
+
+        <service id="security.acl.security_identity_retrieval_strategy.listener.organization"
+                 class="%security.acl.security_identity_retrieval_strategy.listener.organization.class%">
+            <argument type="service" id="security.role_hierarchy"/>
+            <argument type="service" id="sonatra_security.organizational_context"/>
+            <tag name="sonatra_security.event_subscriber"/>
         </service>
 
     </services>

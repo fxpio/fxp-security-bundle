@@ -12,6 +12,7 @@
 namespace Sonatra\Bundle\SecurityBundle\Event;
 
 use Symfony\Component\EventDispatcher\GenericEvent;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
 /**
  * The security identity retrieval strategy event.
@@ -21,12 +22,30 @@ use Symfony\Component\EventDispatcher\GenericEvent;
 class SecurityIdentityEvent extends GenericEvent
 {
     /**
-     * Constructor.
+     * @var TokenInterface
      */
-    public function __construct()
+    protected $token;
+
+    /**
+     * Constructor.
+     *
+     * @param TokenInterface $token The token
+     */
+    public function __construct(TokenInterface $token)
     {
+        $this->token = $token;
         $this->subject = array();
         $this->arguments = array();
+    }
+
+    /**
+     * Get the token.
+     *
+     * @return TokenInterface
+     */
+    public function getToken()
+    {
+        return $this->token;
     }
 
     /**
