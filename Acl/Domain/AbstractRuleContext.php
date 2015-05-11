@@ -46,6 +46,11 @@ abstract class AbstractRuleContext implements RuleContextInterface
     /**
      * @var array
      */
+    protected $organizations;
+
+    /**
+     * @var array
+     */
     protected $authenticated;
 
     /**
@@ -63,6 +68,7 @@ abstract class AbstractRuleContext implements RuleContextInterface
         $this->sids = $sids;
         $this->roles = array();
         $this->groups = array();
+        $this->organizations = array();
         $this->authenticated = array();
         $this->isSplited = false;
     }
@@ -128,6 +134,26 @@ abstract class AbstractRuleContext implements RuleContextInterface
     /**
      * {@inheritdoc}
      */
+    public function hasOrganization($name)
+    {
+        $this->splitSids();
+
+        return in_array($name, $this->organizations);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getOrganizations()
+    {
+        $this->splitSids();
+
+        return $this->organizations;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function isAuthenticatedAnonymously()
     {
         $this->splitSids();
@@ -176,6 +202,9 @@ abstract class AbstractRuleContext implements RuleContextInterface
             } elseif ($sid instanceof UserSecurityIdentity
                     && false !== strpos($sid->getClass(), 'Group')) {
                 $this->groups[] = $sid->getUsername();
+            } elseif ($sid instanceof UserSecurityIdentity
+                && false !== strpos($sid->getClass(), 'Organization')) {
+                $this->organizations[] = $sid->getUsername();
             }
         }
 

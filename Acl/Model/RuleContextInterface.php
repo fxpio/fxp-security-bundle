@@ -65,6 +65,22 @@ interface RuleContextInterface
     public function getGroups();
 
     /**
+     * Check if the context has a organization name.
+     *
+     * @param string $name
+     *
+     * @return bool
+     */
+    public function hasOrganization($name);
+
+    /**
+     * Get all organization names in context.
+     *
+     * @return array
+     */
+    public function getOrganizations();
+
+    /**
      * Check if the context is authenticated anonymously.
      *
      * @return bool
