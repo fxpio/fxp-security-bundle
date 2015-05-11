@@ -84,6 +84,18 @@ class RoleHierarchy extends BaseRoleHierarchy
     }
 
     /**
+     * Returns an array of all roles reachable by the given ones, but only defined in global configuration.
+     *
+     * @param RoleInterface[] $roles An array of RoleInterface instances
+     *
+     * @return RoleInterface[] An array of RoleInterface instances
+     */
+    public function getConfigReachableRoles(array $roles)
+    {
+        return parent::getReachableRoles($roles);
+    }
+
+    /**
      * Returns an array of all roles reachable by the given ones.
      *
      * @param RoleInterface[] $roles An array of RoleInterface instances
