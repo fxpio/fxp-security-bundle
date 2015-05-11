@@ -66,7 +66,7 @@ class OrganizationStrategyIdentitySubscriber implements EventSubscriberInterface
         $org = $this->context->getCurrentOrganization();
 
         return null !== $org
-            ? '_'.$org->getId()
+            ? 'org'.$org->getId()
             : '';
     }
 
