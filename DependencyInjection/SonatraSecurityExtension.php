@@ -95,9 +95,14 @@ class SonatraSecurityExtension extends Extension
                 $loader->load('security_identity_strategy.xml');
             }
 
-            if ($config['acl']['access_voter']['enabled']
-                    && $config['acl']['access_voter']['groupable']) {
-                $loader->load('access_voter_groupable.xml');
+            if ($config['acl']['access_voter']['enabled']) {
+                if ($config['acl']['access_voter']['role_security_identity']) {
+                    $loader->load('access_voter_role_security_identity.xml');
+                }
+
+                if ($config['acl']['access_voter']['groupable']) {
+                    $loader->load('access_voter_groupable.xml');
+                }
             }
 
             $loader->load('acl.xml');

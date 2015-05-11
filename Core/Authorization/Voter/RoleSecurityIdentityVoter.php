@@ -18,12 +18,12 @@ use Symfony\Component\Security\Acl\Model\SecurityIdentityRetrievalStrategyInterf
 use Symfony\Component\Security\Core\Role\Role;
 
 /**
- * OrganizationalRoleHierarchyVoter uses a RoleHierarchy and organizational context to
+ * RoleSecurityIdentityVoter uses a SecurityIdentityRetrievalStrategy to
  * determine the roles granted to the user before voting.
  *
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-class OrganizationalRoleHierarchyVoter extends RoleVoter
+class RoleSecurityIdentityVoter extends RoleVoter
 {
     /**
      * @var SecurityIdentityRetrievalStrategyInterface

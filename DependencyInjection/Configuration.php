@@ -125,6 +125,7 @@ class Configuration implements ConfigurationInterface
                     ->addDefaultsIfNotSet()
                     ->canBeDisabled()
                     ->children()
+                        ->scalarNode('role_security_identity')->defaultTrue()->end()
                         ->scalarNode('groupable')->defaultTrue()->end()
                     ->end()
                 ->end()
