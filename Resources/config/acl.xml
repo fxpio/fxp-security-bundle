@@ -14,7 +14,7 @@
         <parameter key="sonatra_security.acl.object_filter.class">Sonatra\Bundle\SecurityBundle\Acl\Domain\AclObjectFilter</parameter>
         <parameter key="sonatra_security.acl.voter.class">Sonatra\Bundle\SecurityBundle\Core\Authorization\Voter\AclVoter</parameter>
         <parameter key="sonatra_security.acl.disable.listener.class">Sonatra\Bundle\SecurityBundle\Listener\DisableAclListener</parameter>
-        <parameter key="sonatra_security.acl_exception.base.class">Sonatra\Bundle\SecurityBundle\EventListener\AclExceptionListener</parameter>
+        <parameter key="sonatra_security.acl_exception.class">Sonatra\Bundle\SecurityBundle\Listener\AclExceptionListener</parameter>
         <!-- Override standard object identity retrieval strategy -->
         <parameter key="security.acl.object_identity_retrieval_strategy.class">Sonatra\Bundle\SecurityBundle\Acl\Domain\ObjectIdentityRetrievalStrategy</parameter>
         <!-- Override acl provider -->
@@ -93,7 +93,7 @@
         </service>
 
         <service id="sonatra_security.acl_exception.listener"
-                 class="%sonatra_security.acl_exception.base.class%">
+                 class="%sonatra_security.acl_exception.class%">
             <tag name="kernel.event_listener" event="kernel.exception" method="onKernelException"/>
         </service>
 
