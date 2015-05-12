@@ -106,7 +106,7 @@ class OrmObject extends AbstractRuleOrmFilterDefinition
             )
         WHERE
             {$connection->getDatabasePlatform()->getIsNotNullExpression('e.object_identity_id')}
-            AND (e.mask in (4,6,12,16,20,30) OR e.mask >= 32 OR ((e.mask / 2) % 1) > 0)
+            AND (e.mask in (1,4,6,12,16,20,30) OR e.mask >= 32 OR ((e.mask / 2) % 1) > 0)
             AND oid.id = e.object_identity_id
             AND {$sids}
             AND class.class_type = {$classname}
