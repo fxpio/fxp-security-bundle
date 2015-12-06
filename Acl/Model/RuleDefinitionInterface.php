@@ -18,8 +18,8 @@ namespace Sonatra\Bundle\SecurityBundle\Acl\Model;
  */
 interface RuleDefinitionInterface
 {
-    const TYPE_CLASS             = 'class';
-    const TYPE_OBJECT            = 'object';
+    const TYPE_CLASS = 'class';
+    const TYPE_OBJECT = 'object';
     const TYPE_SKIP_OPTIMIZATION = 'skip';
 
     /**

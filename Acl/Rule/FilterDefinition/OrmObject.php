@@ -84,7 +84,7 @@ class OrmObject extends AbstractRuleOrmFilterDefinition
             $sids[] = 's.identifier = '.$connection->quote($sid->getRole());
         }
 
-        $sids =  '('.implode(' OR ', $sids).')';
+        $sids = '('.implode(' OR ', $sids).')';
 
         $sql = <<<SELECTCLAUSE
         SELECT
