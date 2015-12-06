@@ -45,10 +45,10 @@ class DisableAclListener implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            IdentityRetrievalEvents::PRE  => array('disableAcl', -255),
-            ReachableRoleEvents::PRE      => array('disableAcl', -255),
+            IdentityRetrievalEvents::PRE => array('disableAcl', -255),
+            ReachableRoleEvents::PRE => array('disableAcl', -255),
             IdentityRetrievalEvents::POST => array('enableAcl', 255),
-            ReachableRoleEvents::POST     => array('enableAcl', 255),
+            ReachableRoleEvents::POST => array('enableAcl', 255),
         );
     }
 
