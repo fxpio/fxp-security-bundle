@@ -13,6 +13,7 @@ namespace Sonatra\Bundle\SecurityBundle\Acl\Rule\FilterDefinition;
 
 use Sonatra\Bundle\SecurityBundle\Acl\Domain\AbstractRuleOrmFilterDefinition;
 use Sonatra\Bundle\SecurityBundle\Acl\Model\OrmFilterRuleContextDefinitionInterface;
+use Sonatra\Bundle\SecurityBundle\Acl\Model\RuleOrmFilterDefinitionInterface;
 
 /**
  * The Affirmative ACL Rule Filter Definition.
@@ -38,7 +39,9 @@ class OrmAffirmative extends AbstractRuleOrmFilterDefinition
             return '';
         }
 
+        /* @var RuleOrmFilterDefinitionInterface $oDef */
         $oDef = $this->arm->getFilterDefinition('object', $this->getType());
+        /* @var RuleOrmFilterDefinitionInterface $cDef */
         $cDef = $this->arm->getFilterDefinition('class', $this->getType());
 
         $oFilter = $oDef->addFilterConstraint($rcd);

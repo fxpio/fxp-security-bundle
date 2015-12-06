@@ -11,6 +11,7 @@
 
 namespace Sonatra\Bundle\SecurityBundle\Command\User;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use FOS\UserBundle\Model\GroupableInterface;
 use Sonatra\Bundle\SecurityBundle\Model\GroupInterface;
@@ -50,6 +51,7 @@ abstract class AbstractGroupUserCommand extends ContainerAwareCommand
         // find user
         $userClass = str_replace('/', '\\', $this->getContainer()->getParameter('sonatra_security.user_class'));
         $userName = $input->getArgument('username');
+        /* @var EntityManagerInterface $emUser */
         $emUser = $this->getContainer()->get('doctrine')->getManagerForClass($userClass);
 
         if (null === $emUser) {
@@ -68,6 +70,7 @@ abstract class AbstractGroupUserCommand extends ContainerAwareCommand
         // find group
         $groupClass = str_replace('/', '\\', $this->getContainer()->getParameter('sonatra_security.group_class'));
         $groupName = $input->getArgument('group');
+        /* @var EntityManagerInterface $emGroup */
         $emGroup = $this->getContainer()->get('doctrine')->getManagerForClass($groupClass);
         /* @var EntityRepository $repoGroup */
         $repoGroup = $emGroup->getRepository($groupClass);

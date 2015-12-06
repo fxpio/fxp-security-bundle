@@ -11,6 +11,7 @@
 
 namespace Sonatra\Bundle\SecurityBundle\Command\Role;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
@@ -50,6 +51,7 @@ abstract class AbstractActionParentCommand extends ContainerAwareCommand
         $roleClass = str_replace('/', '\\', $this->getContainer()->getParameter('sonatra_security.role_class'));
         $roleName = $input->getArgument('role');
         $parentName = $input->getArgument('parent');
+        /* @var EntityManagerInterface $em */
         $em = $this->getContainer()->get('doctrine')->getManagerForClass($roleClass);
 
         if (null === $em) {

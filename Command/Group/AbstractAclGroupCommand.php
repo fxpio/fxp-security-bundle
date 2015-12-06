@@ -11,6 +11,7 @@
 
 namespace Sonatra\Bundle\SecurityBundle\Command\Group;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Sonatra\Bundle\SecurityBundle\Model\GroupInterface;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
@@ -49,6 +50,7 @@ abstract class AbstractAclGroupCommand extends ContainerAwareCommand
         $groupClass = str_replace('/', '\\', $this->getContainer()->getParameter('sonatra_security.group_class'));
         $groupName = $input->getArgument('group');
         $roleName = $input->getArgument('role');
+        /* @var EntityManagerInterface $em */
         $em = $this->getContainer()->get('doctrine')->getManagerForClass($groupClass);
 
         if (null === $em) {

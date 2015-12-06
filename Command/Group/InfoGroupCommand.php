@@ -11,6 +11,7 @@
 
 namespace Sonatra\Bundle\SecurityBundle\Command\Group;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Sonatra\Bundle\SecurityBundle\Command\AbstractInfoCommand;
 use Sonatra\Bundle\SecurityBundle\Core\Token\ConsoleToken;
@@ -45,6 +46,7 @@ class InfoGroupCommand extends AbstractInfoCommand
         $doctrine = $this->getContainer()->get('doctrine');
         $identityClass = str_replace('/', '\\', $this->getContainer()->getParameter('sonatra_security.group_class'));
         $identityName = $input->getArgument('name');
+        /* @var EntityManagerInterface $em */
         $em = $doctrine->getManagerForClass($identityClass);
 
         if (null === $em) {

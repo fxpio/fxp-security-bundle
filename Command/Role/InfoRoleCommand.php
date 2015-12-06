@@ -11,6 +11,7 @@
 
 namespace Sonatra\Bundle\SecurityBundle\Command\Role;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Sonatra\Bundle\SecurityBundle\Command\AbstractInfoCommand;
 use Sonatra\Bundle\SecurityBundle\Model\RoleHierarchisableInterface;
@@ -45,6 +46,7 @@ class InfoRoleCommand extends AbstractInfoCommand
         $doctrine = $this->getContainer()->get('doctrine');
         $identityClass = str_replace('/', '\\', $this->getContainer()->getParameter('sonatra_security.role_class'));
         $identityName = $input->getArgument('name');
+        /* @var EntityManagerInterface $em */
         $em = $doctrine->getManagerForClass($identityClass);
 
         if (null === $em) {

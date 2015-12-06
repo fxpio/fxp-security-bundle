@@ -11,6 +11,7 @@
 
 namespace Sonatra\Bundle\SecurityBundle\Command;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
@@ -50,6 +51,7 @@ abstract class AbstractDeleteCommand extends ContainerAwareCommand
     {
         $entityClass = str_replace('/', '\\', $entityClass);
         $shortName = substr($entityClass, strrpos($entityClass, '\\') + 1);
+        /* @var EntityManagerInterface $em */
         $em = $this->getContainer()->get('doctrine')->getManagerForClass($entityClass);
 
         if (null === $em) {

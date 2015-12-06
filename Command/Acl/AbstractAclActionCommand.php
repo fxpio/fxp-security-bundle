@@ -11,6 +11,7 @@
 
 namespace Sonatra\Bundle\SecurityBundle\Command\Acl;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Sonatra\Bundle\SecurityBundle\Exception\InvalidArgumentException;
 use Sonatra\Bundle\SecurityBundle\Model\GroupInterface;
@@ -96,6 +97,7 @@ abstract class AbstractAclActionCommand extends ContainerAwareCommand
         $identityType = strtolower($input->getArgument('identity-type'));
         $identity = $input->getArgument('identity-name');
         $identityClass = $this->getClassname($this->getContainer()->getParameter('sonatra_security.'.$identityType.'_class'));
+        /* @var EntityManagerInterface $em */
         $em = $doctrine->getManagerForClass($identityClass);
 
         if (null === $em) {

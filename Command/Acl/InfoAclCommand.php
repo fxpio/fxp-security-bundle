@@ -11,6 +11,7 @@
 
 namespace Sonatra\Bundle\SecurityBundle\Command\Acl;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Sonatra\Bundle\SecurityBundle\Model\GroupInterface;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
@@ -79,6 +80,7 @@ EOF
         $identity = $input->getArgument('identity-name');
         $identityName = $identity;
         $identityClass = $this->getClassname($this->getContainer()->getParameter('sonatra_security.'.$identityType.'_class'));
+        /* @var EntityManagerInterface $em */
         $em = $doctrine->getManagerForClass($identityClass);
 
         if (null === $em) {
