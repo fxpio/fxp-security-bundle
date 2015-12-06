@@ -13,11 +13,11 @@
     ],
     "require": {
         "php": ">=5.5.0",
-        "symfony/framework-bundle": "~2.8",
-        "symfony/security-bundle": "~2.8",
-        "symfony/expression-language": "~2.8",
-        "symfony/validator": "~2.8",
-        "symfony/security-acl": "~2.8@dev",
+        "symfony/framework-bundle": "~2.8|~3.0",
+        "symfony/security-bundle": "~2.8|~3.0",
+        "symfony/expression-language": "~2.8|~3.0",
+        "symfony/validator": "~2.8|~3.0",
+        "symfony/security-acl": "~2.8@dev|~3.0@dev",
         "friendsofsymfony/user-bundle": "~2.0@dev",
         "sonatra/cache": "~1.0@dev"
     },
