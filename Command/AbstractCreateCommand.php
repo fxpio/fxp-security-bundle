@@ -11,6 +11,7 @@
 
 namespace Sonatra\Bundle\SecurityBundle\Command;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -59,6 +60,7 @@ abstract class AbstractCreateCommand extends ContainerAwareCommand
     {
         $entityClass = str_replace('/', '\\', $entityClass);
         $shortName = substr($entityClass, strrpos($entityClass, '\\') + 1);
+        /* @var EntityManagerInterface $em */
         $em = $this->getContainer()->get('doctrine')->getManagerForClass($entityClass);
 
         if (null === $em) {
