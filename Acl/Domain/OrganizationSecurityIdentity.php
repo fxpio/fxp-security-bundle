@@ -11,13 +11,13 @@
 
 namespace Sonatra\Bundle\SecurityBundle\Acl\Domain;
 
+use Sonatra\Bundle\SecurityBundle\Acl\Util\ClassUtils;
 use Sonatra\Bundle\SecurityBundle\Core\Organizational\OrganizationalContextInterface;
 use Sonatra\Bundle\SecurityBundle\Model\OrganizationInterface;
 use Sonatra\Bundle\SecurityBundle\Model\OrganizationUserInterface;
 use Sonatra\Bundle\SecurityBundle\Model\UserInterface;
 use Symfony\Component\Security\Acl\Domain\RoleSecurityIdentity;
 use Symfony\Component\Security\Acl\Domain\UserSecurityIdentity;
-use Symfony\Component\Security\Acl\Util\ClassUtils;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Role\Role;
 use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;

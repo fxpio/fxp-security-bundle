@@ -25,8 +25,7 @@ class ReachableRoleEvent extends GenericEvent
      */
     public function __construct()
     {
-        $this->subject = array();
-        $this->arguments = array();
+        parent::__construct(array(), array());
     }
 
     /**

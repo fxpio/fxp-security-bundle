@@ -11,10 +11,10 @@
 
 namespace Sonatra\Bundle\SecurityBundle\Acl\Domain;
 
+use Sonatra\Bundle\SecurityBundle\Acl\Util\ClassUtils;
 use Sonatra\Bundle\SecurityBundle\Exception\SecurityException;
 use Sonatra\Bundle\SecurityBundle\Acl\Model\AclRuleManagerInterface;
 use Sonatra\Bundle\SecurityBundle\Acl\DependencyInjection\RuleExtensionInterface;
-use Symfony\Component\Security\Acl\Util\ClassUtils;
 
 /**
  * ACL Rule Manager.

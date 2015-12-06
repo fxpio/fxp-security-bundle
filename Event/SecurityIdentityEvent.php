@@ -33,9 +33,9 @@ class SecurityIdentityEvent extends GenericEvent
      */
     public function __construct(TokenInterface $token)
     {
+        parent::__construct(array(), array());
+
         $this->token = $token;
-        $this->subject = array();
-        $this->arguments = array();
     }
 
     /**
