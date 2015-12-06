@@ -51,15 +51,18 @@ class ObjectFilterExtension implements ObjectFilterExtensionInterface
      */
     public function filterValue($value)
     {
+        $val = null;
+
         foreach ($this->voterServiceIds as $id) {
             $voter = $this->getVoter($id);
 
             if ($voter->supports($value)) {
-                return $voter->getValue($value);
+                $val = $voter->getValue($value);
+                break;
             }
         }
 
-        return;
+        return $val;
     }
 
     /**

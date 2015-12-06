@@ -13,8 +13,8 @@ namespace Sonatra\Bundle\SecurityBundle\Acl\Domain;
 
 use Sonatra\Bundle\SecurityBundle\Model\GroupInterface;
 use Symfony\Component\Security\Acl\Domain\UserSecurityIdentity;
+use Symfony\Component\Security\Acl\Util\ClassUtils;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use Symfony\Component\Security\Core\Util\ClassUtils;
 use Sonatra\Bundle\SecurityBundle\Exception\InvalidArgumentException;
 use FOS\UserBundle\Model\GroupableInterface;
 

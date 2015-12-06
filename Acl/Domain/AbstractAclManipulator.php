@@ -184,9 +184,9 @@ abstract class AbstractAclManipulator implements AclManipulatorInterface
                     }
 
                     if (null === $field) {
-                        $acl->{"update{$type}Ace"}($i, AclUtils::convertToMask($newRights), $context->getStrategy());
+                        $acl->{"update{$type}Ace"}($i, AclUtils::convertToMask($newRights));
                     } else {
-                        $acl->{"update{$type}FieldAce"}($i, $field, AclUtils::convertToMask($newRights, $context->getStrategy()));
+                        $acl->{"update{$type}FieldAce"}($i, $field, AclUtils::convertToMask($newRights));
                     }
                 }
 

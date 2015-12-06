@@ -28,8 +28,7 @@ class AclManipulatorEvent extends GenericEvent
      */
     public function __construct(PermissionContextInterface $context)
     {
-        $this->subject = $context;
-        $this->arguments = array();
+        parent::__construct($context, array());
     }
 
     /**

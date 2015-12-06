@@ -14,7 +14,7 @@ namespace Sonatra\Bundle\SecurityBundle\Acl\Domain;
 use Sonatra\Bundle\SecurityBundle\Exception\SecurityException;
 use Sonatra\Bundle\SecurityBundle\Acl\Model\AclRuleManagerInterface;
 use Sonatra\Bundle\SecurityBundle\Acl\DependencyInjection\RuleExtensionInterface;
-use Symfony\Component\Security\Core\Util\ClassUtils;
+use Symfony\Component\Security\Acl\Util\ClassUtils;
 
 /**
  * ACL Rule Manager.
@@ -308,14 +308,16 @@ class AclRuleManager implements AclRuleManagerInterface
     protected function getParentRule($type, array $rules)
     {
         $pRules = $this->getParentRules($type);
+        $rule = null;
 
         foreach ($pRules as $pRule) {
             if (isset($rules[$pRule])) {
-                return $rules[$pRule];
+                $rule = $rules[$pRule];
+                break;
             }
         }
 
-        return;
+        return $rule;
     }
 
     /**

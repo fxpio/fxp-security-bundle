@@ -111,7 +111,7 @@ class AclListener implements EventSubscriber
         $this->getAclObjectFilter()->beginTransaction();
 
         // check all scheduled insertions
-        foreach ($uow->getScheduledEntityInsertions($uow) as $object) {
+        foreach ($uow->getScheduledEntityInsertions() as $object) {
             $this->getAclObjectFilter()->restore($object);
 
             if (!$this->getAuthorizationChecker()->isGranted(BasicPermissionMap::PERMISSION_CREATE, $object)) {
@@ -120,7 +120,7 @@ class AclListener implements EventSubscriber
         }
 
         // check all scheduled updates
-        foreach ($uow->getScheduledEntityUpdates($uow) as $object) {
+        foreach ($uow->getScheduledEntityUpdates() as $object) {
             $this->getAclObjectFilter()->restore($object);
 
             if (!$this->getAuthorizationChecker()->isGranted(BasicPermissionMap::PERMISSION_EDIT, $object)) {
@@ -129,7 +129,7 @@ class AclListener implements EventSubscriber
         }
 
         // check all scheduled deletations
-        foreach ($uow->getScheduledEntityDeletions($uow) as $object) {
+        foreach ($uow->getScheduledEntityDeletions() as $object) {
             if (!$this->getAuthorizationChecker()->isGranted(BasicPermissionMap::PERMISSION_DELETE, $object)) {
                 throw new AccessDeniedException('Insufficient privilege to delete the entity');
             }

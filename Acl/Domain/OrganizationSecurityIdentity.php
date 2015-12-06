@@ -17,11 +17,11 @@ use Sonatra\Bundle\SecurityBundle\Model\OrganizationUserInterface;
 use Sonatra\Bundle\SecurityBundle\Model\UserInterface;
 use Symfony\Component\Security\Acl\Domain\RoleSecurityIdentity;
 use Symfony\Component\Security\Acl\Domain\UserSecurityIdentity;
+use Symfony\Component\Security\Acl\Util\ClassUtils;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Role\Role;
 use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
 use Symfony\Component\Security\Core\Role\RoleInterface;
-use Symfony\Component\Security\Core\Util\ClassUtils;
 
 /**
  * A SecurityIdentity implementation used for actual organization.
