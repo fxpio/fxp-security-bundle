@@ -48,4 +48,11 @@ interface OrganizationalContextInterface
      * @return OrganizationUserInterface|null
      */
     public function getCurrentOrganizationUser();
+
+    /**
+     * Check if the current organization is not a user organization.
+     *
+     * @return bool
+     */
+    public function isOrganization();
 }

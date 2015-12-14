@@ -108,6 +108,16 @@ class OrganizationalContext implements OrganizationalContextInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function isOrganization()
+    {
+        return null !== $this->getCurrentOrganization()
+            && !$this->getCurrentOrganization()->isUserOrganization()
+            && null !== $this->getCurrentOrganizationUser();
+    }
+
+    /**
      * Get the token.
      *
      * @param string $type The type name
