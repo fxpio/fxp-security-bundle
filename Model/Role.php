@@ -12,7 +12,6 @@
 namespace Sonatra\Bundle\SecurityBundle\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Symfony\Component\Security\Core\Role\RoleInterface;
 
 /**
  * This is the domain class for the Role object.
