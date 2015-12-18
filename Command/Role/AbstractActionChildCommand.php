@@ -110,7 +110,7 @@ abstract class AbstractActionChildCommand extends ContainerAwareCommand
      *
      * @return bool
      */
-    abstract protected function doExecute(OutputInterface $output, RoleHierarchisableInterface $role, RoleHierarchisableInterface$child);
+    abstract protected function doExecute(OutputInterface $output, RoleHierarchisableInterface $role, RoleHierarchisableInterface $child);
 
     /**
      * Gets the finish message.
