@@ -31,6 +31,11 @@ class RoleSecurityIdentityVoter extends RoleVoter
     private $sidRetrievalStrategy;
 
     /**
+     * @var array
+     */
+    private $cacheExec;
+
+    /**
      * Constructor.
      *
      * @param SecurityIdentityRetrievalStrategyInterface $sidRetrievalStrategy
@@ -39,6 +44,8 @@ class RoleSecurityIdentityVoter extends RoleVoter
     public function __construct(SecurityIdentityRetrievalStrategyInterface $sidRetrievalStrategy, $prefix = 'ROLE_')
     {
         $this->sidRetrievalStrategy = $sidRetrievalStrategy;
+        $this->cacheExec = array();
+
         parent::__construct($prefix);
     }
 
@@ -48,14 +55,21 @@ class RoleSecurityIdentityVoter extends RoleVoter
     protected function extractRoles(TokenInterface $token)
     {
         $sids = $this->sidRetrievalStrategy->getSecurityIdentities($token);
+        $id = sha1(implode('|', $sids));
+
+        if (isset($this->cacheExec[$id])) {
+            return $this->cacheExec[$id];
+        }
+
         $roles = array();
 
         foreach ($sids as $sid) {
             if ($sid instanceof RoleSecurityIdentity) {
-                $roles[] = new Role($sid->getRole());
+                $role = $sid->getRole();
+                $roles[] = new Role($role);
             }
         }
 
-        return $roles;
+        return $this->cacheExec[$id] = $roles;
     }
 }
