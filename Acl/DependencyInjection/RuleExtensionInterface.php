@@ -37,7 +37,7 @@ interface RuleExtensionInterface
      *
      * @param string $name The name of the definition
      *
-     * @return Boolean Whether the definition is supported by this extension
+     * @return bool Whether the definition is supported by this extension
      */
     public function hasDefinition($name);
 
@@ -60,7 +60,7 @@ interface RuleExtensionInterface
      * @param string $name The name of the filter definition
      * @param string $type The type of the filter definition
      *
-     * @return Boolean Whether the filter definition is supported by this extension
+     * @return bool Whether the filter definition is supported by this extension
      */
     public function hasFilterDefinition($name, $type);
 }
