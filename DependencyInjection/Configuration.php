@@ -190,6 +190,7 @@ class Configuration implements ConfigurationInterface
             ->children()
                 ->scalarNode('has_permission')->defaultTrue()->end()
                 ->scalarNode('has_field_permission')->defaultTrue()->end()
+                ->scalarNode('has_org_role')->defaultTrue()->end()
             ->end()
         ;
 

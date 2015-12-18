@@ -84,6 +84,10 @@ class SonatraSecurityExtension extends Extension
             $loader->load('expression_has_field_permission.xml');
         }
 
+        if ($config['expression']['has_org_role']) {
+            $loader->load('expression_has_org_role.xml');
+        }
+
         // acl
         if ($config['acl']['enabled']
                 && $container->hasParameter('security.acl.dbal.class_table_name')
