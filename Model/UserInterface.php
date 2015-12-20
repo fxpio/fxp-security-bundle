@@ -11,7 +11,7 @@
 
 namespace Sonatra\Bundle\SecurityBundle\Model;
 
-use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use FOS\UserBundle\Model\GroupableInterface;
 use FOS\UserBundle\Model\UserInterface as BaseUserInterface;
 
@@ -25,7 +25,7 @@ interface UserInterface extends BaseUserInterface, GroupableInterface
     /**
      * Get the organizations of user.
      *
-     * @return ArrayCollection
+     * @return Collection|OrganizationUserInterface[]
      */
     public function getUserOrganizations();
 

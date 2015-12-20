@@ -11,6 +11,8 @@
 
 namespace Sonatra\Bundle\SecurityBundle\Model;
 
+use Doctrine\Common\Collections\Collection;
+
 /**
  * Interface for role hierarchisable.
  *
@@ -39,7 +41,7 @@ interface RoleHierarchisableInterface extends RoleInterface
     /**
      * Gets all parent.
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return Collection|RoleHierarchisableInterface[]
      */
     public function getParents();
 
@@ -80,7 +82,7 @@ interface RoleHierarchisableInterface extends RoleInterface
     /**
      * Gets all children.
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return Collection|RoleHierarchisableInterface[]
      */
     public function getChildren();
 

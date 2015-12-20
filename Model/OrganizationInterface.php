@@ -11,7 +11,7 @@
 
 namespace Sonatra\Bundle\SecurityBundle\Model;
 
-use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Security\Core\Role\RoleInterface;
 
 /**
@@ -70,7 +70,7 @@ interface OrganizationInterface
     /**
      * Get the roles of organization.
      *
-     * @return ArrayCollection
+     * @return Collection
      */
     public function getRoles();
 
@@ -111,7 +111,7 @@ interface OrganizationInterface
     /**
      * Get the groups of organization.
      *
-     * @return ArrayCollection
+     * @return Collection
      */
     public function getGroups();
 
@@ -152,7 +152,7 @@ interface OrganizationInterface
     /**
      * Get the users of organization.
      *
-     * @return ArrayCollection
+     * @return Collection|OrganizationUserInterface[]
      */
     public function getOrganizationUsers();
 
