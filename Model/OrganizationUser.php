@@ -15,6 +15,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use FOS\UserBundle\Model\GroupInterface as FosGroupInterface;
 use FOS\UserBundle\Model\User;
+use Sonatra\Bundle\SecurityBundle\Model\Traits\RoleableTrait;
 
 /**
  * This is the domain class for the Organization User object.
@@ -23,6 +24,8 @@ use FOS\UserBundle\Model\User;
  */
 abstract class OrganizationUser implements OrganizationUserInterface
 {
+    use RoleableTrait;
+
     /**
      * @var OrganizationInterface
      */
@@ -32,11 +35,6 @@ abstract class OrganizationUser implements OrganizationUserInterface
      * @var UserInterface
      */
     protected $user;
-
-    /**
-     * @var array
-     */
-    protected $roles;
 
     /**
      * @var Collection|null
@@ -53,7 +51,6 @@ abstract class OrganizationUser implements OrganizationUserInterface
     {
         $this->organization = $organization;
         $this->user = $user;
-        $this->roles = array();
     }
 
     /**
@@ -90,58 +87,6 @@ abstract class OrganizationUser implements OrganizationUserInterface
     public function getUser()
     {
         return $this->user;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function hasRole($role)
-    {
-        return in_array(strtoupper($role), $this->getRoles(), true);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setRoles(array $roles)
-    {
-        $this->roles = array();
-
-        foreach ($roles as $role) {
-            $this->addRole($role);
-        }
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function addRole($role)
-    {
-        $role = strtoupper($role);
-        if ($role === User::ROLE_DEFAULT) {
-            return $this;
-        }
-
-        if (!in_array($role, $this->roles, true)) {
-            $this->roles[] = $role;
-        }
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function removeRole($role)
-    {
-        if (false !== $key = array_search(strtoupper($role), $this->roles, true)) {
-            unset($this->roles[$key]);
-            $this->roles = array_values($this->roles);
-        }
-
-        return $this;
     }
 
     /**

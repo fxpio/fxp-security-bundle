@@ -14,13 +14,14 @@ namespace Sonatra\Bundle\SecurityBundle\Model;
 use Doctrine\Common\Collections\Collection;
 use FOS\UserBundle\Model\GroupableInterface;
 use FOS\UserBundle\Model\UserInterface as BaseUserInterface;
+use Sonatra\Bundle\SecurityBundle\Model\Traits\RoleableInterface;
 
 /**
  * User interface.
  *
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-interface UserInterface extends BaseUserInterface, GroupableInterface
+interface UserInterface extends BaseUserInterface, RoleableInterface, GroupableInterface
 {
     /**
      * Get the organizations of user.

@@ -12,13 +12,14 @@
 namespace Sonatra\Bundle\SecurityBundle\Model;
 
 use FOS\UserBundle\Model\GroupInterface as BaseGroupInterface;
+use Sonatra\Bundle\SecurityBundle\Model\Traits\RoleableInterface;
 
 /**
  * User interface.
  *
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-interface GroupInterface extends BaseGroupInterface
+interface GroupInterface extends BaseGroupInterface, RoleableInterface
 {
     /**
      * Get the group name used by security.
