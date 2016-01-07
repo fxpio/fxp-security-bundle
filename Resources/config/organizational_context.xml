@@ -6,7 +6,7 @@
 
     <parameters>
 
-        <parameter key="sonatra_security.organizational_context.class">Sonatra\Bundle\SecurityBundle\Core\Organizational\OrganizationalContext</parameter>
+        <parameter key="sonatra_security.organizational_context.default.class">Sonatra\Bundle\SecurityBundle\Core\Organizational\OrganizationalContext</parameter>
         <parameter key="security.access.organization_voter.class">Sonatra\Bundle\SecurityBundle\Core\Authorization\Voter\OrganizationVoter</parameter>
         <parameter key="security.acl.security_identity_retrieval_strategy.listener.organization.class">Sonatra\Bundle\SecurityBundle\Listener\OrganizationStrategyIdentitySubscriber</parameter>
 
@@ -14,9 +14,11 @@
 
     <services>
 
-        <service id="sonatra_security.organizational_context" class="%sonatra_security.organizational_context.class%">
+        <service id="sonatra_security.organizational_context.default" class="%sonatra_security.organizational_context.default.class%">
             <argument type="service" id="security.token_storage"/>
         </service>
+
+        <service id="sonatra_security.organizational_context" alias="sonatra_security.organizational_context.default" />
 
         <service id="security.access.organization_voter" class="%security.access.organization_voter.class%"
                  public="false">

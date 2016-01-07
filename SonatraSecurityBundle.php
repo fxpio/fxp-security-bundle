@@ -11,6 +11,7 @@
 
 namespace Sonatra\Bundle\SecurityBundle;
 
+use Sonatra\Bundle\SecurityBundle\DependencyInjection\Compiler\OrganizationalPass;
 use Symfony\Bundle\SecurityBundle\DependencyInjection\SecurityExtension;
 use Symfony\Component\DependencyInjection\Compiler\PassConfig;
 use Symfony\Component\EventDispatcher\DependencyInjection\RegisterListenersPass;
@@ -36,6 +37,7 @@ class SonatraSecurityBundle extends Bundle
 
         $container->addCompilerPass(new AclRuleDefinitionPass());
         $container->addCompilerPass(new AclObjectFilterPass());
+        $container->addCompilerPass(new OrganizationalPass());
         $container->addCompilerPass(new RegisterListenersPass('event_dispatcher',
             'sonatra_security.event_listener', 'sonatra_security.event_subscriber'),
             PassConfig::TYPE_BEFORE_REMOVING);

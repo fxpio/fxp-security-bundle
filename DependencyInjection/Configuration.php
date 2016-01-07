@@ -98,6 +98,9 @@ class Configuration implements ConfigurationInterface
         $node
             ->addDefaultsIfNotSet()
             ->canBeEnabled()
+            ->children()
+                ->scalarNode('service_id')->defaultNull()->end()
+            ->end()
         ;
 
         return $node;
