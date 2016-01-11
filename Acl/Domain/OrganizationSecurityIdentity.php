@@ -135,9 +135,8 @@ final class OrganizationSecurityIdentity
     {
         $roles = $user->getRoles();
         $id = strtoupper($user->getOrganization()->getName());
-        $size = count($roles);
 
-        for ($i = 0; $i < $size; ++$i) {
+        foreach ($roles as $i => $role) {
             $roles[$i] = new Role($roles[$i].'__'.$id);
         }
 
