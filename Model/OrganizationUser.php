@@ -32,9 +32,19 @@ abstract class OrganizationUser implements OrganizationUserInterface
     protected $organization;
 
     /**
-     * @var UserInterface
+     * @var UserInterface|null
      */
     protected $user;
+
+    /**
+     * @var string|null
+     */
+    protected $invitationEmail;
+
+    /**
+     * @var string|null
+     */
+    protected $invitationToken;
 
     /**
      * @var Collection|null
@@ -87,6 +97,50 @@ abstract class OrganizationUser implements OrganizationUserInterface
     public function getUser()
     {
         return $this->user;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setInvitationEmail($email)
+    {
+        $this->invitationEmail = $email;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getInvitationEmail()
+    {
+        return $this->invitationEmail;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setInvitationToken($token)
+    {
+        $this->invitationToken = $token;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getInvitationToken()
+    {
+        return $this->invitationToken;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isInvitation()
+    {
+        return null !== $this->invitationToken;
     }
 
     /**
@@ -174,6 +228,8 @@ abstract class OrganizationUser implements OrganizationUserInterface
      */
     public function __toString()
     {
-        return $this->organization->getName().':'.$this->user->getUsername();
+        $name = null !== $this->user ? $this->user->getUsername() : $this->invitationEmail;
+
+        return $this->organization->getName().':'.$name;
     }
 }

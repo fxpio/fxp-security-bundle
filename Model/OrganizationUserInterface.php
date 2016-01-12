@@ -40,7 +40,7 @@ interface OrganizationUserInterface extends RoleableInterface, GroupableInterfac
     /**
      * Set the user of organization.
      *
-     * @param UserInterface $user The user of organization
+     * @param UserInterface|null $user The user of organization
      *
      * @return self
      */
@@ -49,9 +49,48 @@ interface OrganizationUserInterface extends RoleableInterface, GroupableInterfac
     /**
      * Get the user of organization.
      *
-     * @return UserInterface
+     * @return UserInterface|null
      */
     public function getUser();
+
+    /**
+     * Set the email of the guest invitation.
+     *
+     * @param string|null $email The email
+     *
+     * @return self
+     */
+    public function setInvitationEmail($email);
+
+    /**
+     * Get the email of the guest invitation.
+     *
+     * @return string|null
+     */
+    public function getInvitationEmail();
+
+    /**
+     * Set the token of guest invitation.
+     *
+     * @param string|null $token The token
+     *
+     * @return self
+     */
+    public function setInvitationToken($token);
+
+    /**
+     * Get the token of guest invitation.
+     *
+     * @return string|null
+     */
+    public function getInvitationToken();
+
+    /**
+     * Check whether it is an invitation.
+     *
+     * @return bool
+     */
+    public function isInvitation();
 
     /**
      * Check if the organization user is an admin (contain the ROLE_ADMIN).
