@@ -55,12 +55,17 @@ abstract class OrganizationUser implements OrganizationUserInterface
      * Constructor.
      *
      * @param OrganizationInterface $organization The organization
-     * @param UserInterface         $user         The user
+     * @param UserInterface|string  $user         The user or the email for invitation
      */
-    public function __construct(OrganizationInterface $organization, UserInterface $user)
+    public function __construct(OrganizationInterface $organization, $user)
     {
         $this->organization = $organization;
-        $this->user = $user;
+
+        if ($user instanceof UserInterface) {
+            $this->user = $user;
+        } else {
+            $this->invitationEmail = $user;
+        }
     }
 
     /**
