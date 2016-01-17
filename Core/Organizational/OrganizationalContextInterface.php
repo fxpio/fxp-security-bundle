@@ -55,4 +55,25 @@ interface OrganizationalContextInterface
      * @return bool
      */
     public function isOrganization();
+
+    /**
+     * Set the organizational optional filter type defined in OrganizationalTypes::OPTIONAL_FILTER_*.
+     *
+     * @param string $type The organizational filter type
+     */
+    public function setOptionalFilterType($type);
+
+    /**
+     * Get the organizational optional filter type defined in OrganizationalTypes::OPTIONAL_FILTER_*.
+     *
+     * @return string
+     */
+    public function getOptionalFilterType();
+
+    /**
+     * Check if the current filter type defined in OrganizationalTypes::OPTIONAL_FILTER_* is the same.
+     *
+     * @param string $type The organizational filter type
+     */
+    public function isOptionalFilterType($type);
 }

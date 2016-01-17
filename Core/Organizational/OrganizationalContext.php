@@ -15,6 +15,7 @@ use Sonatra\Bundle\SecurityBundle\Exception\RuntimeException;
 use Sonatra\Bundle\SecurityBundle\Model\OrganizationInterface;
 use Sonatra\Bundle\SecurityBundle\Model\OrganizationUserInterface;
 use Sonatra\Bundle\SecurityBundle\Model\UserInterface;
+use Sonatra\Bundle\SecurityBundle\OrganizationalTypes;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
@@ -25,6 +26,11 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
  */
 class OrganizationalContext implements OrganizationalContextInterface
 {
+    /**
+     * @var string
+     */
+    protected $optionalFilterType = OrganizationalTypes::OPTIONAL_FILTER_WITH_ORG;
+
     /**
      * @var TokenStorageInterface
      */
@@ -115,6 +121,30 @@ class OrganizationalContext implements OrganizationalContextInterface
         return null !== $this->getCurrentOrganization()
             && !$this->getCurrentOrganization()->isUserOrganization()
             && null !== $this->getCurrentOrganizationUser();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setOptionalFilterType($type)
+    {
+        $this->optionalFilterType = $type;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getOptionalFilterType()
+    {
+        return $this->optionalFilterType;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isOptionalFilterType($type)
+    {
+        return is_string($this->optionalFilterType) && $type === $this->optionalFilterType;
     }
 
     /**
