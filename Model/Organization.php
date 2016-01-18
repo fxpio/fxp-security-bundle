@@ -40,7 +40,7 @@ abstract class Organization implements OrganizationInterface
     /**
      * @var Collection|null
      */
-    protected $roles;
+    protected $organizationRoles;
 
     /**
      * @var Collection|null
@@ -117,18 +117,18 @@ abstract class Organization implements OrganizationInterface
     /**
      * {@inheritdoc}
      */
-    public function getRoles()
+    public function getOrganizationRoles()
     {
-        return $this->roles ?: $this->roles = new ArrayCollection();
+        return $this->organizationRoles ?: $this->organizationRoles = new ArrayCollection();
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getRoleNames()
+    public function getOrganizationRoleNames()
     {
         $names = array();
-        foreach ($this->getRoles() as $role) {
+        foreach ($this->getOrganizationRoles() as $role) {
             $names[] = $role->getName();
         }
 
@@ -138,19 +138,19 @@ abstract class Organization implements OrganizationInterface
     /**
      * {@inheritdoc}
      */
-    public function hasRole($role)
+    public function hasOrganizationRole($role)
     {
-        return in_array($role, $this->getRoleNames());
+        return in_array($role, $this->getOrganizationRoleNames());
     }
 
     /**
      * {@inheritdoc}
      */
-    public function addRole(RoleInterface $role)
+    public function addOrganizationRole(RoleInterface $role)
     {
         if (!$this->isUserOrganization()
-            && !$this->getRoles()->contains($role)) {
-            $this->getRoles()->add($role);
+            && !$this->getOrganizationRoles()->contains($role)) {
+            $this->getOrganizationRoles()->add($role);
         }
 
         return $this;
@@ -159,10 +159,10 @@ abstract class Organization implements OrganizationInterface
     /**
      * {@inheritdoc}
      */
-    public function removeRole(RoleInterface $role)
+    public function removeOrganizationRole(RoleInterface $role)
     {
-        if ($this->getRoles()->contains($role)) {
-            $this->getRoles()->removeElement($role);
+        if ($this->getOrganizationRoles()->contains($role)) {
+            $this->getOrganizationRoles()->removeElement($role);
         }
 
         return $this;

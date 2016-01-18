@@ -72,14 +72,14 @@ interface OrganizationInterface
      *
      * @return Collection
      */
-    public function getRoles();
+    public function getOrganizationRoles();
 
     /**
      * Get the role names of organization.
      *
      * @return string[]
      */
-    public function getRoleNames();
+    public function getOrganizationRoleNames();
 
     /**
      * Check the presence of role in organization.
@@ -88,7 +88,7 @@ interface OrganizationInterface
      *
      * @return bool
      */
-    public function hasRole($role);
+    public function hasOrganizationRole($role);
 
     /**
      * Add a role in organization.
@@ -97,7 +97,7 @@ interface OrganizationInterface
      *
      * @return self
      */
-    public function addRole(RoleInterface $role);
+    public function addOrganizationRole(RoleInterface $role);
 
     /**
      * Remove a role in organization.
@@ -106,7 +106,7 @@ interface OrganizationInterface
      *
      * @return self
      */
-    public function removeRole(RoleInterface $role);
+    public function removeOrganizationRole(RoleInterface $role);
 
     /**
      * Get the groups of organization.
