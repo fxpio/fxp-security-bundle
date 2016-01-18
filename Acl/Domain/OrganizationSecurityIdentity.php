@@ -15,6 +15,7 @@ use Sonatra\Bundle\SecurityBundle\Acl\Util\ClassUtils;
 use Sonatra\Bundle\SecurityBundle\Core\Organizational\OrganizationalContextInterface;
 use Sonatra\Bundle\SecurityBundle\Model\OrganizationInterface;
 use Sonatra\Bundle\SecurityBundle\Model\OrganizationUserInterface;
+use Sonatra\Bundle\SecurityBundle\Model\Traits\RoleableInterface;
 use Sonatra\Bundle\SecurityBundle\Model\UserInterface;
 use Symfony\Component\Security\Acl\Domain\RoleSecurityIdentity;
 use Symfony\Component\Security\Acl\Domain\UserSecurityIdentity;
@@ -134,10 +135,20 @@ final class OrganizationSecurityIdentity
     protected static function getOrganizationRoles(OrganizationUserInterface $user, $roleHierarchy = null)
     {
         $roles = $user->getRoles();
-        $id = strtoupper($user->getOrganization()->getName());
+        $org = $user->getOrganization();
+        $id = strtoupper($org->getName());
+        $existingRoles = $roles;
 
         foreach ($roles as $i => $role) {
             $roles[$i] = new Role($roles[$i].'__'.$id);
+        }
+
+        if ($org instanceof RoleableInterface) {
+            foreach ($org->getRoles() as $orgRole) {
+                if (!in_array((string) $orgRole, $existingRoles)) {
+                    $roles[] = new Role($orgRole);
+                }
+            }
         }
 
         if ($roleHierarchy instanceof RoleHierarchyInterface) {
