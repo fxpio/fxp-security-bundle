@@ -45,7 +45,7 @@ abstract class Organization implements OrganizationInterface
     /**
      * @var Collection|null
      */
-    protected $groups;
+    protected $organizationGroups;
 
     /**
      * @var Collection|null
@@ -171,18 +171,18 @@ abstract class Organization implements OrganizationInterface
     /**
      * {@inheritdoc}
      */
-    public function getGroups()
+    public function getOrganizationGroups()
     {
-        return $this->groups ?: $this->groups = new ArrayCollection();
+        return $this->organizationGroups ?: $this->organizationGroups = new ArrayCollection();
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getGroupNames()
+    public function getOrganizationGroupNames()
     {
         $names = array();
-        foreach ($this->getGroups() as $group) {
+        foreach ($this->getOrganizationGroups() as $group) {
             $names[] = $group->getName();
         }
 
@@ -192,19 +192,19 @@ abstract class Organization implements OrganizationInterface
     /**
      * {@inheritdoc}
      */
-    public function hasGroup($group)
+    public function hasOrganizationGroup($group)
     {
-        return in_array($group, $this->getGroupNames());
+        return in_array($group, $this->getOrganizationGroupNames());
     }
 
     /**
      * {@inheritdoc}
      */
-    public function addGroup(GroupInterface $group)
+    public function addOrganizationGroup(GroupInterface $group)
     {
         if (!$this->isUserOrganization()
-            && !$this->getGroups()->contains($group)) {
-            $this->getGroups()->add($group);
+            && !$this->getOrganizationGroups()->contains($group)) {
+            $this->getOrganizationGroups()->add($group);
         }
 
         return $this;
@@ -213,10 +213,10 @@ abstract class Organization implements OrganizationInterface
     /**
      * {@inheritdoc}
      */
-    public function removeGroup(GroupInterface $group)
+    public function removeOrganizationGroup(GroupInterface $group)
     {
-        if ($this->getGroups()->contains($group)) {
-            $this->getGroups()->removeElement($group);
+        if ($this->getOrganizationGroups()->contains($group)) {
+            $this->getOrganizationGroups()->removeElement($group);
         }
 
         return $this;

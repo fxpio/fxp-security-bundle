@@ -113,14 +113,14 @@ interface OrganizationInterface
      *
      * @return Collection
      */
-    public function getGroups();
+    public function getOrganizationGroups();
 
     /**
      * Get the group names of organization.
      *
      * @return string[]
      */
-    public function getGroupNames();
+    public function getOrganizationGroupNames();
 
     /**
      * Check the presence of group in organization.
@@ -129,7 +129,7 @@ interface OrganizationInterface
      *
      * @return bool
      */
-    public function hasGroup($group);
+    public function hasOrganizationGroup($group);
 
     /**
      * Add a group in organization.
@@ -138,7 +138,7 @@ interface OrganizationInterface
      *
      * @return self
      */
-    public function addGroup(GroupInterface $group);
+    public function addOrganizationGroup(GroupInterface $group);
 
     /**
      * Remove a group in organization.
@@ -147,7 +147,7 @@ interface OrganizationInterface
      *
      * @return self
      */
-    public function removeGroup(GroupInterface $group);
+    public function removeOrganizationGroup(GroupInterface $group);
 
     /**
      * Get the users of organization.
