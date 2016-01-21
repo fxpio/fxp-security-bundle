@@ -23,7 +23,7 @@ use Symfony\Component\Security\Core\Role\RoleInterface;
 abstract class Organization implements OrganizationInterface
 {
     /**
-     * @var int
+     * @var int|string|null
      */
     protected $id;
 

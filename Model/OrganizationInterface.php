@@ -24,7 +24,7 @@ interface OrganizationInterface
     /**
      * Get the id of model.
      *
-     * @return int
+     * @return int|string|null
      */
     public function getId();
 

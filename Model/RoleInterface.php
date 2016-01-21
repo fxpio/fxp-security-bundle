@@ -23,7 +23,7 @@ interface RoleInterface extends BaseRoleInterface
     /**
      * Get id.
      *
-     * @return int
+     * @return int|string|null
      */
     public function getId();
 

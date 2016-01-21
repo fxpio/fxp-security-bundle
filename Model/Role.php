@@ -12,6 +12,7 @@
 namespace Sonatra\Bundle\SecurityBundle\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 /**
  * This is the domain class for the Role object.
@@ -20,9 +21,24 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 abstract class Role implements RoleHierarchisableInterface
 {
+    /**
+     * @var int|string|null
+     */
     protected $id;
+
+    /**
+     * @var string
+     */
     protected $name;
+
+    /**
+     * @var Collection
+     */
     protected $parents;
+
+    /**
+     * @var Collection
+     */
     protected $children;
 
     /**
