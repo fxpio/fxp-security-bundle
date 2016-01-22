@@ -11,6 +11,7 @@
 
 namespace Sonatra\Bundle\SecurityBundle\Doctrine\ORM\Listener;
 
+use Doctrine\ORM\Events;
 use Sonatra\Bundle\SecurityBundle\Acl\Model\AclManagerInterface;
 use Sonatra\Bundle\SecurityBundle\Acl\Model\AclObjectFilterInterface;
 use Sonatra\Bundle\SecurityBundle\Acl\Model\AclRuleManagerInterface;
@@ -63,13 +64,22 @@ class AclListener implements EventSubscriber
     protected $aclObjectFilter;
 
     /**
+     * @var array
+     */
+    protected $postResetAcls = array();
+
+    /**
      * Specifies the list of listened events.
      *
      * @return string[]
      */
     public function getSubscribedEvents()
     {
-        return array('postLoad', 'onFlush');
+        return array(
+            Events::postLoad,
+            Events::onFlush,
+            Events::postFlush,
+        );
     }
 
     /**
@@ -99,6 +109,7 @@ class AclListener implements EventSubscriber
      */
     public function onFlush(OnFlushEventArgs $args)
     {
+        $this->postResetAcls = array();
         $token = $this->getTokenStorage()->getToken();
 
         if ($this->aclManager->isDisabled()
@@ -112,6 +123,7 @@ class AclListener implements EventSubscriber
 
         // check all scheduled insertions
         foreach ($uow->getScheduledEntityInsertions() as $object) {
+            $this->postResetAcls[] = $object;
             $this->getAclObjectFilter()->restore($object);
 
             if (!$this->getAuthorizationChecker()->isGranted(BasicPermissionMap::PERMISSION_CREATE, $object)) {
@@ -121,6 +133,7 @@ class AclListener implements EventSubscriber
 
         // check all scheduled updates
         foreach ($uow->getScheduledEntityUpdates() as $object) {
+            $this->postResetAcls[] = $object;
             $this->getAclObjectFilter()->restore($object);
 
             if (!$this->getAuthorizationChecker()->isGranted(BasicPermissionMap::PERMISSION_EDIT, $object)) {
@@ -136,6 +149,15 @@ class AclListener implements EventSubscriber
         }
 
         $this->getAclObjectFilter()->commit();
+    }
+
+    /**
+     * Reset the preloaded acls used for the insertions.
+     */
+    public function postFlush()
+    {
+        $this->getAclManager()->resetPreloadAcls($this->postResetAcls);
+        $this->postResetAcls = array();
     }
 
     /**
