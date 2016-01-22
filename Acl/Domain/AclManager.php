@@ -317,6 +317,23 @@ class AclManager implements AclManagerInterface
     /**
      * {@inheritdoc}
      */
+    public function resetPreloadAcls(array $objects)
+    {
+        $oids = $this->getObjectIdentities($objects);
+
+        foreach ($oids as $oid) {
+            $classname = $oid->getType();
+            $id = $classname.'__'.$oid->getIdentifier();
+
+            if (in_array($id, $this->excludedOids)) {
+                array_splice($this->excludedOids, array_search($id, $this->excludedOids), 1);
+            }
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getRule($type, $domainObject, $field = null)
     {
         if (is_array($type)) {

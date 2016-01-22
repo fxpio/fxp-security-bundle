@@ -134,6 +134,13 @@ interface AclManagerInterface
     public function preloadAcls(array $objects);
 
     /**
+     * Reset the preload acl for specific objects.
+     *
+     * @param object[] $objects The objects
+     */
+    public function resetPreloadAcls(array $objects);
+
+    /**
      * Get the internal acl rule.
      *
      * @param string|int                          $type         The mask type
