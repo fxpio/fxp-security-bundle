@@ -13,6 +13,7 @@ namespace Sonatra\Bundle\SecurityBundle\Acl\Rule\FilterDefinition;
 
 use Sonatra\Bundle\SecurityBundle\Acl\Domain\AbstractRuleOrmFilterDefinition;
 use Sonatra\Bundle\SecurityBundle\Acl\Model\OrmFilterRuleContextDefinitionInterface;
+use Sonatra\Bundle\SecurityBundle\Doctrine\ORM\Util\DoctrineUtils;
 
 /**
  * The Deny ACL Rule Filter Definition.
@@ -34,13 +35,9 @@ class OrmDeny extends AbstractRuleOrmFilterDefinition
      */
     public function addFilterConstraint(OrmFilterRuleContextDefinitionInterface $rcd)
     {
-        $id = 'id';
-        $identifier = $rcd->getTargetEntity()->getIdentifierFieldNames();
+        $targetEntity = $rcd->getTargetEntity();
+        $id = DoctrineUtils::getIdentifier($targetEntity);
 
-        if (0 < count($identifier)) {
-            $id = $identifier[0];
-        }
-
-        return ' '.$rcd->getTargetTableAlias().'.'.$id.' = -1';
+        return ' '.$rcd->getTargetTableAlias().'.'.$id.' = '.DoctrineUtils::getMockZeroId($targetEntity);
     }
 }

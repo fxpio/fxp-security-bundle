@@ -11,9 +11,9 @@
 
 namespace Sonatra\Bundle\SecurityBundle\Acl\Rule\FilterDefinition;
 
-use Doctrine\DBAL\Connection;
 use Sonatra\Bundle\SecurityBundle\Acl\Domain\AbstractRuleOrmFilterDefinition;
 use Sonatra\Bundle\SecurityBundle\Acl\Model\OrmFilterRuleContextDefinitionInterface;
+use Sonatra\Bundle\SecurityBundle\Doctrine\ORM\Util\DoctrineUtils;
 use Symfony\Component\Security\Acl\Domain\RoleSecurityIdentity;
 use Symfony\Component\Security\Acl\Domain\UserSecurityIdentity;
 use Doctrine\ORM\EntityManagerInterface;
@@ -85,10 +85,11 @@ class OrmObject extends AbstractRuleOrmFilterDefinition
         }
 
         $sids = '('.implode(' OR ', $sids).')';
+        $identifier = DoctrineUtils::castIdentifier($rcd->getTargetEntity(), $connection);
 
         $sql = <<<SELECTCLAUSE
         SELECT
-            oid.object_identifier{$this->castToInteger($connection)}
+            oid.object_identifier{$identifier}
         FROM
             {$this->options['entry_table_name']} e
         JOIN
@@ -115,19 +116,5 @@ class OrmObject extends AbstractRuleOrmFilterDefinition
 SELECTCLAUSE;
 
         return " $tableAlias.id IN (".$sql.')';
-    }
-
-    /**
-     * Cast the character varying to integer for postgre sql.
-     *
-     * @param Connection $connection
-     *
-     * @return string
-     */
-    protected function castToInteger(Connection $connection)
-    {
-        return 'postgresql' === $connection->getDatabasePlatform()->getName()
-            ? '::integer'
-            : '';
     }
 }
