@@ -64,7 +64,7 @@ class DoctrineUtils
         if (!isset(static::$cacheIdentifiers[$targetEntity->getName()])) {
             $identifier = $targetEntity->getIdentifierFieldNames();
             static::$cacheIdentifiers[$targetEntity->getName()] = 0 < count($identifier)
-                ? $id = $identifier[0]
+                ? $identifier[0]
                 : 'id';
         }
 
