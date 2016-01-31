@@ -11,6 +11,7 @@
 
 namespace Sonatra\Bundle\SecurityBundle\Core\Role;
 
+use Sonatra\Bundle\DoctrineExtensionsBundle\Util\SqlFilterUtil;
 use Sonatra\Bundle\SecurityBundle\Model\RoleHierarchisableInterface;
 use Sonatra\Bundle\SecurityBundle\ReachableRoleEvents;
 use Sonatra\Component\Cache\Adapter\CacheInterface;
@@ -155,6 +156,9 @@ class RoleHierarchy extends BaseRoleHierarchy
             $reachableRoles = $event->geReachableRoles();
         }
 
+        $filters = SqlFilterUtil::findFilters($em, array(), true);
+        SqlFilterUtil::disableFilters($em, $filters);
+
         if (count($roleNames) > 0) {
             $entityRoles = $repo->findBy(array('name' => $roleNames));
         }
@@ -163,6 +167,8 @@ class RoleHierarchy extends BaseRoleHierarchy
         foreach ($entityRoles as $eRole) {
             $reachableRoles = array_merge($reachableRoles, $this->getReachableRoles($eRole->getChildren()->toArray()));
         }
+
+        SqlFilterUtil::enableFilters($em, $filters);
 
         // cleaning double
         $existingRoles = array();
