@@ -84,6 +84,14 @@ class SonatraSecurityExtension extends Extension
             $loader->load('expression_has_field_permission.xml');
         }
 
+        if ($config['expression']['has_role']) {
+            $loader->load('expression_has_role.xml');
+        }
+
+        if ($config['expression']['has_any_role']) {
+            $loader->load('expression_has_any_role.xml');
+        }
+
         if ($config['expression']['has_org_role']) {
             $loader->load('expression_has_org_role.xml');
         }
