@@ -12,7 +12,6 @@
 namespace Sonatra\Bundle\SecurityBundle\Model;
 
 use Doctrine\Common\Collections\Collection;
-use Symfony\Component\Security\Core\Role\RoleInterface;
 
 /**
  * Organization interface.

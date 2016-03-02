@@ -13,7 +13,6 @@ namespace Sonatra\Bundle\SecurityBundle\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Symfony\Component\Security\Core\Role\RoleInterface;
 
 /**
  * This is the domain class for the Organization object.
