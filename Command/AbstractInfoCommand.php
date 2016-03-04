@@ -134,7 +134,6 @@ abstract class AbstractInfoCommand extends ContainerAwareCommand
         $application = $this->getApplication();
 
         $this->getContainer()->set('request', $request);
-        $this->getContainer()->enterScope('request');
 
         $event = new GetResponseEvent($application->getKernel(), $request, HttpKernelInterface::MASTER_REQUEST);
         $this->getContainer()->get('security.firewall')->onKernelRequest($event);
