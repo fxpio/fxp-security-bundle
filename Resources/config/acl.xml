@@ -127,6 +127,12 @@
             <tag name="sonatra_security.acl.rule_definition" alias="allow"/>
         </service>
 
+        <service id="sonatra_security.acl.rule_definition.allow_with_class_field_check"
+                 class="Sonatra\Bundle\SecurityBundle\Acl\Rule\Definition\AllowWithClassFieldCheck">
+            <tag name="sonatra_security.acl.rule_definition" alias="allow_with_class_field_check"/>
+            <argument type="service" id="sonatra_security.acl.manager"/>
+        </service>
+
         <service id="sonatra_security.acl.rule_definition.deny"
                  class="Sonatra\Bundle\SecurityBundle\Acl\Rule\Definition\Deny">
             <tag name="sonatra_security.acl.rule_definition" alias="deny"/>
