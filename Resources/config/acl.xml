@@ -90,7 +90,7 @@
         </service>
 
         <!-- Voter -->
-        <service id="sonatra_security.acl.voter"
+        <service id="security.access.acl_voter"
                  class="%sonatra_security.acl.voter.class%"
                  public="false">
             <argument type="service" id="sonatra_security.acl.manager"/>
