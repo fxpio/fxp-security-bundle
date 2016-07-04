@@ -51,13 +51,6 @@ abstract class CompleteConfigurationTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('Acme\CoreBundle\Entity\Group', $container->getParameter('sonatra_security.group_class'));
     }
 
-    public function testCache()
-    {
-        $container = $this->getContainer('container1');
-
-        $this->assertTrue(is_dir(sys_get_temp_dir().'/test_sonatra_security_bundle/'));
-    }
-
     /**
      * Gets the container.
      *

@@ -12,10 +12,11 @@
 namespace Sonatra\Bundle\SecurityBundle\DependencyInjection;
 
 use Symfony\Component\Config\FileLocator;
+use Symfony\Component\Config\Loader\LoaderInterface;
+use Symfony\Component\DependencyInjection\Alias;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
-use Sonatra\Bundle\SecurityBundle\Exception\RuntimeException;
 
 /**
  * The extension that fulfills the infos for the container from configuration.
@@ -42,40 +43,59 @@ class SonatraSecurityExtension extends Extension
         $container->setParameter('sonatra_security.group_class', $config['group_class']);
         $container->setParameter('sonatra_security.organization_class', $config['organization_class']);
 
-        // cache dir
-        $cacheDir = $container->getParameterBag()->resolveValue($config['cache_dir']);
+        $this->buildHostRole($loader, $config);
+        $this->buildRoleHierarchy($container, $loader, $config);
+        $this->buildExpression($loader, $config);
+        $this->buildAcl($container, $loader, $config);
+        $this->buildOrganizationalContext($container, $loader, $config);
+    }
 
-        if (!is_dir($cacheDir)) {
-            if (false === @mkdir($cacheDir, 0777, true)) {
-                throw new RuntimeException(sprintf('Could not create cache directory "%s".', $cacheDir));
-            }
-        }
-
-        // host role
+    /**
+     * Build the host role.
+     *
+     * @param LoaderInterface  $loader The config loader
+     * @param array            $config The config
+     */
+    private function buildHostRole(LoaderInterface $loader, array $config)
+    {
         if ($config['host_role']['enabled']) {
             $loader->load('host_role.xml');
         }
+    }
 
-        // role hierarchy
+    /**
+     * Build the role hierarchy.
+     *
+     * @param ContainerBuilder $container The container
+     * @param LoaderInterface  $loader    The config loader
+     * @param array            $config    The config
+     */
+    private function buildRoleHierarchy(ContainerBuilder $container, LoaderInterface $loader, array $config)
+    {
         if ($config['role_hierarchy']['enabled']) {
             $loader->load('role_hierarchy.xml');
 
-            // role hierarchy cache dir
-            if (!is_dir($cacheDir.'/role_hierarchy')) {
-                if (false === @mkdir($cacheDir.'/role_hierarchy', 0777, true)) {
-                    throw new RuntimeException(sprintf('Could not create cache directory "%s".', $cacheDir.'/expressions'));
-                }
+            // role hierarchy cache
+            if (null !== ($cacheId = $config['role_hierarchy']['cache'])) {
+                $cacheAlias = new Alias($cacheId, false);
+                $container->setAlias('sonatra_security.role_hierarchy.cache', $cacheAlias);
             }
-
-            $container->setParameter('sonatra_security.cache_dir', $cacheDir);
 
             // doctrine orm listener role hierarchy
             if ($config['doctrine']['orm']['listener']['role_hierarchy']) {
                 $loader->load('orm_listener_role_hierarchy.xml');
             }
         }
+    }
 
-        // expression
+    /**
+     * Build the expression.
+     *
+     * @param LoaderInterface  $loader The config loader
+     * @param array            $config The config
+     */
+    private function buildExpression(LoaderInterface $loader, array $config)
+    {
         if ($config['expression']['has_permission']) {
             $loader->load('expression_has_permission.xml');
         }
@@ -95,8 +115,17 @@ class SonatraSecurityExtension extends Extension
         if ($config['expression']['has_org_role']) {
             $loader->load('expression_has_org_role.xml');
         }
+    }
 
-        // acl
+    /**
+     * Build the ACL.
+     *
+     * @param ContainerBuilder $container The container
+     * @param LoaderInterface  $loader    The config loader
+     * @param array            $config    The config
+     */
+    private function buildAcl(ContainerBuilder $container, LoaderInterface $loader, array $config)
+    {
         if ($config['acl']['enabled']
                 && $container->hasParameter('security.acl.dbal.class_table_name')
                 && $container->hasParameter('security.acl.dbal.entry_table_name')
@@ -138,7 +167,18 @@ class SonatraSecurityExtension extends Extension
                 $loader->load('orm_object_filter_voter.xml');
             }
         }
+    }
 
+    /**
+     * Build the organizational context.
+     *
+     * @param ContainerBuilder $container The container
+     * @param LoaderInterface  $loader    The config loader
+     * @param array            $config    The config
+     */
+    private function buildOrganizationalContext(ContainerBuilder $container, LoaderInterface $loader,
+                                                array $config)
+    {
         if ($config['organizational_context']['enabled']) {
             $loader->load('organizational_context.xml');
             $id = 'sonatra_security.organizational_context.service_id';

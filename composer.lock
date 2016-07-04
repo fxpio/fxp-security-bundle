@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "33f97cac04c3594f8711d19f1e029e7c",
-    "content-hash": "46446019339ded645f7a5196c45a5bc4",
+    "hash": "de151c98dd5f7f6e296a9bad2a099183",
+    "content-hash": "8bd0f98ab665590bb1d2582c930c39f2",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -399,66 +399,6 @@
                 "psr-3"
             ],
             "time": "2012-12-21 11:40:51"
-        },
-        {
-            "name": "sonatra/cache",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/sonatra/sonatra-cache.git",
-                "reference": "97aa3d78397ca3216ea2d3b6662537bda12ca391"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/sonatra/sonatra-cache/zipball/97aa3d78397ca3216ea2d3b6662537bda12ca391",
-                "reference": "97aa3d78397ca3216ea2d3b6662537bda12ca391",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.3"
-            },
-            "require-dev": {
-                "predis/predis": "1.0.*",
-                "psr/log": "1.0",
-                "symfony/filesystem": "~3.0",
-                "symfony/finder": "~3.0"
-            },
-            "suggest": {
-                "ext-apc": "Caching with ext/apc",
-                "ext-memcached": "Caching with ext/memcached",
-                "predis/predis": "Install Redis PHP"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.0-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Sonatra\\Component\\Cache\\": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "François Pluchino",
-                    "email": "francois.pluchino@sonatra.com"
-                }
-            ],
-            "description": "Small library for manage different systems of cache",
-            "homepage": "https://github.com/sonatra/sonatra-cache",
-            "keywords": [
-                "apc",
-                "cache",
-                "memcache",
-                "memcached",
-                "redis"
-            ],
-            "time": "2016-06-15 16:13:27"
         },
         {
             "name": "symfony/asset",
@@ -3778,8 +3718,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "friendsofsymfony/user-bundle": 20,
-        "sonatra/cache": 20
+        "friendsofsymfony/user-bundle": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

@@ -11,8 +11,8 @@
 
 namespace Sonatra\Bundle\SecurityBundle\Core\Role;
 
+use Psr\Cache\CacheItemPoolInterface;
 use Sonatra\Bundle\SecurityBundle\Core\Organizational\OrganizationalContextInterface;
-use Sonatra\Component\Cache\Adapter\CacheInterface;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
@@ -33,11 +33,11 @@ class OrganizationalRoleHierarchy extends RoleHierarchy
      * @param array                               $hierarchy     An array defining the hierarchy
      * @param RegistryInterface                   $registry
      * @param string                              $roleClassname
-     * @param CacheInterface                      $cache
+     * @param CacheItemPoolInterface|null         $cache
      * @param OrganizationalContextInterface|null $context
      */
     public function __construct(array $hierarchy, RegistryInterface $registry, $roleClassname,
-                                CacheInterface $cache, OrganizationalContextInterface $context = null)
+                                CacheItemPoolInterface $cache = null, OrganizationalContextInterface $context = null)
     {
         parent::__construct($hierarchy, $registry, $roleClassname, $cache);
         $this->context = $context;

@@ -36,7 +36,6 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('role_class')->defaultValue('Symfony\Component\Security\Core\Role\RoleInterface')->end()
                 ->scalarNode('group_class')->defaultValue('Sonatra\Bundle\SecurityBundle\Model\GroupInterface')->end()
                 ->scalarNode('organization_class')->defaultValue('Sonatra\Bundle\SecurityBundle\Model\OrganizationInterface')->end()
-                ->scalarNode('cache_dir')->cannotBeEmpty()->defaultValue('%kernel.cache_dir%/sonatra_security')->end()
             ->end()
             ->append($this->getHostRoleNode())
             ->append($this->getRoleHierarchyNode())
@@ -80,6 +79,9 @@ class Configuration implements ConfigurationInterface
         $node
             ->addDefaultsIfNotSet()
             ->canBeDisabled()
+            ->children()
+                ->scalarNode('cache')->defaultNull()->info('The service id of cache')->end()
+            ->end()
         ;
 
         return $node;

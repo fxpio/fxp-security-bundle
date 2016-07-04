@@ -11,11 +11,11 @@
 
 namespace Sonatra\Bundle\SecurityBundle\Core\Role;
 
+use Psr\Cache\CacheItemInterface;
+use Psr\Cache\CacheItemPoolInterface;
 use Sonatra\Bundle\DoctrineExtensionsBundle\Util\SqlFilterUtil;
 use Sonatra\Bundle\SecurityBundle\Model\RoleHierarchisableInterface;
 use Sonatra\Bundle\SecurityBundle\ReachableRoleEvents;
-use Sonatra\Component\Cache\Adapter\CacheInterface;
-use Sonatra\Component\Cache\CacheElement;
 use Symfony\Component\Security\Core\Role\RoleHierarchy as BaseRoleHierarchy;
 use Symfony\Component\Security\Core\Role\RoleInterface;
 use Symfony\Component\Security\Core\Role\Role;
@@ -47,7 +47,7 @@ class RoleHierarchy extends BaseRoleHierarchy
     private $cacheExec;
 
     /**
-     * @var CacheInterface
+     * @var CacheItemPoolInterface|null
      */
     private $cache;
 
@@ -59,12 +59,13 @@ class RoleHierarchy extends BaseRoleHierarchy
     /**
      * Constructor.
      *
-     * @param array             $hierarchy     An array defining the hierarchy
-     * @param RegistryInterface $registry
-     * @param string            $roleClassname
-     * @param CacheInterface    $cache
+     * @param array                       $hierarchy     An array defining the hierarchy
+     * @param RegistryInterface           $registry
+     * @param string                      $roleClassname
+     * @param CacheItemPoolInterface|null $cache
      */
-    public function __construct(array $hierarchy, RegistryInterface $registry, $roleClassname, CacheInterface $cache)
+    public function __construct(array $hierarchy, RegistryInterface $registry, $roleClassname,
+                                CacheItemPoolInterface $cache = null)
     {
         parent::__construct($hierarchy);
 
@@ -113,6 +114,7 @@ class RoleHierarchy extends BaseRoleHierarchy
 
         $roleNames = array();
         $nRoles = array();
+        $item = null;
 
         foreach ($roles as $role) {
             if (!is_string($role) && !($role instanceof RoleInterface)) {
@@ -134,11 +136,13 @@ class RoleHierarchy extends BaseRoleHierarchy
         }
 
         // find the hierarchy in cache
-        $element = $this->cache->get($id);
-        $reachableRoles = $element->getData();
+        if (null !== $this->cache) {
+            $item = $this->cache->getItem($id);
+            $reachableRoles = $item->get();
 
-        if (!$element->isExpired() && null !== $reachableRoles) {
-            return $reachableRoles;
+            if ($item->isHit() && null !== $reachableRoles) {
+                return $reachableRoles;
+            }
         }
 
         // build hierarchy
@@ -186,7 +190,11 @@ class RoleHierarchy extends BaseRoleHierarchy
         }
 
         // insert in cache
-        $this->cache->set($id, $finalRoles, CacheElement::YEAR);
+        if (null !== $this->cache && $item instanceof CacheItemInterface) {
+            $item->set($finalRoles);
+            $this->cache->save($item);
+        }
+
         $this->cacheExec[$id] = $finalRoles;
 
         if (null !== $this->eventDispatcher) {

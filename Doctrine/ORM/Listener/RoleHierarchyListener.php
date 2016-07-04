@@ -16,13 +16,13 @@ use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Events;
 use Doctrine\ORM\PersistentCollection;
 use Doctrine\ORM\UnitOfWork;
+use Psr\Cache\CacheItemPoolInterface;
 use Sonatra\Bundle\SecurityBundle\Acl\Domain\SecurityIdentityRetrievalStrategy;
 use Sonatra\Bundle\SecurityBundle\Core\Organizational\OrganizationalContextInterface;
 use Sonatra\Bundle\SecurityBundle\Model\GroupInterface;
 use Sonatra\Bundle\SecurityBundle\Model\OrganizationInterface;
 use Sonatra\Bundle\SecurityBundle\Model\OrganizationUserInterface;
 use Sonatra\Bundle\SecurityBundle\Model\RoleHierarchisableInterface;
-use Sonatra\Component\Cache\Adapter\CacheInterface;
 use Symfony\Component\Security\Acl\Model\SecurityIdentityRetrievalStrategyInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -35,14 +35,14 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class RoleHierarchyListener implements EventSubscriber
 {
     /**
-     * @var CacheInterface
-     */
-    protected $cache;
-
-    /**
      * @var SecurityIdentityRetrievalStrategyInterface
      */
     protected $strategy;
+
+    /**
+     * @var CacheItemPoolInterface|null
+     */
+    protected $cache;
 
     /**
      * @var OrganizationalContextInterface|null
@@ -52,14 +52,16 @@ class RoleHierarchyListener implements EventSubscriber
     /**
      * Constructor.
      *
-     * @param CacheInterface                             $cache
      * @param SecurityIdentityRetrievalStrategyInterface $strategy
-     * @param OrganizationalContextInterface             $context
+     * @param CacheItemPoolInterface|null                $cache
+     * @param OrganizationalContextInterface|null        $context
      */
-    public function __construct(CacheInterface $cache, SecurityIdentityRetrievalStrategyInterface $strategy, OrganizationalContextInterface $context = null)
+    public function __construct(SecurityIdentityRetrievalStrategyInterface $strategy,
+                                CacheItemPoolInterface $cache = null,
+                                OrganizationalContextInterface $context = null)
     {
-        $this->cache = $cache;
         $this->strategy = $strategy;
+        $this->cache = $cache;
         $this->context = $context;
     }
 
@@ -102,11 +104,11 @@ class RoleHierarchyListener implements EventSubscriber
     protected function flushCache(array $invalidates)
     {
         if ('' !== implode('', $invalidates)) {
-            if (null === $this->context) {
-                $this->cache->flushAll();
-            } else {
+            if (null !== $this->cache && null === $this->context) {
+                $this->cache->clear();
+            } else if (null !== $this->cache) {
                 foreach ($invalidates as $invalidate) {
-                    $this->cache->flushAll($invalidate);
+                    $this->cache->deleteItems($invalidate);
                 }
             }
 

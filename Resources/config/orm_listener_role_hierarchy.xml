@@ -14,9 +14,9 @@
 
         <service id="sonatra_security.role_hierarchy.cache.listener"
                  class="%sonatra_security.role_hierarchy.cache.listener.class%">
-            <argument type="service" id="sonatra_security.role_hierarchy.cache"/>
             <argument type="service" id="security.acl.security_identity_retrieval_strategy"/>
-            <argument type="service" id="sonatra_security.organizational_context" on-invalid="ignored"/>
+            <argument type="service" id="sonatra_security.role_hierarchy.cache" on-invalid="null"/>
+            <argument type="service" id="sonatra_security.organizational_context" on-invalid="null"/>
             <tag name="doctrine.event_subscriber"/>
         </service>
 

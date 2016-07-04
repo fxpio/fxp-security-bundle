@@ -25,7 +25,7 @@ Features include:
 - Merge the permissions of roles children of associated roles with user, role, group, and token
 - Define a role for various host with direct injection in token (regex compatible)
 - Execution cache system for the ACL/ACE getter
-- Execution cache and resource PHP cache system for the determination of all roles in hierarchy (with user, group, role, token)
+- Execution cache and PSR-6 Caching Implementation for the determination of all roles in hierarchy (with user, group, role, token)
 - Doctrine ORM Filter for filter the records in query (using ACL Rule Filter Definition)
 - Doctrine Listener for empty the record field value for all query type
 - Doctrine Listener for keep the old value in the record field value if the user has not the permission of action
