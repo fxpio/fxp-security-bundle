@@ -147,6 +147,7 @@ class SonatraSecurityExtension extends Extension
             }
 
             $loader->load('acl.xml');
+            $loader->load('acl_rule.xml');
 
             $container->setParameter('sonatra_security.acl_default_rule', $config['acl']['default_rule']);
             $container->setParameter('sonatra_security.acl_disabled_rule', $config['acl']['disabled_rule']);
