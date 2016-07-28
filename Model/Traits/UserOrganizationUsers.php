@@ -12,7 +12,6 @@
 namespace Sonatra\Bundle\SecurityBundle\Model\Traits;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Sonatra\Bundle\SecurityBundle\Model\OrganizationUserInterface;
 
 /**
@@ -23,7 +22,7 @@ use Sonatra\Bundle\SecurityBundle\Model\OrganizationUserInterface;
 trait UserOrganizationUsers
 {
     /**
-     * @var Collection|null
+     * @var \Doctrine\Common\Collections\Collection|null
      */
     protected $userOrganizations;
 
