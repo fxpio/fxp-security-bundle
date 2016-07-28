@@ -15,18 +15,18 @@ use Sonatra\Bundle\SecurityBundle\Acl\Domain\AbstractRuleDefinition;
 use Sonatra\Bundle\SecurityBundle\Acl\Model\RuleContextDefinitionInterface;
 
 /**
- * The Deny ACL Rule Definition.
+ * The Affirmative ACL Rule Definition.
  *
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-class Deny extends AbstractRuleDefinition
+class AffirmativeDefinition extends AbstractRuleDefinition
 {
     /**
      * {@inheritdoc}
      */
     public function getName()
     {
-        return 'deny';
+        return 'affirmative';
     }
 
     /**
@@ -34,7 +34,7 @@ class Deny extends AbstractRuleDefinition
      */
     public function getTypes()
     {
-        return array();
+        return array(static::TYPE_CLASS, static::TYPE_OBJECT);
     }
 
     /**
@@ -42,6 +42,10 @@ class Deny extends AbstractRuleDefinition
      */
     public function isGranted(RuleContextDefinitionInterface $rcd)
     {
-        return false;
+        $oDef = $this->arm->getDefinition('object');
+        $cDef = $this->arm->getDefinition('class');
+
+        return $oDef->isGranted($rcd)
+                || $cDef->isGranted($rcd);
     }
 }

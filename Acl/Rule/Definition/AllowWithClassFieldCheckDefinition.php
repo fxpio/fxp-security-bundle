@@ -12,16 +12,16 @@
 namespace Sonatra\Bundle\SecurityBundle\Acl\Rule\Definition;
 
 use Sonatra\Bundle\SecurityBundle\Acl\Domain\AbstractRuleDefinition;
-use Sonatra\Bundle\SecurityBundle\Acl\Model\RuleContextDefinitionInterface;
 use Sonatra\Bundle\SecurityBundle\Acl\Model\AclManagerInterface;
-use Symfony\Component\Security\Acl\Domain\ObjectIdentity;
+use Sonatra\Bundle\SecurityBundle\Acl\Model\RuleContextDefinitionInterface;
 
 /**
- * The Object ACL Rule Definition.
+ * The Allow ACL Rule Definition but check the grant of class field
+ * with the grant of the class.
  *
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-class Object extends AbstractRuleDefinition
+class AllowWithClassFieldCheckDefinition extends AbstractRuleDefinition
 {
     /**
      * @var AclManagerInterface
@@ -41,7 +41,7 @@ class Object extends AbstractRuleDefinition
      */
     public function getName()
     {
-        return 'object';
+        return 'allow_with_class_field_check';
     }
 
     /**
@@ -49,7 +49,7 @@ class Object extends AbstractRuleDefinition
      */
     public function getTypes()
     {
-        return array(static::TYPE_OBJECT);
+        return array();
     }
 
     /**
@@ -57,17 +57,15 @@ class Object extends AbstractRuleDefinition
      */
     public function isGranted(RuleContextDefinitionInterface $rcd)
     {
-        $sids = $rcd->getSecurityIdentities();
-        $oid = $rcd->getObjectIdentity();
-        $initOid = $oid;
-        $field = $rcd->getField();
-        $masks = $rcd->getMasks();
+        if (null !== $rcd->getField()) {
+            $sids = $rcd->getSecurityIdentities();
+            $oid = $rcd->getObjectIdentity();
+            $initOid = $oid;
+            $masks = $rcd->getMasks();
 
-        // force not found acl
-        if ('class' === $oid->getIdentifier()) {
-            $oid = new ObjectIdentity('object', $oid->getType());
+            return $this->am->doIsGranted($sids, $masks, $oid, $initOid);
         }
 
-        return $this->am->doIsGranted($sids, $masks, $oid, $initOid, $field);
+        return true;
     }
 }

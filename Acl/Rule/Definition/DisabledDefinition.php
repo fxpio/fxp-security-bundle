@@ -18,7 +18,7 @@ use Sonatra\Bundle\SecurityBundle\Acl\Domain\AbstractRuleDefinition;
  *
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-class Disabled extends AbstractRuleDefinition
+class DisabledDefinition extends AbstractRuleDefinition
 {
     /**
      * {@inheritdoc}

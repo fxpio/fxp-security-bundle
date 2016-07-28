@@ -8,44 +8,44 @@
 
         <!-- Acl Rule Definitions -->
         <service id="sonatra_security.acl.rule_definition.disabled"
-                 class="Sonatra\Bundle\SecurityBundle\Acl\Rule\Definition\Disabled">
+                 class="Sonatra\Bundle\SecurityBundle\Acl\Rule\Definition\DisabledDefinition">
             <tag name="sonatra_security.acl.rule_definition" alias="disabled"/>
         </service>
 
         <service id="sonatra_security.acl.rule_definition.allow"
-                 class="Sonatra\Bundle\SecurityBundle\Acl\Rule\Definition\Allow">
+                 class="Sonatra\Bundle\SecurityBundle\Acl\Rule\Definition\AllowDefinition">
             <tag name="sonatra_security.acl.rule_definition" alias="allow"/>
         </service>
 
         <service id="sonatra_security.acl.rule_definition.allow_with_class_field_check"
-                 class="Sonatra\Bundle\SecurityBundle\Acl\Rule\Definition\AllowWithClassFieldCheck">
+                 class="Sonatra\Bundle\SecurityBundle\Acl\Rule\Definition\AllowWithClassFieldCheckDefinition">
             <tag name="sonatra_security.acl.rule_definition" alias="allow_with_class_field_check"/>
             <argument type="service" id="sonatra_security.acl.manager"/>
         </service>
 
         <service id="sonatra_security.acl.rule_definition.deny"
-                 class="Sonatra\Bundle\SecurityBundle\Acl\Rule\Definition\Deny">
+                 class="Sonatra\Bundle\SecurityBundle\Acl\Rule\Definition\DenyDefinition">
             <tag name="sonatra_security.acl.rule_definition" alias="deny"/>
         </service>
 
         <service id="sonatra_security.acl.rule_definition.affirmative"
-                 class="Sonatra\Bundle\SecurityBundle\Acl\Rule\Definition\Affirmative">
+                 class="Sonatra\Bundle\SecurityBundle\Acl\Rule\Definition\AffirmativeDefinition">
             <tag name="sonatra_security.acl.rule_definition" alias="affirmative"/>
         </service>
 
         <service id="sonatra_security.acl.rule_definition.unanimous"
-                 class="Sonatra\Bundle\SecurityBundle\Acl\Rule\Definition\Unanimous">
+                 class="Sonatra\Bundle\SecurityBundle\Acl\Rule\Definition\UnanimousDefinition">
             <tag name="sonatra_security.acl.rule_definition" alias="unanimous"/>
         </service>
 
         <service id="sonatra_security.acl.rule_definition.object"
-                 class="Sonatra\Bundle\SecurityBundle\Acl\Rule\Definition\Object">
+                 class="Sonatra\Bundle\SecurityBundle\Acl\Rule\Definition\ObjectDefinition">
             <argument type="service" id="sonatra_security.acl.manager"/>
             <tag name="sonatra_security.acl.rule_definition" alias="object"/>
         </service>
 
         <service id="sonatra_security.acl.rule_definition.class"
-                 class="Sonatra\Bundle\SecurityBundle\Acl\Rule\Definition\ClassDefinition">
+                 class="Sonatra\Bundle\SecurityBundle\Acl\Rule\Definition\ClassDefinitionDefinition">
             <argument type="service" id="sonatra_security.acl.manager"/>
             <tag name="sonatra_security.acl.rule_definition" alias="class"/>
         </service>

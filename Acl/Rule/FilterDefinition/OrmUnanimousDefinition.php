@@ -20,7 +20,7 @@ use Sonatra\Bundle\SecurityBundle\Acl\Model\RuleOrmFilterDefinitionInterface;
  *
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-class OrmUnanimous extends AbstractRuleOrmFilterDefinition
+class OrmUnanimousDefinition extends AbstractRuleOrmFilterDefinition
 {
     /**
      * {@inheritdoc}

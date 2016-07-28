@@ -12,20 +12,21 @@
 namespace Sonatra\Bundle\SecurityBundle\Acl\Rule\Definition;
 
 use Sonatra\Bundle\SecurityBundle\Acl\Domain\AbstractRuleDefinition;
+use Sonatra\Bundle\SecurityBundle\Acl\Model\RuleContextDefinitionInterface;
 
 /**
- * The Allow ACL Rule Definition.
+ * The Unanimous ACL Rule Definition.
  *
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-class Allow extends AbstractRuleDefinition
+class UnanimousDefinition extends AbstractRuleDefinition
 {
     /**
      * {@inheritdoc}
      */
     public function getName()
     {
-        return 'allow';
+        return 'unanimous';
     }
 
     /**
@@ -33,6 +34,18 @@ class Allow extends AbstractRuleDefinition
      */
     public function getTypes()
     {
-        return array();
+        return array(static::TYPE_CLASS, static::TYPE_OBJECT);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isGranted(RuleContextDefinitionInterface $rcd)
+    {
+        $oDef = $this->arm->getDefinition('object');
+        $cDef = $this->arm->getDefinition('class');
+
+        return $oDef->isGranted($rcd)
+                && $cDef->isGranted($rcd);
     }
 }

@@ -22,7 +22,7 @@ use Doctrine\ORM\EntityManagerInterface;
  *
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-class OrmClass extends AbstractRuleOrmFilterDefinition
+class OrmClassDefinition extends AbstractRuleOrmFilterDefinition
 {
     /**
      * @var EntityManagerInterface

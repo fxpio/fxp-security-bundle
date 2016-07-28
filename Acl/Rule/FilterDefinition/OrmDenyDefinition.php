@@ -20,7 +20,7 @@ use Sonatra\Bundle\SecurityBundle\Doctrine\ORM\Util\DoctrineUtils;
  *
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-class OrmDeny extends AbstractRuleOrmFilterDefinition
+class OrmDenyDefinition extends AbstractRuleOrmFilterDefinition
 {
     /**
      * {@inheritdoc}

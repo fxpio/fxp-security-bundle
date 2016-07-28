@@ -12,16 +12,16 @@
 namespace Sonatra\Bundle\SecurityBundle\Acl\Rule\Definition;
 
 use Sonatra\Bundle\SecurityBundle\Acl\Domain\AbstractRuleDefinition;
-use Sonatra\Bundle\SecurityBundle\Acl\Model\AclManagerInterface;
 use Sonatra\Bundle\SecurityBundle\Acl\Model\RuleContextDefinitionInterface;
+use Sonatra\Bundle\SecurityBundle\Acl\Model\AclManagerInterface;
+use Symfony\Component\Security\Acl\Domain\ObjectIdentity;
 
 /**
- * The Allow ACL Rule Definition but check the grant of class field
- * with the grant of the class.
+ * The Object ACL Rule Definition.
  *
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-class AllowWithClassFieldCheck extends AbstractRuleDefinition
+class ObjectDefinition extends AbstractRuleDefinition
 {
     /**
      * @var AclManagerInterface
@@ -41,7 +41,7 @@ class AllowWithClassFieldCheck extends AbstractRuleDefinition
      */
     public function getName()
     {
-        return 'allow_with_class_field_check';
+        return 'object';
     }
 
     /**
@@ -49,7 +49,7 @@ class AllowWithClassFieldCheck extends AbstractRuleDefinition
      */
     public function getTypes()
     {
-        return array();
+        return array(static::TYPE_OBJECT);
     }
 
     /**
@@ -57,15 +57,17 @@ class AllowWithClassFieldCheck extends AbstractRuleDefinition
      */
     public function isGranted(RuleContextDefinitionInterface $rcd)
     {
-        if (null !== $rcd->getField()) {
-            $sids = $rcd->getSecurityIdentities();
-            $oid = $rcd->getObjectIdentity();
-            $initOid = $oid;
-            $masks = $rcd->getMasks();
+        $sids = $rcd->getSecurityIdentities();
+        $oid = $rcd->getObjectIdentity();
+        $initOid = $oid;
+        $field = $rcd->getField();
+        $masks = $rcd->getMasks();
 
-            return $this->am->doIsGranted($sids, $masks, $oid, $initOid);
+        // force not found acl
+        if ('class' === $oid->getIdentifier()) {
+            $oid = new ObjectIdentity('object', $oid->getType());
         }
 
-        return true;
+        return $this->am->doIsGranted($sids, $masks, $oid, $initOid, $field);
     }
 }
