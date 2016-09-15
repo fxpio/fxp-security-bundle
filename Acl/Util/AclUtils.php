@@ -14,6 +14,7 @@ namespace Sonatra\Bundle\SecurityBundle\Acl\Util;
 use Sonatra\Bundle\SecurityBundle\Acl\Domain\GroupSecurityIdentity;
 use Sonatra\Bundle\SecurityBundle\Acl\Domain\OrganizationSecurityIdentity;
 use Sonatra\Bundle\SecurityBundle\Exception\InvalidArgumentException;
+use Sonatra\Bundle\SecurityBundle\Exception\RuntimeException;
 use Sonatra\Bundle\SecurityBundle\Model\GroupInterface;
 use Sonatra\Bundle\SecurityBundle\Model\OrganizationInterface;
 use Symfony\Component\Security\Acl\Domain\ObjectIdentity;
@@ -36,6 +37,75 @@ use Symfony\Component\Security\Core\Role\RoleInterface;
 class AclUtils
 {
     /**
+     * @var string
+     */
+    private static $permissionMapClass = BasicPermissionMap::class;
+
+    /**
+     * @var array<string, string>
+     */
+    private static $permissionMap = array(
+        MaskBuilder::CODE_VIEW => BasicPermissionMap::PERMISSION_VIEW,
+        MaskBuilder::CODE_CREATE => BasicPermissionMap::PERMISSION_CREATE,
+        MaskBuilder::CODE_EDIT => BasicPermissionMap::PERMISSION_EDIT,
+        MaskBuilder::CODE_DELETE => BasicPermissionMap::PERMISSION_DELETE,
+        MaskBuilder::CODE_UNDELETE => BasicPermissionMap::PERMISSION_UNDELETE,
+        MaskBuilder::CODE_OPERATOR => BasicPermissionMap::PERMISSION_OPERATOR,
+        MaskBuilder::CODE_MASTER => BasicPermissionMap::PERMISSION_MASTER,
+        MaskBuilder::CODE_OWNER => BasicPermissionMap::PERMISSION_OWNER,
+    );
+
+    /**
+     * @var BasicPermissionMap|null
+     */
+    private static $permissionMapInstance;
+
+    /**
+     * @var array|null
+     */
+    private static $permissionMapRules;
+
+    /**
+     * Set the class name of permission map.
+     *
+     * @param string $class The class name
+     */
+    public static function setPermissionMapClass($class)
+    {
+        static::$permissionMapClass = $class;
+    }
+
+    /**
+     * Get the class name of permission map.
+     *
+     * @return string
+     */
+    public static function getPermissionMapClass()
+    {
+        return static::$permissionMapClass;
+    }
+
+    /**
+     * Set the map of mask builder code and permission name.
+     *
+     * @param array $map The permission map
+     */
+    public static function setPermissionMap(array $map)
+    {
+        static::$permissionMap = $map;
+    }
+
+    /**
+     * Get the map of mask builder code and permission name.
+     *
+     * @return array
+     */
+    public static function getPermissionMap()
+    {
+        return static::$permissionMap;
+    }
+
+    /**
      * Convert the acl name or the array of acl name to mask.
      *
      * @param int|string|array $mask
@@ -57,7 +127,7 @@ class AclUtils
 
         // convert the rights to mask
         $mask = (array) $mask;
-        $builder = new MaskBuilder();
+        $builder = static::getPermissionMapInstance()->getMaskBuilder();
         $maskConverted = null;
 
         try {
@@ -87,40 +157,15 @@ class AclUtils
             throw new InvalidArgumentException('The mask must be a int');
         }
 
-        $mb = new MaskBuilder($mask);
+        $mb = static::getPermissionMapInstance()->getMaskBuilder();
+        $mb->set($mask);
         $pattern = $mb->getPattern();
         $rights = array();
 
-        if (false !== strpos($pattern, MaskBuilder::CODE_VIEW)) {
-            $rights[] = BasicPermissionMap::PERMISSION_VIEW;
-        }
-
-        if (false !== strpos($pattern, MaskBuilder::CODE_CREATE)) {
-            $rights[] = BasicPermissionMap::PERMISSION_CREATE;
-        }
-
-        if (false !== strpos($pattern, MaskBuilder::CODE_EDIT)) {
-            $rights[] = BasicPermissionMap::PERMISSION_EDIT;
-        }
-
-        if (false !== strpos($pattern, MaskBuilder::CODE_DELETE)) {
-            $rights[] = BasicPermissionMap::PERMISSION_DELETE;
-        }
-
-        if (false !== strpos($pattern, MaskBuilder::CODE_UNDELETE)) {
-            $rights[] = BasicPermissionMap::PERMISSION_UNDELETE;
-        }
-
-        if (false !== strpos($pattern, MaskBuilder::CODE_OPERATOR)) {
-            $rights[] = BasicPermissionMap::PERMISSION_OPERATOR;
-        }
-
-        if (false !== strpos($pattern, MaskBuilder::CODE_MASTER)) {
-            $rights[] = BasicPermissionMap::PERMISSION_MASTER;
-        }
-
-        if (false !== strpos($pattern, MaskBuilder::CODE_OWNER)) {
-            $rights[] = BasicPermissionMap::PERMISSION_OWNER;
+        foreach (static::getPermissionMap() as $code => $permission) {
+            if (false !== strpos($pattern, $code)) {
+                $rights[] = $permission;
+            }
         }
 
         return $rights;
@@ -218,5 +263,89 @@ class AclUtils
         }
 
         return ClassUtils::getRealClass($domainObject);
+    }
+
+    /**
+     * Get the list of parent decision rules.
+     *
+     * @param string $type
+     *
+     * @return string[]
+     */
+    public static function getParentRules($type)
+    {
+        $type = strtoupper($type);
+        $rules = array($type);
+        $mapRules = static::getPermissionMapRules();
+
+        if (isset($mapRules[$type])) {
+            $rules = $mapRules[$type];
+        }
+
+        return $rules;
+    }
+
+    /**
+     * Get the class name of mask builder.
+     *
+     * @return string
+     */
+    public static function getMaskBuilderClass()
+    {
+        return get_class(static::getPermissionMapInstance()->getMaskBuilder());
+    }
+
+    /**
+     * Create the instance of permission map.
+     *
+     * @return BasicPermissionMap
+     */
+    public static function createPermissionMapInstance()
+    {
+        $permission = new static::$permissionMapClass();
+
+        if (!$permission instanceof BasicPermissionMap) {
+            throw new RuntimeException('The permission map class must be an instance of BasicPermissionMap');
+        }
+
+        return $permission;
+    }
+
+    /**
+     * Get the permission map rules.
+     *
+     * @return array
+     */
+    private static function getPermissionMapRules()
+    {
+        if (null === static::$permissionMapRules) {
+            $pm = static::getPermissionMapInstance();
+            $ref = new \ReflectionClass($pm);
+            $prop = $ref->getProperty('map');
+            $prop->setAccessible(true);
+            static::$permissionMapRules = $prop->getValue($pm);
+
+            foreach (static::$permissionMapRules as &$rules) {
+                foreach ($rules as $i => &$mask) {
+                    $mask = current(static::convertToAclName($mask));
+                }
+            }
+        }
+
+        return static::$permissionMapRules;
+    }
+
+    /**
+     * Get the instance of permission map.
+     *
+     * @return BasicPermissionMap
+     */
+    private static function getPermissionMapInstance()
+    {
+        if (null === static::$permissionMapInstance) {
+            static::$permissionMapInstance = static::createPermissionMapInstance();
+        }
+
+        return static::$permissionMapInstance;
     }
 }

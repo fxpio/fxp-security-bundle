@@ -23,7 +23,6 @@ use Symfony\Component\Security\Acl\Exception\NotAllAclsFoundException;
 use Symfony\Component\Security\Acl\Model\ObjectIdentityInterface;
 use Symfony\Component\Security\Acl\Model\ObjectIdentityRetrievalStrategyInterface;
 use Symfony\Component\Security\Acl\Model\SecurityIdentityRetrievalStrategyInterface;
-use Symfony\Component\Security\Acl\Permission\BasicPermissionMap;
 use Symfony\Component\Security\Acl\Voter\FieldVote;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
@@ -361,16 +360,7 @@ class AclManager implements AclManagerInterface
         $rules = array();
 
         if (empty($types)) {
-            $types = array(
-                    BasicPermissionMap::PERMISSION_VIEW,
-                    BasicPermissionMap::PERMISSION_EDIT,
-                    BasicPermissionMap::PERMISSION_CREATE,
-                    BasicPermissionMap::PERMISSION_DELETE,
-                    BasicPermissionMap::PERMISSION_UNDELETE,
-                    BasicPermissionMap::PERMISSION_OPERATOR,
-                    BasicPermissionMap::PERMISSION_MASTER,
-                    BasicPermissionMap::PERMISSION_OWNER,
-            );
+            $types = array_values(AclUtils::getPermissionMap());
         }
 
         foreach ($types as $type) {
@@ -447,7 +437,7 @@ class AclManager implements AclManagerInterface
     protected function getAllMasks(array $masks, $object)
     {
         $all = array();
-        $map = new BasicPermissionMap();
+        $map = AclUtils::createPermissionMapInstance();
 
         foreach ($masks as $mask) {
             $mask = implode('', AclUtils::convertToAclName($mask));

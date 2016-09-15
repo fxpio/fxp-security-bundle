@@ -11,6 +11,7 @@
 
 namespace Sonatra\Bundle\SecurityBundle\Acl\Domain;
 
+use Sonatra\Bundle\SecurityBundle\Acl\Util\AclUtils;
 use Sonatra\Bundle\SecurityBundle\Acl\Util\ClassUtils;
 use Sonatra\Bundle\SecurityBundle\Exception\SecurityException;
 use Sonatra\Bundle\SecurityBundle\Acl\Model\AclRuleManagerInterface;
@@ -290,7 +291,7 @@ class AclRuleManager implements AclRuleManagerInterface
     {
         $type = strtoupper($type);
 
-        if (!defined('Symfony\Component\Security\Acl\Permission\MaskBuilder::MASK_'.$type)) {
+        if (!defined(AclUtils::getMaskBuilderClass().'::MASK_'.$type)) {
             throw new SecurityException(sprintf('The type "%s" in configuration of Sonatra ACL Rules does not exist', $type));
         }
 
@@ -307,7 +308,7 @@ class AclRuleManager implements AclRuleManagerInterface
      */
     protected function getParentRule($type, array $rules)
     {
-        $pRules = $this->getParentRules($type);
+        $pRules = AclUtils::getParentRules($type);
         $rule = null;
 
         foreach ($pRules as $pRule) {
@@ -318,103 +319,5 @@ class AclRuleManager implements AclRuleManagerInterface
         }
 
         return $rule;
-    }
-
-    /**
-     * Get the list of parent desicion rules.
-     *
-     * @param string $type
-     *
-     * @return string[]
-     */
-    protected function getParentRules($type)
-    {
-        $type = strtoupper($type);
-        $rules = array($type);
-
-        switch ($type) {
-            case 'VIEW':
-                $rules = array(
-                    'VIEW',
-                    'EDIT',
-                    'OPERATOR',
-                    'MASTER',
-                    'OWNER',
-                    'IDDQD',
-                );
-                break;
-
-            case 'EDIT':
-                $rules = array(
-                    'EDIT',
-                    'OPERATOR',
-                    'MASTER',
-                    'OWNER',
-                    'IDDQD',
-                );
-                break;
-
-            case 'CREATE':
-                $rules = array(
-                    'CREATE',
-                    'OPERATOR',
-                    'MASTER',
-                    'OWNER',
-                    'IDDQD',
-                );
-                break;
-
-            case 'DELETE':
-                $rules = array(
-                    'DELETE',
-                    'OPERATOR',
-                    'MASTER',
-                    'OWNER',
-                    'IDDQD',
-                );
-                break;
-
-            case 'UNDELETE':
-                $rules = array(
-                    'UNDELETE',
-                    'OPERATOR',
-                    'MASTER',
-                    'OWNER',
-                    'IDDQD',
-                );
-                break;
-
-            case 'OPERATOR':
-                $rules = array(
-                    'OPERATOR',
-                    'MASTER',
-                    'OWNER',
-                    'IDDQD',
-                );
-                break;
-
-            case 'MASTER':
-                $rules = array(
-                    'MASTER',
-                    'OWNER',
-                    'IDDQD',
-                );
-                break;
-
-            case 'OWNER':
-                $rules = array(
-                    'OWNER',
-                    'IDDQD',
-                );
-                break;
-
-            case 'IDDQD':
-                $rules = array(
-                    'IDDQD',
-                );
-                break;
-        }
-
-        return $rules;
     }
 }

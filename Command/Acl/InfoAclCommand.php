@@ -40,16 +40,22 @@ use Sonatra\Bundle\SecurityBundle\Exception\InvalidArgumentException;
  */
 class InfoAclCommand extends AbstractAclActionCommand
 {
-    protected $rightsDisplayed = array(
-        'VIEW',
-        'CREATE',
-        'EDIT',
-        'DELETE',
-        'UNDELETE',
-        'OPERATOR',
-        'MASTER',
-        'OWNER',
-    );
+    /**
+     * @var array
+     */
+    protected $rightsDisplayed;
+
+    /**
+     * Constructor.
+     *
+     * @param string|null $name The name of the command
+     */
+    public function __construct($name = null)
+    {
+        parent::__construct($name);
+
+        $this->rightsDisplayed = array_values(AclUtils::getPermissionMap());
+    }
 
     /**
      * {@inheritdoc}
