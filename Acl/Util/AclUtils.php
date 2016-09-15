@@ -22,7 +22,6 @@ use Symfony\Component\Security\Acl\Domain\UserSecurityIdentity;
 use Symfony\Component\Security\Acl\Domain\RoleSecurityIdentity;
 use Symfony\Component\Security\Acl\Model\ObjectIdentityInterface;
 use Symfony\Component\Security\Acl\Model\SecurityIdentityInterface;
-use Symfony\Component\Security\Acl\Permission\MaskBuilder;
 use Symfony\Component\Security\Acl\Permission\BasicPermissionMap;
 use Symfony\Component\Security\Acl\Voter\FieldVote;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -42,18 +41,9 @@ class AclUtils
     private static $permissionMapClass = BasicPermissionMap::class;
 
     /**
-     * @var array<string, string>
+     * @var array<string, string>|null
      */
-    private static $permissionMap = array(
-        MaskBuilder::CODE_VIEW => BasicPermissionMap::PERMISSION_VIEW,
-        MaskBuilder::CODE_CREATE => BasicPermissionMap::PERMISSION_CREATE,
-        MaskBuilder::CODE_EDIT => BasicPermissionMap::PERMISSION_EDIT,
-        MaskBuilder::CODE_DELETE => BasicPermissionMap::PERMISSION_DELETE,
-        MaskBuilder::CODE_UNDELETE => BasicPermissionMap::PERMISSION_UNDELETE,
-        MaskBuilder::CODE_OPERATOR => BasicPermissionMap::PERMISSION_OPERATOR,
-        MaskBuilder::CODE_MASTER => BasicPermissionMap::PERMISSION_MASTER,
-        MaskBuilder::CODE_OWNER => BasicPermissionMap::PERMISSION_OWNER,
-    );
+    private static $permissionMap;
 
     /**
      * @var BasicPermissionMap|null
@@ -73,26 +63,9 @@ class AclUtils
     public static function setPermissionMapClass($class)
     {
         static::$permissionMapClass = $class;
-    }
-
-    /**
-     * Get the class name of permission map.
-     *
-     * @return string
-     */
-    public static function getPermissionMapClass()
-    {
-        return static::$permissionMapClass;
-    }
-
-    /**
-     * Set the map of mask builder code and permission name.
-     *
-     * @param array $map The permission map
-     */
-    public static function setPermissionMap(array $map)
-    {
-        static::$permissionMap = $map;
+        static::$permissionMap = null;
+        static::$permissionMapInstance = null;
+        static::$permissionMapRules = null;
     }
 
     /**
@@ -102,6 +75,22 @@ class AclUtils
      */
     public static function getPermissionMap()
     {
+        if (null === static::$permissionMap) {
+            static::$permissionMap = array();
+            $refPerm = new \ReflectionClass(static::$permissionMapClass);
+            $refMask = new \ReflectionClass(static::getPermissionMapInstance()->getMaskBuilder());
+
+            foreach ($refMask->getConstants() as $name => $cMask) {
+                $subName = substr($name, 5);
+
+                if (0 === strpos($name, 'MASK_')
+                        && defined($cName = $refMask->getName().'::CODE_'.$subName)
+                        && defined($pName = $refPerm->getName().'::PERMISSION_'.$subName)) {
+                    static::$permissionMap[constant($cName)] = constant($pName);
+                }
+            }
+        }
+
         return static::$permissionMap;
     }
 
