@@ -69,7 +69,7 @@ class InfoAclCommand extends AbstractAclActionCommand
         ->addOption('host', null, InputOption::VALUE_REQUIRED, 'The hostname pattern (for default anonymous role)', 'localhost')
         ->addOption('no-host', null, InputOption::VALUE_NONE, 'Not display the role of host')
         ->addOption('calc', 'c', InputOption::VALUE_NONE, 'Get the rights with granted method (calculated)')
-        ->setHelp(<<<EOF
+        ->setHelp(<<<'EOF'
 The <info>security:acl:info</info> command gets the existing rights for the
 given security identity on a specified domain (class or object).
 EOF

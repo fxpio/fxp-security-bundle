@@ -36,7 +36,7 @@ class AddAclCommand extends AbstractAclActionCommand
         ->addOption('strategy', null, InputOption::VALUE_REQUIRED, 'The ACE granting strategy', 'all')
         ->addOption('right', null, InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
             'Specifies the right(s) to set on the given class for the given security identity')
-        ->setHelp(<<<EOF
+        ->setHelp(<<<'EOF'
 The <info>security:acl:add</info> command adds the given rights for the
 given security identity on a specified domain (class or object).
 

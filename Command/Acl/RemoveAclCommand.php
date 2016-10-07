@@ -33,7 +33,7 @@ class RemoveAclCommand extends AbstractAclActionCommand
         ->setDescription('Remove a specified right from a given identifier on a given domain (class or object).')
         ->addOption('right', null, InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
             'Specifies the right(s) to set on the given class for the given security identity')
-        ->setHelp(<<<EOF
+        ->setHelp(<<<'EOF'
 The <info>security:acl:remove</info> command revokes the given rights for the
 given security identity on a specified domain (class or object).
 
