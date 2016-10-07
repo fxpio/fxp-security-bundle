@@ -27,7 +27,7 @@ class AclExceptionListener
     /**
      * Method for a dependency injection.
      *
-     * @param GetResponseForExceptionEvent $event A event object.
+     * @param GetResponseForExceptionEvent $event A event object
      */
     public function onKernelException(GetResponseForExceptionEvent $event)
     {

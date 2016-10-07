@@ -28,14 +28,14 @@ interface UnitOfWorkInterface
     /**
      * Attaches an object from the object filter management.
      *
-     * @param object $object The object to attach.
+     * @param object $object The object to attach
      */
     public function attach($object);
 
     /**
      * Detaches an object from the object filter management.
      *
-     * @param object $object The object to detach.
+     * @param object $object The object to detach
      */
     public function detach($object);
 
