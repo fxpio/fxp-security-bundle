@@ -14,6 +14,7 @@ namespace Sonatra\Bundle\SecurityBundle\Doctrine\ORM\Filter;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Query\Filter\SQLFilter;
 use Doctrine\ORM\Mapping\ClassMetadata;
+use Helloguest\Bundle\CoreBundle\Security\Acl\Permission\PermissionMap;
 use Sonatra\Bundle\SecurityBundle\Acl\Domain\OrmFilterRuleContextDefinition;
 use Sonatra\Bundle\SecurityBundle\Acl\Domain\AbstractRuleOrmFilterDefinition;
 use Sonatra\Bundle\SecurityBundle\Acl\Model\RuleOrmFilterDefinitionInterface;
@@ -37,7 +38,7 @@ class AclFilter extends SQLFilter
     {
         $arm = $this->getListener()->getAclRuleManager();
         $class = $targetEntity->getName();
-        $rule = $arm->getRule('VIEW', $class);
+        $rule = $arm->getRule(PermissionMap::PERMISSION_VIEW, $class);
 
         if ($arm->hasFilterDefinition($rule, AbstractRuleOrmFilterDefinition::TYPE)) {
             /* @var RuleOrmFilterDefinitionInterface $definition */
