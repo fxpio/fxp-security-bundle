@@ -106,7 +106,7 @@ class RoleHierarchyListener implements EventSubscriber
         if ('' !== implode('', $invalidates)) {
             if (null !== $this->cache && null === $this->context) {
                 $this->cache->clear();
-            } else if (null !== $this->cache) {
+            } elseif (null !== $this->cache) {
                 $this->cache->deleteItems($invalidates);
             }
 
