@@ -141,7 +141,9 @@ class Configuration implements ConfigurationInterface
                     ->prototype('array')
                         ->beforeNormalization()
                             ->ifString()
-                            ->then(function ($v) { return array('default' => strtolower($v)); })
+                            ->then(function ($v) {
+                                return array('default' => strtolower($v));
+                            })
                         ->end()
                         ->children()
                             ->scalarNode('default')->end()
@@ -149,7 +151,9 @@ class Configuration implements ConfigurationInterface
                             ->arrayNode('rules')
                                 ->prototype('scalar')
                                     ->beforeNormalization()
-                                        ->always(function ($v) {return strtolower($v);})
+                                        ->always(function ($v) {
+                                            return strtolower($v);
+                                        })
                                     ->end()
                                 ->end()
                             ->end()
@@ -158,14 +162,18 @@ class Configuration implements ConfigurationInterface
                                 ->prototype('array')
                                     ->beforeNormalization()
                                         ->ifString()
-                                        ->then(function ($v) { return array('default' => strtolower($v)); })
+                                        ->then(function ($v) {
+                                            return array('default' => strtolower($v));
+                                        })
                                     ->end()
                                     ->children()
                                         ->scalarNode('default')->end()
                                         ->arrayNode('rules')
                                             ->prototype('scalar')
                                                 ->beforeNormalization()
-                                                    ->always(function ($v) {return strtolower($v);})
+                                                    ->always(function ($v) {
+                                                        return strtolower($v);
+                                                    })
                                                 ->end()
                                             ->end()
                                         ->end()
