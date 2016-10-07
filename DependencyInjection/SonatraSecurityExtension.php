@@ -53,8 +53,8 @@ class SonatraSecurityExtension extends Extension
     /**
      * Build the host role.
      *
-     * @param LoaderInterface  $loader The config loader
-     * @param array            $config The config
+     * @param LoaderInterface $loader The config loader
+     * @param array           $config The config
      */
     private function buildHostRole(LoaderInterface $loader, array $config)
     {
@@ -91,8 +91,8 @@ class SonatraSecurityExtension extends Extension
     /**
      * Build the expression.
      *
-     * @param LoaderInterface  $loader The config loader
-     * @param array            $config The config
+     * @param LoaderInterface $loader The config loader
+     * @param array           $config The config
      */
     private function buildExpression(LoaderInterface $loader, array $config)
     {
