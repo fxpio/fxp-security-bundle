@@ -45,7 +45,7 @@
         </service>
 
         <service id="sonatra_security.acl.rule_definition.class"
-                 class="Sonatra\Bundle\SecurityBundle\Acl\Rule\Definition\ClassDefinitionDefinition">
+                 class="Sonatra\Bundle\SecurityBundle\Acl\Rule\Definition\ClassDefinition">
             <argument type="service" id="sonatra_security.acl.manager"/>
             <tag name="sonatra_security.acl.rule_definition" alias="class"/>
         </service>
