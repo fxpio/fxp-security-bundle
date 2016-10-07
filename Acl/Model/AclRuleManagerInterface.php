@@ -99,6 +99,15 @@ interface AclRuleManagerInterface
     public function getRule($type, $classname, $fieldname = null);
 
     /**
+     * Get the master domain object.
+     *
+     * @param object $domainObject The domain object
+     *
+     * @return object
+     */
+    public function getMaster($domainObject);
+
+    /**
      * Get the acl rule definition.
      *
      * @param string $name

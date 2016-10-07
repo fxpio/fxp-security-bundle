@@ -145,6 +145,7 @@ class Configuration implements ConfigurationInterface
                         ->end()
                         ->children()
                             ->scalarNode('default')->end()
+                            ->scalarNode('master')->defaultNull()->end()
                             ->arrayNode('rules')
                                 ->prototype('scalar')
                                     ->beforeNormalization()

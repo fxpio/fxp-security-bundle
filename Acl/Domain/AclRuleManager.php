@@ -16,6 +16,7 @@ use Sonatra\Bundle\SecurityBundle\Acl\Util\ClassUtils;
 use Sonatra\Bundle\SecurityBundle\Exception\SecurityException;
 use Sonatra\Bundle\SecurityBundle\Acl\Model\AclRuleManagerInterface;
 use Sonatra\Bundle\SecurityBundle\Acl\DependencyInjection\RuleExtensionInterface;
+use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
 /**
  * ACL Rule Manager.
@@ -24,6 +25,11 @@ use Sonatra\Bundle\SecurityBundle\Acl\DependencyInjection\RuleExtensionInterface
  */
 class AclRuleManager implements AclRuleManagerInterface
 {
+    /**
+     * @var PropertyAccessorInterface
+     */
+    protected $propertyAccessor;
+
     /**
      * @var RuleExtensionInterface
      */
@@ -57,16 +63,19 @@ class AclRuleManager implements AclRuleManagerInterface
     /**
      * Constructor.
      *
-     * @param RuleExtensionInterface $ruleExtension
-     * @param string                 $defaultRule
-     * @param string                 $disabledRule
-     * @param array                  $rules
+     * @param PropertyAccessorInterface $propertyAccessor
+     * @param RuleExtensionInterface    $ruleExtension
+     * @param string                    $defaultRule
+     * @param string                    $disabledRule
+     * @param array                     $rules
      */
-    public function __construct(RuleExtensionInterface $ruleExtension,
+    public function __construct(PropertyAccessorInterface $propertyAccessor,
+            RuleExtensionInterface $ruleExtension,
             $defaultRule,
             $disabledRule,
             array $rules = array())
     {
+        $this->propertyAccessor = $propertyAccessor;
         $this->ruleExtension = $ruleExtension;
         $this->defaultRule = $defaultRule;
         $this->disabledRule = $disabledRule;
@@ -226,6 +235,24 @@ class AclRuleManager implements AclRuleManagerInterface
         $this->setRule($rule, $type, $classname, $fieldname);
 
         return $this->getRule($type, $classname, $fieldname);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getMaster($domainObject)
+    {
+        if (is_object($domainObject)) {
+            $classname = ClassUtils::getRealClass($domainObject);
+
+            if (isset($this->rules[$classname]['master'])) {
+                $master = $this->rules[$classname]['master'];
+                $value = $this->propertyAccessor->getValue($domainObject, $master);
+                $domainObject = is_object($value) ? $value : $domainObject;
+            }
+        }
+
+        return $domainObject;
     }
 
     /**

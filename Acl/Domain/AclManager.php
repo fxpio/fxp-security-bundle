@@ -238,6 +238,7 @@ class AclManager implements AclManagerInterface
         }
 
         $sids = AclUtils::convertSecurityIdentities($sids);
+        $domainObject = $this->aclRuleManager->getMaster($domainObject);
 
         $oid = $this->getObjectIdentity($domainObject);
         $rule = $this->getRule($mask, $domainObject, $field);
