@@ -207,7 +207,7 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('has_field_permission')->defaultTrue()->end()
                 ->scalarNode('has_role')->defaultTrue()->end()
                 ->scalarNode('has_any_role')->defaultTrue()->end()
-                ->scalarNode('has_org_role')->defaultTrue()->end()
+                ->scalarNode('has_org_role')->defaultFalse()->end()
             ->end()
         ;
 
