@@ -40,6 +40,11 @@ class HostRoleListener implements ListenerInterface
     protected $anonymousListener;
 
     /**
+     * @var bool
+     */
+    protected $enabled = true;
+
+    /**
      * Constructor.
      *
      * @param TokenStorageInterface $tokenStorage
@@ -54,12 +59,36 @@ class HostRoleListener implements ListenerInterface
     }
 
     /**
+     * Set if the listener is enabled.
+     *
+     * @param bool $enabled The value
+     */
+    public function setEnabled($enabled)
+    {
+        $this->enabled = (bool) $enabled;
+    }
+
+    /**
+     * Check if the listener is enabled.
+     *
+     * @return bool
+     */
+    public function isEnabled()
+    {
+        return $this->enabled;
+    }
+
+    /**
      * Handles anonymous authentication.
      *
      * @param GetResponseEvent $event A GetResponseEvent instance
      */
     public function handle(GetResponseEvent $event)
     {
+        if (!$this->enabled) {
+            return;
+        }
+
         $hostRole = $this->getHostRole($event);
 
         if (null === $hostRole) {

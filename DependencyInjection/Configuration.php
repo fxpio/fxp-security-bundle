@@ -60,7 +60,7 @@ class Configuration implements ConfigurationInterface
 
         $node
             ->addDefaultsIfNotSet()
-            ->canBeDisabled()
+            ->canBeEnabled()
         ;
 
         return $node;
@@ -78,7 +78,7 @@ class Configuration implements ConfigurationInterface
 
         $node
             ->addDefaultsIfNotSet()
-            ->canBeDisabled()
+            ->canBeEnabled()
             ->children()
                 ->scalarNode('cache')->defaultNull()->info('The service id of cache')->end()
             ->end()
@@ -203,10 +203,10 @@ class Configuration implements ConfigurationInterface
             ->addDefaultsIfNotSet()
             ->children()
 
-                ->scalarNode('has_permission')->defaultTrue()->end()
-                ->scalarNode('has_field_permission')->defaultTrue()->end()
-                ->scalarNode('has_role')->defaultTrue()->end()
-                ->scalarNode('has_any_role')->defaultTrue()->end()
+                ->scalarNode('has_permission')->defaultFalse()->end()
+                ->scalarNode('has_field_permission')->defaultFalse()->end()
+                ->scalarNode('has_role')->defaultFalse()->end()
+                ->scalarNode('has_any_role')->defaultFalse()->end()
                 ->scalarNode('has_org_role')->defaultFalse()->end()
             ->end()
         ;

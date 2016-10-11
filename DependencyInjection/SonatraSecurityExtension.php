@@ -11,6 +11,7 @@
 
 namespace Sonatra\Bundle\SecurityBundle\DependencyInjection;
 
+use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\Alias;
@@ -43,9 +44,9 @@ class SonatraSecurityExtension extends Extension
         $container->setParameter('sonatra_security.group_class', $config['group_class']);
         $container->setParameter('sonatra_security.organization_class', $config['organization_class']);
 
-        $this->buildHostRole($loader, $config);
+        $this->buildHostRole($container, $loader, $config);
         $this->buildRoleHierarchy($container, $loader, $config);
-        $this->buildExpression($loader, $config);
+        $this->buildExpression($container, $loader, $config);
         $this->buildAcl($container, $loader, $config);
         $this->buildOrganizationalContext($container, $loader, $config);
     }
@@ -53,14 +54,16 @@ class SonatraSecurityExtension extends Extension
     /**
      * Build the host role.
      *
-     * @param LoaderInterface $loader The config loader
-     * @param array           $config The config
+     * @param ContainerBuilder $container The container
+     * @param LoaderInterface  $loader    The config loader
+     * @param array            $config    The config
      */
-    private function buildHostRole(LoaderInterface $loader, array $config)
+    private function buildHostRole(ContainerBuilder $container, LoaderInterface $loader, array $config)
     {
-        if ($config['host_role']['enabled']) {
-            $loader->load('host_role.xml');
-        }
+        $loader->load('host_role.xml');
+
+        $def = $container->getDefinition('sonatra_security.host_role.authentication.listener');
+        $def->addMethodCall('setEnabled', array($config['host_role']['enabled']));
     }
 
     /**
@@ -73,6 +76,7 @@ class SonatraSecurityExtension extends Extension
     private function buildRoleHierarchy(ContainerBuilder $container, LoaderInterface $loader, array $config)
     {
         if ($config['role_hierarchy']['enabled']) {
+            $this->validate($container, 'role_hierarchy', 'doctrine.class', 'doctrine/doctrine-bundle');
             $loader->load('role_hierarchy.xml');
 
             // role hierarchy cache
@@ -83,6 +87,7 @@ class SonatraSecurityExtension extends Extension
 
             // doctrine orm listener role hierarchy
             if ($config['doctrine']['orm']['listener']['role_hierarchy']) {
+                $this->validate($container, 'doctrine.orm.listener.role_hierarchy', 'doctrine.orm.entity_manager.class', 'doctrine/orm');
                 $loader->load('orm_listener_role_hierarchy.xml');
             }
         }
@@ -91,28 +96,34 @@ class SonatraSecurityExtension extends Extension
     /**
      * Build the expression.
      *
-     * @param LoaderInterface $loader The config loader
-     * @param array           $config The config
+     * @param ContainerBuilder $container The container
+     * @param LoaderInterface  $loader    The config loader
+     * @param array            $config    The config
      */
-    private function buildExpression(LoaderInterface $loader, array $config)
+    private function buildExpression(ContainerBuilder $container, LoaderInterface $loader, array $config)
     {
         if ($config['expression']['has_permission']) {
+            $this->validate($container, 'expression.has_permission', 'security.expressions.compiler.class', 'jms/security-extra-bundle');
             $loader->load('expression_has_permission.xml');
         }
 
         if ($config['expression']['has_field_permission']) {
+            $this->validate($container, 'expression.has_field_permission', 'security.expressions.compiler.class', 'jms/security-extra-bundle');
             $loader->load('expression_has_field_permission.xml');
         }
 
         if ($config['expression']['has_role']) {
+            $this->validate($container, 'expression.has_role', 'security.expressions.compiler.class', 'jms/security-extra-bundle');
             $loader->load('expression_has_role.xml');
         }
 
         if ($config['expression']['has_any_role']) {
+            $this->validate($container, 'expression.has_any_role', 'security.expressions.compiler.class', 'jms/security-extra-bundle');
             $loader->load('expression_has_any_role.xml');
         }
 
         if ($config['expression']['has_org_role']) {
+            $this->validate($container, 'expression.has_org_role', 'security.expressions.compiler.class', 'jms/security-extra-bundle');
             $loader->load('expression_has_org_role.xml');
         }
     }
@@ -132,6 +143,8 @@ class SonatraSecurityExtension extends Extension
                 && $container->hasParameter('security.acl.dbal.oid_table_name')
                 && $container->hasParameter('security.acl.dbal.oid_ancestors_table_name')
                 && $container->hasParameter('security.acl.dbal.sid_table_name')) {
+            $this->validate($container, 'acl', 'doctrine.class', 'doctrine/doctrine-bundle');
+
             if ($config['acl']['security_identity']['enabled']) {
                 $loader->load('security_identity_strategy.xml');
             }
@@ -155,16 +168,19 @@ class SonatraSecurityExtension extends Extension
 
             // doctrine orm listener acl filter/restaure fields value
             if ($config['doctrine']['orm']['listener']['acl_filter_fields']) {
+                $this->validate($container, 'doctrine.orm.listener.acl_filter_fields', 'doctrine.orm.entity_manager.class', 'doctrine/orm');
                 $loader->load('orm_listener_acl_filter_fields.xml');
             }
 
             // doctrine orm rule filters
             if ($config['doctrine']['orm']['filter']['rule_filters']) {
+                $this->validate($container, 'doctrine.orm.filter.rule_filters', 'doctrine.orm.entity_manager.class', 'doctrine/orm');
                 $loader->load('orm_rule_filter.xml');
             }
 
             // doctrine orm object filter voters
             if ($config['doctrine']['orm']['object_filter_voter']) {
+                $this->validate($container, 'doctrine.orm.object_filter_voter', 'doctrine.orm.entity_manager.class', 'doctrine/orm');
                 $loader->load('orm_object_filter_voter.xml');
             }
         }
@@ -184,6 +200,22 @@ class SonatraSecurityExtension extends Extension
             $loader->load('organizational_context.xml');
             $id = 'sonatra_security.organizational_context.service_id';
             $container->setParameter($id, $config['organizational_context']['service_id']);
+        }
+    }
+
+    /**
+     * Validate the configuration.
+     *
+     * @param ContainerBuilder $container The container
+     * @param string           $config    The name of config
+     * @param string           $parameter The required parameter
+     * @param string           $package   The required package name
+     */
+    private function validate(ContainerBuilder $container, $config, $parameter, $package)
+    {
+        if (!$container->hasParameter($parameter)) {
+            $msg = 'The "sonatra_security.%s" config require the "%s" package';
+            throw new InvalidConfigurationException(sprintf($msg, $config, $package));
         }
     }
 }
