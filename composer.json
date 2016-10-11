@@ -18,6 +18,7 @@
         "symfony/expression-language": "~3.0",
         "symfony/validator": "~3.0",
         "symfony/security-acl": "~3.0",
+        "doctrine/common": "~2.5",
         "friendsofsymfony/user-bundle": "~2.0@dev",
         "psr/cache": "~1.0"
     },
