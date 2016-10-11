@@ -8,7 +8,7 @@ Sonatra Security Bundle
 [![SensioLabsInsight](https://img.shields.io/sensiolabs/i/74707490-7a7f-4dd8-91c9-84af5de547a1.svg)](https://insight.sensiolabs.com/projects/74707490-7a7f-4dd8-91c9-84af5de547a1)
 
 The Sonatra SecurityBundle implements all functionnalities of 
-[Symfony2 Advanced ACL Concepts](http://symfony.com/doc/current/cookbook/security/acl_advanced.html) 
+[Symfony Advanced ACL Concepts](http://symfony.com/doc/current/cookbook/security/acl_advanced.html)
 and adds some interesting features.
 
 
