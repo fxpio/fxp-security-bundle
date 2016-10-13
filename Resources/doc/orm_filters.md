@@ -2,10 +2,10 @@ Using Doctrine ORM Filters
 ==========================
 
 Build a Doctrine SQL filter automatically based on the Sonatra ACL Rules. This filter is
-used to filter the result of the query. And to make sure that the values of the object of which
+used to filter the result of the query and to make sure that the values of the object of which
 the user does not have access to are removed from the result. The filter also makes sure that fields 
-for which the user has no access are overwritten with empty values, this is done by retrieving the
-values in the database before persisting.
+for which the user has no access to are overwritten with empty values, this is done by retrieving the
+current values in the database before persisting.
 
 > This feature requires `doctrine/orm` as a dependency.
 
