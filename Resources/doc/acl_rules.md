@@ -1,25 +1,25 @@
 Using ACL Rules
 ===============
 
-ACL Rules allow to build the sharing rules over the Symfony ACLs. It can
-be used to design simple or complex sharing rules.
+ACL Rules allow to build the sharing rules for the Symfony ACLs. It can
+be used to design either simple or complex sharing rules.
 
-This bundle uses tables configured by Symfony SecurityBundle: therefore
+This bundle uses the tables configured by Symfony SecurityBundle: therefore
 no change.
 
-Keep in mind that the more you add rules, more the ORM request is
-complex, and therefore costly to time.
+Keep in mind that the ORM request becomes more complex (and thus more time consuming) 
+with each added rule.
 
-You can applied the following rules on `class`, `entity`, `class field`, `entity field`:
+You can apply the following rules on `class`, `entity`, `class field`, `entity field`:
 
-- `disabled` for disable the rule
-- `allow` for always allow the access
-- `deny` for always deny the access
-- `class` for get the access with the rule defined for the class (applied for all entities)
-- `object` for get the access with the rule defined for the entity
+- `disabled` to disable the rule
+- `allow` to always allow access
+- `deny` to always deny access
+- `class` to get access with the rule defined for the class (applied for all entities)
+- `object` to get access with the rule defined for the entity
 - `parent` use the parent rule
-- `affirmative` for get the access with the rule defined for the class `OR` the entity
-- `unanimous` for get the access with the rule defined for the class `AND` the entity
+- `affirmative` to get access with the rule defined for the class `OR` the entity
+- `unanimous` to get access with the rule defined for the class `AND` the entity
 
 - `disabled` always authorized (acl disabled, skip symfony find ACLs)
 - `allow` always authorized (skip symfony find ACLs)
@@ -27,7 +27,7 @@ You can applied the following rules on `class`, `entity`, `class field`, `entity
 - `class` search only the OID for the class in ACLs, so if no OID found for the class, access is unauthorized
 - `entity` search only the OID for the entity in ACLs, so if no OID found for the entity, access is unauthorized
 - `affirmative` search the OID for the entity and class in the ACLs, so if a Entity OID is found but no Class OID is found, access is authorized (ditto for the reverse). But if no OID found, access is unauthorized
-- `unanimous` search the OID for the entity and class in the ACLs, si if a Entity OID is found but no Class OID is found, access is unauthorized (ditto for the reverse). We need a Entity OID and Class OID
+- `unanimous` search the OID for the entity and class in the ACLs, so if a Entity OID is found but no Class OID is found, access is unauthorized (ditto for the reverse). We need a Entity OID and Class OID
 
 **Explanation:**
 
