@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "695dcf967399151a5747bfdd46fbb906",
+    "hash": "791952b6263fcc305b48fbc4d67c1c6b",
     "content-hash": "14ff8d4dec8b4e9f38518481242348d7",
     "packages": [
         {
@@ -411,12 +411,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfSymfony/FOSUserBundle.git",
-                "reference": "42691e1806aa3faff2622dbdaae1c3562c925906"
+                "reference": "67197694ab1e74b046eebdf4321cae8bed515218"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/42691e1806aa3faff2622dbdaae1c3562c925906",
-                "reference": "42691e1806aa3faff2622dbdaae1c3562c925906",
+                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/67197694ab1e74b046eebdf4321cae8bed515218",
+                "reference": "67197694ab1e74b046eebdf4321cae8bed515218",
                 "shasum": ""
             },
             "require": {
@@ -480,7 +480,7 @@
             "keywords": [
                 "User management"
             ],
-            "time": "2016-10-11 13:29:39"
+            "time": "2016-10-12 12:49:21"
         },
         {
             "name": "paragonie/random_compat",
