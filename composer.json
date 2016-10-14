@@ -32,7 +32,10 @@
         "doctrine/orm": "For ORM filter query feature"
     },
     "autoload": {
-        "psr-4": { "Sonatra\\Bundle\\SecurityBundle\\": "" }
+        "psr-4": { "Sonatra\\Bundle\\SecurityBundle\\": "" },
+        "exclude-from-classmap": [
+            "/Tests/"
+        ]
     },
     "extra": {
         "branch-alias": {
