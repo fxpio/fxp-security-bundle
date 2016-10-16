@@ -58,6 +58,23 @@ trait UserOrganizationUsers
     /**
      * {@inheritdoc}
      */
+    public function getUserOrganization($name)
+    {
+        $org = null;
+
+        foreach ($this->getUserOrganizations() as $userOrg) {
+            if ($name === $userOrg->getOrganization()->getName()) {
+                $org = $userOrg;
+                break;
+            }
+        }
+
+        return $org;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function addUserOrganization(OrganizationUserInterface $organizationUser)
     {
         if (!$organizationUser->getOrganization()->isUserOrganization()

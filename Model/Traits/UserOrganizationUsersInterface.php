@@ -45,6 +45,15 @@ interface UserOrganizationUsersInterface
     public function hasUserOrganization($name);
 
     /**
+     * Get the associated organization with this user.
+     *
+     * @param string $name The name of organization
+     *
+     * @return OrganizationUserInterface|null
+     */
+    public function getUserOrganization($name);
+
+    /**
      * Associate an organization with this user.
      *
      * @param OrganizationUserInterface $organizationUser The user organization
