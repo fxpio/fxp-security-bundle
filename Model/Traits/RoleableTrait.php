@@ -53,11 +53,8 @@ trait RoleableTrait
     public function addRole($role)
     {
         $role = strtoupper($role);
-        if ($role === User::ROLE_DEFAULT && $this instanceof User) {
-            return $this;
-        }
 
-        if (!in_array($role, $this->roles, true)) {
+        if (!in_array($role, $this->roles, true) && $role !== User::ROLE_DEFAULT) {
             $this->roles[] = $role;
         }
 
