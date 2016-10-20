@@ -100,10 +100,14 @@ abstract class OrganizationUser implements OrganizationUserInterface
             $roles = array_merge($roles, $group->getRoles());
         }
 
-        // we need to make sure to have at least one role
-        $roles[] = User::ROLE_DEFAULT;
+        $roles = array_unique($roles);
 
-        return array_unique($roles);
+        // we need to make sure to have at least one role
+        if (!in_array(User::ROLE_DEFAULT, $roles, true)) {
+            $roles[] = User::ROLE_DEFAULT;
+        }
+
+        return $roles;
     }
 
     /**

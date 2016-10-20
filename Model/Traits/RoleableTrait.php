@@ -82,9 +82,8 @@ trait RoleableTrait
         $roles = $this->roles;
 
         // we need to make sure to have at least one role
-        if ($this instanceof User) {
+        if ($this instanceof User && !in_array(User::ROLE_DEFAULT, $roles, true)) {
             $roles[] = User::ROLE_DEFAULT;
-            $roles = array_unique($roles);
         }
 
         return $roles;
