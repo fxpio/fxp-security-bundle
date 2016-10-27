@@ -1,16 +1,15 @@
 Using Doctrine ORM Filters
 ==========================
 
-Allow to build automatically a Doctrine SQL Filter based on the Sonatra
-ACL Rules, to filter the result of query.
+Build a Doctrine SQL filter automatically based on the Sonatra ACL Rules. This filter is
+used to filter the result of the query and to make sure that the values of the object of which
+the user does not have access to are removed from the result. The filter also makes sure that fields 
+for which the user has no access to are overwritten with empty values, this is done by retrieving the
+current values in the database before persisting.
 
-But also, to clean the values of object fields that the current user
-doesn't have the access permissions (and restore the empty values by the
-values in database before persist.
+> This feature requires `doctrine/orm` as a dependency.
 
-> This feature require `doctrine/orm` dependency.
-
-### Configure your application's config.yml
+### Configure your applications config.yml
 
 Add the following configuration to your `config.yml`.
 
@@ -40,16 +39,17 @@ doctrine:
 
 It is used indirectly by Doctrine ORM. It is not used by the AclFilter,
 but by the Doctrine event `PreLoad` (used in Doctrine UnitOfWorks). The
-listener will get the list of objects retrieve by Doctrine, preload the
+listener will get the list of objects retrieved by Doctrine, preload the
 ACLs for all retrieved entities, and checked with the AclManager (so
 with the Voter) if each field is authorized in READ.
 
 ### Regarding the ACL Filter Fields
 
 The cleaning of the fields is performed in the `Unit of Work` of
-Doctrine via the listeners `postLoad` and `onFlush`, see
+Doctrine via the listeners `postLoad` and `onFlush`, see the source files
 [AclListener](https://github.com/sonatra/SonatraSecurityBundle/blob/master/Doctrine/ORM/Listener/AclListener.php)
-and [AclObjectFilter](https://github.com/sonatra/SonatraSecurityBundle/blob/master/Acl/Domain/AclObjectFilter.php).
+and [AclObjectFilter](https://github.com/sonatra/SonatraSecurityBundle/blob/master/Acl/Domain/AclObjectFilter.php) 
+for more information.
 
 ### Regarding the RuleDefinition and RuleFilterDefinition
 
@@ -67,7 +67,7 @@ AclFilter).
 
 **Example:**
 
-You have 1000 entities, A user can only access to 500 entities (1 of 2),
+You have 1000 entities, A user only has permission to access 500 entities (1 of 2),
 the user makes a request with a pagination with 50, you will have:
 
 **Request size:** 50

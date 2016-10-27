@@ -1,8 +1,8 @@
 Using JMS SecurityExtraBundle
 =============================
 
-If you would use the JMS SecurityExtraBundle with this bundle, you must
-disable JMS voters.
+If you want to use the JMS SecurityExtraBundle with this bundle, you must
+disable JMS voters in the configuration.
 
 ### Configure your application's config.yml
 
