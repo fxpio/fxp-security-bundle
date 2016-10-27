@@ -31,10 +31,22 @@ class AclRuleDefinitionPass implements CompilerPassInterface
             return;
         }
 
-        // Acl Rule Definitions: Builds an array with service IDs as keys and tag aliases as values
+        $this->injectRuleServices($container, 'sonatra_security.acl.rule_definition', 0);
+        $this->injectRuleServices($container, 'sonatra_security.acl.rule_filter_definition', 1);
+    }
+
+    /**
+     * Builds an array with service IDs as keys and tag aliases as values.
+     *
+     * @param ContainerBuilder $container   The container builder
+     * @param string           $tag         The service tag name
+     * @param int              $argPosition The position of argument replacement
+     */
+    private function injectRuleServices(ContainerBuilder $container, $tag, $argPosition)
+    {
         $definitions = array();
 
-        foreach ($container->findTaggedServiceIds('sonatra_security.acl.rule_definition') as $serviceId => $tag) {
+        foreach ($container->findTaggedServiceIds($tag) as $serviceId => $tag) {
             $alias = isset($tag[0]['alias'])
                 ? $tag[0]['alias']
                 : $serviceId;
@@ -43,20 +55,6 @@ class AclRuleDefinitionPass implements CompilerPassInterface
             $definitions[$alias] = $serviceId;
         }
 
-        $container->getDefinition('sonatra_security.acl.rule_extension')->replaceArgument(0, $definitions);
-
-        // Acl Rule Filter Definitions: Builds an array with service IDs as keys and tag aliases as values
-        $filterDefinitions = array();
-
-        foreach ($container->findTaggedServiceIds('sonatra_security.acl.rule_filter_definition') as $serviceId => $tag) {
-            $alias = isset($tag[0]['alias'])
-            ? $tag[0]['alias']
-            : $serviceId;
-
-            // flip, because we want tag aliases (= definition identifiers) as keys
-            $filterDefinitions[$alias] = $serviceId;
-        }
-
-        $container->getDefinition('sonatra_security.acl.rule_extension')->replaceArgument(1, $filterDefinitions);
+        $container->getDefinition('sonatra_security.acl.rule_extension')->replaceArgument($argPosition, $definitions);
     }
 }
