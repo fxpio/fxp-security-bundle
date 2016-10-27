@@ -1,7 +1,7 @@
 Using Groups with Sonatra SecurityBundle
 ========================================
 
-Allow to use the group in the Symfony Security Authorization Checker.
+Allow the usage of groups in the Symfony Security Authorization Checker.
 
 ### Configure the groups in FOS UserBundle
 

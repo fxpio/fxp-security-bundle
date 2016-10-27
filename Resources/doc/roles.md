@@ -4,7 +4,7 @@ Using Roles with Sonatra SecurityBundle
 SecurityBundle allows you manage Roles directly into the database,
 including the role hierarchy.
 
-This example require `doctrine/orm` dependency.
+This example requires `doctrine/orm` as a dependency.
 
 ### Create the Role class
 

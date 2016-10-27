@@ -78,14 +78,14 @@ $ php app/console init:acl
 ### Next Steps
 
 You can override the default configuration adding `sonatra_security` tree in `app/config/config.yml`.
-For see the reference of Sonatra Security Configuration, execute command:
+To get an overview off all the available Sonatra Security configuration options, execute the command:
 
 ```bash
 $ php app/console config:dump-reference SonatraSecurityBundle
 ```
 
 Now that you have completed the basic installation and configuration of the
-Sonatra SecurityBundle, you are ready to learn about usages of the bundle.
+Sonatra SecurityBundle, you are ready to learn more about using this bundle.
 
 The following documents are available:
 
@@ -93,7 +93,7 @@ The following documents are available:
 - [Using Groups with Sonatra SecurityBundle](groups.md)
 - [Using JMS SecurityExtraBundle with Sonatra SecurityBundle](jms.md)
 - [Using Doctrine ORM Filters](orm_filters.md)
-- [Using ACL Rules](orm_filters.md)
+- [Using ACL Rules](acl_rules.md)
 - [Using ACL Manipulator](acl_manipulator.md)
 - [Using ACL Manager](acl_manager.md)
 - [Using Commands](commands.md)

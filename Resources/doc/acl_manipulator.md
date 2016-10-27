@@ -1,12 +1,12 @@
 Using ACL Manipulator
 =====================
 
-ACL Manipulator is a helper to manipulating simply the Symfony ACLs.
+ACL Manipulator is a helper easily manipulating the Symfony ACLs.
 
-You are not forced to used the Sonatra ACL Manipulator, in fact, it's
+You are not forced to use the Sonatra ACL Manipulator, in fact, it's
 just a helper to simplify the manipulation of ACL of Symfony Security.
 
-You can apply an ACL rules on:
+You can apply ACL rules on:
 
 - user (contains roles and groups)
 - role (contains other roles)
