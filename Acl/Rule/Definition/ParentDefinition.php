@@ -13,6 +13,7 @@ namespace Sonatra\Bundle\SecurityBundle\Acl\Rule\Definition;
 
 use Sonatra\Bundle\SecurityBundle\Acl\Domain\AbstractRuleDefinition;
 use Sonatra\Bundle\SecurityBundle\Acl\Domain\RuleContextDefinition;
+use Sonatra\Bundle\SecurityBundle\Acl\Model\AclRuleManagerInterface;
 use Sonatra\Bundle\SecurityBundle\Acl\Model\RuleContextDefinitionInterface;
 use Sonatra\Bundle\SecurityBundle\Acl\Util\AclUtils;
 use Sonatra\Bundle\SecurityBundle\Exception\InvalidArgumentException;
@@ -24,6 +25,21 @@ use Sonatra\Bundle\SecurityBundle\Exception\InvalidArgumentException;
  */
 class ParentDefinition extends AbstractRuleDefinition
 {
+    /**
+     * @var AclRuleManagerInterface
+     */
+    protected $arm;
+
+    /**
+     * Constructor.
+     *
+     * @param AclRuleManagerInterface $arm The ACL rule manager
+     */
+    public function __construct(AclRuleManagerInterface $arm)
+    {
+        $this->arm = $arm;
+    }
+
     /**
      * {@inheritdoc}
      */

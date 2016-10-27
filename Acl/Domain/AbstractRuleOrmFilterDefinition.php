@@ -19,7 +19,7 @@ use Sonatra\Bundle\SecurityBundle\Acl\Model\OrmFilterRuleContextDefinitionInterf
  *
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-abstract class AbstractRuleOrmFilterDefinition extends AbstractRuleFilterDefinition implements RuleOrmFilterDefinitionInterface
+abstract class AbstractRuleOrmFilterDefinition implements RuleOrmFilterDefinitionInterface
 {
     const TYPE = 'orm';
 

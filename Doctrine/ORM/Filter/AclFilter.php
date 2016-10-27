@@ -43,7 +43,6 @@ class AclFilter extends SQLFilter
         if ($arm->hasFilterDefinition($rule, AbstractRuleOrmFilterDefinition::TYPE)) {
             /* @var RuleOrmFilterDefinitionInterface $definition */
             $definition = $arm->getFilterDefinition($rule, AbstractRuleOrmFilterDefinition::TYPE);
-            $definition->setAclRuleManager($arm);
             $identities = $this->getListener()->getSecurityIdentities();
             $rcd = new OrmFilterRuleContextDefinition($identities, $targetEntity, $targetTableAlias);
 

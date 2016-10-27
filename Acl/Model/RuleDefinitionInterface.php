@@ -37,22 +37,6 @@ interface RuleDefinitionInterface
     public function getTypes();
 
     /**
-     * Set acl rule manager.
-     *
-     * @param AclRuleManagerInterface $arm
-     *
-     * @return self
-     */
-    public function setAclRuleManager(AclRuleManagerInterface $arm);
-
-    /**
-     * Get acl rule manager.
-     *
-     * @return AclRuleManagerInterface
-     */
-    public function getAclRuleManager();
-
-    /**
      * Check if identity is granted on ACL Manager.
      *
      * @param RuleContextDefinitionInterface $rcd

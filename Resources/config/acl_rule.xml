@@ -31,11 +31,13 @@
         <service id="sonatra_security.acl.rule_definition.affirmative"
                  class="Sonatra\Bundle\SecurityBundle\Acl\Rule\Definition\AffirmativeDefinition">
             <tag name="sonatra_security.acl.rule_definition" alias="affirmative"/>
+            <argument type="service" id="sonatra_security.acl.rule_manager"/>
         </service>
 
         <service id="sonatra_security.acl.rule_definition.unanimous"
                  class="Sonatra\Bundle\SecurityBundle\Acl\Rule\Definition\UnanimousDefinition">
             <tag name="sonatra_security.acl.rule_definition" alias="unanimous"/>
+            <argument type="service" id="sonatra_security.acl.rule_manager"/>
         </service>
 
         <service id="sonatra_security.acl.rule_definition.object"
@@ -53,6 +55,7 @@
         <service id="sonatra_security.acl.rule_definition.parent"
                  class="Sonatra\Bundle\SecurityBundle\Acl\Rule\Definition\ParentDefinition">
             <tag name="sonatra_security.acl.rule_definition" alias="parent"/>
+            <argument type="service" id="sonatra_security.acl.rule_manager"/>
         </service>
 
     </services>

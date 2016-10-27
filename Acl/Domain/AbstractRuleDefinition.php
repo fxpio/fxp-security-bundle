@@ -12,7 +12,6 @@
 namespace Sonatra\Bundle\SecurityBundle\Acl\Domain;
 
 use Sonatra\Bundle\SecurityBundle\Acl\Model\RuleDefinitionInterface;
-use Sonatra\Bundle\SecurityBundle\Acl\Model\AclRuleManagerInterface;
 use Sonatra\Bundle\SecurityBundle\Acl\Model\RuleContextDefinitionInterface;
 
 /**
@@ -23,34 +22,11 @@ use Sonatra\Bundle\SecurityBundle\Acl\Model\RuleContextDefinitionInterface;
 abstract class AbstractRuleDefinition implements RuleDefinitionInterface
 {
     /**
-     * @var AclRuleManagerInterface
-     */
-    protected $arm;
-
-    /**
      * {@inheritdoc}
      */
     public function getTypes()
     {
         return array(static::TYPE_SKIP_OPTIMIZATION);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setAclRuleManager(AclRuleManagerInterface $arm)
-    {
-        $this->arm = $arm;
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getAclRuleManager()
-    {
-        return $this->arm;
     }
 
     /**

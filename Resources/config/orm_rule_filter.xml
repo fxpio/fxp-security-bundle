@@ -27,11 +27,13 @@
         <service id="sonatra_security.acl.rule_filter_definition.orm.affirmative"
                  class="Sonatra\Bundle\SecurityBundle\Acl\Rule\FilterDefinition\OrmAffirmativeDefinition">
             <tag name="sonatra_security.acl.rule_filter_definition" alias="orm:affirmative"/>
+            <argument type="service" id="sonatra_security.acl.rule_manager"/>
         </service>
 
         <service id="sonatra_security.acl.rule_filter_definition.orm.unanimous"
                  class="Sonatra\Bundle\SecurityBundle\Acl\Rule\FilterDefinition\OrmUnanimousDefinition">
             <tag name="sonatra_security.acl.rule_filter_definition" alias="orm:unanimous"/>
+            <argument type="service" id="sonatra_security.acl.rule_manager"/>
         </service>
 
         <service id="sonatra_security.acl.rule_filter_definition.orm.object"

@@ -31,20 +31,4 @@ interface RuleFilterDefinitionInterface
      * @return string The type of filter definition
      */
     public function getType();
-
-    /**
-     * Set acl rule manager.
-     *
-     * @param AclRuleManagerInterface $arm
-     *
-     * @return self
-     */
-    public function setAclRuleManager(AclRuleManagerInterface $arm);
-
-    /**
-     * Get acl rule manager.
-     *
-     * @return AclRuleManagerInterface
-     */
-    public function getAclRuleManager();
 }

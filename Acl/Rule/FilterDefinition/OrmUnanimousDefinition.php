@@ -12,6 +12,7 @@
 namespace Sonatra\Bundle\SecurityBundle\Acl\Rule\FilterDefinition;
 
 use Sonatra\Bundle\SecurityBundle\Acl\Domain\AbstractRuleOrmFilterDefinition;
+use Sonatra\Bundle\SecurityBundle\Acl\Model\AclRuleManagerInterface;
 use Sonatra\Bundle\SecurityBundle\Acl\Model\OrmFilterRuleContextDefinitionInterface;
 use Sonatra\Bundle\SecurityBundle\Acl\Model\RuleOrmFilterDefinitionInterface;
 
@@ -22,6 +23,21 @@ use Sonatra\Bundle\SecurityBundle\Acl\Model\RuleOrmFilterDefinitionInterface;
  */
 class OrmUnanimousDefinition extends AbstractRuleOrmFilterDefinition
 {
+    /**
+     * @var AclRuleManagerInterface
+     */
+    protected $arm;
+
+    /**
+     * Constructor.
+     *
+     * @param AclRuleManagerInterface $arm The ACL rule manager
+     */
+    public function __construct(AclRuleManagerInterface $arm)
+    {
+        $this->arm = $arm;
+    }
+
     /**
      * {@inheritdoc}
      */
