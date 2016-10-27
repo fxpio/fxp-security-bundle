@@ -2,7 +2,7 @@ Using ACL Manager
 =================
 
 ACL Manager is used by the ACL voter to check the authorizations in
-Symfonies Authorization Checker, or in the Doctrine ORM Filter.
+Symfony Authorization Checker, or in the Doctrine ORM Filter.
 
 All the ACL rules are defined in the ACL Manager.
 
