@@ -26,6 +26,14 @@ interface RuleContextDefinitionInterface extends RuleContextInterface
     public function getObjectIdentity();
 
     /**
+     * Get the object instance. If the object instance is passed to the authorization voter,
+     * in this case, this method returns the object instance, otherwise, a null value.
+     *
+     * @return object|null
+     */
+    public function getObject();
+
+    /**
      * Get filed name.
      *
      * @return string|null

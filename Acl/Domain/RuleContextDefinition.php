@@ -33,25 +33,36 @@ class RuleContextDefinition extends AbstractRuleContext implements RuleContextDe
     protected $masks;
 
     /**
-     * @var string
+     * @var string|null
      */
     protected $field;
 
     /**
+     * @var object|null
+     */
+    protected $object;
+
+    /**
      * Constructor.
      *
-     * @param SecurityIdentityInterface[] $sids
-     * @param ObjectIdentityInterface     $oid
-     * @param array                       $masks
-     * @param string                      $field
+     * @param SecurityIdentityInterface[] $sids   The security identities
+     * @param ObjectIdentityInterface     $oid    The object identity
+     * @param array                       $masks  The masks
+     * @param string|null                 $field  The object field
+     * @param object|null                 $object The object instance
      */
-    public function __construct(array $sids, ObjectIdentityInterface $oid, array $masks, $field = null)
+    public function __construct(array $sids,
+                                ObjectIdentityInterface $oid,
+                                array $masks,
+                                $field = null,
+                                $object = null)
     {
         parent::__construct($sids);
 
         $this->oid = $oid;
         $this->masks = $masks;
         $this->field = $field;
+        $this->object = $object;
     }
 
     /**
@@ -60,6 +71,14 @@ class RuleContextDefinition extends AbstractRuleContext implements RuleContextDe
     public function getObjectIdentity()
     {
         return $this->oid;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getObject()
+    {
+        return $this->object;
     }
 
     /**

@@ -65,7 +65,13 @@ class ParentDefinition extends AbstractRuleDefinition
             throw new InvalidArgumentException('The rule definition "parent" must be only associated with class field');
         }
 
-        $rcd = new RuleContextDefinition($rcd->getSecurityIdentities(), $rcd->getObjectIdentity(), $rcd->getMasks());
+        $rcd = new RuleContextDefinition(
+            $rcd->getSecurityIdentities(),
+            $rcd->getObjectIdentity(),
+            $rcd->getMasks(),
+            null,
+            $rcd->getObject()
+        );
         $type = AclUtils::convertToAclName($rcd->getMasks()[0]);
         $defName = $this->arm->getRule($type[0], $rcd->getObjectIdentity()->getType());
         $def = $this->arm->getDefinition($defName);

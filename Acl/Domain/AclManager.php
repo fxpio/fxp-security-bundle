@@ -20,6 +20,7 @@ use Symfony\Component\Security\Acl\Domain\ObjectIdentity;
 use Symfony\Component\Security\Acl\Exception\NoAceFoundException;
 use Symfony\Component\Security\Acl\Exception\AclNotFoundException;
 use Symfony\Component\Security\Acl\Exception\NotAllAclsFoundException;
+use Symfony\Component\Security\Acl\Model\DomainObjectInterface;
 use Symfony\Component\Security\Acl\Model\ObjectIdentityInterface;
 use Symfony\Component\Security\Acl\Model\ObjectIdentityRetrievalStrategyInterface;
 use Symfony\Component\Security\Acl\Model\SecurityIdentityRetrievalStrategyInterface;
@@ -241,9 +242,10 @@ class AclManager implements AclManagerInterface
         $domainObject = $this->aclRuleManager->getMaster($domainObject);
 
         $oid = $this->getObjectIdentity($domainObject);
+        $object = $this->getObject($domainObject);
         $rule = $this->getRule($mask, $domainObject, $field);
         $definition = $this->aclRuleManager->getDefinition($rule);
-        $rcd = new RuleContextDefinition($sids, $oid, $masks, $field);
+        $rcd = new RuleContextDefinition($sids, $oid, $masks, $field, $object);
 
         return $definition->isGranted($rcd);
     }
@@ -479,5 +481,23 @@ class AclManager implements AclManagerInterface
             $this->excludedOids = array_merge($this->excludedOids, array_keys($oids));
             $this->excludedOids = array_unique($this->excludedOids);
         }
+    }
+
+    /**
+     * Get the object instance of domain object.
+     *
+     * @param mixed $domainObject The domain object
+     *
+     * @return null
+     */
+    protected function getObject($domainObject)
+    {
+        if (!is_object($domainObject)
+                || $domainObject instanceof DomainObjectInterface
+                || $domainObject instanceof ObjectIdentityInterface) {
+            $domainObject = null;
+        }
+
+        return $domainObject;
     }
 }
