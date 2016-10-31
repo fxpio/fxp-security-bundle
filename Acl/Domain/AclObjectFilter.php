@@ -14,7 +14,14 @@ namespace Sonatra\Bundle\SecurityBundle\Acl\Domain;
 use Sonatra\Bundle\SecurityBundle\Acl\Model\AclObjectFilterInterface;
 use Sonatra\Bundle\SecurityBundle\Acl\Model\AclManagerInterface;
 use Sonatra\Bundle\SecurityBundle\Acl\DependencyInjection\ObjectFilterExtensionInterface;
+use Sonatra\Bundle\SecurityBundle\Event\ObjectFieldViewGrantedEvent;
+use Sonatra\Bundle\SecurityBundle\Event\ObjectViewGrantedEvent;
+use Sonatra\Bundle\SecurityBundle\Event\PostCommitObjectFilterEvent;
+use Sonatra\Bundle\SecurityBundle\Event\PreCommitObjectFilterEvent;
+use Sonatra\Bundle\SecurityBundle\Event\RestoreViewGrantedEvent;
 use Sonatra\Bundle\SecurityBundle\Exception\InvalidArgumentException;
+use Sonatra\Bundle\SecurityBundle\ObjectFilterEvents;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Security\Acl\Permission\BasicPermissionMap;
 use Symfony\Component\Security\Acl\Voter\FieldVote;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
@@ -47,6 +54,11 @@ class AclObjectFilter implements AclObjectFilterInterface
     private $ac;
 
     /**
+     * @var EventDispatcherInterface
+     */
+    private $dispatcher;
+
+    /**
      * If the action filtering/restoring is in a transaction, then the action
      * will be executing on the commit.
      *
@@ -71,16 +83,21 @@ class AclObjectFilter implements AclObjectFilterInterface
     /**
      * Constructor.
      *
-     * @param ObjectFilterExtensionInterface $ofe
-     * @param AclManagerInterface            $am
-     * @param AuthorizationCheckerInterface  $ac
+     * @param ObjectFilterExtensionInterface $ofe        The object filter extension
+     * @param AclManagerInterface            $am         The acl manager
+     * @param AuthorizationCheckerInterface  $ac         The authorization checker
+     * @param EventDispatcherInterface       $dispatcher The event dispatcher
      */
-    public function __construct(ObjectFilterExtensionInterface $ofe, AclManagerInterface $am, AuthorizationCheckerInterface  $ac)
+    public function __construct(ObjectFilterExtensionInterface $ofe,
+                                AclManagerInterface $am,
+                                AuthorizationCheckerInterface  $ac,
+                                EventDispatcherInterface $dispatcher)
     {
         $this->uow = new UnitOfWork();
         $this->ofe = $ofe;
         $this->am = $am;
         $this->ac = $ac;
+        $this->dispatcher = $dispatcher;
     }
 
     /**
@@ -104,6 +121,9 @@ class AclObjectFilter implements AclObjectFilterInterface
      */
     public function commit()
     {
+        $event = new PreCommitObjectFilterEvent($this->queue);
+        $this->dispatcher->dispatch(ObjectFilterEvents::PRE_COMMIT, $event);
+
         $this->am->preloadAcls(array_values($this->queue));
 
         foreach ($this->queue as $id => $object) {
@@ -114,6 +134,9 @@ class AclObjectFilter implements AclObjectFilterInterface
 
             $this->doRestore($object);
         }
+
+        $event = new PostCommitObjectFilterEvent($this->queue);
+        $this->dispatcher->dispatch(ObjectFilterEvents::POST_COMMIT, $event);
 
         $this->queue = array();
         $this->isTransactionnal = false;
@@ -191,7 +214,7 @@ class AclObjectFilter implements AclObjectFilterInterface
         $id = spl_object_hash($object);
         array_splice($this->toFilter, array_search($id, $this->toFilter), 1);
 
-        if (!$this->ac->isGranted(BasicPermissionMap::PERMISSION_VIEW, $object)) {
+        if (!$this->isViewGranted($object)) {
             $clearAll = true;
         }
 
@@ -199,9 +222,10 @@ class AclObjectFilter implements AclObjectFilterInterface
 
         foreach ($ref->getProperties() as $property) {
             $property->setAccessible(true);
+            $fieldVote = new FieldVote($object, $property->getName());
             $value = $property->getValue($object);
 
-            if (null !== $value && ($clearAll || !$this->ac->isGranted(BasicPermissionMap::PERMISSION_VIEW, new FieldVote($object, $property->getName())))) {
+            if (null !== $value && ($clearAll || !$this->isViewGranted($fieldVote))) {
                 $value = $this->ofe->filterValue($value);
                 $property->setValue($object, $value);
             }
@@ -221,14 +245,65 @@ class AclObjectFilter implements AclObjectFilterInterface
         foreach ($changeSet as $field => $values) {
             $fv = new FieldVote($object, $field);
 
-            if (!$this->ac->isGranted('VIEW', $fv)
-                    || (null === $values['old'] && null !== $values['new'] && !$this->ac->isGranted(BasicPermissionMap::PERMISSION_CREATE, $fv) && !$this->ac->isGranted(BasicPermissionMap::PERMISSION_EDIT, $fv))
-                    || (null !== $values['old'] && null !== $values['new'] && !$this->ac->isGranted(BasicPermissionMap::PERMISSION_EDIT, $fv))
-                    || (null !== $values['old'] && null === $values['new'] && !$this->ac->isGranted(BasicPermissionMap::PERMISSION_DELETE, $fv) && !$this->ac->isGranted(BasicPermissionMap::PERMISSION_EDIT, $fv))) {
+            if ($this->isRestoreViewGranted($fv, $values)) {
                 $property = $ref->getProperty($field);
                 $property->setAccessible(true);
                 $property->setValue($object, $values['old']);
             }
         }
+    }
+
+    /**
+     * Check if the field value must be restored.
+     *
+     * @param FieldVote $fieldVote The field vote
+     * @param array     $values    The map of old and new values
+     *
+     * @return bool
+     */
+    protected function isRestoreViewGranted(FieldVote $fieldVote, array $values)
+    {
+        $event = new RestoreViewGrantedEvent($fieldVote, $values['old'], $values['new']);
+        $this->dispatcher->dispatch(ObjectFilterEvents::RESTORE_VIEW_GRANTED, $event);
+
+        if ($event->isSkipAuthorizationChecker()) {
+            return !$event->isGranted();
+        }
+
+        return !$this->ac->isGranted(BasicPermissionMap::PERMISSION_VIEW, $fieldVote)
+            || (null === $values['old'] && null !== $values['new']
+                && !$this->ac->isGranted(BasicPermissionMap::PERMISSION_CREATE, $fieldVote)
+                && !$this->ac->isGranted(BasicPermissionMap::PERMISSION_EDIT, $fieldVote))
+            || (null !== $values['old'] && null !== $values['new']
+                && !$this->ac->isGranted(BasicPermissionMap::PERMISSION_EDIT, $fieldVote))
+            || (null !== $values['old'] && null === $values['new']
+                && !$this->ac->isGranted(BasicPermissionMap::PERMISSION_DELETE, $fieldVote)
+                && !$this->ac->isGranted(BasicPermissionMap::PERMISSION_EDIT, $fieldVote));
+    }
+
+    /**
+     * Check if the object or object field can be seen.
+     *
+     * @param object|FieldVote $object The object or field vote
+     *
+     * @return bool
+     */
+    protected function isViewGranted($object)
+    {
+        if ($object instanceof FieldVote) {
+            $eventName = ObjectFilterEvents::OBJECT_FIELD_VIEW_GRANTED;
+            $event = new ObjectFieldViewGrantedEvent($object);
+        } else {
+            $eventName = ObjectFilterEvents::OBJECT_VIEW_GRANTED;
+            $event = new ObjectViewGrantedEvent($object);
+        }
+
+        $this->dispatcher->dispatch($eventName, $event);
+
+        if ($event->isSkipAuthorizationChecker()) {
+            return $event->isGranted();
+        }
+
+        return $this->ac->isGranted(BasicPermissionMap::PERMISSION_VIEW, $object);
     }
 }
