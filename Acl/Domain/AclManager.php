@@ -488,7 +488,7 @@ class AclManager implements AclManagerInterface
      *
      * @param mixed $domainObject The domain object
      *
-     * @return null
+     * @return object|null
      */
     protected function getObject($domainObject)
     {
