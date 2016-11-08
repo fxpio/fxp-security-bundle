@@ -13,8 +13,9 @@ namespace Sonatra\Bundle\SecurityBundle\Command\User;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
-use Sonatra\Component\Security\Model\GroupableEditableInterface;
+use Sonatra\Bundle\SecurityBundle\Exception\UnexpectedTypeException;
 use Sonatra\Component\Security\Model\GroupInterface;
+use Sonatra\Component\Security\Model\Traits\GroupableInterface;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -60,7 +61,7 @@ abstract class AbstractGroupUserCommand extends ContainerAwareCommand
 
         /* @var EntityRepository $repoUser */
         $repoUser = $emUser->getRepository($userClass);
-        /* @var GroupableEditableInterface $user */
+        /* @var GroupableInterface $user */
         $user = $repoUser->findOneBy(array('username' => $userName));
 
         if (null === $user) {
@@ -107,9 +108,9 @@ abstract class AbstractGroupUserCommand extends ContainerAwareCommand
     /**
      * Do execute.
      *
-     * @param OutputInterface                          $output
-     * @param UserInterface|GroupableEditableInterface $user
-     * @param GroupInterface                           $group
+     * @param OutputInterface                  $output
+     * @param UserInterface|GroupableInterface $user
+     * @param GroupInterface                   $group
      *
      * @return bool
      */
@@ -158,5 +159,25 @@ abstract class AbstractGroupUserCommand extends ContainerAwareCommand
 
             $input->setArgument('group', $group);
         }
+    }
+
+    /**
+     * Validate the object.
+     *
+     * @param object $object            The object instance
+     * @param string $expectedInterface The expected interface
+     *
+     * @return object
+     *
+     * @throws UnexpectedTypeException When the object does not implement the expected interface
+     */
+    protected function validateObject($object, $expectedInterface)
+    {
+        if (is_object($object) && class_exists($expectedInterface)
+                && in_array($expectedInterface, class_implements($object))) {
+            return $object;
+        }
+
+        throw new UnexpectedTypeException($object, $expectedInterface);
     }
 }

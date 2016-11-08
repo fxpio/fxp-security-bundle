@@ -43,7 +43,9 @@ class AddGroupUserCommand extends AbstractGroupUserCommand
             return false;
         }
 
-        $user->addSecurityGroup($group);
+        $user = $this->validateObject($user, 'FOS\UserBundle\Model\GroupableInterface');
+        $group = $this->validateObject($group, 'FOS\UserBundle\Model\GroupInterface');
+        $user->addGroup($group);
 
         return true;
     }

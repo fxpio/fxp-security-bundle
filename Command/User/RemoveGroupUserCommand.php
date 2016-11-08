@@ -43,7 +43,9 @@ class RemoveGroupUserCommand extends AbstractGroupUserCommand
             return false;
         }
 
-        $user->removeSecurityGroup($group);
+        $user = $this->validateObject($user, 'FOS\UserBundle\Model\GroupableInterface');
+        $group = $this->validateObject($group, 'FOS\UserBundle\Model\GroupInterface');
+        $user->removeGroup($group);
 
         return true;
     }
