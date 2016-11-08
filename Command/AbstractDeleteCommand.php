@@ -18,8 +18,8 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
-use Sonatra\Bundle\SecurityBundle\Exception\InvalidArgumentException;
-use Sonatra\Bundle\SecurityBundle\Exception\LogicException;
+use Sonatra\Component\Security\Exception\InvalidArgumentException;
+use Sonatra\Component\Security\Exception\LogicException;
 
 /**
  * @author François Pluchino <francois.pluchino@sonatra.com>

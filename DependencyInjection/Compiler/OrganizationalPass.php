@@ -11,7 +11,7 @@
 
 namespace Sonatra\Bundle\SecurityBundle\DependencyInjection\Compiler;
 
-use Sonatra\Bundle\SecurityBundle\Core\Organizational\OrganizationalContextInterface;
+use Sonatra\Component\Security\Core\Organizational\OrganizationalContextInterface;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;

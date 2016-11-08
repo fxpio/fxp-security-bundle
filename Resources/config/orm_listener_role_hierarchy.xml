@@ -6,7 +6,7 @@
 
     <parameters>
 
-        <parameter key="sonatra_security.role_hierarchy.cache.listener.class">Sonatra\Bundle\SecurityBundle\Doctrine\ORM\Listener\RoleHierarchyListener</parameter>
+        <parameter key="sonatra_security.role_hierarchy.cache.listener.class">Sonatra\Component\Security\Doctrine\ORM\Listener\RoleHierarchyListener</parameter>
 
     </parameters>
 

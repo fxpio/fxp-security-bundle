@@ -6,7 +6,7 @@
 
     <parameters>
 
-        <parameter key="security.role_hierarchy.class">Sonatra\Bundle\SecurityBundle\Core\Role\OrganizationalRoleHierarchy</parameter>
+        <parameter key="security.role_hierarchy.class">Sonatra\Component\Security\Core\Role\OrganizationalRoleHierarchy</parameter>
 
     </parameters>
 

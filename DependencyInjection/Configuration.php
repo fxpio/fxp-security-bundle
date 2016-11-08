@@ -32,10 +32,10 @@ class Configuration implements ConfigurationInterface
 
         $rootNode
             ->children()
-                ->scalarNode('user_class')->defaultValue('FOS\UserBundle\Model\UserInterface')->end()
-                ->scalarNode('role_class')->defaultValue('Symfony\Component\Security\Core\Role\RoleInterface')->end()
-                ->scalarNode('group_class')->defaultValue('Sonatra\Bundle\SecurityBundle\Model\GroupInterface')->end()
-                ->scalarNode('organization_class')->defaultValue('Sonatra\Bundle\SecurityBundle\Model\OrganizationInterface')->end()
+                ->scalarNode('user_class')->defaultValue('Sonatra\Component\Security\Model\UserInterface')->end()
+                ->scalarNode('role_class')->defaultValue('Sonatra\Component\Security\Model\RoleInterface')->end()
+                ->scalarNode('group_class')->defaultValue('Sonatra\Component\Security\Model\GroupInterface')->end()
+                ->scalarNode('organization_class')->defaultValue('Sonatra\Component\Security\Model\OrganizationInterface')->end()
             ->end()
             ->append($this->getHostRoleNode())
             ->append($this->getRoleHierarchyNode())

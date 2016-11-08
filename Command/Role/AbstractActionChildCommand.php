@@ -18,10 +18,10 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
-use Sonatra\Bundle\SecurityBundle\Exception\InvalidArgumentException;
-use Sonatra\Bundle\SecurityBundle\Exception\LogicException;
-use Sonatra\Bundle\SecurityBundle\Exception\RuntimeException;
-use Sonatra\Bundle\SecurityBundle\Model\RoleHierarchisableInterface;
+use Sonatra\Component\Security\Exception\InvalidArgumentException;
+use Sonatra\Component\Security\Exception\LogicException;
+use Sonatra\Component\Security\Exception\RuntimeException;
+use Sonatra\Component\Security\Model\RoleHierarchisableInterface;
 use Symfony\Component\Validator\ConstraintViolationInterface;
 
 /**
@@ -73,7 +73,7 @@ abstract class AbstractActionChildCommand extends ContainerAwareCommand
         }
 
         if (!($role instanceof RoleHierarchisableInterface)) {
-            $hierarchyInterface = 'Sonatra\Bundle\SecurityBundle\Model\RoleHierarchisableInterface';
+            $hierarchyInterface = RoleHierarchisableInterface::class;
 
             throw new RuntimeException(sprintf('The role "%s" must have a "%s" interface', $roleName, $hierarchyInterface));
         }

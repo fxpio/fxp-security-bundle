@@ -6,8 +6,8 @@
 
     <parameters>
 
-        <parameter key="security.access.groupable_voter.class">Sonatra\Bundle\SecurityBundle\Core\Authorization\Voter\GroupableVoter</parameter>
-        <parameter key="security.acl.security_identity_retrieval_strategy.listener.group.class">Sonatra\Bundle\SecurityBundle\Listener\GroupStrategyIdentitySubscriber</parameter>
+        <parameter key="security.access.groupable_voter.class">Sonatra\Component\Security\Core\Authorization\Voter\GroupableVoter</parameter>
+        <parameter key="security.acl.security_identity_retrieval_strategy.listener.group.class">Sonatra\Component\Security\Listener\GroupStrategyIdentitySubscriber</parameter>
 
     </parameters>
 

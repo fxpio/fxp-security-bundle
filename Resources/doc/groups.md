@@ -8,6 +8,24 @@ Allow the usage of groups in the Symfony Security Authorization Checker.
 Follow the installation instructions in the [official documentation of Symfony]
 (https://symfony.com/doc/master/bundles/FOSUserBundle/groups.html).
 
+### Update your group model
+
+Add the `Sonatra\Component\Security\Model\GroupInterface` into your group model:
+
+```php
+// src/Acme/CoreBundle/Entity/Group.php
+
+namespace Acme\CoreBundle\Entity;
+
+use FOS\UserBundle\Model\Group as BaseGroup;
+use Sonatra\Component\Security\Model\GroupInterface;
+
+class Group extends BaseRole implements GroupInterface
+{
+    //...
+}
+```
+
 ### Configure your application's config.yml
 
 Add the following configuration to your `config.yml`.

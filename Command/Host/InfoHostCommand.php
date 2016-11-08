@@ -12,7 +12,7 @@
 namespace Sonatra\Bundle\SecurityBundle\Command\Host;
 
 use Sonatra\Bundle\SecurityBundle\Command\AbstractInfoCommand;
-use Sonatra\Bundle\SecurityBundle\Core\Token\ConsoleToken;
+use Sonatra\Component\Security\Core\Token\ConsoleToken;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;

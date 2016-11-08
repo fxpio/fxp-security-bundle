@@ -12,7 +12,7 @@
 namespace Sonatra\Bundle\SecurityBundle\Command\Role;
 
 use Symfony\Component\Console\Output\OutputInterface;
-use Sonatra\Bundle\SecurityBundle\Model\RoleHierarchisableInterface;
+use Sonatra\Component\Security\Model\RoleHierarchisableInterface;
 
 /**
  * @author François Pluchino <francois.pluchino@sonatra.com>

@@ -6,7 +6,7 @@
 
     <parameters>
 
-        <parameter key="sonatra_security.acl.orm.listener.class">Sonatra\Bundle\SecurityBundle\Doctrine\ORM\Listener\AclListener</parameter>
+        <parameter key="sonatra_security.acl.orm.listener.class">Sonatra\Bundle\SecurityBundle\Doctrine\ORM\Listener\AclListenerContainerAware</parameter>
 
     </parameters>
 

@@ -6,25 +6,25 @@
 
     <parameters>
 
-        <parameter key="sonatra_security.acl.rule_extension.class">Sonatra\Bundle\SecurityBundle\Acl\DependencyInjection\RuleExtension</parameter>
-        <parameter key="sonatra_security.acl.object_filter_extension.class">Sonatra\Bundle\SecurityBundle\Acl\DependencyInjection\ObjectFilterExtension</parameter>
-        <parameter key="sonatra_security.acl.rule_manager.class">Sonatra\Bundle\SecurityBundle\Acl\Domain\AclRuleManager</parameter>
-        <parameter key="sonatra_security.acl.manipulator.class">Sonatra\Bundle\SecurityBundle\Acl\Domain\AclManipulator</parameter>
-        <parameter key="sonatra_security.acl.manager.class">Sonatra\Bundle\SecurityBundle\Acl\Domain\AclManager</parameter>
-        <parameter key="sonatra_security.acl.object_filter.class">Sonatra\Bundle\SecurityBundle\Acl\Domain\AclObjectFilter</parameter>
-        <parameter key="sonatra_security.acl.voter.class">Sonatra\Bundle\SecurityBundle\Core\Authorization\Voter\AclVoter</parameter>
-        <parameter key="sonatra_security.acl.disable.listener.class">Sonatra\Bundle\SecurityBundle\Listener\DisableAclListener</parameter>
-        <parameter key="sonatra_security.acl_exception.class">Sonatra\Bundle\SecurityBundle\Listener\AclExceptionListener</parameter>
+        <parameter key="sonatra_security.acl.rule_extension.class">Sonatra\Component\Security\Acl\DependencyInjection\RuleExtension</parameter>
+        <parameter key="sonatra_security.acl.object_filter_extension.class">Sonatra\Component\Security\Acl\DependencyInjection\ObjectFilterExtension</parameter>
+        <parameter key="sonatra_security.acl.rule_manager.class">Sonatra\Component\Security\Acl\Domain\AclRuleManager</parameter>
+        <parameter key="sonatra_security.acl.manipulator.class">Sonatra\Component\Security\Acl\Domain\AclManipulator</parameter>
+        <parameter key="sonatra_security.acl.manager.class">Sonatra\Component\Security\Acl\Domain\AclManager</parameter>
+        <parameter key="sonatra_security.acl.object_filter.class">Sonatra\Component\Security\Acl\Domain\AclObjectFilter</parameter>
+        <parameter key="sonatra_security.acl.voter.class">Sonatra\Component\Security\Core\Authorization\Voter\AclVoter</parameter>
+        <parameter key="sonatra_security.acl.disable.listener.class">Sonatra\Component\Security\Listener\DisableAclListener</parameter>
+        <parameter key="sonatra_security.acl_exception.class">Sonatra\Component\Security\Listener\AclExceptionListener</parameter>
 
     </parameters>
 
     <services>
 
         <!-- Override standard object identity retrieval strategy -->
-        <service id="security.acl.object_identity_retrieval_strategy" class="Sonatra\Bundle\SecurityBundle\Acl\Domain\ObjectIdentityRetrievalStrategy" public="false" />
+        <service id="security.acl.object_identity_retrieval_strategy" class="Sonatra\Component\Security\Acl\Domain\ObjectIdentityRetrievalStrategy" public="false" />
 
         <!-- Override acl provider -->
-        <service id="security.acl.dbal.provider" class="Sonatra\Bundle\SecurityBundle\Acl\Dbal\MutableAclProvider" public="false">
+        <service id="security.acl.dbal.provider" class="Sonatra\Component\Security\Acl\Dbal\MutableAclProvider" public="false">
             <argument type="service" id="security.acl.dbal.connection" />
             <argument type="service" id="security.acl.permission_granting_strategy" />
             <argument type="collection">
@@ -114,7 +114,7 @@
 
         <!-- Acl Object Filter Voter -->
         <service id="sonatra_security.acl.object_filter_voter.mixed"
-                 class="Sonatra\Bundle\SecurityBundle\Acl\ObjectFilter\MixedValue">
+                 class="Sonatra\Component\Security\Acl\ObjectFilter\MixedValue">
             <tag name="sonatra_security.acl.object_filter_voter" priority="-255"/>
         </service>
 

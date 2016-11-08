@@ -8,7 +8,7 @@
 
         <!-- Acl Object Filter Voter -->
         <service id="sonatra_security.acl.object_filter_voter.doctrine_orm_collection"
-                 class="Sonatra\Bundle\SecurityBundle\Acl\ObjectFilter\DoctrineOrmCollectionValue">
+                 class="Sonatra\Component\Security\Acl\ObjectFilter\DoctrineOrmCollectionValue">
             <tag name="sonatra_security.acl.object_filter_voter"/>
         </service>
 

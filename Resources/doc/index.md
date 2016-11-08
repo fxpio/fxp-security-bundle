@@ -12,8 +12,9 @@ Installation is a quick, 5 step process:
 1. Download and install FOS UserBundle
 2. Download the bundle using composer
 3. Enable the bundle
-4. Configure your application's config.yml
-5. Configure and initialize the Symfony ACL
+4. Update your user model
+5. Configure your application's config.yml
+6. Configure and initialize the Symfony ACL
 
 ### Step 1: Download and install FOS UserBundle
 
@@ -46,7 +47,25 @@ public function registerBundles()
 }
 ```
 
-### Step 4: Configure your application's config.yml
+### Step 4: Update your user model
+
+Add the `Sonatra\Component\Security\Model\UserInterface` into your group model:
+
+```php
+// src/Acme/CoreBundle/Entity/User.php
+
+namespace Acme\CoreBundle\Entity;
+
+use FOS\UserBundle\Model\User as BaseUser;
+use Sonatra\Component\Security\Model\UserInterface;
+
+class User extends BaseUser implements UserInterface
+{
+    //...
+}
+```
+
+### Step 5: Configure your application's config.yml
 
 Add the following configuration to your `config.yml`.
 
@@ -58,7 +77,7 @@ sonatra_security:
         security_identity: true # Override the standard security identity retrieval strategy (default true)
 ```
 
-### Step 5: Configure and initialize the Symfony ACL
+### Step 6: Configure and initialize the Symfony ACL
 
 If you haven't configured the ACL enable it in `app/config/security.yml`:
 

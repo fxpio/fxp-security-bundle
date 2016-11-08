@@ -13,14 +13,14 @@ namespace Sonatra\Bundle\SecurityBundle\Command\Group;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
-use Sonatra\Bundle\SecurityBundle\Model\GroupInterface;
+use Sonatra\Component\Security\Model\GroupInterface;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
-use Sonatra\Bundle\SecurityBundle\Exception\InvalidArgumentException;
-use Sonatra\Bundle\SecurityBundle\Exception\LogicException;
+use Sonatra\Component\Security\Exception\InvalidArgumentException;
+use Sonatra\Component\Security\Exception\LogicException;
 use Symfony\Component\Validator\ConstraintViolationInterface;
 
 /**

@@ -15,21 +15,16 @@
         "php": ">=5.5.0",
         "symfony/framework-bundle": "~3.0",
         "symfony/security-bundle": "~3.0",
-        "symfony/expression-language": "~3.0",
-        "symfony/validator": "~3.0",
-        "symfony/security-acl": "~3.0",
-        "doctrine/common": "~2.5",
-        "friendsofsymfony/user-bundle": "~2.0@dev",
-        "psr/cache": "~1.0"
+        "sonatra/security": "~1.0@dev"
     },
     "require-dev": {
+        "friendsofsymfony/user-bundle": "~2.0@dev",
         "doctrine/doctrine-bundle": "~1.6",
-        "doctrine/orm": "~2.5",
-        "jms/security-extra-bundle": "~1.5"
+        "jms/security-extra-bundle": "~1.6",
+        "doctrine/orm": "~2.5"
     },
     "suggest": {
-        "jms/security-extra-bundle": "For JMS Security Extra Expression features",
-        "doctrine/orm": "For ORM filter query feature"
+        "jms/security-extra-bundle": "For JMS Security Extra Expression features"
     },
     "autoload": {
         "psr-4": { "Sonatra\\Bundle\\SecurityBundle\\": "" },

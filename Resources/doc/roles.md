@@ -13,7 +13,7 @@ This example requires `doctrine/orm` as a dependency.
 
 namespace Acme\CoreBundle\Entity;
 
-use Sonatra\Bundle\SecurityBundle\Model\Role as BaseRole;
+use Sonatra\Component\Security\Model\Role as BaseRole;
 
 class Role extends BaseRole
 {

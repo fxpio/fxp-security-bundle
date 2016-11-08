@@ -12,6 +12,7 @@
 namespace Sonatra\Bundle\SecurityBundle\Exception;
 
 use JMS\SecurityExtraBundle\Exception\RuntimeException;
+use Sonatra\Component\Security\Exception\ExceptionInterface;
 
 /**
  * Base JmsRuntimeException for the Security component.

@@ -13,7 +13,7 @@ namespace Sonatra\Bundle\SecurityBundle\Command\Acl;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
-use Sonatra\Bundle\SecurityBundle\Model\GroupInterface;
+use Sonatra\Component\Security\Model\GroupInterface;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -29,9 +29,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
-use Sonatra\Bundle\SecurityBundle\Core\Token\ConsoleToken;
-use Sonatra\Bundle\SecurityBundle\Acl\Util\AclUtils;
-use Sonatra\Bundle\SecurityBundle\Exception\InvalidArgumentException;
+use Sonatra\Component\Security\Core\Token\ConsoleToken;
+use Sonatra\Component\Security\Acl\Util\AclUtils;
+use Sonatra\Component\Security\Exception\InvalidArgumentException;
 
 /**
  * Display the identifier rights of class/field.

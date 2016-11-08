@@ -11,7 +11,7 @@
 
 namespace Sonatra\Bundle\SecurityBundle\Acl\Expression;
 
-use Sonatra\Bundle\SecurityBundle\Core\Organizational\OrganizationalContextInterface;
+use Sonatra\Component\Security\Core\Organizational\OrganizationalContextInterface;
 use Symfony\Component\Security\Acl\Domain\RoleSecurityIdentity;
 use Symfony\Component\Security\Acl\Model\SecurityIdentityRetrievalStrategyInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;

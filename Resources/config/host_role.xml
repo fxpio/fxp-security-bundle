@@ -6,8 +6,8 @@
 
     <parameters>
 
-        <parameter key="sonatra_security.host_role.authentication.provider.class">Sonatra\Bundle\SecurityBundle\Authentication\Provider\HostRoleProvider</parameter>
-        <parameter key="sonatra_security.host_role.authentication.listener.class">Sonatra\Bundle\SecurityBundle\Firewall\HostRoleListener</parameter>
+        <parameter key="sonatra_security.host_role.authentication.provider.class">Sonatra\Component\Security\Authentication\Provider\HostRoleProvider</parameter>
+        <parameter key="sonatra_security.host_role.authentication.listener.class">Sonatra\Component\Security\Firewall\HostRoleListener</parameter>
 
     </parameters>
 

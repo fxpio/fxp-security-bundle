@@ -13,15 +13,15 @@ namespace Sonatra\Bundle\SecurityBundle\Command\User;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
-use FOS\UserBundle\Model\GroupableInterface;
-use Sonatra\Bundle\SecurityBundle\Model\GroupInterface;
+use Sonatra\Component\Security\Model\GroupableEditableInterface;
+use Sonatra\Component\Security\Model\GroupInterface;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
-use Sonatra\Bundle\SecurityBundle\Exception\InvalidArgumentException;
-use Sonatra\Bundle\SecurityBundle\Exception\LogicException;
+use Sonatra\Component\Security\Exception\InvalidArgumentException;
+use Sonatra\Component\Security\Exception\LogicException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\ConstraintViolationInterface;
 
@@ -60,7 +60,7 @@ abstract class AbstractGroupUserCommand extends ContainerAwareCommand
 
         /* @var EntityRepository $repoUser */
         $repoUser = $emUser->getRepository($userClass);
-        /* @var GroupableInterface $user */
+        /* @var GroupableEditableInterface $user */
         $user = $repoUser->findOneBy(array('username' => $userName));
 
         if (null === $user) {
@@ -107,9 +107,9 @@ abstract class AbstractGroupUserCommand extends ContainerAwareCommand
     /**
      * Do execute.
      *
-     * @param OutputInterface                  $output
-     * @param UserInterface|GroupableInterface $user
-     * @param GroupInterface                   $group
+     * @param OutputInterface                          $output
+     * @param UserInterface|GroupableEditableInterface $user
+     * @param GroupInterface                           $group
      *
      * @return bool
      */

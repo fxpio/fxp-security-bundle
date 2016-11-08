@@ -7,7 +7,7 @@
     <parameters>
 
         <!-- Override standard security identity retrieval strategy -->
-        <parameter key="security.acl.security_identity_retrieval_strategy.class">Sonatra\Bundle\SecurityBundle\Acl\Domain\SecurityIdentityRetrievalStrategy</parameter>
+        <parameter key="security.acl.security_identity_retrieval_strategy.class">Sonatra\Component\Security\Acl\Domain\SecurityIdentityRetrievalStrategy</parameter>
 
     </parameters>
 

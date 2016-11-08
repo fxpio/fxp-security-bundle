@@ -11,7 +11,7 @@
 
 namespace Sonatra\Bundle\SecurityBundle\Command\User;
 
-use Sonatra\Bundle\SecurityBundle\Model\GroupInterface;
+use Sonatra\Component\Security\Model\GroupInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -43,7 +43,7 @@ class AddGroupUserCommand extends AbstractGroupUserCommand
             return false;
         }
 
-        $user->addGroup($group);
+        $user->addSecurityGroup($group);
 
         return true;
     }

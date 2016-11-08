@@ -11,7 +11,7 @@
 
 namespace Sonatra\Bundle\SecurityBundle\Command\Group;
 
-use Sonatra\Bundle\SecurityBundle\Model\GroupInterface;
+use Sonatra\Component\Security\Model\GroupInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**

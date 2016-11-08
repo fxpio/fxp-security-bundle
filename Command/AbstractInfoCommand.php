@@ -20,7 +20,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
-use Sonatra\Bundle\SecurityBundle\Exception\LogicException;
+use Sonatra\Component\Security\Exception\LogicException;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
 /**

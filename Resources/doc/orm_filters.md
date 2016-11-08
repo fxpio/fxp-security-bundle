@@ -31,7 +31,7 @@ doctrine:
                 filters:
                     sonatra_acl:
                         # Enable the Doctrine SQL Filter for Sonatra Rule Filters
-                        class:   Sonatra\Bundle\SecurityBundle\Doctrine\ORM\Filter\AclFilter
+                        class:   Sonatra\Component\Security\Doctrine\ORM\Filter\AclFilter
                         enabled: true
 ```
 
