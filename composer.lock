@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "e65a6e2842be9478bcb70f8df795d348",
+    "hash": "a25d5605073806055adc9df9bd9ef988",
     "content-hash": "686bbbb3de36a4e164d28a5fbe237cdd",
     "packages": [
         {
@@ -552,12 +552,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonatra/sonatra-security.git",
-                "reference": "e46c9b873b6a54f2294399597bb30afcb90cc24a"
+                "reference": "e549c65631e5bbf8841fa12d15ca412a39898c8d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonatra/sonatra-security/zipball/e46c9b873b6a54f2294399597bb30afcb90cc24a",
-                "reference": "e46c9b873b6a54f2294399597bb30afcb90cc24a",
+                "url": "https://api.github.com/repos/sonatra/sonatra-security/zipball/e549c65631e5bbf8841fa12d15ca412a39898c8d",
+                "reference": "e549c65631e5bbf8841fa12d15ca412a39898c8d",
                 "shasum": ""
             },
             "require": {
@@ -612,7 +612,7 @@
                 "ace",
                 "acl"
             ],
-            "time": "2016-11-08 14:25:05"
+            "time": "2016-11-08 16:25:39"
         },
         {
             "name": "symfony/asset",
