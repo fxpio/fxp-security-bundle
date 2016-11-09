@@ -3,7 +3,7 @@
     "type": "symfony-bundle",
     "description": "Implements all features of Symfony2 Advanced ACL Concepts and adds some interesting features",
     "keywords": ["ACL", "ACE", "Advanced ACL Concept Implementation", "Rule definition", "Sharing rule", "ACL Voter", "JMS Expression"],
-    "homepage": "https://github.com/sonatra/SonatraSecurityBundle",
+    "homepage": "https://github.com/sonatra/sonatra-security-bundle",
     "license": "MIT",
     "authors": [
         {

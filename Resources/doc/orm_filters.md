@@ -47,8 +47,8 @@ with the Voter) if each field is authorized in READ.
 
 The cleaning of the fields is performed in the `Unit of Work` of
 Doctrine via the listeners `postLoad` and `onFlush`, see the source files
-[AclListener](https://github.com/sonatra/SonatraSecurityBundle/blob/master/Doctrine/ORM/Listener/AclListener.php)
-and [AclObjectFilter](https://github.com/sonatra/SonatraSecurityBundle/blob/master/Acl/Domain/AclObjectFilter.php) 
+[AclListener](https://github.com/sonatra/sonatra-security-bundle/blob/master/Doctrine/ORM/Listener/AclListener.php)
+and [AclObjectFilter](https://github.com/sonatra/sonatra-security-bundle/blob/master/Acl/Domain/AclObjectFilter.php)
 for more information.
 
 ### Regarding the RuleDefinition and RuleFilterDefinition

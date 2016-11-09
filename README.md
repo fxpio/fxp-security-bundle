@@ -2,9 +2,9 @@ Sonatra Security Bundle
 =======================
 
 [![Latest Version](https://img.shields.io/packagist/v/sonatra/security-bundle.svg)](https://packagist.org/packages/sonatra/security-bundle)
-[![Build Status](https://img.shields.io/travis/sonatra/SonatraSecurityBundle/master.svg)](https://travis-ci.org/sonatra/SonatraSecurityBundle)
-[![Coverage Status](https://img.shields.io/coveralls/sonatra/SonatraSecurityBundle/master.svg)](https://coveralls.io/r/sonatra/SonatraSecurityBundle?branch=master)
-[![Scrutinizer Code Quality](https://img.shields.io/scrutinizer/g/sonatra/SonatraSecurityBundle/master.svg)](https://scrutinizer-ci.com/g/sonatra/SonatraSecurityBundle?branch=master)
+[![Build Status](https://img.shields.io/travis/sonatra/sonatra-security-bundle/master.svg)](https://travis-ci.org/sonatra/sonatra-security-bundle)
+[![Coverage Status](https://img.shields.io/coveralls/sonatra/sonatra-security-bundle/master.svg)](https://coveralls.io/r/sonatra/sonatra-security-bundle?branch=master)
+[![Scrutinizer Code Quality](https://img.shields.io/scrutinizer/g/sonatra/sonatra-security-bundle/master.svg)](https://scrutinizer-ci.com/g/sonatra/sonatra-security-bundle?branch=master)
 [![SensioLabsInsight](https://img.shields.io/sensiolabs/i/74707490-7a7f-4dd8-91c9-84af5de547a1.svg)](https://insight.sensiolabs.com/projects/74707490-7a7f-4dd8-91c9-84af5de547a1)
 
 The Sonatra SecurityBundle implements all functionnalities of 
@@ -59,12 +59,12 @@ About
 -----
 
 Sonatra SecurityBundle is a [sonatra](https://github.com/sonatra) initiative.
-See also the list of [contributors](https://github.com/sonatra/SonatraSecurityBundle/graphs/contributors).
+See also the list of [contributors](https://github.com/sonatra/sonatra-security-bundle/graphs/contributors).
 
 Reporting an issue or a feature request
 ---------------------------------------
 
-Issues and feature requests are tracked in the [Github issue tracker](https://github.com/sonatra/SonatraSecurityBundle/issues).
+Issues and feature requests are tracked in the [Github issue tracker](https://github.com/sonatra/sonatra-security-bundle/issues).
 
 When reporting a bug, it may be a good idea to reproduce it in a basic project
 built using the [Symfony Standard Edition](https://github.com/symfony/symfony-standard)
