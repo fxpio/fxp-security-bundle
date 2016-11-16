@@ -38,17 +38,72 @@ class SonatraSecurityExtension extends Extension
         $configPath = dirname(dirname($ref->getFileName())).'/Resources/config';
         $loader = new Loader\XmlFileLoader($container, new FileLocator($configPath));
 
-        // entity classes
-        $container->setParameter('sonatra_security.user_class', $config['user_class']);
-        $container->setParameter('sonatra_security.role_class', $config['role_class']);
-        $container->setParameter('sonatra_security.group_class', $config['group_class']);
-        $container->setParameter('sonatra_security.organization_class', $config['organization_class']);
-
+        $this->buildModel($container, $config);
+        $this->buildSecurityIdentityStrategy($loader);
+        $this->buildPermission($loader);
+        $this->buildObjectFilter($container, $loader, $config);
         $this->buildHostRole($container, $loader, $config);
         $this->buildRoleHierarchy($container, $loader, $config);
-        $this->buildExpression($container, $loader, $config);
-        $this->buildAcl($container, $loader, $config);
+        $this->buildSecurityVoter($loader, $config);
         $this->buildOrganizationalContext($container, $loader, $config);
+        $this->buildSharing($container, $loader, $config);
+    }
+
+    /**
+     * Build the models.
+     *
+     * @param ContainerBuilder $container The container
+     * @param array            $config    The config
+     */
+    private function buildModel(ContainerBuilder $container, array $config)
+    {
+        $container->setParameter('sonatra_security.role_class', $config['role_class']);
+    }
+
+    /**
+     * Build the security identity strategy.
+     *
+     * @param LoaderInterface $loader The config loader
+     */
+    private function buildSecurityIdentityStrategy(LoaderInterface $loader)
+    {
+        $loader->load('security_identity_strategy.xml');
+    }
+
+    /**
+     * Build the permission.
+     *
+     * @param LoaderInterface $loader The config loader
+     */
+    private function buildPermission(LoaderInterface $loader)
+    {
+        $loader->load('permission.xml');
+    }
+
+    /**
+     * Build the object filter.
+     *
+     * @param ContainerBuilder $container The container
+     * @param LoaderInterface  $loader    The config loader
+     * @param array            $config    The config
+     */
+    private function buildObjectFilter(ContainerBuilder $container, LoaderInterface $loader, array $config)
+    {
+        if ($config['object_filter']['enabled']) {
+            $loader->load('object_filter.xml');
+
+            // doctrine orm object filter voters
+            if ($config['doctrine']['orm']['object_filter_voter']) {
+                $this->validate($container, 'doctrine.orm.object_filter_voter', 'doctrine.orm.entity_manager.class', 'doctrine/orm');
+                $loader->load('orm_object_filter_voter.xml');
+            }
+
+            // doctrine orm object filter listener
+            if ($config['doctrine']['orm']['listeners']['object_filter']) {
+                $this->validate($container, 'doctrine.orm.listener.object_filter', 'doctrine.orm.entity_manager.class', 'doctrine/orm');
+                $loader->load('orm_listener_object_filter.xml');
+            }
+        }
     }
 
     /**
@@ -64,6 +119,23 @@ class SonatraSecurityExtension extends Extension
 
         $def = $container->getDefinition('sonatra_security.host_role.authentication.listener');
         $def->addMethodCall('setEnabled', array($config['host_role']['enabled']));
+    }
+
+    /**
+     * Build the security voter.
+     *
+     * @param LoaderInterface $loader The config loader
+     * @param array           $config The config
+     */
+    private function buildSecurityVoter(LoaderInterface $loader, array $config)
+    {
+        if ($config['security_voter']['role_security_identity']) {
+            $loader->load('security_voter_role_security_identity.xml');
+        }
+
+        if ($config['security_voter']['groupable']) {
+            $loader->load('security_voter_groupable.xml');
+        }
     }
 
     /**
@@ -85,103 +157,10 @@ class SonatraSecurityExtension extends Extension
                 $container->setAlias('sonatra_security.role_hierarchy.cache', $cacheAlias);
             }
 
-            // doctrine orm listener role hierarchy
-            if ($config['doctrine']['orm']['listener']['role_hierarchy']) {
+            // doctrine orm role hierarchy listener
+            if ($config['doctrine']['orm']['listeners']['role_hierarchy']) {
                 $this->validate($container, 'doctrine.orm.listener.role_hierarchy', 'doctrine.orm.entity_manager.class', 'doctrine/orm');
                 $loader->load('orm_listener_role_hierarchy.xml');
-            }
-        }
-    }
-
-    /**
-     * Build the expression.
-     *
-     * @param ContainerBuilder $container The container
-     * @param LoaderInterface  $loader    The config loader
-     * @param array            $config    The config
-     */
-    private function buildExpression(ContainerBuilder $container, LoaderInterface $loader, array $config)
-    {
-        if ($config['expression']['has_permission']) {
-            $this->validate($container, 'expression.has_permission', 'security.expressions.compiler.class', 'jms/security-extra-bundle');
-            $loader->load('expression_has_permission.xml');
-        }
-
-        if ($config['expression']['has_field_permission']) {
-            $this->validate($container, 'expression.has_field_permission', 'security.expressions.compiler.class', 'jms/security-extra-bundle');
-            $loader->load('expression_has_field_permission.xml');
-        }
-
-        if ($config['expression']['has_role']) {
-            $this->validate($container, 'expression.has_role', 'security.expressions.compiler.class', 'jms/security-extra-bundle');
-            $loader->load('expression_has_role.xml');
-        }
-
-        if ($config['expression']['has_any_role']) {
-            $this->validate($container, 'expression.has_any_role', 'security.expressions.compiler.class', 'jms/security-extra-bundle');
-            $loader->load('expression_has_any_role.xml');
-        }
-
-        if ($config['expression']['has_org_role']) {
-            $this->validate($container, 'expression.has_org_role', 'security.expressions.compiler.class', 'jms/security-extra-bundle');
-            $loader->load('expression_has_org_role.xml');
-        }
-    }
-
-    /**
-     * Build the ACL.
-     *
-     * @param ContainerBuilder $container The container
-     * @param LoaderInterface  $loader    The config loader
-     * @param array            $config    The config
-     */
-    private function buildAcl(ContainerBuilder $container, LoaderInterface $loader, array $config)
-    {
-        if ($config['acl']['enabled']
-                && $container->hasParameter('security.acl.dbal.class_table_name')
-                && $container->hasParameter('security.acl.dbal.entry_table_name')
-                && $container->hasParameter('security.acl.dbal.oid_table_name')
-                && $container->hasParameter('security.acl.dbal.oid_ancestors_table_name')
-                && $container->hasParameter('security.acl.dbal.sid_table_name')) {
-            $this->validate($container, 'acl', 'doctrine.class', 'doctrine/doctrine-bundle');
-
-            if ($config['acl']['security_identity']['enabled']) {
-                $loader->load('security_identity_strategy.xml');
-            }
-
-            if ($config['acl']['access_voter']['enabled']) {
-                if ($config['acl']['access_voter']['role_security_identity']) {
-                    $loader->load('access_voter_role_security_identity.xml');
-                }
-
-                if ($config['acl']['access_voter']['groupable']) {
-                    $loader->load('access_voter_groupable.xml');
-                }
-            }
-
-            $loader->load('acl.xml');
-            $loader->load('acl_rule.xml');
-
-            $container->setParameter('sonatra_security.acl_default_rule', $config['acl']['default_rule']);
-            $container->setParameter('sonatra_security.acl_disabled_rule', $config['acl']['disabled_rule']);
-            $container->setParameter('sonatra_security.acl_rules', $config['acl']['rules']);
-
-            // doctrine orm listener acl filter/restaure fields value
-            if ($config['doctrine']['orm']['listener']['acl_filter_fields']) {
-                $this->validate($container, 'doctrine.orm.listener.acl_filter_fields', 'doctrine.orm.entity_manager.class', 'doctrine/orm');
-                $loader->load('orm_listener_acl_filter_fields.xml');
-            }
-
-            // doctrine orm rule filters
-            if ($config['doctrine']['orm']['filter']['rule_filters']) {
-                $this->validate($container, 'doctrine.orm.filter.rule_filters', 'doctrine.orm.entity_manager.class', 'doctrine/orm');
-                $loader->load('orm_rule_filter.xml');
-            }
-
-            // doctrine orm object filter voters
-            if ($config['doctrine']['orm']['object_filter_voter']) {
-                $this->validate($container, 'doctrine.orm.object_filter_voter', 'doctrine.orm.entity_manager.class', 'doctrine/orm');
-                $loader->load('orm_object_filter_voter.xml');
             }
         }
     }
@@ -200,6 +179,22 @@ class SonatraSecurityExtension extends Extension
             $loader->load('organizational_context.xml');
             $id = 'sonatra_security.organizational_context.service_id';
             $container->setParameter($id, $config['organizational_context']['service_id']);
+        }
+    }
+
+    /**
+     * Build the sharing.
+     *
+     * @param ContainerBuilder $container The container
+     * @param LoaderInterface  $loader    The config loader
+     * @param array            $config    The config
+     */
+    private function buildSharing(ContainerBuilder $container, LoaderInterface $loader,
+                                                array $config)
+    {
+        if ($config['doctrine']['orm']['filters']['sharing']) {
+            $this->validate($container, 'doctrine.orm.filter.sharing', 'doctrine.orm.entity_manager.class', 'doctrine/orm');
+            $loader->load('orm_filter_sharing.xml');
         }
     }
 

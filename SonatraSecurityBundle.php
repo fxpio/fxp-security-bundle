@@ -17,8 +17,7 @@ use Symfony\Component\DependencyInjection\Compiler\PassConfig;
 use Symfony\Component\EventDispatcher\DependencyInjection\RegisterListenersPass;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Sonatra\Bundle\SecurityBundle\DependencyInjection\Compiler\AclRuleDefinitionPass;
-use Sonatra\Bundle\SecurityBundle\DependencyInjection\Compiler\AclObjectFilterPass;
+use Sonatra\Bundle\SecurityBundle\DependencyInjection\Compiler\ObjectFilterPass;
 use Sonatra\Bundle\SecurityBundle\Factory\HostRoleFactory;
 use Doctrine\Bundle\DoctrineBundle\DependencyInjection\Compiler\DoctrineOrmMappingsPass;
 
@@ -35,8 +34,7 @@ class SonatraSecurityBundle extends Bundle
         $extension = $container->getExtension('security');
         $extension->addSecurityListenerFactory(new HostRoleFactory());
 
-        $container->addCompilerPass(new AclRuleDefinitionPass());
-        $container->addCompilerPass(new AclObjectFilterPass());
+        $container->addCompilerPass(new ObjectFilterPass());
         $container->addCompilerPass(new OrganizationalPass());
         $container->addCompilerPass(new RegisterListenersPass('event_dispatcher',
             'sonatra_security.event_listener', 'sonatra_security.event_subscriber'),

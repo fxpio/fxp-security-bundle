@@ -11,20 +11,19 @@
 
 namespace Sonatra\Bundle\SecurityBundle\Doctrine\ORM\Listener;
 
-use Sonatra\Component\Security\Acl\Model\AclManagerInterface;
-use Sonatra\Component\Security\Acl\Model\AclObjectFilterInterface;
-use Sonatra\Component\Security\Acl\Model\AclRuleManagerInterface;
-use Sonatra\Component\Security\Doctrine\ORM\Listener\AclListener;
+use Sonatra\Component\Security\Doctrine\ORM\Listener\ObjectFilterListener;
+use Sonatra\Component\Security\ObjectFilter\ObjectFilterInterface;
+use Sonatra\Component\Security\Permission\PermissionManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 /**
- * This class listens to all database activity and automatically adds constraints as acls / aces.
+ * This class listens to all database activity and automatically adds constraints as permissions.
  *
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-class AclListenerContainerAware extends AclListener
+class ObjectFilterListenerContainerAware extends ObjectFilterListener
 {
     /**
      * @var ContainerInterface
@@ -41,18 +40,15 @@ class AclListenerContainerAware extends AclListener
             $tokenStorage = $this->container->get('security.token_storage');
             /* @var AuthorizationCheckerInterface $authChecker */
             $authChecker = $this->container->get('security.authorization_checker');
-            /* @var AclManagerInterface $aclManager */
-            $aclManager = $this->container->get('sonatra_security.acl.manager');
-            /* @var AclRuleManagerInterface $aclRuleManager */
-            $aclRuleManager = $this->container->get('sonatra_security.acl.rule_manager');
-            /* @var AclObjectFilterInterface $aclObjectFilter */
-            $aclObjectFilter = $this->container->get('sonatra_security.acl.object_filter');
+            /* @var PermissionManagerInterface $permManager */
+            $permManager = $this->container->get('sonatra_security.permission_manager');
+            /* @var ObjectFilterInterface $objectFilter */
+            $objectFilter = $this->container->get('sonatra_security.object_filter');
 
             $this->setTokenStorage($tokenStorage);
             $this->setAuthorizationChecker($authChecker);
-            $this->setAclManager($aclManager);
-            $this->setAclRuleManager($aclRuleManager);
-            $this->setAclObjectFilter($aclObjectFilter);
+            $this->setPermissionManager($permManager);
+            $this->setObjectFilter($objectFilter);
             $this->initialized = true;
             $this->container = null;
         }

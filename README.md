@@ -7,33 +7,15 @@ Sonatra Security Bundle
 [![Scrutinizer Code Quality](https://img.shields.io/scrutinizer/g/sonatra/sonatra-security-bundle/master.svg)](https://scrutinizer-ci.com/g/sonatra/sonatra-security-bundle?branch=master)
 [![SensioLabsInsight](https://img.shields.io/sensiolabs/i/74707490-7a7f-4dd8-91c9-84af5de547a1.svg)](https://insight.sensiolabs.com/projects/74707490-7a7f-4dd8-91c9-84af5de547a1)
 
-The Sonatra SecurityBundle implements all functionnalities of 
-[Symfony Advanced ACL Concepts](http://symfony.com/doc/current/cookbook/security/acl_advanced.html)
-and adds some interesting features.
-
+The Sonatra SecurityBundle is a Role-Based Access Control Level 2 with advanced permissions
+and sharing rules.
 
 Features include:
 
 - All features of [Sonatra Security](https://github.com/sonatra/sonatra-security)
-- Ability to replace the `hasPermission()` JMS Expression (and twig function)
-- Ability to add the `hasFieldPermission()` JMS Expression (and twig function)
-- Ability to replace the `hasRole()` JMS Expression (and twig function)
-- Ability to replace the `hasAnyRole()` JMS Expression (and twig function)
-- Commands for:
- * create/delete a user
- * create/delete a role
- * create/delete a group
- * promote/demote a user
- * promote/demote a group
- * associate/disassociate a user from a group
- * add/remove child of role
- * add/remove parent of role
- * grant/revoke permissions by user, by role or by group for a defined class (or record entity)
- * display direct and indirect roles of user (host role compatible)
- * display direct and indirect roles of group (host role compatible)
- * display direct and indirect children of role (host role compatible)
- * display the permissions by user or by role for a defined class (or a record entity)
- * display the calculated permissions by user or by role for a defined class (or a record entity)
+- Configurator of all Sonatra Security features
+- Security factory for host role
+- Compiler pass for object filter voters
 
 Documentation
 -------------

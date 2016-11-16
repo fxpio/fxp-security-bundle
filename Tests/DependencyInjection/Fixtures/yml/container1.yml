@@ -1,6 +1,0 @@
-sonatra_security:
-    user_class: 'Acme\CoreBundle\Entity\User'
-    role_class: 'Acme\CoreBundle\Entity\Role'
-    group_class: 'Acme\CoreBundle\Entity\Group'
-    acl:
-        enabled: false

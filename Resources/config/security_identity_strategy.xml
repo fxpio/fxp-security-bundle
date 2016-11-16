@@ -5,23 +5,17 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-
-        <!-- Override standard security identity retrieval strategy -->
-        <parameter key="security.acl.security_identity_retrieval_strategy.class">Sonatra\Component\Security\Acl\Domain\SecurityIdentityRetrievalStrategy</parameter>
-
+        <parameter key="sonatra_security.security_identity_retrieval_strategy.class">Sonatra\Component\Security\Identity\CacheSecurityIdentityRetrievalStrategy</parameter>
     </parameters>
 
     <services>
-
-        <!-- Override security identity retrieval strategy service -->
-        <service id="security.acl.security_identity_retrieval_strategy"
-                 class="%security.acl.security_identity_retrieval_strategy.class%"
-                 public="false">
+        <!-- Security Identity Retrieval Strategy -->
+        <service id="sonatra_security.security_identity_retrieval_strategy"
+                 class="%sonatra_security.security_identity_retrieval_strategy.class%">
             <argument type="service" id="event_dispatcher"/>
             <argument type="service" id="security.role_hierarchy"/>
             <argument type="service" id="security.authentication.trust_resolver"/>
         </service>
-
     </services>
 
 </container>

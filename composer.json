@@ -1,8 +1,8 @@
 {
     "name": "sonatra/security-bundle",
     "type": "symfony-bundle",
-    "description": "Implements all features of Symfony2 Advanced ACL Concepts and adds some interesting features",
-    "keywords": ["ACL", "ACE", "Advanced ACL Concept Implementation", "Rule definition", "Sharing rule", "ACL Voter", "JMS Expression"],
+    "description": "A Role-Based Access Control Level 2 with advanced permissions and sharing rules",
+    "keywords": ["RBAC", "Permission", "Sharing", "Security"],
     "homepage": "https://github.com/sonatra/sonatra-security-bundle",
     "license": "MIT",
     "authors": [
@@ -13,18 +13,14 @@
     ],
     "require": {
         "php": ">=5.6.0",
-        "symfony/framework-bundle": "~3.0",
-        "symfony/security-bundle": "~3.0",
+        "symfony/framework-bundle": "~3.1",
+        "symfony/security-bundle": "~3.1",
         "sonatra/security": "~1.0@dev"
     },
     "require-dev": {
         "friendsofsymfony/user-bundle": "~2.0@dev",
         "doctrine/doctrine-bundle": "~1.6",
-        "jms/security-extra-bundle": "~1.6",
         "doctrine/orm": "~2.5"
-    },
-    "suggest": {
-        "jms/security-extra-bundle": "For JMS Security Extra Expression features"
     },
     "autoload": {
         "psr-4": { "Sonatra\\Bundle\\SecurityBundle\\": "" },

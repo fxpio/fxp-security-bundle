@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="sonatra_security.permission_manager.class">Sonatra\Component\Security\Permission\PermissionManager</parameter>
+        <parameter key="sonatra_security.listener.permission.disable.class">Sonatra\Component\Security\Listener\DisablePermissionListener</parameter>
+        <parameter key="sonatra_security.listener.permission_exception.class">Sonatra\Component\Security\Listener\PermissionExceptionListener</parameter>
+    </parameters>
+
+    <services>
+        <!-- Permission Manager -->
+        <service id="sonatra_security.permission_manager"
+                 class="%sonatra_security.permission_manager.class%">
+            <argument type="service" id="sonatra_security.security_identity_retrieval_strategy"/>
+        </service>
+
+        <!-- Disable Permission Listener -->
+        <service id="sonatra_security.listener.permission.disable"
+                 class="%sonatra_security.listener.permission.disable.class%">
+            <tag name="kernel.event_subscriber"/>
+            <argument type="service" id="sonatra_security.permission_manager"/>
+        </service>
+
+        <!-- Permission Exception Listener -->
+        <service id="sonatra_security.listener.permission_exception"
+                 class="%sonatra_security.listener.permission_exception.class%">
+            <tag name="kernel.event_listener" event="kernel.exception" method="onKernelException"/>
+        </service>
+    </services>
+</container>

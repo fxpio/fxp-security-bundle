@@ -3,18 +3,21 @@ Getting Started
 
 ## Prerequisites
 
-This version of the bundle requires Symfony 3.0+.
+This version of the bundle requires Symfony 3.1+.
+
+This example requires `friendsofsymfony/user-bundle` as a dependency in
+a [Symfony Standard Edition](https://github.com/symfony/symfony-standard)
+project.
 
 ## Installation
-
-Installation is a quick, 5 step process:
 
 1. Download and install FOS UserBundle
 2. Download the bundle using composer
 3. Enable the bundle
 4. Update your user model
-5. Configure your application's config.yml
-6. Configure and initialize the Symfony ACL
+5. Create the role model
+6. Configure your application's config.yml
+7. Configure and initialize the permissions
 
 ### Step 1: Download and install FOS UserBundle
 
@@ -65,33 +68,92 @@ class User extends BaseUser implements UserInterface
 }
 ```
 
-### Step 5: Configure your application's config.yml
+### Step 5: Create the role model
+
+#### Create the role class
+
+``` php
+// src/Acme/CoreBundle/Entity/Role.php
+
+namespace Acme\CoreBundle\Entity;
+
+use Sonatra\Component\Security\Model\Role as BaseRole;
+
+class Role extends BaseRole
+{
+}
+```
+
+#### Create the role mapping
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                  http://raw.github.com/doctrine/doctrine2/master/doctrine-mapping.xsd">
+
+    <entity name="Acme\CoreBundle\Entity\Role" table="core_role">
+        <id name="id" type="integer" column="id">
+            <generator strategy="AUTO"/>
+        </id>
+
+        <many-to-many field="parents" target-entity="Role" mappedBy="children" />
+
+        <many-to-many field="children" target-entity="Role" inversedBy="parents">
+            <join-table name="core_roles_children">
+                <join-columns>
+                    <join-column name="role_id" referenced-column-name="id" />
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="children_role_id" referenced-column-name="id" />
+                </inverse-join-columns>
+            </join-table>
+        </many-to-many>
+
+    </entity>
+</doctrine-mapping>
+```
+
+### Step 6: Configure your application's config.yml
 
 Add the following configuration to your `config.yml`.
 
 ```yaml
 # app/config/config.yml
 sonatra_security:
-    user_class: Acme\CoreBundle\Entity\User
-    acl:
-        security_identity: true # Override the standard security identity retrieval strategy (default true)
+    user_class:                  Acme\CoreBundle\Entity\Role
+    object_filter:
+        enabled:                 true # Enable the object filter (optional)
+    role_hierarchy:
+        enabled:                 true # Enable the role hierarchy for organizational context (optional)
+        cache:                   null # Defined the service cache for role hierarchy (optional)
+    security_voter:
+        role_security_identity:  true # Override the Symfony Role Hierarchy Voter (optional)
+    doctrine:
+        orm:
+            object_filter_voter: true # Ebable the Doctrine ORM Collection Object Filter (optional)
+            listeners:
+                object_filter:   true # Ebable the Doctrine ORM Object Filter Listener(optional)
+                role_hierarchy:  true # Enable the Doctrine ORM listener of role hierarchy (optional)
+            filters:
+                sharing:         true # Enable the Doctrine ORM SQL Filter for sharing the entities (optional)
+doctrine:
+    orm:
+        entity_managers:
+            default:
+                filters:
+                    sonatra_acl:
+                        class:     Sonatra\Component\Security\Doctrine\ORM\Filter\SharingFilter
+                        enabled:   true
 ```
 
-### Step 6: Configure and initialize the Symfony ACL
+### Step 7: Configure and initialize the permissions
 
-If you haven't configured the ACL enable it in `app/config/security.yml`:
-
-```yaml
-# app/config/security.yml
-security:
-    acl:
-        connection: default
-```
-
-Finally run the ACL init command
+#### Update your database schema
 
 ```bash
-$ php app/console init:acl
+$ php app/console doctrine:schema:update --force
 ```
 
 ### Next Steps
@@ -108,11 +170,4 @@ Sonatra SecurityBundle, you are ready to learn more about using this bundle.
 
 The following documents are available:
 
-- [Using Roles with Sonatra SecurityBundle](roles.md)
 - [Using Groups with Sonatra SecurityBundle](groups.md)
-- [Using JMS SecurityExtraBundle with Sonatra SecurityBundle](jms.md)
-- [Using Doctrine ORM Filters](orm_filters.md)
-- [Using ACL Rules](acl_rules.md)
-- [Using ACL Manipulator](acl_manipulator.md)
-- [Using ACL Manager](acl_manager.md)
-- [Using Commands](commands.md)

@@ -13,34 +13,35 @@ namespace Sonatra\Bundle\SecurityBundle\DependencyInjection\Compiler;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use Symfony\Component\DependencyInjection\Reference;
 
 /**
- * Adds all services with the tags "sonatra_security.acl.object_filter_voter" as arguments
- * of the "sonatra_security.acl.object_filter_extension" service.
+ * Adds all services with the tags "sonatra_security.object_filter.voter" as arguments
+ * of the "sonatra_security.object_filter.extension" service.
  *
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-class AclObjectFilterPass implements CompilerPassInterface
+class ObjectFilterPass implements CompilerPassInterface
 {
     /**
      * {@inheritdoc}
      */
     public function process(ContainerBuilder $container)
     {
-        if (!$container->hasDefinition('sonatra_security.acl.object_filter_extension')) {
+        if (!$container->hasDefinition('sonatra_security.object_filter.extension')) {
             return;
         }
 
         $voters = array();
-        foreach ($container->findTaggedServiceIds('sonatra_security.acl.object_filter_voter') as $id => $attributes) {
+        foreach ($container->findTaggedServiceIds('sonatra_security.object_filter.voter') as $id => $attributes) {
             $priority = isset($attributes[0]['priority']) ? $attributes[0]['priority'] : 0;
-            $voters[$priority][] = $id;
+            $voters[$priority][] = new Reference($id);
         }
 
         // sort by priority and flatten
         krsort($voters);
         $voters = call_user_func_array('array_merge', $voters);
 
-        $container->getDefinition('sonatra_security.acl.object_filter_extension')->replaceArgument(0, $voters);
+        $container->getDefinition('sonatra_security.object_filter.extension')->replaceArgument(0, $voters);
     }
 }

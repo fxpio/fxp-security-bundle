@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="sonatra_security.object_filter.extension.class">Sonatra\Component\Security\ObjectFilter\ObjectFilterExtension</parameter>
+        <parameter key="sonatra_security.object_filter.class">Sonatra\Component\Security\ObjectFilter\ObjectFilter</parameter>
+    </parameters>
+
+    <services>
+        <!-- Object Filter -->
+        <service id="sonatra_security.object_filter"
+                 class="%sonatra_security.object_filter.class%">
+            <argument type="service" id="sonatra_security.object_filter.extension"/>
+            <argument type="service" id="sonatra_security.permission_manager"/>
+            <argument type="service" id="security.authorization_checker"/>
+            <argument type="service" id="event_dispatcher"/>
+        </service>
+
+        <!-- Object Filter Extension -->
+        <service id="sonatra_security.object_filter.extension"
+                 class="%sonatra_security.object_filter.extension.class%"
+                 public="false">
+            <argument type="collection"/>
+            <property name="container" type="service" id="service_container"/>
+        </service>
+
+        <!-- Object Filter Voter -->
+        <service id="sonatra_security.object_filter.voter.mixed"
+                 class="Sonatra\Component\Security\Acl\ObjectFilter\MixedValue"
+                 public="false">
+            <tag name="sonatra_security.object_filter.voter" priority="-255"/>
+        </service>
+    </services>
+</container>

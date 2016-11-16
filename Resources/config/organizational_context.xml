@@ -5,34 +5,34 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-
-        <parameter key="sonatra_security.organizational_context.default.class">Sonatra\Component\Security\Core\Organizational\OrganizationalContext</parameter>
-        <parameter key="security.access.organization_voter.class">Sonatra\Component\Security\Core\Authorization\Voter\OrganizationVoter</parameter>
-        <parameter key="security.acl.security_identity_retrieval_strategy.listener.organization.class">Sonatra\Component\Security\Listener\OrganizationStrategyIdentitySubscriber</parameter>
-
+        <parameter key="sonatra_security.organizational_context.default.class">Sonatra\Component\Security\Organizational\OrganizationalContext</parameter>
+        <parameter key="security.access.organization_voter.class">Sonatra\Component\Security\Authorization\Voter\OrganizationVoter</parameter>
+        <parameter key="sonatra_security.security_identity_retrieval_strategy.listener.organization.class">Sonatra\Component\Security\Listener\OrganizationStrategyIdentitySubscriber</parameter>
     </parameters>
 
     <services>
-
+        <!-- Default Organizational Context -->
         <service id="sonatra_security.organizational_context.default" class="%sonatra_security.organizational_context.default.class%">
             <argument type="service" id="security.token_storage"/>
         </service>
 
+        <!-- Organizational Context -->
         <service id="sonatra_security.organizational_context" alias="sonatra_security.organizational_context.default" />
 
-        <service id="security.access.organization_voter" class="%security.access.organization_voter.class%"
+        <!-- Organizational Security Voter -->
+        <service id="security.access.organization_voter"
+                 class="%security.access.organization_voter.class%"
                  public="false">
-            <argument type="service" id="security.acl.security_identity_retrieval_strategy"/>
             <tag name="security.voter" priority="245"/>
+            <argument type="service" id="sonatra_security.security_identity_retrieval_strategy"/>
         </service>
 
-        <service id="security.acl.security_identity_retrieval_strategy.listener.organization"
-                 class="%security.acl.security_identity_retrieval_strategy.listener.organization.class%">
+        <!-- Security Identity Strategy Organizational Listener -->
+        <service id="sonatra_security.security_identity_retrieval_strategy.listener.organization"
+                 class="%sonatra_security.security_identity_retrieval_strategy.listener.organization.class%">
+            <tag name="sonatra_security.event_subscriber"/>
             <argument type="service" id="security.role_hierarchy"/>
             <argument type="service" id="sonatra_security.organizational_context"/>
-            <tag name="sonatra_security.event_subscriber"/>
         </service>
-
     </services>
-
 </container>
