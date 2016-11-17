@@ -100,7 +100,7 @@ class SonatraSecurityExtension extends Extension
 
             // doctrine orm object filter listener
             if ($config['doctrine']['orm']['listeners']['object_filter']) {
-                $this->validate($container, 'doctrine.orm.listener.object_filter', 'doctrine.orm.entity_manager.class', 'doctrine/orm');
+                $this->validate($container, 'doctrine.orm.listeners.object_filter', 'doctrine.orm.entity_manager.class', 'doctrine/orm');
                 $loader->load('orm_listener_object_filter.xml');
             }
         }
@@ -159,7 +159,7 @@ class SonatraSecurityExtension extends Extension
 
             // doctrine orm role hierarchy listener
             if ($config['doctrine']['orm']['listeners']['role_hierarchy']) {
-                $this->validate($container, 'doctrine.orm.listener.role_hierarchy', 'doctrine.orm.entity_manager.class', 'doctrine/orm');
+                $this->validate($container, 'doctrine.orm.listeners.role_hierarchy', 'doctrine.orm.entity_manager.class', 'doctrine/orm');
                 $loader->load('orm_listener_role_hierarchy.xml');
             }
         }
