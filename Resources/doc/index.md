@@ -55,9 +55,9 @@ public function registerBundles()
 Add the `Sonatra\Component\Security\Model\UserInterface` into your group model:
 
 ```php
-// src/Acme/CoreBundle/Entity/User.php
+// src/AppBundle/Entity/User.php
 
-namespace Acme\CoreBundle\Entity;
+namespace AppBundle\Entity;
 
 use FOS\UserBundle\Model\User as BaseUser;
 use Sonatra\Component\Security\Model\UserInterface;
@@ -73,9 +73,9 @@ class User extends BaseUser implements UserInterface
 #### Create the role class
 
 ``` php
-// src/Acme/CoreBundle/Entity/Role.php
+// src/AppBundle/Entity/Role.php
 
-namespace Acme\CoreBundle\Entity;
+namespace AppBundle\Entity;
 
 use Sonatra\Component\Security\Model\Role as BaseRole;
 
@@ -93,14 +93,14 @@ class Role extends BaseRole
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
                   http://raw.github.com/doctrine/doctrine2/master/doctrine-mapping.xsd">
 
-    <entity name="Acme\CoreBundle\Entity\Role" table="core_role">
+    <entity name="AppBundle\Entity\Role" table="core_role">
         <id name="id" type="integer" column="id">
             <generator strategy="AUTO"/>
         </id>
 
-        <many-to-many field="parents" target-entity="Role" mappedBy="children" />
+        <many-to-many field="parents" target-entity="Role" mapped-by="children" />
 
-        <many-to-many field="children" target-entity="Role" inversedBy="parents">
+        <many-to-many field="children" target-entity="Role" inversed-by="parents">
             <join-table name="core_roles_children">
                 <join-columns>
                     <join-column name="role_id" referenced-column-name="id" />
@@ -122,7 +122,7 @@ Add the following configuration to your `config.yml`.
 ```yaml
 # app/config/config.yml
 sonatra_security:
-    user_class:                  Acme\CoreBundle\Entity\Role
+    role_class:                  AppBundle\Entity\Role
     object_filter:
         enabled:                 true # Enable the object filter (optional)
     role_hierarchy:
@@ -143,9 +143,9 @@ doctrine:
         entity_managers:
             default:
                 filters:
-                    sonatra_acl:
-                        class:     Sonatra\Component\Security\Doctrine\ORM\Filter\SharingFilter
-                        enabled:   true
+                    sonatra_sharing:
+                        class:   Sonatra\Component\Security\Doctrine\ORM\Filter\SharingFilter
+                        enabled: true
 ```
 
 ### Step 7: Configure and initialize the permissions
@@ -153,7 +153,7 @@ doctrine:
 #### Update your database schema
 
 ```bash
-$ php app/console doctrine:schema:update --force
+$ php bin/console doctrine:schema:update --force
 ```
 
 ### Next Steps
@@ -162,7 +162,7 @@ You can override the default configuration adding `sonatra_security` tree in `ap
 To get an overview off all the available Sonatra Security configuration options, execute the command:
 
 ```bash
-$ php app/console config:dump-reference SonatraSecurityBundle
+$ php bin/console config:dump-reference SonatraSecurityBundle
 ```
 
 Now that you have completed the basic installation and configuration of the

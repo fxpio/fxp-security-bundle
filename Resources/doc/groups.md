@@ -17,14 +17,14 @@ Follow the installation instructions in the [official documentation of Symfony]
 Add the `Sonatra\Component\Security\Model\GroupInterface` into your group model:
 
 ```php
-// src/Acme/CoreBundle/Entity/Group.php
+// src/AppBundle/Entity/Group.php
 
-namespace Acme\CoreBundle\Entity;
+namespace AppBundle\Entity;
 
 use FOS\UserBundle\Model\Group as BaseGroup;
 use Sonatra\Component\Security\Model\GroupInterface;
 
-class Group extends BaseRole implements GroupInterface
+class Group extends BaseGroup implements GroupInterface
 {
     //...
 }
@@ -44,5 +44,5 @@ sonatra_security:
 ### Update your database schema
 
 ```bash
-$ php app/console doctrine:schema:update --force
+$ php bin/console doctrine:schema:update --force
 ```
