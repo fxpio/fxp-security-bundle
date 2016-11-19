@@ -29,7 +29,7 @@
 
         <!-- Object Filter Voter -->
         <service id="sonatra_security.object_filter.voter.mixed"
-                 class="Sonatra\Component\Security\Acl\ObjectFilter\MixedValue"
+                 class="Sonatra\Component\Security\ObjectFilter\MixedValue"
                  public="false">
             <tag name="sonatra_security.object_filter.voter" priority="-255"/>
         </service>
