@@ -12,6 +12,7 @@
 namespace Sonatra\Bundle\SecurityBundle;
 
 use Sonatra\Bundle\SecurityBundle\DependencyInjection\Compiler\OrganizationalPass;
+use Sonatra\Component\Security\ReachableRoleEvents;
 use Symfony\Bundle\SecurityBundle\DependencyInjection\SecurityExtension;
 use Symfony\Component\DependencyInjection\Compiler\PassConfig;
 use Symfony\Component\EventDispatcher\DependencyInjection\RegisterListenersPass;
@@ -40,17 +41,25 @@ class SonatraSecurityBundle extends Bundle
             'sonatra_security.event_listener', 'sonatra_security.event_subscriber'),
             PassConfig::TYPE_BEFORE_REMOVING);
 
+        $this->addRegisterMappingsPass($container);
+    }
+
+    /**
+     * @param ContainerBuilder $container
+     */
+    private function addRegisterMappingsPass(ContainerBuilder $container)
+    {
         $ormCompilerClass = 'Doctrine\Bundle\DoctrineBundle\DependencyInjection\Compiler\DoctrineOrmMappingsPass';
 
         if (class_exists($ormCompilerClass)) {
-            $ref = new \ReflectionClass($this);
+            $ref = new \ReflectionClass(ReachableRoleEvents::class);
             $container->addCompilerPass(
                 DoctrineOrmMappingsPass::createXmlMappingDriver(
                     array(
-                        realpath(dirname($ref->getFileName()).'/Resources/config/doctrine/model') => 'Sonatra\Bundle\SecurityBundle\Model',
+                        realpath(dirname($ref->getFileName()).'/Resources/config/doctrine/model') => 'Sonatra\Component\Security\Model',
                     ),
-                    array('fos_user.model_manager_name'),
-                    'fos_user.backend_type_orm'
+                    array(),
+                    'sonatra_security.backend_type_orm'
                 )
             );
         }

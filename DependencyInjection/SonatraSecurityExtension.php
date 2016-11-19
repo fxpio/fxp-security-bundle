@@ -57,6 +57,10 @@ class SonatraSecurityExtension extends Extension
      */
     private function buildModel(ContainerBuilder $container, array $config)
     {
+        if ('custom' !== $config['db_driver']) {
+            $container->setParameter($this->getAlias().'.backend_type_'.$config['db_driver'], true);
+        }
+
         $container->setParameter('sonatra_security.role_class', $config['role_class']);
     }
 

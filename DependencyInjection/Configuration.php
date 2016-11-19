@@ -29,9 +29,19 @@ class Configuration implements ConfigurationInterface
     {
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('sonatra_security');
+        $supportedDrivers = array('orm', 'custom');
 
         $rootNode
             ->children()
+                ->scalarNode('db_driver')
+                    ->validate()
+                        ->ifNotInArray($supportedDrivers)
+                        ->thenInvalid('The driver %s is not supported. Please choose one of '.json_encode($supportedDrivers))
+                    ->end()
+                    ->cannotBeOverwritten()
+                    ->cannotBeEmpty()
+                    ->defaultValue('orm')
+                ->end()
                 ->scalarNode('role_class')->defaultValue('Sonatra\Component\Security\Model\RoleInterface')->end()
             ->end()
             ->append($this->getHostRoleNode())

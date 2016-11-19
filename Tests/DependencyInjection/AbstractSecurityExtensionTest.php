@@ -18,6 +18,7 @@ use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Bundle\SecurityBundle\DependencyInjection\SecurityExtension;
 use Symfony\Bundle\SecurityBundle\SecurityBundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 
 /**
@@ -50,6 +51,9 @@ abstract class AbstractSecurityExtensionTest extends \PHPUnit_Framework_TestCase
             'kernel.root_dir' => sys_get_temp_dir().'/sonatra_security_bundle',
             'kernel.charset' => 'UTF-8',
         )));
+
+        $container->setParameter('doctrine.default_entity_manager', 'test');
+        $container->setDefinition('doctrine.orm.test_metadata_driver', new Definition(\stdClass::class));
 
         $sfExt = new FrameworkExtension();
         $sfSecurityExt = new SecurityExtension();
