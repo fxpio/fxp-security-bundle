@@ -13,6 +13,7 @@ namespace Sonatra\Bundle\SecurityBundle\Tests\DependencyInjection;
 
 use Doctrine\Bundle\DoctrineBundle\Registry;
 use Doctrine\ORM\EntityManager;
+use Sonatra\Component\Security\Authorization\Voter\ExpressionVoter;
 use Sonatra\Component\Security\Authorization\Voter\RoleSecurityIdentityVoter;
 use Sonatra\Component\Security\Role\OrganizationalRoleHierarchy;
 
@@ -184,6 +185,20 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
         $this->assertTrue($container->hasDefinition('sonatra_security.organizational_context.default'));
         $this->assertTrue($container->hasDefinition('security.access.organization_voter'));
         $this->assertTrue($container->hasDefinition('sonatra_security.security_identity_retrieval_strategy.listener.organization'));
+    }
+
+    public function testExpressionLanguage()
+    {
+        $container = $this->createContainer(array(array(
+            'expression' => array(
+                'override_voter' => true,
+            ),
+        )));
+
+        $this->assertTrue($container->hasDefinition('security.access.expression_voter'));
+
+        $def = $container->getDefinition('security.access.expression_voter');
+        $this->assertSame(ExpressionVoter::class, $def->getClass());
     }
 
     public function testOrmSharing()

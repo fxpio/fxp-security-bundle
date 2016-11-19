@@ -49,6 +49,7 @@ class Configuration implements ConfigurationInterface
             ->append($this->getSecurityVoterNode())
             ->append($this->getObjectFilterNode())
             ->append($this->getOrganizationalContextNode())
+            ->append($this->getExpressionLanguageNode())
             ->append($this->getDoctrineNode())
         ;
 
@@ -148,6 +149,26 @@ class Configuration implements ConfigurationInterface
             ->canBeEnabled()
             ->children()
                 ->scalarNode('service_id')->defaultNull()->end()
+            ->end()
+        ;
+
+        return $node;
+    }
+
+    /**
+     * Get expression language node.
+     *
+     * @return NodeDefinition
+     */
+    private function getExpressionLanguageNode()
+    {
+        $treeBuilder = new TreeBuilder();
+        $node = $treeBuilder->root('expression');
+
+        $node
+            ->addDefaultsIfNotSet()
+            ->children()
+                ->scalarNode('override_voter')->defaultFalse()->end()
             ->end()
         ;
 

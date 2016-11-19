@@ -46,6 +46,7 @@ class SonatraSecurityExtension extends Extension
         $this->buildRoleHierarchy($container, $loader, $config);
         $this->buildSecurityVoter($loader, $config);
         $this->buildOrganizationalContext($container, $loader, $config);
+        $this->buildExpressionLanguage($loader, $config);
         $this->buildSharing($container, $loader, $config);
     }
 
@@ -183,6 +184,19 @@ class SonatraSecurityExtension extends Extension
             $loader->load('organizational_context.xml');
             $id = 'sonatra_security.organizational_context.service_id';
             $container->setParameter($id, $config['organizational_context']['service_id']);
+        }
+    }
+
+    /**
+     * Build the expression language.
+     *
+     * @param LoaderInterface $loader The config loader
+     * @param array           $config The config
+     */
+    private function buildExpressionLanguage(LoaderInterface $loader, array $config)
+    {
+        if ($config['expression']['override_voter']) {
+            $loader->load('expression_voter.xml');
         }
     }
 
