@@ -101,7 +101,7 @@ class Role extends BaseRole
         <many-to-many field="parents" target-entity="Role" mapped-by="children" />
 
         <many-to-many field="children" target-entity="Role" inversed-by="parents">
-            <join-table name="core_roles_children">
+            <join-table name="core_role_children">
                 <join-columns>
                     <join-column name="role_id" referenced-column-name="id" />
                 </join-columns>
@@ -171,3 +171,4 @@ Sonatra SecurityBundle, you are ready to learn more about using this bundle.
 The following documents are available:
 
 - [Using Groups with Sonatra SecurityBundle](groups.md)
+- [Using Organizations](organizations.md)
