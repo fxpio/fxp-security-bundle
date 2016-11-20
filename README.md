@@ -14,6 +14,9 @@ Features include:
 
 - All features of [Sonatra Security](https://github.com/sonatra/sonatra-security)
 - Configurator of all Sonatra Security features
+- Override the security access control config to allow to use custom expression language
+  functions defined with the tag `security.expression_language_provider` in `allow_if` option
+  (expressions are compiled on cache compilation)
 - Security factory for host role
 - Compiler pass for object filter voters
 

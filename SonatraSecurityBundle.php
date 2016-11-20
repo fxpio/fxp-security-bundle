@@ -11,9 +11,12 @@
 
 namespace Sonatra\Bundle\SecurityBundle;
 
+use Sonatra\Bundle\SecurityBundle\DependencyInjection\Compiler\AccessControlPass;
 use Sonatra\Bundle\SecurityBundle\DependencyInjection\Compiler\OrganizationalPass;
+use Sonatra\Bundle\SecurityBundle\DependencyInjection\SecurityExtension;
+use Sonatra\Component\Security\Exception\LogicException;
 use Sonatra\Component\Security\ReachableRoleEvents;
-use Symfony\Bundle\SecurityBundle\DependencyInjection\SecurityExtension;
+use Symfony\Bundle\SecurityBundle\DependencyInjection\SecurityExtension as BaseSecurityExtension;
 use Symfony\Component\DependencyInjection\Compiler\PassConfig;
 use Symfony\Component\EventDispatcher\DependencyInjection\RegisterListenersPass;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
@@ -31,9 +34,7 @@ class SonatraSecurityBundle extends Bundle
     {
         parent::build($container);
 
-        /* @var SecurityExtension $extension */
-        $extension = $container->getExtension('security');
-        $extension->addSecurityListenerFactory(new HostRoleFactory());
+        $this->registerSecurityExtension($container);
 
         $container->addCompilerPass(new ObjectFilterPass());
         $container->addCompilerPass(new OrganizationalPass());
@@ -41,13 +42,34 @@ class SonatraSecurityBundle extends Bundle
             'sonatra_security.event_listener', 'sonatra_security.event_subscriber'),
             PassConfig::TYPE_BEFORE_REMOVING);
 
-        $this->addRegisterMappingsPass($container);
+        $this->registerMappingsPass($container);
     }
 
     /**
-     * @param ContainerBuilder $container
+     * Register and decorate the security extension, and inject the host role listener factory.
+     *
+     * @param ContainerBuilder $container The container
      */
-    private function addRegisterMappingsPass(ContainerBuilder $container)
+    private function registerSecurityExtension(ContainerBuilder $container)
+    {
+        if (!$container->hasExtension('security')) {
+            throw new LogicException('The SonatraSecurityBundle must be registered after the SecurityBundle in your App Kernel');
+        }
+
+        /* @var BaseSecurityExtension $extension */
+        $extension = $container->getExtension('security');
+        $extension->addSecurityListenerFactory(new HostRoleFactory());
+
+        $container->registerExtension(new SecurityExtension($extension));
+        $container->addCompilerPass(new AccessControlPass());
+    }
+
+    /**
+     * Register the doctrine mapping.
+     *
+     * @param ContainerBuilder $container The container
+     */
+    private function registerMappingsPass(ContainerBuilder $container)
     {
         $ormCompilerClass = 'Doctrine\Bundle\DoctrineBundle\DependencyInjection\Compiler\DoctrineOrmMappingsPass';
 
