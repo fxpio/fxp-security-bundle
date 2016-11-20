@@ -173,6 +173,7 @@ class Configuration implements ConfigurationInterface
                 ->addDefaultsIfNotSet()
                 ->children()
                     ->scalarNode('is_basic_auth')->defaultFalse()->end()
+                    ->scalarNode('has_org_role')->defaultFalse()->end()
                 ->end()
                 ->end()
             ->end()

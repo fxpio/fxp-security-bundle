@@ -194,6 +194,7 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
                 'override_voter' => true,
                 'functions' => array(
                     'is_basic_auth' => true,
+                    'has_org_role' => true,
                 ),
             ),
         )));
@@ -204,6 +205,7 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
         $this->assertSame(ExpressionVoter::class, $def->getClass());
 
         $this->assertTrue($container->hasDefinition('sonatra_security.expression.functions.is_basic_auth'));
+        $this->assertTrue($container->hasDefinition('sonatra_security.expression.functions.has_org_role'));
     }
 
     public function testOrmSharing()
