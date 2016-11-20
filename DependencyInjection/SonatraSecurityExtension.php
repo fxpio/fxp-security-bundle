@@ -182,6 +182,7 @@ class SonatraSecurityExtension extends Extension
     {
         if ($config['organizational_context']['enabled']) {
             $loader->load('organizational_context.xml');
+            $loader->load('organizational_role.xml');
             $id = 'sonatra_security.organizational_context.service_id';
             $container->setParameter($id, $config['organizational_context']['service_id']);
         }
