@@ -192,6 +192,9 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
         $container = $this->createContainer(array(array(
             'expression' => array(
                 'override_voter' => true,
+                'functions' => array(
+                    'is_basic_auth' => true,
+                ),
             ),
         )));
 
@@ -199,6 +202,8 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
 
         $def = $container->getDefinition('security.access.expression_voter');
         $this->assertSame(ExpressionVoter::class, $def->getClass());
+
+        $this->assertTrue($container->hasDefinition('sonatra_security.expression.functions.is_basic_auth'));
     }
 
     public function testOrmSharing()

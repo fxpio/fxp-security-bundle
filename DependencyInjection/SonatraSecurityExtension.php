@@ -198,6 +198,10 @@ class SonatraSecurityExtension extends Extension
         if ($config['expression']['override_voter']) {
             $loader->load('expression_voter.xml');
         }
+
+        if ($config['expression']['functions']['is_basic_auth']) {
+            $loader->load('expression_function_is_basic_auth.xml');
+        }
     }
 
     /**

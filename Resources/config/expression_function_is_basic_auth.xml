@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <!-- Is basic authentication expression language function -->
+        <service id="sonatra_security.expression.functions.is_basic_auth" class="Sonatra\Component\Security\Authorization\Expression\IsBasicAuthProvider" public="false">
+            <tag name="security.expression_language_provider" />
+        </service>
+    </services>
+</container>

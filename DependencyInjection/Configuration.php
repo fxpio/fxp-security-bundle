@@ -169,6 +169,12 @@ class Configuration implements ConfigurationInterface
             ->addDefaultsIfNotSet()
             ->children()
                 ->scalarNode('override_voter')->defaultFalse()->end()
+                ->arrayNode('functions')
+                ->addDefaultsIfNotSet()
+                ->children()
+                    ->scalarNode('is_basic_auth')->defaultFalse()->end()
+                ->end()
+                ->end()
             ->end()
         ;
 
