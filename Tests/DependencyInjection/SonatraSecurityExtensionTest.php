@@ -190,6 +190,9 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
     public function testExpressionLanguage()
     {
         $container = $this->createContainer(array(array(
+            'organizational_context' => array(
+                'enabled' => true,
+            ),
             'expression' => array(
                 'override_voter' => true,
                 'functions' => array(
@@ -206,6 +209,22 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
 
         $this->assertTrue($container->hasDefinition('sonatra_security.expression.functions.is_basic_auth'));
         $this->assertTrue($container->hasDefinition('sonatra_security.expression.functions.has_org_role'));
+    }
+
+    /**
+     * @expectedException \Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException
+     * @expectedExceptionMessage The service "sonatra_security.expression.functions.has_org_role" has a dependency on a non-existent service "sonatra_security.organizational_role"
+     */
+    public function testExpressionLanguageWitMissingDependencies()
+    {
+        $this->createContainer(array(array(
+            'expression' => array(
+                'override_voter' => true,
+                'functions' => array(
+                    'has_org_role' => true,
+                ),
+            ),
+        )));
     }
 
     public function testOrmSharing()

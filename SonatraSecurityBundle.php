@@ -12,6 +12,7 @@
 namespace Sonatra\Bundle\SecurityBundle;
 
 use Sonatra\Bundle\SecurityBundle\DependencyInjection\Compiler\AccessControlPass;
+use Sonatra\Bundle\SecurityBundle\DependencyInjection\Compiler\ExpressionVoterVariablePass;
 use Sonatra\Bundle\SecurityBundle\DependencyInjection\Compiler\OrganizationalPass;
 use Sonatra\Bundle\SecurityBundle\DependencyInjection\SecurityExtension;
 use Sonatra\Component\Security\Exception\LogicException;
@@ -36,6 +37,7 @@ class SonatraSecurityBundle extends Bundle
 
         $this->registerSecurityExtension($container);
 
+        $container->addCompilerPass(new ExpressionVoterVariablePass());
         $container->addCompilerPass(new ObjectFilterPass());
         $container->addCompilerPass(new OrganizationalPass());
         $container->addCompilerPass(new RegisterListenersPass('event_dispatcher',

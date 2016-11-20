@@ -17,6 +17,8 @@ Features include:
 - Override the security access control config to allow to use custom expression language
   functions defined with the tag `security.expression_language_provider` in `allow_if` option
   (expressions are compiled on cache compilation)
+- Compiler pass to inject service dependencies of custom expression function providers in
+  variables of expression voter
 - Security factory for host role
 - Compiler pass for object filter voters
 

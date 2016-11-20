@@ -10,8 +10,7 @@
             <argument type="service" id="security.expression_language" />
             <argument type="service" id="security.authentication.trust_resolver" />
             <argument type="service" id="sonatra_security.security_identity_retrieval_strategy" on-invalid="ignore" />
-            <argument type="service" id="sonatra_security.organizational_context" on-invalid="ignore" />
-            <argument type="service" id="sonatra_security.organizational_role" on-invalid="ignore" />
+            <argument/>
             <tag name="security.voter" priority="245" />
         </service>
     </services>
