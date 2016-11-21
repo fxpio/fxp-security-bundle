@@ -8,6 +8,7 @@
         <parameter key="sonatra_security.permission_manager.class">Sonatra\Component\Security\Permission\PermissionManager</parameter>
         <parameter key="sonatra_security.listener.permission.disable.class">Sonatra\Component\Security\Listener\DisablePermissionListener</parameter>
         <parameter key="sonatra_security.listener.permission_exception.class">Sonatra\Component\Security\Listener\PermissionExceptionListener</parameter>
+        <parameter key="sonatra_security.access.permission_voter.class">Sonatra\Component\Security\Authorization\Voter\PermissionVoter</parameter>
     </parameters>
 
     <services>
@@ -28,6 +29,15 @@
         <service id="sonatra_security.listener.permission_exception"
                  class="%sonatra_security.listener.permission_exception.class%">
             <tag name="kernel.event_listener" event="kernel.exception" method="onKernelException"/>
+        </service>
+
+        <!-- Voter -->
+        <service id="sonatra_security.access.permission_voter"
+                 class="%sonatra_security.access.permission_voter.class%"
+                 public="false">
+            <argument type="service" id="sonatra_security.permission_manager"/>
+            <argument type="service" id="sonatra_security.security_identity_retrieval_strategy"/>
+            <tag name="security.voter" priority="260"/>
         </service>
     </services>
 </container>
