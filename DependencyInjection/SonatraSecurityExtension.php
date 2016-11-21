@@ -200,12 +200,10 @@ class SonatraSecurityExtension extends Extension
             $loader->load('expression_voter.xml');
         }
 
-        if ($config['expression']['functions']['is_basic_auth']) {
-            $loader->load('expression_function_is_basic_auth.xml');
-        }
-
-        if ($config['expression']['functions']['has_org_role']) {
-            $loader->load('expression_function_has_org_role.xml');
+        foreach ($config['expression']['functions'] as $function => $enabled) {
+            if ($enabled) {
+                $loader->load(sprintf('expression_function_%s.xml', $function));
+            }
         }
     }
 
