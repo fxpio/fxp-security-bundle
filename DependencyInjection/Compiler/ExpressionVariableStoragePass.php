@@ -11,7 +11,6 @@
 
 namespace Sonatra\Bundle\SecurityBundle\DependencyInjection\Compiler;
 
-use Sonatra\Component\Security\Authorization\Voter\ExpressionVoter;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
@@ -20,19 +19,19 @@ use Symfony\Component\DependencyInjection\Reference;
 /**
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-class ExpressionVoterVariablePass implements CompilerPassInterface
+class ExpressionVariableStoragePass implements CompilerPassInterface
 {
     /**
      * {@inheritdoc}
      */
     public function process(ContainerBuilder $container)
     {
-        if (!$this->isValid($container)) {
+        if (!$container->hasDefinition('sonatra_security.expression.variable_storage')) {
             return;
         }
 
         $variables = array();
-        foreach ($container->findTaggedServiceIds('sonatra_security.expression_voter.variables') as $id => $tags) {
+        foreach ($container->findTaggedServiceIds('sonatra_security.expression.variables') as $id => $tags) {
             foreach ($tags as $attributes) {
                 foreach ($attributes as $name => $value) {
                     $value = $this->buildValue($container, $id, $value);
@@ -44,27 +43,7 @@ class ExpressionVoterVariablePass implements CompilerPassInterface
             }
         }
 
-        $container->getDefinition('security.access.expression_voter.variable_storage')->replaceArgument(0, $variables);
-    }
-
-    /**
-     * Check if the pass must be used.
-     *
-     * @param ContainerBuilder $container The container
-     *
-     * @return bool
-     */
-    private function isValid(ContainerBuilder $container)
-    {
-        if (!$container->hasDefinition('security.access.expression_voter')
-                || !$container->hasDefinition('security.access.expression_voter.variable_storage')) {
-            return false;
-        }
-
-        $def = $container->getDefinition('security.access.expression_voter');
-        $ref = new \ReflectionClass($def->getClass());
-
-        return $ref->getName() === ExpressionVoter::class || $ref->isSubclassOf(ExpressionVoter::class);
+        $container->getDefinition('sonatra_security.expression.variable_storage')->replaceArgument(0, $variables);
     }
 
     /**

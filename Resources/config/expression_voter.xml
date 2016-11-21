@@ -9,15 +9,8 @@
         <service id="security.access.expression_voter" class="Sonatra\Component\Security\Authorization\Voter\ExpressionVoter" public="false">
             <argument type="service" id="event_dispatcher" />
             <argument type="service" id="security.expression_language" />
-            <argument type="service" id="security.authentication.trust_resolver" />
-            <argument type="service" id="sonatra_security.security_identity_retrieval_strategy" on-invalid="ignore" />
+            <tag name="sonatra_security.expression.variables" auth_checker="@security.authentication.trust_resolver" />
             <tag name="security.voter" priority="245" />
-        </service>
-
-        <!-- Variables Storage of Security Access Expression Voter -->
-        <service id="security.access.expression_voter.variable_storage" class="Sonatra\Component\Security\Authorization\Voter\ExpressionVoterVariableStorage" public="true">
-            <argument/>
-            <tag name="sonatra_security.event_subscriber"/>
         </service>
     </services>
 </container>

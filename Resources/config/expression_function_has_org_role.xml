@@ -8,7 +8,7 @@
         <!-- Has organization role expression language function -->
         <service id="sonatra_security.expression.functions.has_org_role" class="Sonatra\Component\Security\Authorization\Expression\HasOrgRoleProvider" public="false">
             <tag name="security.expression_language_provider" />
-            <tag name="sonatra_security.expression_voter.variables" organizational_role="@sonatra_security.organizational_role" />
+            <tag name="sonatra_security.expression.variables" organizational_role="@sonatra_security.organizational_role" />
         </service>
     </services>
 </container>

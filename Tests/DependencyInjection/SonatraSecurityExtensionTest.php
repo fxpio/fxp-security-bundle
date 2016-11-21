@@ -17,6 +17,7 @@ use Sonatra\Component\Security\Authorization\Voter\ExpressionVoter;
 use Sonatra\Component\Security\Authorization\Voter\RoleSecurityIdentityVoter;
 use Sonatra\Component\Security\Role\OrganizationalRoleHierarchy;
 use Symfony\Component\DependencyInjection\Definition;
+use Symfony\Component\Security\Core\Authentication\AuthenticationTrustResolver;
 use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
 
 /**
@@ -205,8 +206,10 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
             ),
         )), array(), array(
             'security.authorization_checker' => new Definition(AuthorizationChecker::class),
+            'security.authentication.trust_resolver' => new Definition(AuthenticationTrustResolver::class),
         ));
 
+        $this->assertTrue($container->hasDefinition('sonatra_security.expression.variable_storage'));
         $this->assertTrue($container->hasDefinition('security.access.expression_voter'));
 
         $def = $container->getDefinition('security.access.expression_voter');
@@ -230,7 +233,9 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
                     'has_org_role' => true,
                 ),
             ),
-        )));
+        )), array(), array(
+            'security.authentication.trust_resolver' => new Definition(AuthenticationTrustResolver::class),
+        ));
     }
 
     /**
@@ -246,7 +251,9 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
                     'is_granted' => true,
                 ),
             ),
-        )));
+        )), array(), array(
+            'security.authentication.trust_resolver' => new Definition(AuthenticationTrustResolver::class),
+        ));
     }
 
     public function testOrmSharing()

@@ -196,6 +196,8 @@ class SonatraSecurityExtension extends Extension
      */
     private function buildExpressionLanguage(LoaderInterface $loader, array $config)
     {
+        $loader->load('expression_variable_storage.xml');
+
         if ($config['expression']['override_voter']) {
             $loader->load('expression_voter.xml');
         }

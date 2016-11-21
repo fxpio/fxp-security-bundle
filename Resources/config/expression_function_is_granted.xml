@@ -8,7 +8,7 @@
         <!-- Is granted expression language function -->
         <service id="sonatra_security.expression.functions.is_granted" class="Sonatra\Component\Security\Authorization\Expression\IsGrantedProvider" public="false">
             <tag name="security.expression_language_provider" />
-            <tag name="sonatra_security.expression_voter.variables" auth_checker="@security.authorization_checker" />
+            <tag name="sonatra_security.expression.variables" auth_checker="@security.authorization_checker" />
         </service>
     </services>
 </container>
