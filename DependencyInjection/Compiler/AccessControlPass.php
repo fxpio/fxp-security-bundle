@@ -27,7 +27,7 @@ class AccessControlPass implements CompilerPassInterface
      * @var string[]
      */
     private static $availableExpressionNames = array(
-        'token', 'user', 'object', 'roles', 'request', 'trust_resolver', 'organizational_context',
+        'token', 'user', 'object', 'roles', 'request', 'trust_resolver',
     );
 
     /**
