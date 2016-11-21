@@ -16,6 +16,8 @@ use Doctrine\ORM\EntityManager;
 use Sonatra\Component\Security\Authorization\Voter\ExpressionVoter;
 use Sonatra\Component\Security\Authorization\Voter\RoleSecurityIdentityVoter;
 use Sonatra\Component\Security\Role\OrganizationalRoleHierarchy;
+use Symfony\Component\DependencyInjection\Definition;
+use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
 
 /**
  * Security extension tests.
@@ -198,9 +200,12 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
                 'functions' => array(
                     'is_basic_auth' => true,
                     'has_org_role' => true,
+                    'is_granted' => true,
                 ),
             ),
-        )));
+        )), array(), array(
+            'security.authorization_checker' => new Definition(AuthorizationChecker::class),
+        ));
 
         $this->assertTrue($container->hasDefinition('security.access.expression_voter'));
 
@@ -209,6 +214,7 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
 
         $this->assertTrue($container->hasDefinition('sonatra_security.expression.functions.is_basic_auth'));
         $this->assertTrue($container->hasDefinition('sonatra_security.expression.functions.has_org_role'));
+        $this->assertTrue($container->hasDefinition('sonatra_security.expression.functions.is_granted'));
     }
 
     /**
@@ -222,6 +228,22 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
                 'override_voter' => true,
                 'functions' => array(
                     'has_org_role' => true,
+                ),
+            ),
+        )));
+    }
+
+    /**
+     * @expectedException \Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException
+     * @expectedExceptionMessage The service "sonatra_security.expression.functions.is_granted" has a dependency on a non-existent service "security.authorization_checker"
+     */
+    public function testExpressionLanguageWitMissingDependenciesForIsGranted()
+    {
+        $this->createContainer(array(array(
+            'expression' => array(
+                'override_voter' => true,
+                'functions' => array(
+                    'is_granted' => true,
                 ),
             ),
         )));

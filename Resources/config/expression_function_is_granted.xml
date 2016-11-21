@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <!-- Is granted expression language function -->
+        <service id="sonatra_security.expression.functions.is_granted" class="Sonatra\Component\Security\Authorization\Expression\IsGrantedProvider" public="false">
+            <tag name="security.expression_language_provider" />
+            <tag name="sonatra_security.expression_voter.variables" auth_checker="@security.authorization_checker" />
+        </service>
+    </services>
+</container>

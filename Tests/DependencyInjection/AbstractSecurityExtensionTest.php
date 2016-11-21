@@ -33,10 +33,11 @@ abstract class AbstractSecurityExtensionTest extends \PHPUnit_Framework_TestCase
      *
      * @param array $configs    The configs
      * @param array $parameters The container parameters
+     * @param array $services   The service definitions
      *
      * @return ContainerBuilder
      */
-    protected function createContainer(array $configs = array(), array $parameters = array())
+    protected function createContainer(array $configs = array(), array $parameters = array(), array $services = array())
     {
         $container = new ContainerBuilder(new ParameterBag(array(
             'kernel.bundles' => array(
@@ -65,6 +66,10 @@ abstract class AbstractSecurityExtensionTest extends \PHPUnit_Framework_TestCase
 
         foreach ($parameters as $name => $value) {
             $container->setParameter($name, $value);
+        }
+
+        foreach ($services as $id => $definition) {
+            $container->setDefinition($id, $definition);
         }
 
         $sfExt->load(array(array('form' => true)), $container);

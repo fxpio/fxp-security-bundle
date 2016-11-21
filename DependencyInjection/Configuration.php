@@ -174,6 +174,7 @@ class Configuration implements ConfigurationInterface
                 ->children()
                     ->scalarNode('is_basic_auth')->defaultFalse()->end()
                     ->scalarNode('has_org_role')->defaultFalse()->end()
+                    ->scalarNode('is_granted')->defaultFalse()->end()
                 ->end()
                 ->end()
             ->end()
