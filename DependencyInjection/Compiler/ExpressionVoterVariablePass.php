@@ -44,7 +44,7 @@ class ExpressionVoterVariablePass implements CompilerPassInterface
             }
         }
 
-        $container->getDefinition('security.access.expression_voter')->replaceArgument(3, $variables);
+        $container->getDefinition('security.access.expression_voter.variable_storage')->replaceArgument(0, $variables);
     }
 
     /**
@@ -56,7 +56,8 @@ class ExpressionVoterVariablePass implements CompilerPassInterface
      */
     private function isValid(ContainerBuilder $container)
     {
-        if (!$container->hasDefinition('security.access.expression_voter')) {
+        if (!$container->hasDefinition('security.access.expression_voter')
+                || !$container->hasDefinition('security.access.expression_voter.variable_storage')) {
             return false;
         }
 
