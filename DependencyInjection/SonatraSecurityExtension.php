@@ -47,6 +47,7 @@ class SonatraSecurityExtension extends Extension
         $this->buildSecurityVoter($loader, $config);
         $this->buildOrganizationalContext($container, $loader, $config);
         $this->buildExpressionLanguage($loader, $config);
+        $this->buildAnnotation($container, $loader, $config);
         $this->buildSharing($container, $loader, $config);
     }
 
@@ -206,6 +207,26 @@ class SonatraSecurityExtension extends Extension
             if ($enabled) {
                 $loader->load(sprintf('expression_function_%s.xml', $function));
             }
+        }
+    }
+
+    /**
+     * Build the annotation.
+     *
+     * @param ContainerBuilder $container The container
+     * @param LoaderInterface  $loader    The config loader
+     * @param array            $config    The config
+     */
+    private function buildAnnotation(ContainerBuilder $container, LoaderInterface $loader,
+                                     array $config)
+    {
+        if ($config['annotations']['security']) {
+            $this->validate($container, 'annotations.security', 'sensio_framework_extra.view.guesser.class', 'sensio/framework-extra-bundle');
+            $loader->load('annotation_security.xml');
+
+            $this->addClassesToCompile(array(
+                'Sonatra\\Bundle\\SecurityBundle\\Listener\\SecurityAnnotationSubscriber',
+            ));
         }
     }
 

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="sonatra_security.subscriber.security_annotation.class">Sonatra\Bundle\SecurityBundle\Listener\SecurityAnnotationSubscriber</parameter>
+    </parameters>
+
+    <services>
+        <!-- Security Annotation Listener -->
+        <service id="sonatra_security.subscriber.security_annotation"
+                 class="%sonatra_security.subscriber.security_annotation.class%">
+            <tag name="kernel.event_subscriber" />
+            <argument type="service" id="event_dispatcher" />
+            <argument type="service" id="security.token_storage" />
+            <argument type="service" id="security.expression_language" />
+        </service>
+    </services>
+</container>

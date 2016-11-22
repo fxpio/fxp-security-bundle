@@ -19,6 +19,7 @@ Features include:
   (expressions are compiled on cache compilation)
 - Compiler pass to inject service dependencies of custom expression function providers in
   variables of expression voter
+- `@Security` annotation compatible with custom expression functions and variables
 - Security factory for host role
 - Compiler pass for object filter voters
 

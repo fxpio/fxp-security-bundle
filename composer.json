@@ -18,6 +18,7 @@
         "sonatra/security": "~1.0@dev"
     },
     "require-dev": {
+        "sensio/framework-extra-bundle": "~3.0",
         "friendsofsymfony/user-bundle": "~2.0@dev",
         "doctrine/doctrine-bundle": "~1.6",
         "doctrine/orm": "~2.5"

@@ -13,6 +13,7 @@ namespace Sonatra\Bundle\SecurityBundle\Tests\DependencyInjection;
 
 use Doctrine\Bundle\DoctrineBundle\Registry;
 use Doctrine\ORM\EntityManager;
+use Sensio\Bundle\FrameworkExtraBundle\Templating\TemplateGuesser;
 use Sonatra\Component\Security\Authorization\Voter\ExpressionVoter;
 use Sonatra\Component\Security\Authorization\Voter\RoleSecurityIdentityVoter;
 use Sonatra\Component\Security\Role\OrganizationalRoleHierarchy;
@@ -254,6 +255,32 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
         )), array(), array(
             'security.authentication.trust_resolver' => new Definition(AuthenticationTrustResolver::class),
         ));
+    }
+
+    public function testAnnotation()
+    {
+        $container = $this->createContainer(array(array(
+            'annotations' => array(
+                'security' => true,
+            ),
+        )), array(
+            'sensio_framework_extra.view.guesser.class' => TemplateGuesser::class,
+        ));
+
+        $this->assertTrue($container->hasDefinition('sonatra_security.subscriber.security_annotation'));
+    }
+
+    /**
+     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
+     * @expectedExceptionMessage The "sonatra_security.annotations.security" config require the "sensio/framework-extra-bundle" package
+     */
+    public function testAnnotationWitMissingDependencies()
+    {
+        $this->createContainer(array(array(
+            'annotations' => array(
+                'security' => true,
+            ),
+        )));
     }
 
     public function testOrmSharing()

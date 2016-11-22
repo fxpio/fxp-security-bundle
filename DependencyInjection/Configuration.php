@@ -50,6 +50,7 @@ class Configuration implements ConfigurationInterface
             ->append($this->getObjectFilterNode())
             ->append($this->getOrganizationalContextNode())
             ->append($this->getExpressionLanguageNode())
+            ->append($this->getAnnotationNode())
             ->append($this->getDoctrineNode())
         ;
 
@@ -177,6 +178,26 @@ class Configuration implements ConfigurationInterface
                     ->scalarNode('is_granted')->defaultFalse()->end()
                 ->end()
                 ->end()
+            ->end()
+        ;
+
+        return $node;
+    }
+
+    /**
+     * Get annotation node.
+     *
+     * @return NodeDefinition
+     */
+    private function getAnnotationNode()
+    {
+        $treeBuilder = new TreeBuilder();
+        $node = $treeBuilder->root('annotations');
+
+        $node
+            ->addDefaultsIfNotSet()
+            ->children()
+                ->scalarNode('security')->defaultFalse()->end()
             ->end()
         ;
 
