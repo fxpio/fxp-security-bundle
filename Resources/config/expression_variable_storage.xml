@@ -10,6 +10,10 @@
             <argument/>
             <argument type="service" id="sonatra_security.security_identity_retrieval_strategy" on-invalid="ignore" />
             <tag name="sonatra_security.event_subscriber"/>
+            <call method="add">
+                <argument>trust_resolver</argument>
+                <argument type="service" id="security.authentication.trust_resolver"/>
+            </call>
         </service>
     </services>
 </container>
