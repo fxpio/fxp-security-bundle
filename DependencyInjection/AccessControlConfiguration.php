@@ -11,6 +11,7 @@
 
 namespace Sonatra\Bundle\SecurityBundle\DependencyInjection;
 
+use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\NodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
@@ -47,6 +48,7 @@ class AccessControlConfiguration implements ConfigurationInterface
     private function getAccessControlNode()
     {
         $treeBuilder = new TreeBuilder();
+        /* @var ArrayNodeDefinition $node */
         $node = $treeBuilder->root('access_control');
 
         $node
