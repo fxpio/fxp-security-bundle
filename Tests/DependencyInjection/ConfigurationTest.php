@@ -12,6 +12,7 @@
 namespace Sonatra\Bundle\SecurityBundle\Tests\DependencyInjection;
 
 use Sonatra\Bundle\SecurityBundle\DependencyInjection\Configuration;
+use Sonatra\Component\Security\SharingTypes;
 use Symfony\Component\Config\Definition\Processor;
 
 /**
@@ -28,5 +29,23 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
         $processor = new Processor();
         $configuration = new Configuration(array(), array());
         $processor->processConfiguration($configuration, array($config));
+    }
+
+    public function testPermissionConfigNormalization()
+    {
+        $config = array(
+            'permissions' => array(
+                \stdClass::class => SharingTypes::TYPE_PRIVATE,
+            ),
+        );
+
+        $processor = new Processor();
+        $configuration = new Configuration(array(), array());
+        $res = $processor->processConfiguration($configuration, array($config));
+
+        $this->assertArrayHasKey('permissions', $res);
+        $this->assertArrayHasKey(\stdClass::class, $res['permissions']);
+        $this->assertArrayHasKey('sharing', $res['permissions'][\stdClass::class]);
+        $this->assertSame(SharingTypes::TYPE_PRIVATE, $res['permissions'][\stdClass::class]['sharing']);
     }
 }

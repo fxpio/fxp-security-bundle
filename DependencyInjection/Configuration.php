@@ -11,6 +11,8 @@
 
 namespace Sonatra\Bundle\SecurityBundle\DependencyInjection;
 
+use Sonatra\Component\Security\SharingTypes;
+use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\NodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
@@ -51,6 +53,7 @@ class Configuration implements ConfigurationInterface
             ->append($this->getOrganizationalContextNode())
             ->append($this->getExpressionLanguageNode())
             ->append($this->getAnnotationNode())
+            ->append($this->getPermissionNode())
             ->append($this->getDoctrineNode())
         ;
 
@@ -198,6 +201,45 @@ class Configuration implements ConfigurationInterface
             ->addDefaultsIfNotSet()
             ->children()
                 ->scalarNode('security')->defaultFalse()->end()
+            ->end()
+        ;
+
+        return $node;
+    }
+
+    /**
+     * Get permission node.
+     *
+     * @return NodeDefinition
+     */
+    private function getPermissionNode()
+    {
+        $treeBuilder = new TreeBuilder();
+        /* @var ArrayNodeDefinition $node */
+        $node = $treeBuilder->root('permissions', 'array');
+
+        $node
+            ->requiresAtLeastOneElement()
+            ->useAttributeAsKey('permission', false)
+            ->normalizeKeys(false)
+
+            ->prototype('array')
+                ->addDefaultsIfNotSet()
+                ->canBeDisabled()
+                ->beforeNormalization()
+                    ->ifString()
+                    ->then(function ($v) {
+                        return array('sharing' => $v);
+                    })
+                ->end()
+                ->children()
+                    ->scalarNode('sharing')->defaultValue(SharingTypes::TYPE_PUBLIC)->end()
+                    ->scalarNode('master')->defaultNull()->end()
+                    ->booleanNode('build_fields')->defaultTrue()->end()
+                    ->arrayNode('fields')
+                        ->prototype('scalar')->end()
+                    ->end()
+                ->end()
             ->end()
         ;
 

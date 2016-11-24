@@ -16,6 +16,7 @@
         <service id="sonatra_security.permission_manager"
                  class="%sonatra_security.permission_manager.class%">
             <argument type="service" id="sonatra_security.security_identity_retrieval_strategy"/>
+            <argument/>
         </service>
 
         <!-- Disable Permission Listener -->

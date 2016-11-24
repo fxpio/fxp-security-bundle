@@ -17,6 +17,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Templating\TemplateGuesser;
 use Sonatra\Component\Security\Authorization\Voter\ExpressionVoter;
 use Sonatra\Component\Security\Authorization\Voter\RoleSecurityIdentityVoter;
 use Sonatra\Component\Security\Role\OrganizationalRoleHierarchy;
+use Sonatra\Component\Security\Tests\Fixtures\Model\MockObject;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\Security\Core\Authentication\AuthenticationTrustResolver;
 use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
@@ -317,5 +318,70 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
         )));
 
         $this->assertTrue($container->hasDefinition('sonatra_security.orm.listener.sharing'));
+    }
+
+    public function testPermission()
+    {
+        $container = $this->createContainer(array(array(
+            'permissions' => array(
+                MockObject::class => true,
+            ),
+        )));
+
+        $def = $container->getDefinition('sonatra_security.permission_manager');
+        $permConfigs = $def->getArgument(1);
+
+        $this->assertTrue(is_array($permConfigs));
+        $this->assertCount(1, $permConfigs);
+    }
+
+    /**
+     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
+     * @expectedExceptionMessage The "FooBar" permission class does not exist
+     */
+    public function testPermissionWithNonExistentClass()
+    {
+        $this->createContainer(array(array(
+            'permissions' => array(
+                'FooBar' => true,
+            ),
+        )));
+    }
+
+    public function testPermissionWithFields()
+    {
+        $container = $this->createContainer(array(array(
+            'permissions' => array(
+                MockObject::class => array(
+                    'fields' => array(
+                        'id',
+                        'name',
+                    ),
+                ),
+            ),
+        )));
+
+        $def = $container->getDefinition('sonatra_security.permission_manager');
+        $permConfigs = $def->getArgument(1);
+
+        $this->assertTrue(is_array($permConfigs));
+        $this->assertCount(1, $permConfigs);
+    }
+
+    /**
+     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
+     * @expectedExceptionMessage The permission field "foo" does not exist in "Sonatra\Component\Security\Tests\Fixtures\Model\MockObject" class
+     */
+    public function testPermissionWithNonExistentField()
+    {
+        $this->createContainer(array(array(
+            'permissions' => array(
+                MockObject::class => array(
+                    'fields' => array(
+                        'foo',
+                    ),
+                ),
+            ),
+        )));
     }
 }
