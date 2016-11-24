@@ -102,7 +102,7 @@ class AccessControlPass implements CompilerPassInterface
     private function createRequestMatcher(ContainerBuilder $container, $path = null, $host = null,
                                           $methods = array(), $ip = null, array $attributes = array())
     {
-        if ($methods) {
+        if (!empty($methods)) {
             $methods = array_map('strtoupper', (array) $methods);
         }
 
