@@ -12,7 +12,6 @@
 namespace Sonatra\Bundle\SecurityBundle\DependencyInjection;
 
 use Sonatra\Component\Security\SharingTypes;
-use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\NodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
@@ -67,8 +66,7 @@ class Configuration implements ConfigurationInterface
      */
     private function getHostRoleNode()
     {
-        $treeBuilder = new TreeBuilder();
-        $node = $treeBuilder->root('host_role');
+        $node = NodeUtils::createArrayNode('host_role');
 
         $node
             ->addDefaultsIfNotSet()
@@ -85,8 +83,7 @@ class Configuration implements ConfigurationInterface
      */
     private function getRoleHierarchyNode()
     {
-        $treeBuilder = new TreeBuilder();
-        $node = $treeBuilder->root('role_hierarchy');
+        $node = NodeUtils::createArrayNode('role_hierarchy');
 
         $node
             ->addDefaultsIfNotSet()
@@ -106,8 +103,7 @@ class Configuration implements ConfigurationInterface
      */
     private function getSecurityVoterNode()
     {
-        $treeBuilder = new TreeBuilder();
-        $node = $treeBuilder->root('security_voter');
+        $node = NodeUtils::createArrayNode('security_voter');
 
         $node
             ->addDefaultsIfNotSet()
@@ -127,8 +123,7 @@ class Configuration implements ConfigurationInterface
      */
     private function getObjectFilterNode()
     {
-        $treeBuilder = new TreeBuilder();
-        $node = $treeBuilder->root('object_filter');
+        $node = NodeUtils::createArrayNode('object_filter');
 
         $node
             ->addDefaultsIfNotSet()
@@ -145,8 +140,7 @@ class Configuration implements ConfigurationInterface
      */
     private function getOrganizationalContextNode()
     {
-        $treeBuilder = new TreeBuilder();
-        $node = $treeBuilder->root('organizational_context');
+        $node = NodeUtils::createArrayNode('organizational_context');
 
         $node
             ->addDefaultsIfNotSet()
@@ -166,8 +160,7 @@ class Configuration implements ConfigurationInterface
      */
     private function getExpressionLanguageNode()
     {
-        $treeBuilder = new TreeBuilder();
-        $node = $treeBuilder->root('expression');
+        $node = NodeUtils::createArrayNode('expression');
 
         $node
             ->addDefaultsIfNotSet()
@@ -194,8 +187,7 @@ class Configuration implements ConfigurationInterface
      */
     private function getAnnotationNode()
     {
-        $treeBuilder = new TreeBuilder();
-        $node = $treeBuilder->root('annotations');
+        $node = NodeUtils::createArrayNode('annotations');
 
         $node
             ->addDefaultsIfNotSet()
@@ -214,9 +206,7 @@ class Configuration implements ConfigurationInterface
      */
     private function getPermissionNode()
     {
-        $treeBuilder = new TreeBuilder();
-        /* @var ArrayNodeDefinition $node */
-        $node = $treeBuilder->root('permissions', 'array');
+        $node = NodeUtils::createArrayNode('permissions');
 
         $node
             ->requiresAtLeastOneElement()
@@ -253,8 +243,7 @@ class Configuration implements ConfigurationInterface
      */
     private function getDoctrineNode()
     {
-        $treeBuilder = new TreeBuilder();
-        $node = $treeBuilder->root('doctrine');
+        $node = NodeUtils::createArrayNode('doctrine');
 
         $node
             ->addDefaultsIfNotSet()

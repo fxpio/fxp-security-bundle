@@ -1,0 +1,38 @@
+<?php
+
+/*
+ * This file is part of the Sonatra package.
+ *
+ * (c) François Pluchino <francois.pluchino@sonatra.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+namespace Sonatra\Bundle\SecurityBundle\DependencyInjection;
+
+use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
+use Symfony\Component\Config\Definition\Builder\NodeBuilder;
+use Symfony\Component\Config\Definition\Builder\TreeBuilder;
+
+/**
+ * @author François Pluchino <francois.pluchino@sonatra.com>
+ */
+abstract class NodeUtils
+{
+    /**
+     * Create an array node.
+     *
+     * @param string           $name    The name of the root node
+     * @param NodeBuilder|null $builder The node builder
+     *
+     * @return ArrayNodeDefinition
+     */
+    public static function createArrayNode($name, NodeBuilder $builder = null)
+    {
+        $treeBuilder = new TreeBuilder();
+        $node = $treeBuilder->root($name, 'array', $builder);
+
+        return $node;
+    }
+}
