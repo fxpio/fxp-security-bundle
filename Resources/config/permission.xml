@@ -15,7 +15,6 @@
         <!-- Permission Manager -->
         <service id="sonatra_security.permission_manager"
                  class="%sonatra_security.permission_manager.class%">
-            <argument type="service" id="sonatra_security.security_identity_manager"/>
             <argument/>
         </service>
 

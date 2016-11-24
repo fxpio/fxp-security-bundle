@@ -97,7 +97,7 @@ class SonatraSecurityExtension extends Extension
             }
         }
 
-        $container->getDefinition('sonatra_security.permission_manager')->replaceArgument(1, $configs);
+        $container->getDefinition('sonatra_security.permission_manager')->replaceArgument(0, $configs);
     }
 
     /**
