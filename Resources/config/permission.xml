@@ -6,7 +6,7 @@
 
     <parameters>
         <parameter key="sonatra_security.permission_manager.class">Sonatra\Component\Security\Permission\PermissionManager</parameter>
-        <parameter key="sonatra_security.listener.permission.disable.class">Sonatra\Component\Security\Listener\DisablePermissionListener</parameter>
+        <parameter key="sonatra_security.subscriber.permission.disable.class">Sonatra\Component\Security\Listener\DisablePermissionSubscriber</parameter>
         <parameter key="sonatra_security.listener.permission_exception.class">Sonatra\Component\Security\Listener\PermissionExceptionListener</parameter>
         <parameter key="sonatra_security.access.permission_voter.class">Sonatra\Component\Security\Authorization\Voter\PermissionVoter</parameter>
     </parameters>
@@ -19,9 +19,9 @@
             <argument/>
         </service>
 
-        <!-- Disable Permission Listener -->
-        <service id="sonatra_security.listener.permission.disable"
-                 class="%sonatra_security.listener.permission.disable.class%">
+        <!-- Disable Permission Subscriber -->
+        <service id="sonatra_security.subscriber.permission.disable"
+                 class="%sonatra_security.subscriber.permission.disable.class%">
             <tag name="kernel.event_subscriber"/>
             <argument type="service" id="sonatra_security.permission_manager"/>
         </service>
