@@ -110,7 +110,7 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
 
         $this->assertTrue($container->hasDefinition('security.access.role_hierarchy_voter'));
         $this->assertTrue($container->hasDefinition('security.access.groupable_voter'));
-        $this->assertTrue($container->hasDefinition('sonatra_security.security_identity.listener.group'));
+        $this->assertTrue($container->hasDefinition('sonatra_security.subscriber.security_identity.group'));
 
         $this->assertSame('%sonatra_security.access.role_security_identity_voter.class%', $container->getDefinition('security.access.role_hierarchy_voter')->getClass());
         $this->assertSame(RoleSecurityIdentityVoter::class, $container->getParameter('sonatra_security.access.role_security_identity_voter.class'));
@@ -189,7 +189,7 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
 
         $this->assertTrue($container->hasDefinition('sonatra_security.organizational_context.default'));
         $this->assertTrue($container->hasDefinition('security.access.organization_voter'));
-        $this->assertTrue($container->hasDefinition('sonatra_security.security_identity.listener.organization'));
+        $this->assertTrue($container->hasDefinition('sonatra_security.subscriber.security_identity.organization'));
     }
 
     public function testExpressionLanguage()

@@ -9,7 +9,7 @@
     </parameters>
 
     <services>
-        <!-- Security Annotation Listener -->
+        <!-- Security Annotation Subscriber -->
         <service id="sonatra_security.subscriber.security_annotation"
                  class="%sonatra_security.subscriber.security_annotation.class%">
             <tag name="kernel.event_subscriber" />
