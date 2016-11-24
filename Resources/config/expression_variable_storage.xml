@@ -8,7 +8,7 @@
         <!-- Expression Variable Storage -->
         <service id="sonatra_security.expression.variable_storage" class="Sonatra\Component\Security\Expression\ExpressionVariableStorage" public="true">
             <argument/>
-            <argument type="service" id="sonatra_security.security_identity_retrieval_strategy" on-invalid="ignore" />
+            <argument type="service" id="sonatra_security.security_identity_manager" on-invalid="ignore" />
             <tag name="sonatra_security.event_subscriber"/>
             <call method="add">
                 <argument>trust_resolver</argument>

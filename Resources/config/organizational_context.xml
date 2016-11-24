@@ -7,7 +7,7 @@
     <parameters>
         <parameter key="sonatra_security.organizational_context.default.class">Sonatra\Component\Security\Organizational\OrganizationalContext</parameter>
         <parameter key="security.access.organization_voter.class">Sonatra\Component\Security\Authorization\Voter\OrganizationVoter</parameter>
-        <parameter key="sonatra_security.security_identity_retrieval_strategy.listener.organization.class">Sonatra\Component\Security\Listener\OrganizationStrategyIdentitySubscriber</parameter>
+        <parameter key="sonatra_security.security_identity.listener.organization.class">Sonatra\Component\Security\Listener\OrganizationSecurityIdentitySubscriber</parameter>
     </parameters>
 
     <services>
@@ -24,12 +24,12 @@
                  class="%security.access.organization_voter.class%"
                  public="false">
             <tag name="security.voter" priority="245"/>
-            <argument type="service" id="sonatra_security.security_identity_retrieval_strategy"/>
+            <argument type="service" id="sonatra_security.security_identity_manager"/>
         </service>
 
-        <!-- Security Identity Strategy Organizational Listener -->
-        <service id="sonatra_security.security_identity_retrieval_strategy.listener.organization"
-                 class="%sonatra_security.security_identity_retrieval_strategy.listener.organization.class%">
+        <!-- Organization Security Identity Listener -->
+        <service id="sonatra_security.security_identity.listener.organization"
+                 class="%sonatra_security.security_identity.listener.organization.class%">
             <tag name="sonatra_security.event_subscriber"/>
             <argument type="service" id="security.role_hierarchy"/>
             <argument type="service" id="sonatra_security.organizational_context"/>

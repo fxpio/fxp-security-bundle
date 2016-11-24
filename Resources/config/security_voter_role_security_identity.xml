@@ -14,7 +14,7 @@
                  class="%sonatra_security.access.role_security_identity_voter.class%"
                  public="false">
             <tag name="security.voter" priority="245"/>
-            <argument type="service" id="sonatra_security.security_identity_retrieval_strategy"/>
+            <argument type="service" id="sonatra_security.security_identity_manager"/>
         </service>
     </services>
 </container>

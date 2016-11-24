@@ -15,7 +15,7 @@
         <!-- Permission Manager -->
         <service id="sonatra_security.permission_manager"
                  class="%sonatra_security.permission_manager.class%">
-            <argument type="service" id="sonatra_security.security_identity_retrieval_strategy"/>
+            <argument type="service" id="sonatra_security.security_identity_manager"/>
             <argument/>
         </service>
 
@@ -37,7 +37,7 @@
                  class="%sonatra_security.access.permission_voter.class%"
                  public="false">
             <argument type="service" id="sonatra_security.permission_manager"/>
-            <argument type="service" id="sonatra_security.security_identity_retrieval_strategy"/>
+            <argument type="service" id="sonatra_security.security_identity_manager"/>
             <tag name="security.voter" priority="260"/>
         </service>
     </services>

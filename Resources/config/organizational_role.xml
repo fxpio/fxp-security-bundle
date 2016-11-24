@@ -12,7 +12,7 @@
         <!-- Organizational Role -->
         <service id="sonatra_security.organizational_role" class="%sonatra_security.organizational_role.class%">
             <argument type="service" id="sonatra_security.organizational_context"/>
-            <argument type="service" id="sonatra_security.security_identity_retrieval_strategy"/>
+            <argument type="service" id="sonatra_security.security_identity_manager"/>
             <argument type="service" id="security.token_storage"/>
         </service>
     </services>

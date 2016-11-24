@@ -13,7 +13,7 @@
         <service id="sonatra_security.role_hierarchy.cache.listener"
                  class="%sonatra_security.role_hierarchy.cache.listener.class%">
             <tag name="doctrine.event_subscriber"/>
-            <argument type="service" id="sonatra_security.security_identity_retrieval_strategy"/>
+            <argument type="service" id="sonatra_security.security_identity_manager"/>
             <argument type="service" id="sonatra_security.role_hierarchy.cache" on-invalid="null"/>
             <argument type="service" id="sonatra_security.organizational_context" on-invalid="null"/>
         </service>

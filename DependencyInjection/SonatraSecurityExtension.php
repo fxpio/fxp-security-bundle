@@ -42,7 +42,7 @@ class SonatraSecurityExtension extends Extension
         $loader = new Loader\XmlFileLoader($container, new FileLocator($configPath));
 
         $this->buildModel($container, $config);
-        $this->buildSecurityIdentityStrategy($loader);
+        $this->buildSecurityIdentity($loader);
         $this->buildPermission($container, $loader, $config);
         $this->buildObjectFilter($container, $loader, $config);
         $this->buildHostRole($container, $loader, $config);
@@ -70,13 +70,13 @@ class SonatraSecurityExtension extends Extension
     }
 
     /**
-     * Build the security identity strategy.
+     * Build the security identity manager.
      *
      * @param LoaderInterface $loader The config loader
      */
-    private function buildSecurityIdentityStrategy(LoaderInterface $loader)
+    private function buildSecurityIdentity(LoaderInterface $loader)
     {
-        $loader->load('security_identity_strategy.xml');
+        $loader->load('security_identity.xml');
     }
 
     /**

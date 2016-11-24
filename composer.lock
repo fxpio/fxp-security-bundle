@@ -552,12 +552,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonatra/sonatra-security.git",
-                "reference": "5a81a10d26da851f990f4f4abc405ba69059c2a8"
+                "reference": "88b43347851482a7188c5bdd65195006494afa51"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonatra/sonatra-security/zipball/5a81a10d26da851f990f4f4abc405ba69059c2a8",
-                "reference": "5a81a10d26da851f990f4f4abc405ba69059c2a8",
+                "url": "https://api.github.com/repos/sonatra/sonatra-security/zipball/88b43347851482a7188c5bdd65195006494afa51",
+                "reference": "88b43347851482a7188c5bdd65195006494afa51",
                 "shasum": ""
             },
             "require": {
@@ -605,7 +605,7 @@
                 "security",
                 "sharing"
             ],
-            "time": "2016-11-23 17:46:33"
+            "time": "2016-11-24 14:42:44"
         },
         {
             "name": "symfony/asset",

@@ -6,7 +6,7 @@
 
     <parameters>
         <parameter key="security.access.groupable_voter.class">Sonatra\Component\Security\Authorization\Voter\GroupableVoter</parameter>
-        <parameter key="sonatra_security.security_identity_retrieval_strategy.listener.group.class">Sonatra\Component\Security\Listener\GroupStrategyIdentitySubscriber</parameter>
+        <parameter key="sonatra_security.security_identity.listener.group.class">Sonatra\Component\Security\Listener\GroupSecurityIdentitySubscriber</parameter>
     </parameters>
 
     <services>
@@ -15,12 +15,12 @@
                  class="%security.access.groupable_voter.class%"
                  public="false">
             <tag name="security.voter" priority="245"/>
-            <argument type="service" id="sonatra_security.security_identity_retrieval_strategy"/>
+            <argument type="service" id="sonatra_security.security_identity_manager"/>
         </service>
 
-        <!-- Security Identity Strategy Group Listener -->
-        <service id="sonatra_security.security_identity_retrieval_strategy.listener.group"
-                 class="%sonatra_security.security_identity_retrieval_strategy.listener.group.class%">
+        <!-- Group Security Identity Listener -->
+        <service id="sonatra_security.security_identity.listener.group"
+                 class="%sonatra_security.security_identity.listener.group.class%">
             <tag name="sonatra_security.event_subscriber"/>
         </service>
     </services>

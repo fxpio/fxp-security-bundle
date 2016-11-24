@@ -5,13 +5,13 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-        <parameter key="sonatra_security.security_identity_retrieval_strategy.class">Sonatra\Component\Security\Identity\CacheSecurityIdentityRetrievalStrategy</parameter>
+        <parameter key="sonatra_security.security_identity_manager.class">Sonatra\Component\Security\Identity\CacheSecurityIdentityManager</parameter>
     </parameters>
 
     <services>
-        <!-- Security Identity Retrieval Strategy -->
-        <service id="sonatra_security.security_identity_retrieval_strategy"
-                 class="%sonatra_security.security_identity_retrieval_strategy.class%">
+        <!-- Security Identity Manager -->
+        <service id="sonatra_security.security_identity_manager"
+                 class="%sonatra_security.security_identity_manager.class%">
             <argument type="service" id="event_dispatcher"/>
             <argument type="service" id="security.role_hierarchy"/>
             <argument type="service" id="security.authentication.trust_resolver"/>
