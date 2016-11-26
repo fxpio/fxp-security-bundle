@@ -13,6 +13,8 @@ namespace Sonatra\Bundle\SecurityBundle\Tests\DependencyInjection;
 
 use Sonatra\Bundle\SecurityBundle\DependencyInjection\Configuration;
 use Sonatra\Component\Security\SharingTypes;
+use Sonatra\Component\Security\Tests\Fixtures\Model\MockPermission;
+use Sonatra\Component\Security\Tests\Fixtures\Model\MockRole;
 use Symfony\Component\Config\Definition\Processor;
 
 /**
@@ -24,7 +26,10 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
 {
     public function testNoConfig()
     {
-        $config = array();
+        $config = array(
+            'role_class' => MockRole::class,
+            'permission_class' => MockPermission::class,
+        );
 
         $processor = new Processor();
         $configuration = new Configuration(array(), array());
@@ -34,6 +39,8 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
     public function testPermissionConfigNormalization()
     {
         $config = array(
+            'role_class' => MockRole::class,
+            'permission_class' => MockPermission::class,
             'permissions' => array(
                 \stdClass::class => SharingTypes::TYPE_PRIVATE,
             ),

@@ -18,6 +18,8 @@ use Sonatra\Component\Security\Authorization\Voter\ExpressionVoter;
 use Sonatra\Component\Security\Authorization\Voter\RoleSecurityIdentityVoter;
 use Sonatra\Component\Security\Role\OrganizationalRoleHierarchy;
 use Sonatra\Component\Security\Tests\Fixtures\Model\MockObject;
+use Sonatra\Component\Security\Tests\Fixtures\Model\MockPermission;
+use Sonatra\Component\Security\Tests\Fixtures\Model\MockRole;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\Security\Core\Authentication\AuthenticationTrustResolver;
 use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
@@ -31,13 +33,18 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
 {
     public function testExtensionExist()
     {
-        $container = $this->createContainer();
+        $container = $this->createContainer(array(array(
+            'role_class' => MockRole::class,
+            'permission_class' => MockPermission::class,
+        )));
         $this->assertTrue($container->hasExtension('sonatra_security'));
     }
 
     public function testObjectFilter()
     {
         $container = $this->createContainer(array(array(
+            'role_class' => MockRole::class,
+            'permission_class' => MockPermission::class,
             'object_filter' => array(
                 'enabled' => true,
             ),
@@ -68,6 +75,8 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
     public function testOrmObjectFilterVoterWithoutDoctrine()
     {
         $this->createContainer(array(array(
+            'role_class' => MockRole::class,
+            'permission_class' => MockPermission::class,
             'object_filter' => array(
                 'enabled' => true,
             ),
@@ -86,6 +95,8 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
     public function testOrmObjectFilterListenerWithoutDoctrine()
     {
         $this->createContainer(array(array(
+            'role_class' => MockRole::class,
+            'permission_class' => MockPermission::class,
             'object_filter' => array(
                 'enabled' => true,
             ),
@@ -102,6 +113,8 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
     public function testSecurityVoter()
     {
         $container = $this->createContainer(array(array(
+            'role_class' => MockRole::class,
+            'permission_class' => MockPermission::class,
             'security_voter' => array(
                 'role_security_identity' => true,
                 'groupable' => true,
@@ -119,6 +132,8 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
     public function testRoleHierarchy()
     {
         $container = $this->createContainer(array(array(
+            'role_class' => MockRole::class,
+            'permission_class' => MockPermission::class,
             'role_hierarchy' => array(
                 'enabled' => true,
                 'cache' => 'test_cache',
@@ -151,6 +166,8 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
     public function testRoleHierarchyWithoutDoctrineBundle()
     {
         $this->createContainer(array(array(
+            'role_class' => MockRole::class,
+            'permission_class' => MockPermission::class,
             'role_hierarchy' => array(
                 'enabled' => true,
             ),
@@ -164,6 +181,8 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
     public function testOrmRoleHierarchyListenerWithoutDoctrine()
     {
         $this->createContainer(array(array(
+            'role_class' => MockRole::class,
+            'permission_class' => MockPermission::class,
             'role_hierarchy' => array(
                 'enabled' => true,
             ),
@@ -182,6 +201,8 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
     public function testOrganizationalContext()
     {
         $container = $this->createContainer(array(array(
+            'role_class' => MockRole::class,
+            'permission_class' => MockPermission::class,
             'organizational_context' => array(
                 'enabled' => true,
             ),
@@ -195,6 +216,8 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
     public function testExpressionLanguage()
     {
         $container = $this->createContainer(array(array(
+            'role_class' => MockRole::class,
+            'permission_class' => MockPermission::class,
             'organizational_context' => array(
                 'enabled' => true,
             ),
@@ -229,6 +252,8 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
     public function testExpressionLanguageWitMissingDependencies()
     {
         $this->createContainer(array(array(
+            'role_class' => MockRole::class,
+            'permission_class' => MockPermission::class,
             'expression' => array(
                 'override_voter' => true,
                 'functions' => array(
@@ -247,6 +272,8 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
     public function testExpressionLanguageWitMissingDependenciesForIsGranted()
     {
         $this->createContainer(array(array(
+            'role_class' => MockRole::class,
+            'permission_class' => MockPermission::class,
             'expression' => array(
                 'override_voter' => true,
                 'functions' => array(
@@ -261,6 +288,8 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
     public function testAnnotation()
     {
         $container = $this->createContainer(array(array(
+            'role_class' => MockRole::class,
+            'permission_class' => MockPermission::class,
             'annotations' => array(
                 'security' => true,
             ),
@@ -278,6 +307,8 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
     public function testAnnotationWitMissingDependencies()
     {
         $this->createContainer(array(array(
+            'role_class' => MockRole::class,
+            'permission_class' => MockPermission::class,
             'annotations' => array(
                 'security' => true,
             ),
@@ -287,6 +318,8 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
     public function testOrmSharing()
     {
         $container = $this->createContainer(array(array(
+            'role_class' => MockRole::class,
+            'permission_class' => MockPermission::class,
             'doctrine' => array(
                 'orm' => array(
                     'filters' => array(
@@ -308,6 +341,8 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
     public function testOrmSharingWithoutDoctrine()
     {
         $container = $this->createContainer(array(array(
+            'role_class' => MockRole::class,
+            'permission_class' => MockPermission::class,
             'doctrine' => array(
                 'orm' => array(
                     'filters' => array(
@@ -323,13 +358,15 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
     public function testPermission()
     {
         $container = $this->createContainer(array(array(
+            'role_class' => MockRole::class,
+            'permission_class' => MockPermission::class,
             'permissions' => array(
                 MockObject::class => true,
             ),
         )));
 
         $def = $container->getDefinition('sonatra_security.permission_manager');
-        $permConfigs = $def->getArgument(0);
+        $permConfigs = $def->getArgument(1);
 
         $this->assertTrue(is_array($permConfigs));
         $this->assertCount(1, $permConfigs);
@@ -342,6 +379,8 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
     public function testPermissionWithNonExistentClass()
     {
         $this->createContainer(array(array(
+            'role_class' => MockRole::class,
+            'permission_class' => MockPermission::class,
             'permissions' => array(
                 'FooBar' => true,
             ),
@@ -351,6 +390,8 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
     public function testPermissionWithFields()
     {
         $container = $this->createContainer(array(array(
+            'role_class' => MockRole::class,
+            'permission_class' => MockPermission::class,
             'permissions' => array(
                 MockObject::class => array(
                     'fields' => array(
@@ -362,7 +403,7 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
         )));
 
         $def = $container->getDefinition('sonatra_security.permission_manager');
-        $permConfigs = $def->getArgument(0);
+        $permConfigs = $def->getArgument(1);
 
         $this->assertTrue(is_array($permConfigs));
         $this->assertCount(1, $permConfigs);
@@ -375,6 +416,8 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
     public function testPermissionWithNonExistentField()
     {
         $this->createContainer(array(array(
+            'role_class' => MockRole::class,
+            'permission_class' => MockPermission::class,
             'permissions' => array(
                 MockObject::class => array(
                     'fields' => array(

@@ -16,8 +16,9 @@ project.
 3. Enable the bundle
 4. Update your user model
 5. Create the role model
-6. Configure your application's config.yml
-7. Configure and initialize the permissions
+6. Create the permission model
+7. Configure your application's config.yml
+8. Configure and initialize the permissions
 
 ### Step 1: Download and install FOS UserBundle
 
@@ -111,11 +112,57 @@ class Role extends BaseRole
             </join-table>
         </many-to-many>
 
+        <many-to-many field="permissions" target-entity="Permission" inversed-by="roles">
+            <join-table name="core_role_permission">
+                <join-columns>
+                    <join-column name="role_id" referenced-column-name="id" />
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="permission_id" referenced-column-name="id" />
+                </inverse-join-columns>
+            </join-table>
+        </many-to-many>
+
     </entity>
 </doctrine-mapping>
 ```
 
-### Step 6: Configure your application's config.yml
+### Step 6: Create the permission model
+
+#### Create the permission class
+
+``` php
+// src/AppBundle/Entity/Permission.php
+
+namespace AppBundle\Entity;
+
+use Sonatra\Component\Security\Model\Permission as BasePermission;
+
+class Permission extends BasePermission
+{
+}
+```
+
+#### Create the permission mapping
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                  http://raw.github.com/doctrine/doctrine2/master/doctrine-mapping.xsd">
+
+    <entity name="AppBundle\Entity\Permission" table="core_permission">
+        <id name="id" type="integer" column="id">
+            <generator strategy="AUTO"/>
+        </id>
+
+        <many-to-many field="roles" mapped-by="permissions" target-entity="Role"/>
+    </entity>
+</doctrine-mapping>
+```
+
+### Step 7: Configure your application's config.yml
 
 Add the following configuration to your `config.yml`.
 
@@ -123,6 +170,7 @@ Add the following configuration to your `config.yml`.
 # app/config/config.yml
 sonatra_security:
     role_class:                  AppBundle\Entity\Role
+    permission_class:            AppBundle\Entity\Permission
     object_filter:
         enabled:                 true # Enable the object filter (optional)
     role_hierarchy:
@@ -148,7 +196,7 @@ doctrine:
                         enabled: true
 ```
 
-### Step 7: Configure and initialize the permissions
+### Step 8: Configure and initialize the permissions
 
 #### Update your database schema
 

@@ -67,6 +67,7 @@ class SonatraSecurityExtension extends Extension
         }
 
         $container->setParameter('sonatra_security.role_class', $config['role_class']);
+        $container->setParameter('sonatra_security.permission_class', $config['permission_class']);
     }
 
     /**
@@ -97,7 +98,11 @@ class SonatraSecurityExtension extends Extension
             }
         }
 
-        $container->getDefinition('sonatra_security.permission_manager')->replaceArgument(0, $configs);
+        $container->getDefinition('sonatra_security.permission_manager')->replaceArgument(1, $configs);
+
+        if ('custom' !== $config['db_driver']) {
+            $loader->load($config['db_driver'].'_permission_provider.xml');
+        }
     }
 
     /**
