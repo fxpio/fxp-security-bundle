@@ -12,6 +12,7 @@
 namespace Sonatra\Bundle\SecurityBundle\DependencyInjection;
 
 use Sonatra\Component\Security\Permission\PermissionConfig;
+use Sonatra\Component\Security\Sharing\SharingIdentityConfig;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Config\Loader\LoaderInterface;
@@ -318,10 +319,51 @@ class SonatraSecurityExtension extends Extension
     private function buildSharing(ContainerBuilder $container, LoaderInterface $loader,
                                                 array $config)
     {
+        if ($config['sharing']['enabled']) {
+            $loader->load('sharing.xml');
+            $configs = array();
+
+            foreach ($config['sharing']['identity_types'] as $type => $identityConfig) {
+                $configs[] = $this->buildSharingIdentityConfig($container, $type, $identityConfig);
+            }
+
+            $container->getDefinition('sonatra_security.sharing_manager')->replaceArgument(0, $configs);
+        }
+
         if ($config['doctrine']['orm']['filters']['sharing']) {
             $this->validate($container, 'doctrine.orm.filter.sharing', 'doctrine.orm.entity_manager.class', 'doctrine/orm');
             $loader->load('orm_filter_sharing.xml');
         }
+    }
+
+    /**
+     * Build the sharing identity config.
+     *
+     * @param ContainerBuilder $container The container
+     * @param string           $type      The sharing identity type
+     * @param array            $config    The sharing identity config
+     *
+     * @return Reference
+     */
+    private function buildSharingIdentityConfig(ContainerBuilder $container, $type, array $config)
+    {
+        if (!class_exists($type)) {
+            $msg = 'The "%s" sharing identity class does not exist';
+            throw new InvalidConfigurationException(sprintf($msg, $type));
+        }
+
+        $def = new Definition(SharingIdentityConfig::class, array(
+            $type,
+            $config['alias'],
+            $config['roleable'],
+            $config['permissible'],
+        ));
+        $def->setPublic(false);
+
+        $id = 'sonatra_security.sharing_identity_config.'.strtolower(str_replace('\\', '_', $type));
+        $container->setDefinition($id, $def);
+
+        return new Reference($id);
     }
 
     /**

@@ -54,6 +54,7 @@ class Configuration implements ConfigurationInterface
             ->append($this->getExpressionLanguageNode())
             ->append($this->getAnnotationNode())
             ->append($this->getPermissionNode())
+            ->append($this->getSharingNode())
             ->append($this->getDoctrineNode())
         ;
 
@@ -224,11 +225,49 @@ class Configuration implements ConfigurationInterface
                     })
                 ->end()
                 ->children()
-                    ->scalarNode('sharing')->defaultValue(SharingTypes::TYPE_PUBLIC)->end()
+                    ->scalarNode('sharing')->defaultValue(SharingTypes::TYPE_NONE)->end()
                     ->scalarNode('master')->defaultNull()->end()
                     ->booleanNode('build_fields')->defaultTrue()->end()
                     ->arrayNode('fields')
                         ->prototype('scalar')->end()
+                    ->end()
+                ->end()
+            ->end()
+        ;
+
+        return $node;
+    }
+
+    /**
+     * Get sharing node.
+     *
+     * @return NodeDefinition
+     */
+    private function getSharingNode()
+    {
+        $node = NodeUtils::createArrayNode('sharing');
+
+        $node
+            ->addDefaultsIfNotSet()
+            ->canBeEnabled()
+            ->children()
+                ->arrayNode('identity_types')
+                    ->requiresAtLeastOneElement()
+                    ->useAttributeAsKey('permission', false)
+                    ->normalizeKeys(false)
+                    ->prototype('array')
+                        ->addDefaultsIfNotSet()
+                        ->beforeNormalization()
+                            ->ifString()
+                            ->then(function ($v) {
+                                return array('alias' => $v);
+                            })
+                        ->end()
+                        ->children()
+                            ->scalarNode('alias')->defaultNull()->end()
+                            ->booleanNode('roleable')->defaultFalse()->end()
+                            ->booleanNode('permissible')->defaultFalse()->end()
+                        ->end()
                     ->end()
                 ->end()
             ->end()

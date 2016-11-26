@@ -158,11 +158,61 @@ class Permission extends BasePermission
         </id>
 
         <many-to-many field="roles" mapped-by="permissions" target-entity="Role"/>
+
+        <many-to-many field="sharingEntries" mapped-by="permissions" target-entity="Sharing"/>
     </entity>
 </doctrine-mapping>
 ```
 
-### Step 7: Configure your application's config.yml
+### Step 7: Create the sharing model
+
+#### Create the sharing class
+
+``` php
+// src/AppBundle/Entity/Sharing.php
+
+namespace AppBundle\Entity;
+
+use Sonatra\Component\Security\Model\Sharing as BaseSharing;
+
+class Sharing extends BaseSharing
+{
+}
+```
+
+#### Create the sharing mapping
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                  http://raw.github.com/doctrine/doctrine2/master/doctrine-mapping.xsd">
+
+    <entity name="AppBundle\Entity\Sharing" table="core_sharing">
+        <id name="id" type="integer" column="id">
+            <generator strategy="AUTO"/>
+        </id>
+
+        <field name="subjectId" column="subject_id" type="integer" />
+
+        <field name="identityId" column="identity_id" type="integer" />
+
+        <many-to-many field="permissions" target-entity="Permission" inversed-by="sharingEntries">
+            <join-table name="core_sharing_permission">
+                <join-columns>
+                    <join-column name="sharing_id" referenced-column-name="id" />
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="permission_id" referenced-column-name="id" />
+                </inverse-join-columns>
+            </join-table>
+        </many-to-many>
+    </entity>
+</doctrine-mapping>
+```
+
+### Step 8: Configure your application's config.yml
 
 Add the following configuration to your `config.yml`.
 
@@ -196,7 +246,7 @@ doctrine:
                         enabled: true
 ```
 
-### Step 8: Configure and initialize the permissions
+### Step 9: Configure and initialize the permissions
 
 #### Update your database schema
 

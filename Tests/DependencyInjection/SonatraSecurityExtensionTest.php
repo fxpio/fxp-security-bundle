@@ -427,4 +427,70 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
             ),
         )));
     }
+
+    public function testSharing()
+    {
+        $container = $this->createContainer(array(array(
+            'role_class' => MockRole::class,
+            'permission_class' => MockPermission::class,
+            'sharing' => array(
+                'enabled' => true,
+                'identity_types' => array(
+                    MockRole::class => array(
+                        'alias' => 'foo',
+                        'roleable' => true,
+                        'permissible' => true,
+                    ),
+                ),
+            ),
+        )));
+
+        $def = $container->getDefinition('sonatra_security.sharing_manager');
+        $identityConfigs = $def->getArgument(0);
+
+        $this->assertTrue(is_array($identityConfigs));
+        $this->assertCount(1, $identityConfigs);
+    }
+
+    public function testSharingWithDirectAlias()
+    {
+        $container = $this->createContainer(array(array(
+            'role_class' => MockRole::class,
+            'permission_class' => MockPermission::class,
+            'sharing' => array(
+                'enabled' => true,
+                'identity_types' => array(
+                    MockRole::class => 'foo',
+                ),
+            ),
+        )));
+
+        $def = $container->getDefinition('sonatra_security.sharing_manager');
+        $identityConfigs = $def->getArgument(0);
+
+        $this->assertTrue(is_array($identityConfigs));
+        $this->assertCount(1, $identityConfigs);
+    }
+
+    /**
+     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
+     * @expectedExceptionMessage The "FooBar" sharing identity class does not exist
+     */
+    public function testSharingWithNonExistentClass()
+    {
+        $this->createContainer(array(array(
+            'role_class' => MockRole::class,
+            'permission_class' => MockPermission::class,
+            'sharing' => array(
+                'enabled' => true,
+                'identity_types' => array(
+                    'FooBar' => array(
+                        'alias' => 'foo',
+                        'roleable' => true,
+                        'permissible' => true,
+                    ),
+                ),
+            ),
+        )));
+    }
 }

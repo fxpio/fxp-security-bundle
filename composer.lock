@@ -552,12 +552,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonatra/sonatra-security.git",
-                "reference": "a5cbda8bc37c2738312a91314fd5dad9103b766b"
+                "reference": "def3342c1d72b15982b149235b6cf750171c2036"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonatra/sonatra-security/zipball/a5cbda8bc37c2738312a91314fd5dad9103b766b",
-                "reference": "a5cbda8bc37c2738312a91314fd5dad9103b766b",
+                "url": "https://api.github.com/repos/sonatra/sonatra-security/zipball/def3342c1d72b15982b149235b6cf750171c2036",
+                "reference": "def3342c1d72b15982b149235b6cf750171c2036",
                 "shasum": ""
             },
             "require": {
@@ -605,7 +605,7 @@
                 "security",
                 "sharing"
             ],
-            "time": "2016-11-25 17:25:03"
+            "time": "2016-11-26 23:17:28"
         },
         {
             "name": "symfony/asset",
@@ -2588,15 +2588,16 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfSymfony/FOSUserBundle.git",
-                "reference": "c62c727dc7a387edc16df32d2ee4181e620ad35f"
+                "reference": "81f872eb331b1f3a6244483ffb77ec69a6b1c1d8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/c62c727dc7a387edc16df32d2ee4181e620ad35f",
-                "reference": "c62c727dc7a387edc16df32d2ee4181e620ad35f",
+                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/81f872eb331b1f3a6244483ffb77ec69a6b1c1d8",
+                "reference": "81f872eb331b1f3a6244483ffb77ec69a6b1c1d8",
                 "shasum": ""
             },
             "require": {
+                "paragonie/random_compat": "^1 || ^2",
                 "php": "^5.5.9 || ^7.0",
                 "symfony/form": "^2.7 || ^3.0",
                 "symfony/framework-bundle": "^2.7 || ^3.0",
@@ -2653,7 +2654,7 @@
             "keywords": [
                 "User management"
             ],
-            "time": "2016-11-22 12:21:39"
+            "time": "2016-11-26 22:10:42"
         },
         {
             "name": "jdorn/sql-formatter",
