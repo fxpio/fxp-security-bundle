@@ -99,7 +99,7 @@ class SonatraSecurityExtension extends Extension
             }
         }
 
-        $container->getDefinition('sonatra_security.permission_manager')->replaceArgument(1, $configs);
+        $container->getDefinition('sonatra_security.permission_manager')->replaceArgument(2, $configs);
 
         if ('custom' !== $config['db_driver']) {
             $loader->load($config['db_driver'].'_permission_provider.xml');
