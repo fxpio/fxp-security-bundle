@@ -221,6 +221,7 @@ Add the following configuration to your `config.yml`.
 sonatra_security:
     role_class:                  AppBundle\Entity\Role
     permission_class:            AppBundle\Entity\Permission
+    sharing_class:               AppBundle\Entity\Sharing
     object_filter:
         enabled:                 true # Enable the object filter (optional)
     role_hierarchy:
@@ -228,6 +229,12 @@ sonatra_security:
         cache:                   null # Defined the service cache for role hierarchy (optional)
     security_voter:
         role_security_identity:  true # Override the Symfony Role Hierarchy Voter (optional)
+    sharing:
+        identity_types:
+            AppBundle\Entity\User:
+                roleable:        true # (optional)
+            AppBundle\Entity\Role:
+                permissible:     true # (optional)
     doctrine:
         orm:
             object_filter_voter: true # Ebable the Doctrine ORM Collection Object Filter (optional)
