@@ -45,6 +45,7 @@ class Configuration implements ConfigurationInterface
                 ->end()
                 ->scalarNode('role_class')->defaultValue('Sonatra\Component\Security\Model\RoleInterface')->isRequired()->end()
                 ->scalarNode('permission_class')->defaultValue('Sonatra\Component\Security\Model\PermissionInterface')->isRequired()->end()
+                ->scalarNode('sharing_class')->defaultValue('Sonatra\Component\Security\Model\SharingInterface')->end()
             ->end()
             ->append($this->getHostRoleNode())
             ->append($this->getRoleHierarchyNode())

@@ -20,6 +20,7 @@ use Sonatra\Component\Security\Role\OrganizationalRoleHierarchy;
 use Sonatra\Component\Security\Tests\Fixtures\Model\MockObject;
 use Sonatra\Component\Security\Tests\Fixtures\Model\MockPermission;
 use Sonatra\Component\Security\Tests\Fixtures\Model\MockRole;
+use Sonatra\Component\Security\Tests\Fixtures\Model\MockSharing;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\Security\Core\Authentication\AuthenticationTrustResolver;
 use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
@@ -366,7 +367,7 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
         )));
 
         $def = $container->getDefinition('sonatra_security.permission_manager');
-        $permConfigs = $def->getArgument(2);
+        $permConfigs = $def->getArgument(3);
 
         $this->assertTrue(is_array($permConfigs));
         $this->assertCount(1, $permConfigs);
@@ -403,7 +404,7 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
         )));
 
         $def = $container->getDefinition('sonatra_security.permission_manager');
-        $permConfigs = $def->getArgument(2);
+        $permConfigs = $def->getArgument(3);
 
         $this->assertTrue(is_array($permConfigs));
         $this->assertCount(1, $permConfigs);
@@ -433,6 +434,7 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
         $container = $this->createContainer(array(array(
             'role_class' => MockRole::class,
             'permission_class' => MockPermission::class,
+            'sharing_class' => MockSharing::class,
             'sharing' => array(
                 'enabled' => true,
                 'identity_types' => array(
@@ -452,11 +454,33 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
         $this->assertCount(1, $identityConfigs);
     }
 
+    /**
+     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
+     * @expectedExceptionMessage The "sonatra_security.sharing_class" config must be configured with a valid class
+     */
+    public function testSharingWithoutSharingClass()
+    {
+        $container = $this->createContainer(array(array(
+            'role_class' => MockRole::class,
+            'permission_class' => MockPermission::class,
+            'sharing' => array(
+                'enabled' => true,
+            ),
+        )));
+
+        $def = $container->getDefinition('sonatra_security.sharing_manager');
+        $identityConfigs = $def->getArgument(0);
+
+        $this->assertTrue(is_array($identityConfigs));
+        $this->assertCount(1, $identityConfigs);
+    }
+
     public function testSharingWithDirectAlias()
     {
         $container = $this->createContainer(array(array(
             'role_class' => MockRole::class,
             'permission_class' => MockPermission::class,
+            'sharing_class' => MockSharing::class,
             'sharing' => array(
                 'enabled' => true,
                 'identity_types' => array(
@@ -481,6 +505,7 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
         $this->createContainer(array(array(
             'role_class' => MockRole::class,
             'permission_class' => MockPermission::class,
+            'sharing_class' => MockSharing::class,
             'sharing' => array(
                 'enabled' => true,
                 'identity_types' => array(

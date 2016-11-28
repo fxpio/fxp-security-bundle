@@ -11,6 +11,7 @@
 
 namespace Sonatra\Bundle\SecurityBundle\DependencyInjection;
 
+use Sonatra\Component\Security\Model\SharingInterface;
 use Sonatra\Component\Security\Permission\PermissionConfig;
 use Sonatra\Component\Security\Sharing\SharingIdentityConfig;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
@@ -99,7 +100,7 @@ class SonatraSecurityExtension extends Extension
             }
         }
 
-        $container->getDefinition('sonatra_security.permission_manager')->replaceArgument(2, $configs);
+        $container->getDefinition('sonatra_security.permission_manager')->replaceArgument(3, $configs);
 
         if ('custom' !== $config['db_driver']) {
             $loader->load($config['db_driver'].'_permission_provider.xml');
@@ -320,6 +321,7 @@ class SonatraSecurityExtension extends Extension
                                                 array $config)
     {
         if ($config['sharing']['enabled']) {
+            $container->setParameter('sonatra_security.sharing_class', $this->validateSharingClass($config['sharing_class']));
             $loader->load('sharing.xml');
             $configs = array();
 
@@ -334,6 +336,23 @@ class SonatraSecurityExtension extends Extension
             $this->validate($container, 'doctrine.orm.filter.sharing', 'doctrine.orm.entity_manager.class', 'doctrine/orm');
             $loader->load('orm_filter_sharing.xml');
         }
+    }
+
+    /**
+     * Validate the sharing class.
+     *
+     * @param string $class The class name
+     *
+     * @return string
+     */
+    private function validateSharingClass($class)
+    {
+        if (SharingInterface::class === $class || !class_exists($class)) {
+            $msg = 'The "sonatra_security.sharing_class" config must be configured with a valid class';
+            throw new InvalidConfigurationException($msg);
+        }
+
+        return $class;
     }
 
     /**

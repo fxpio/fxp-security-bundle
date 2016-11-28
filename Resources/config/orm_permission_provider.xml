@@ -14,6 +14,7 @@
                  class="%sonatra_security.permission_provider.class%"
                  public="false">
             <argument type="expression">service('doctrine').getEntityManagerForClass(parameter('sonatra_security.permission_class')).getRepository(parameter('sonatra_security.permission_class'))</argument>
+            <argument type="expression">service('doctrine').getEntityManagerForClass(parameter('sonatra_security.permission_class')).getRepository(parameter('sonatra_security.sharing_class'))</argument>
             <argument>%sonatra_security.role_class%</argument>
         </service>
     </services>
