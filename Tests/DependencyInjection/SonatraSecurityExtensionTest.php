@@ -367,7 +367,7 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
         )));
 
         $def = $container->getDefinition('sonatra_security.permission_manager');
-        $permConfigs = $def->getArgument(3);
+        $permConfigs = $def->getArgument(4);
 
         $this->assertTrue(is_array($permConfigs));
         $this->assertCount(1, $permConfigs);
@@ -404,7 +404,7 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
         )));
 
         $def = $container->getDefinition('sonatra_security.permission_manager');
-        $permConfigs = $def->getArgument(3);
+        $permConfigs = $def->getArgument(4);
 
         $this->assertTrue(is_array($permConfigs));
         $this->assertCount(1, $permConfigs);
