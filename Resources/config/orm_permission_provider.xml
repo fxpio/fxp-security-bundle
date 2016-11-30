@@ -5,7 +5,7 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-        <parameter key="sonatra_security.permission_provider.class">Sonatra\Component\Security\Doctrine\ORM\Permission\PermissionProvider</parameter>
+        <parameter key="sonatra_security.permission_provider.class">Sonatra\Component\Security\Doctrine\ORM\Provider\PermissionProvider</parameter>
     </parameters>
 
     <services>
@@ -13,12 +13,8 @@
         <service id="sonatra_security.permission_provider"
                  class="%sonatra_security.permission_provider.class%"
                  public="false">
-            <argument type="expression">service('doctrine').getEntityManagerForClass(parameter('sonatra_security.permission_class')).getRepository(parameter('sonatra_security.permission_class'))</argument>
             <argument type="expression">service('doctrine').getEntityManagerForClass(parameter('sonatra_security.role_class')).getRepository(parameter('sonatra_security.role_class'))</argument>
-            <argument type="service" id="sonatra_security.security_identity_manager"/>
-            <argument type="service" id="security.token_storage"/>
-            <argument type="expression" on-invalid="ignore">service('doctrine').getEntityManagerForClass(parameter('sonatra_security.permission_class')).getRepository(parameter('sonatra_security.sharing_class'))</argument>
-            <argument type="service" id="sonatra_security.sharing_manager" on-invalid="ignore"/>
+            <argument type="expression">service('doctrine').getEntityManagerForClass(parameter('sonatra_security.permission_class')).getRepository(parameter('sonatra_security.permission_class'))</argument>
         </service>
     </services>
 </container>

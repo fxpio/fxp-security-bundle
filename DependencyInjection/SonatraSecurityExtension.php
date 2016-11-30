@@ -14,6 +14,7 @@ namespace Sonatra\Bundle\SecurityBundle\DependencyInjection;
 use Sonatra\Component\Security\Model\SharingInterface;
 use Sonatra\Component\Security\Permission\PermissionConfig;
 use Sonatra\Component\Security\Sharing\SharingIdentityConfig;
+use Sonatra\Component\Security\Sharing\SharingSubjectConfig;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Config\Loader\LoaderInterface;
@@ -101,10 +102,7 @@ class SonatraSecurityExtension extends Extension
         }
 
         $container->getDefinition('sonatra_security.permission_manager')->replaceArgument(4, $configs);
-
-        if ('custom' !== $config['db_driver']) {
-            $loader->load($config['db_driver'].'_permission_provider.xml');
-        }
+        $this->loadProvider($loader, $config, 'permission');
     }
 
     /**
@@ -124,7 +122,6 @@ class SonatraSecurityExtension extends Extension
         $def = new Definition(PermissionConfig::class, array(
             $type,
             $this->buildPermissionConfigFields($type, $config),
-            $config['sharing'],
             $config['master'],
         ));
         $def->setPublic(false);
@@ -323,13 +320,20 @@ class SonatraSecurityExtension extends Extension
         if ($config['sharing']['enabled']) {
             $container->setParameter('sonatra_security.sharing_class', $this->validateSharingClass($config['sharing_class']));
             $loader->load('sharing.xml');
-            $configs = array();
+            $subjectConfigs = array();
+            $identityConfigs = array();
 
-            foreach ($config['sharing']['identity_types'] as $type => $identityConfig) {
-                $configs[] = $this->buildSharingIdentityConfig($container, $type, $identityConfig);
+            foreach ($config['sharing']['subjects'] as $type => $subjectConfig) {
+                $subjectConfigs[] = $this->buildSharingSubjectConfig($container, $type, $subjectConfig);
             }
 
-            $container->getDefinition('sonatra_security.sharing_manager')->replaceArgument(0, $configs);
+            foreach ($config['sharing']['identity_types'] as $type => $identityConfig) {
+                $identityConfigs[] = $this->buildSharingIdentityConfig($container, $type, $identityConfig);
+            }
+
+            $container->getDefinition('sonatra_security.sharing_manager')->replaceArgument(1, $subjectConfigs);
+            $container->getDefinition('sonatra_security.sharing_manager')->replaceArgument(2, $identityConfigs);
+            $this->loadProvider($loader, $config, 'sharing');
         }
 
         if ($config['doctrine']['orm']['filters']['sharing']) {
@@ -353,6 +357,34 @@ class SonatraSecurityExtension extends Extension
         }
 
         return $class;
+    }
+
+    /**
+     * Build the sharing subject config.
+     *
+     * @param ContainerBuilder $container The container
+     * @param string           $type      The sharing subject type
+     * @param array            $config    The sharing subject config
+     *
+     * @return Reference
+     */
+    private function buildSharingSubjectConfig(ContainerBuilder $container, $type, array $config)
+    {
+        if (!class_exists($type)) {
+            $msg = 'The "%s" sharing subject class does not exist';
+            throw new InvalidConfigurationException(sprintf($msg, $type));
+        }
+
+        $def = new Definition(SharingSubjectConfig::class, array(
+            $type,
+            $config['visibility'],
+        ));
+        $def->setPublic(false);
+
+        $id = 'sonatra_security.sharing_subject_config.'.strtolower(str_replace('\\', '_', $type));
+        $container->setDefinition($id, $def);
+
+        return new Reference($id);
     }
 
     /**
@@ -398,6 +430,20 @@ class SonatraSecurityExtension extends Extension
         if (!$container->hasParameter($parameter)) {
             $msg = 'The "sonatra_security.%s" config require the "%s" package';
             throw new InvalidConfigurationException(sprintf($msg, $config, $package));
+        }
+    }
+
+    /**
+     * Load the database provider.
+     *
+     * @param LoaderInterface $loader The config loader
+     * @param array           $config The config
+     * @param string          $type   The provider type
+     */
+    private function loadProvider(LoaderInterface $loader, array $config, $type)
+    {
+        if ('custom' !== $config['db_driver']) {
+            $loader->load($config['db_driver'].'_'.$type.'_provider.xml');
         }
     }
 }

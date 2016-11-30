@@ -17,6 +17,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Templating\TemplateGuesser;
 use Sonatra\Component\Security\Authorization\Voter\ExpressionVoter;
 use Sonatra\Component\Security\Authorization\Voter\RoleSecurityIdentityVoter;
 use Sonatra\Component\Security\Role\OrganizationalRoleHierarchy;
+use Sonatra\Component\Security\SharingVisibilities;
 use Sonatra\Component\Security\Tests\Fixtures\Model\MockObject;
 use Sonatra\Component\Security\Tests\Fixtures\Model\MockPermission;
 use Sonatra\Component\Security\Tests\Fixtures\Model\MockRole;
@@ -448,7 +449,7 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
         )));
 
         $def = $container->getDefinition('sonatra_security.sharing_manager');
-        $identityConfigs = $def->getArgument(0);
+        $identityConfigs = $def->getArgument(2);
 
         $this->assertTrue(is_array($identityConfigs));
         $this->assertCount(1, $identityConfigs);
@@ -460,22 +461,16 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
      */
     public function testSharingWithoutSharingClass()
     {
-        $container = $this->createContainer(array(array(
+        $this->createContainer(array(array(
             'role_class' => MockRole::class,
             'permission_class' => MockPermission::class,
             'sharing' => array(
                 'enabled' => true,
             ),
         )));
-
-        $def = $container->getDefinition('sonatra_security.sharing_manager');
-        $identityConfigs = $def->getArgument(0);
-
-        $this->assertTrue(is_array($identityConfigs));
-        $this->assertCount(1, $identityConfigs);
     }
 
-    public function testSharingWithDirectAlias()
+    public function testSharingWithDirectIdentityAlias()
     {
         $container = $this->createContainer(array(array(
             'role_class' => MockRole::class,
@@ -490,7 +485,7 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
         )));
 
         $def = $container->getDefinition('sonatra_security.sharing_manager');
-        $identityConfigs = $def->getArgument(0);
+        $identityConfigs = $def->getArgument(2);
 
         $this->assertTrue(is_array($identityConfigs));
         $this->assertCount(1, $identityConfigs);
@@ -500,7 +495,7 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
      * @expectedExceptionMessage The "FooBar" sharing identity class does not exist
      */
-    public function testSharingWithNonExistentClass()
+    public function testSharingWithNonExistentIdentityClass()
     {
         $this->createContainer(array(array(
             'role_class' => MockRole::class,
@@ -513,6 +508,48 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
                         'alias' => 'foo',
                         'roleable' => true,
                         'permissible' => true,
+                    ),
+                ),
+            ),
+        )));
+    }
+
+    public function testSharingWithSubject()
+    {
+        $container = $this->createContainer(array(array(
+            'role_class' => MockRole::class,
+            'permission_class' => MockPermission::class,
+            'sharing_class' => MockSharing::class,
+            'sharing' => array(
+                'enabled' => true,
+                'subjects' => array(
+                    MockObject::class => SharingVisibilities::TYPE_PRIVATE,
+                ),
+            ),
+        )));
+
+        $def = $container->getDefinition('sonatra_security.sharing_manager');
+        $subjectConfigs = $def->getArgument(1);
+
+        $this->assertTrue(is_array($subjectConfigs));
+        $this->assertCount(1, $subjectConfigs);
+    }
+
+    /**
+     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
+     * @expectedExceptionMessage The "FooBar" sharing subject class does not exist
+     */
+    public function testSharingWithNonExistentSubjectClass()
+    {
+        $this->createContainer(array(array(
+            'role_class' => MockRole::class,
+            'permission_class' => MockPermission::class,
+            'sharing_class' => MockSharing::class,
+            'sharing' => array(
+                'enabled' => true,
+                'subjects' => array(
+                    'FooBar' => array(
+                        'visibility' => SharingVisibilities::TYPE_PRIVATE,
                     ),
                 ),
             ),

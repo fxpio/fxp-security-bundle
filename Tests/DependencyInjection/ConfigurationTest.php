@@ -12,9 +12,10 @@
 namespace Sonatra\Bundle\SecurityBundle\Tests\DependencyInjection;
 
 use Sonatra\Bundle\SecurityBundle\DependencyInjection\Configuration;
-use Sonatra\Component\Security\SharingTypes;
+use Sonatra\Component\Security\SharingVisibilities;
 use Sonatra\Component\Security\Tests\Fixtures\Model\MockPermission;
 use Sonatra\Component\Security\Tests\Fixtures\Model\MockRole;
+use Sonatra\Component\Security\Tests\Fixtures\Model\MockSharing;
 use Symfony\Component\Config\Definition\Processor;
 
 /**
@@ -42,7 +43,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
             'role_class' => MockRole::class,
             'permission_class' => MockPermission::class,
             'permissions' => array(
-                \stdClass::class => SharingTypes::TYPE_PRIVATE,
+                \stdClass::class => true,
             ),
         );
 
@@ -52,7 +53,27 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
 
         $this->assertArrayHasKey('permissions', $res);
         $this->assertArrayHasKey(\stdClass::class, $res['permissions']);
-        $this->assertArrayHasKey('sharing', $res['permissions'][\stdClass::class]);
-        $this->assertSame(SharingTypes::TYPE_PRIVATE, $res['permissions'][\stdClass::class]['sharing']);
+    }
+
+    public function testSharingSubjectConfigNormalization()
+    {
+        $config = array(
+            'role_class' => MockRole::class,
+            'permission_class' => MockPermission::class,
+            'sharing_class' => MockSharing::class,
+            'sharing' => array(
+                'subjects' => array(
+                    \stdClass::class => SharingVisibilities::TYPE_PRIVATE,
+                ),
+            ),
+        );
+
+        $processor = new Processor();
+        $configuration = new Configuration(array(), array());
+        $res = $processor->processConfiguration($configuration, array($config));
+
+        $this->assertArrayHasKey('sharing', $res);
+        $this->assertArrayHasKey('subjects', $res['sharing']);
+        $this->assertArrayHasKey(\stdClass::class, $res['sharing']['subjects']);
     }
 }

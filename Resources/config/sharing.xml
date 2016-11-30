@@ -12,6 +12,8 @@
         <!-- Sharing Manager -->
         <service id="sonatra_security.sharing_manager"
                  class="%sonatra_security.sharing_manager.class%">
+            <argument type="service" id="sonatra_security.sharing_provider"/>
+            <argument/>
             <argument/>
         </service>
     </services>

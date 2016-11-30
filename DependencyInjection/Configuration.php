@@ -11,7 +11,7 @@
 
 namespace Sonatra\Bundle\SecurityBundle\DependencyInjection;
 
-use Sonatra\Component\Security\SharingTypes;
+use Sonatra\Component\Security\SharingVisibilities;
 use Symfony\Component\Config\Definition\Builder\NodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
@@ -219,14 +219,7 @@ class Configuration implements ConfigurationInterface
             ->prototype('array')
                 ->addDefaultsIfNotSet()
                 ->canBeDisabled()
-                ->beforeNormalization()
-                    ->ifString()
-                    ->then(function ($v) {
-                        return array('sharing' => $v);
-                    })
-                ->end()
                 ->children()
-                    ->scalarNode('sharing')->defaultValue(SharingTypes::TYPE_NONE)->end()
                     ->scalarNode('master')->defaultNull()->end()
                     ->booleanNode('build_fields')->defaultTrue()->end()
                     ->arrayNode('fields')
@@ -252,9 +245,26 @@ class Configuration implements ConfigurationInterface
             ->addDefaultsIfNotSet()
             ->canBeEnabled()
             ->children()
+                ->arrayNode('subjects')
+                    ->requiresAtLeastOneElement()
+                    ->useAttributeAsKey('subject', false)
+                    ->normalizeKeys(false)
+                    ->prototype('array')
+                        ->addDefaultsIfNotSet()
+                        ->beforeNormalization()
+                            ->ifString()
+                            ->then(function ($v) {
+                                return array('visibility' => $v);
+                            })
+                        ->end()
+                        ->children()
+                            ->scalarNode('visibility')->defaultValue(SharingVisibilities::TYPE_NONE)->end()
+                        ->end()
+                    ->end()
+                ->end()
                 ->arrayNode('identity_types')
                     ->requiresAtLeastOneElement()
-                    ->useAttributeAsKey('permission', false)
+                    ->useAttributeAsKey('identity', false)
                     ->normalizeKeys(false)
                     ->prototype('array')
                         ->addDefaultsIfNotSet()
