@@ -322,6 +322,10 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
         $container = $this->createContainer(array(array(
             'role_class' => MockRole::class,
             'permission_class' => MockPermission::class,
+            'sharing_class' => MockSharing::class,
+            'sharing' => array(
+                'enabled' => true,
+            ),
             'doctrine' => array(
                 'orm' => array(
                     'filters' => array(
@@ -342,7 +346,7 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
      */
     public function testOrmSharingWithoutDoctrine()
     {
-        $container = $this->createContainer(array(array(
+        $this->createContainer(array(array(
             'role_class' => MockRole::class,
             'permission_class' => MockPermission::class,
             'doctrine' => array(
@@ -353,8 +357,93 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
                 ),
             ),
         )));
+    }
 
-        $this->assertTrue($container->hasDefinition('sonatra_security.orm.listener.sharing'));
+    /**
+     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
+     * @expectedExceptionMessage The "sonatra_security.sharing" config must be enabled
+     */
+    public function testOrmSharingDoctrineWithoutEnableSharing()
+    {
+        $this->createContainer(array(array(
+            'role_class' => MockRole::class,
+            'permission_class' => MockPermission::class,
+            'doctrine' => array(
+                'orm' => array(
+                    'filters' => array(
+                        'sharing' => true,
+                    ),
+                ),
+            ),
+        )), array(
+            'doctrine.orm.entity_manager.class' => EntityManager::class,
+        ));
+    }
+
+    public function testOrmSharingPrivateListener()
+    {
+        $container = $this->createContainer(array(array(
+            'role_class' => MockRole::class,
+            'permission_class' => MockPermission::class,
+            'sharing_class' => MockSharing::class,
+            'sharing' => array(
+                'enabled' => true,
+            ),
+            'doctrine' => array(
+                'orm' => array(
+                    'filters' => array(
+                        'sharing' => true,
+                    ),
+                    'listeners' => array(
+                        'private_sharing' => true,
+                    ),
+                ),
+            ),
+        )), array(
+            'doctrine.orm.entity_manager.class' => EntityManager::class,
+        ));
+
+        $this->assertTrue($container->hasDefinition('sonatra_security.sharing_filter.orm.private_listener'));
+    }
+
+    /**
+     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
+     * @expectedExceptionMessage The "sonatra_security.doctrine.orm.listeners.private_sharing" config require the "doctrine/orm" package
+     */
+    public function testOrmSharingPrivateListenerWithoutDoctrine()
+    {
+        $this->createContainer(array(array(
+            'role_class' => MockRole::class,
+            'permission_class' => MockPermission::class,
+            'doctrine' => array(
+                'orm' => array(
+                    'listeners' => array(
+                        'private_sharing' => true,
+                    ),
+                ),
+            ),
+        )));
+    }
+
+    /**
+     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
+     * @expectedExceptionMessage The "sonatra_security.doctrine.orm.filters.sharing" config must be enabled
+     */
+    public function testOrmSharingPrivateListenerWithoutEnableSharing()
+    {
+        $this->createContainer(array(array(
+            'role_class' => MockRole::class,
+            'permission_class' => MockPermission::class,
+            'doctrine' => array(
+                'orm' => array(
+                    'listeners' => array(
+                        'private_sharing' => true,
+                    ),
+                ),
+            ),
+        )), array(
+            'doctrine.orm.entity_manager.class' => EntityManager::class,
+        ));
     }
 
     public function testPermission()

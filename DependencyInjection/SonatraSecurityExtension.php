@@ -320,25 +320,77 @@ class SonatraSecurityExtension extends Extension
         if ($config['sharing']['enabled']) {
             $container->setParameter('sonatra_security.sharing_class', $this->validateSharingClass($config['sharing_class']));
             $loader->load('sharing.xml');
-            $subjectConfigs = array();
-            $identityConfigs = array();
-
-            foreach ($config['sharing']['subjects'] as $type => $subjectConfig) {
-                $subjectConfigs[] = $this->buildSharingSubjectConfig($container, $type, $subjectConfig);
-            }
-
-            foreach ($config['sharing']['identity_types'] as $type => $identityConfig) {
-                $identityConfigs[] = $this->buildSharingIdentityConfig($container, $type, $identityConfig);
-            }
-
-            $container->getDefinition('sonatra_security.sharing_manager')->replaceArgument(1, $subjectConfigs);
-            $container->getDefinition('sonatra_security.sharing_manager')->replaceArgument(2, $identityConfigs);
+            $this->buildSharingConfigs($container, $config);
             $this->loadProvider($loader, $config, 'sharing');
         }
 
+        $this->buildDoctrineSharingFilter($container, $loader, $config);
+        $this->buildDoctrineSharingListener($container, $loader, $config);
+    }
+
+    /**
+     * Build the sharing configurations.
+     *
+     * @param ContainerBuilder $container The container
+     * @param array            $config    The config
+     */
+    private function buildSharingConfigs(ContainerBuilder $container, array $config)
+    {
+        $subjectConfigs = array();
+        $identityConfigs = array();
+
+        foreach ($config['sharing']['subjects'] as $type => $subjectConfig) {
+            $subjectConfigs[] = $this->buildSharingSubjectConfig($container, $type, $subjectConfig);
+        }
+
+        foreach ($config['sharing']['identity_types'] as $type => $identityConfig) {
+            $identityConfigs[] = $this->buildSharingIdentityConfig($container, $type, $identityConfig);
+        }
+
+        $container->getDefinition('sonatra_security.sharing_manager')->replaceArgument(1, $subjectConfigs);
+        $container->getDefinition('sonatra_security.sharing_manager')->replaceArgument(2, $identityConfigs);
+    }
+
+    /**
+     * Build the doctrine sharing filter.
+     *
+     * @param ContainerBuilder $container The container
+     * @param LoaderInterface  $loader    The config loader
+     * @param array            $config    The config
+     */
+    private function buildDoctrineSharingFilter(ContainerBuilder $container, LoaderInterface $loader,
+                                                  array $config)
+    {
         if ($config['doctrine']['orm']['filters']['sharing']) {
             $this->validate($container, 'doctrine.orm.filter.sharing', 'doctrine.orm.entity_manager.class', 'doctrine/orm');
+
+            if (!$config['sharing']['enabled']) {
+                throw new InvalidConfigurationException('The "sonatra_security.sharing" config must be enabled');
+            }
+
             $loader->load('orm_filter_sharing.xml');
+        }
+    }
+
+    /**
+     * Build the doctrine sharing listener.
+     *
+     * @param ContainerBuilder $container The container
+     * @param LoaderInterface  $loader    The config loader
+     * @param array            $config    The config
+     */
+    private function buildDoctrineSharingListener(ContainerBuilder $container, LoaderInterface $loader,
+                                                  array $config)
+    {
+        // doctrine orm sharing filter listener for private sharing
+        if ($config['doctrine']['orm']['listeners']['private_sharing']) {
+            $this->validate($container, 'doctrine.orm.listeners.private_sharing', 'doctrine.orm.entity_manager.class', 'doctrine/orm');
+
+            if (!$config['doctrine']['orm']['filters']['sharing']) {
+                throw new InvalidConfigurationException('The "sonatra_security.doctrine.orm.filters.sharing" config must be enabled');
+            }
+
+            $loader->load('orm_private_sharing_listener.xml');
         }
     }
 

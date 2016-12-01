@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="sonatra_security.sharing_filter.orm.private_listener.class">Sonatra\Component\Security\Doctrine\ORM\Listener\PrivateSharingSubscriber</parameter>
+    </parameters>
+
+    <services>
+        <!-- Doctrine ORM Sharing Filter Subscriber for Private Sharing -->
+        <service id="sonatra_security.sharing_filter.orm.private_listener"
+                 class="%sonatra_security.sharing_filter.orm.private_listener.class%">
+            <tag name="sonatra_security.event_subscriber"/>
+            <argument type="service" id="doctrine.orm.entity_manager"/>
+            <argument>%sonatra_security.sharing_class%</argument>
+        </service>
+    </services>
+</container>
