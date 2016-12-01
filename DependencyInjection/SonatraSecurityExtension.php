@@ -23,6 +23,7 @@ use Sonatra\Bundle\SecurityBundle\DependencyInjection\Extension\RoleHierarchyBui
 use Sonatra\Bundle\SecurityBundle\DependencyInjection\Extension\SecurityIdentityBuilder;
 use Sonatra\Bundle\SecurityBundle\DependencyInjection\Extension\SecurityVoterBuilder;
 use Sonatra\Bundle\SecurityBundle\DependencyInjection\Extension\SharingBuilder;
+use Sonatra\Bundle\SecurityBundle\DependencyInjection\Extension\ValidatorBuilder;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader;
@@ -71,6 +72,7 @@ class SonatraSecurityExtension extends Extension
             new ExpressionLanguageBuilder(),
             new AnnotationBuilder($this),
             new SharingBuilder(),
+            new ValidatorBuilder(),
         );
     }
 }

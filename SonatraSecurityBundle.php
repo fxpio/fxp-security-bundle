@@ -14,6 +14,8 @@ namespace Sonatra\Bundle\SecurityBundle;
 use Sonatra\Bundle\SecurityBundle\DependencyInjection\Compiler\AccessControlPass;
 use Sonatra\Bundle\SecurityBundle\DependencyInjection\Compiler\ExpressionVariableStoragePass;
 use Sonatra\Bundle\SecurityBundle\DependencyInjection\Compiler\OrganizationalPass;
+use Sonatra\Bundle\SecurityBundle\DependencyInjection\Compiler\TranslatorPass;
+use Sonatra\Bundle\SecurityBundle\DependencyInjection\Compiler\ValidationPass;
 use Sonatra\Bundle\SecurityBundle\DependencyInjection\SecurityExtension;
 use Sonatra\Component\Security\Exception\LogicException;
 use Sonatra\Component\Security\ReachableRoleEvents;
@@ -37,6 +39,8 @@ class SonatraSecurityBundle extends Bundle
 
         $this->registerSecurityExtension($container);
 
+        $container->addCompilerPass(new ValidationPass());
+        $container->addCompilerPass(new TranslatorPass());
         $container->addCompilerPass(new ExpressionVariableStoragePass());
         $container->addCompilerPass(new ObjectFilterPass());
         $container->addCompilerPass(new OrganizationalPass());

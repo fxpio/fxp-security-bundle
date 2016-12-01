@@ -552,12 +552,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonatra/sonatra-security.git",
-                "reference": "16378ac9d36fad842eb91b655c32be3ecdcc6e50"
+                "reference": "200c389b98c1d3fe9dc3a19f339f9eab6b54216a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonatra/sonatra-security/zipball/16378ac9d36fad842eb91b655c32be3ecdcc6e50",
-                "reference": "16378ac9d36fad842eb91b655c32be3ecdcc6e50",
+                "url": "https://api.github.com/repos/sonatra/sonatra-security/zipball/200c389b98c1d3fe9dc3a19f339f9eab6b54216a",
+                "reference": "200c389b98c1d3fe9dc3a19f339f9eab6b54216a",
                 "shasum": ""
             },
             "require": {
@@ -605,7 +605,7 @@
                 "security",
                 "sharing"
             ],
-            "time": "2016-12-01 10:12:42"
+            "time": "2016-12-01 18:21:17"
         },
         {
             "name": "symfony/cache",
@@ -2493,12 +2493,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfSymfony/FOSUserBundle.git",
-                "reference": "3c89d4f01ec2852ad7e3d6ac02031fe32f70a536"
+                "reference": "950785595e7c4f0861e25de777c6847e09601baa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/3c89d4f01ec2852ad7e3d6ac02031fe32f70a536",
-                "reference": "3c89d4f01ec2852ad7e3d6ac02031fe32f70a536",
+                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/950785595e7c4f0861e25de777c6847e09601baa",
+                "reference": "950785595e7c4f0861e25de777c6847e09601baa",
                 "shasum": ""
             },
             "require": {
@@ -2559,7 +2559,7 @@
             "keywords": [
                 "User management"
             ],
-            "time": "2016-11-30 17:06:29"
+            "time": "2016-12-01 15:27:29"
         },
         {
             "name": "jdorn/sql-formatter",
