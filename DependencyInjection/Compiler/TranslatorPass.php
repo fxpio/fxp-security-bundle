@@ -37,7 +37,7 @@ class TranslatorPass implements CompilerPassInterface
         $xlfTranslations = $this->getTranslationFiles($container);
 
         if (count($xlfTranslations) > 0) {
-            $options = array_merge(
+            $options = array_merge_recursive(
                 $translator->getArgument(3),
                 array('resource_files' => $xlfTranslations)
             );
