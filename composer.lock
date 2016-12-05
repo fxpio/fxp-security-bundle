@@ -552,12 +552,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonatra/sonatra-security.git",
-                "reference": "200c389b98c1d3fe9dc3a19f339f9eab6b54216a"
+                "reference": "0b8d1f0f25f4a45188aa6fa6efd5eaf10b06a2c4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonatra/sonatra-security/zipball/200c389b98c1d3fe9dc3a19f339f9eab6b54216a",
-                "reference": "200c389b98c1d3fe9dc3a19f339f9eab6b54216a",
+                "url": "https://api.github.com/repos/sonatra/sonatra-security/zipball/0b8d1f0f25f4a45188aa6fa6efd5eaf10b06a2c4",
+                "reference": "0b8d1f0f25f4a45188aa6fa6efd5eaf10b06a2c4",
                 "shasum": ""
             },
             "require": {
@@ -605,7 +605,7 @@
                 "security",
                 "sharing"
             ],
-            "time": "2016-12-01 18:21:17"
+            "time": "2016-12-05 15:16:31"
         },
         {
             "name": "symfony/cache",
@@ -2493,12 +2493,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfSymfony/FOSUserBundle.git",
-                "reference": "950785595e7c4f0861e25de777c6847e09601baa"
+                "reference": "7261f7aa143b4bfdb0b7ddc5df208067fa7be698"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/950785595e7c4f0861e25de777c6847e09601baa",
-                "reference": "950785595e7c4f0861e25de777c6847e09601baa",
+                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/7261f7aa143b4bfdb0b7ddc5df208067fa7be698",
+                "reference": "7261f7aa143b4bfdb0b7ddc5df208067fa7be698",
                 "shasum": ""
             },
             "require": {
@@ -2507,6 +2507,7 @@
                 "symfony/form": "^2.7 || ^3.0",
                 "symfony/framework-bundle": "^2.7 || ^3.0",
                 "symfony/security-bundle": "^2.7 || ^3.0",
+                "symfony/templating": "^2.7 || ^3.0",
                 "symfony/twig-bundle": "^2.7 || ^3.0"
             },
             "conflict": {
@@ -2559,7 +2560,7 @@
             "keywords": [
                 "User management"
             ],
-            "time": "2016-12-01 15:27:29"
+            "time": "2016-12-03 17:42:44"
         },
         {
             "name": "jdorn/sql-formatter",
@@ -3072,6 +3073,61 @@
                 "shim"
             ],
             "time": "2016-11-14 01:06:16"
+        },
+        {
+            "name": "symfony/templating",
+            "version": "v3.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/templating.git",
+                "reference": "709cb8145bbac2514065111d9588b0c57aa3bb9d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/templating/zipball/709cb8145bbac2514065111d9588b0c57aa3bb9d",
+                "reference": "709cb8145bbac2514065111d9588b0c57aa3bb9d",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.5.9"
+            },
+            "require-dev": {
+                "psr/log": "~1.0"
+            },
+            "suggest": {
+                "psr/log": "For using debug logging in loaders"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.2-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\Templating\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony Templating Component",
+            "homepage": "https://symfony.com",
+            "time": "2016-09-06 11:07:23"
         },
         {
             "name": "symfony/twig-bridge",

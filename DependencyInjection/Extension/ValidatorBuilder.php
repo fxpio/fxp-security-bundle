@@ -25,5 +25,9 @@ class ValidatorBuilder implements ExtensionBuilderInterface
     public function build(ContainerBuilder $container, LoaderInterface $loader, array $config)
     {
         $loader->load('validator.xml');
+
+        if ($config['sharing']['enabled']) {
+            $loader->load('validator_sharing.xml');
+        }
     }
 }

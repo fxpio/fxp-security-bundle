@@ -55,9 +55,11 @@ class ValidationPassTest extends \PHPUnit_Framework_TestCase
     {
         $reflection = new \ReflectionClass(PermissionEvents::class);
         $dirname = dirname($reflection->getFileName());
-        $file = realpath($dirname.'/Resources/config/validation/Permission.xml');
+        $permissionFile = realpath($dirname.'/Resources/config/validation/Permission.xml');
+        $sharingFile = realpath($dirname.'/Resources/config/validation/Sharing.xml');
 
-        $this->assertTrue(file_exists($file));
+        $this->assertTrue(file_exists($permissionFile));
+        $this->assertTrue(file_exists($sharingFile));
 
         $validator = $this->getMockBuilder(Definition::class)->disableOriginalConstructor()->getMock();
 
@@ -74,7 +76,10 @@ class ValidationPassTest extends \PHPUnit_Framework_TestCase
         $validator->expects($this->once())
             ->method('addMethodCall')
             ->with('addXmlMappings', array(
-                array($file),
+                array(
+                    $permissionFile,
+                    $sharingFile,
+                ),
             ));
 
         $this->compiler->process($this->container);
