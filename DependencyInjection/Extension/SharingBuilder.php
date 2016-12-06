@@ -103,7 +103,7 @@ class SharingBuilder implements ExtensionBuilderInterface
                 throw new InvalidConfigurationException('The "sonatra_security.doctrine.orm.filters.sharing" config must be enabled');
             }
 
-            $loader->load('orm_private_sharing_listener.xml');
+            $loader->load('orm_listener_private_sharing.xml');
         }
     }
 

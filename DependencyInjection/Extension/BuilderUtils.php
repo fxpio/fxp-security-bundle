@@ -47,7 +47,7 @@ abstract class BuilderUtils
     public static function loadProvider(LoaderInterface $loader, array $config, $type)
     {
         if ('custom' !== $config['db_driver']) {
-            $loader->load($config['db_driver'].'_'.$type.'_provider.xml');
+            $loader->load($config['db_driver'].'_provider_'.$type.'.xml');
         }
     }
 }

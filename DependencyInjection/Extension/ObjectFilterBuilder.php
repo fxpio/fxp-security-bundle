@@ -30,7 +30,7 @@ class ObjectFilterBuilder implements ExtensionBuilderInterface
             // doctrine orm object filter voters
             if ($config['doctrine']['orm']['object_filter_voter']) {
                 BuilderUtils::validate($container, 'doctrine.orm.object_filter_voter', 'doctrine.orm.entity_manager.class', 'doctrine/orm');
-                $loader->load('orm_object_filter_voter.xml');
+                $loader->load('orm_voter_object_filter.xml');
             }
 
             // doctrine orm object filter listener
