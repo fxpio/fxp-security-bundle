@@ -306,6 +306,7 @@ class Configuration implements ConfigurationInterface
                             ->addDefaultsIfNotSet()
                             ->children()
                                 ->scalarNode('role_hierarchy')->defaultFalse()->end()
+                                ->scalarNode('permission_checker')->defaultfalse()->end()
                                 ->scalarNode('object_filter')->defaultfalse()->end()
                                 ->scalarNode('private_sharing')->defaultfalse()->info('Require to enable the "sonatra_security.doctrine.orm.filters.sharing" option')->end()
                             ->end()

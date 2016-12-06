@@ -219,38 +219,39 @@ Add the following configuration to your `config.yml`.
 ```yaml
 # app/config/config.yml
 sonatra_security:
-    role_class:                  AppBundle\Entity\Role
-    permission_class:            AppBundle\Entity\Permission
-    sharing_class:               AppBundle\Entity\Sharing
+    role_class:                     AppBundle\Entity\Role
+    permission_class:               AppBundle\Entity\Permission
+    sharing_class:                  AppBundle\Entity\Sharing
     object_filter:
-        enabled:                 true # Enable the object filter (optional)
+        enabled:                    true # Enable the object filter (optional)
     role_hierarchy:
-        enabled:                 true # Enable the role hierarchy for organizational context (optional)
-        cache:                   null # Defined the service cache for role hierarchy (optional)
+        enabled:                    true # Enable the role hierarchy for organizational context (optional)
+        cache:                      null # Defined the service cache for role hierarchy (optional)
     security_voter:
-        role_security_identity:  true # Override the Symfony Role Hierarchy Voter (optional)
+        role_security_identity:     true # Override the Symfony Role Hierarchy Voter (optional)
     sharing:
         identity_types:
             AppBundle\Entity\User:
-                roleable:        true # (optional)
+                roleable:           true # (optional)
             AppBundle\Entity\Role:
-                permissible:     true # (optional)
+                permissible:        true # (optional)
     doctrine:
         orm:
-            object_filter_voter: true # Ebable the Doctrine ORM Collection Object Filter (optional)
+            object_filter_voter:    true # Ebable the Doctrine ORM Collection Object Filter (optional)
             listeners:
-                object_filter:   true # Ebable the Doctrine ORM Object Filter Listener(optional)
-                role_hierarchy:  true # Enable the Doctrine ORM listener of role hierarchy (optional)
+                permission_checker: true # Enable the Doctrine ORM Permission Checker Listener (optional)
+                object_filter:      true # Enable the Doctrine ORM Object Filter Listener(optional)
+                role_hierarchy:     true # Enable the Doctrine ORM listener of role hierarchy (optional)
             filters:
-                sharing:         true # Enable the Doctrine ORM SQL Filter for sharing the entities (optional)
+                sharing:            true # Enable the Doctrine ORM SQL Filter for sharing the entities (optional)
 doctrine:
     orm:
         entity_managers:
             default:
                 filters:
                     sonatra_sharing:
-                        class:   Sonatra\Component\Security\Doctrine\ORM\Filter\SharingFilter
-                        enabled: true
+                        class:      Sonatra\Component\Security\Doctrine\ORM\Filter\SharingFilter
+                        enabled:    true
 ```
 
 ### Step 9: Configure and initialize the permissions

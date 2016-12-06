@@ -552,12 +552,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonatra/sonatra-security.git",
-                "reference": "0b8d1f0f25f4a45188aa6fa6efd5eaf10b06a2c4"
+                "reference": "d6b0789ecaaea6a895d0442174a97c0acf355638"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonatra/sonatra-security/zipball/0b8d1f0f25f4a45188aa6fa6efd5eaf10b06a2c4",
-                "reference": "0b8d1f0f25f4a45188aa6fa6efd5eaf10b06a2c4",
+                "url": "https://api.github.com/repos/sonatra/sonatra-security/zipball/d6b0789ecaaea6a895d0442174a97c0acf355638",
+                "reference": "d6b0789ecaaea6a895d0442174a97c0acf355638",
                 "shasum": ""
             },
             "require": {
@@ -605,7 +605,7 @@
                 "security",
                 "sharing"
             ],
-            "time": "2016-12-05 15:16:31"
+            "time": "2016-12-06 12:33:57"
         },
         {
             "name": "symfony/cache",

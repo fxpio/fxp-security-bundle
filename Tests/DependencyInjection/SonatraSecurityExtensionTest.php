@@ -454,13 +454,24 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
             'permissions' => array(
                 MockObject::class => true,
             ),
-        )));
+            'doctrine' => array(
+                'orm' => array(
+                    'listeners' => array(
+                        'permission_checker' => true,
+                    ),
+                ),
+            ),
+        )), array(
+            'doctrine.orm.entity_manager.class' => EntityManager::class,
+        ));
 
         $def = $container->getDefinition('sonatra_security.permission_manager');
         $permConfigs = $def->getArgument(4);
 
         $this->assertTrue(is_array($permConfigs));
         $this->assertCount(1, $permConfigs);
+
+        $this->assertTrue($container->hasDefinition('sonatra_security.permission_checker.orm.listener'));
     }
 
     /**
@@ -513,6 +524,28 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
                 MockObject::class => array(
                     'fields' => array(
                         'foo',
+                    ),
+                ),
+            ),
+        )));
+    }
+
+    /**
+     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
+     * @expectedExceptionMessage The "sonatra_security.doctrine.orm.listeners.permission_checker" config require the "doctrine/orm" package
+     */
+    public function testOrmPermissionCheckerListenerWithoutDoctrine()
+    {
+        $this->createContainer(array(array(
+            'role_class' => MockRole::class,
+            'permission_class' => MockPermission::class,
+            'permissions' => array(
+                MockObject::class => array(),
+            ),
+            'doctrine' => array(
+                'orm' => array(
+                    'listeners' => array(
+                        'permission_checker' => true,
                     ),
                 ),
             ),
