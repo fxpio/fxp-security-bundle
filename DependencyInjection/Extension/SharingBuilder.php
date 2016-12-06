@@ -39,6 +39,7 @@ class SharingBuilder implements ExtensionBuilderInterface
 
         $this->buildDoctrineSharingFilter($container, $loader, $config);
         $this->buildDoctrineSharingListener($container, $loader, $config);
+        $this->buildDoctrineSharingDeleteListener($container, $loader, $config);
     }
 
     /**
@@ -104,6 +105,29 @@ class SharingBuilder implements ExtensionBuilderInterface
             }
 
             $loader->load('orm_listener_private_sharing.xml');
+        }
+    }
+
+    /**
+     * Build the doctrine sharing delete listener.
+     *
+     * @param ContainerBuilder $container The container
+     * @param LoaderInterface  $loader    The config loader
+     * @param array            $config    The config
+     */
+    private function buildDoctrineSharingDeleteListener(ContainerBuilder $container,
+                                                        LoaderInterface $loader,
+                                                        array $config)
+    {
+        // doctrine orm sharing delete listener for private sharing
+        if ($config['doctrine']['orm']['listeners']['sharing_delete']) {
+            BuilderUtils::validate($container, 'doctrine.orm.listeners.sharing_delete', 'doctrine.orm.entity_manager.class', 'doctrine/orm');
+
+            if (!$config['sharing']['enabled']) {
+                throw new InvalidConfigurationException('The "sonatra_security.sharing" config must be enabled');
+            }
+
+            $loader->load('orm_listener_sharing_delete.xml');
         }
     }
 

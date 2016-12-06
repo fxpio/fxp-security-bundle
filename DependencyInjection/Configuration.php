@@ -309,6 +309,7 @@ class Configuration implements ConfigurationInterface
                                 ->scalarNode('permission_checker')->defaultfalse()->end()
                                 ->scalarNode('object_filter')->defaultfalse()->end()
                                 ->scalarNode('private_sharing')->defaultfalse()->info('Require to enable the "sonatra_security.doctrine.orm.filters.sharing" option')->end()
+                                ->scalarNode('sharing_delete')->defaultfalse()->end()
                             ->end()
                         ->end()
                         ->scalarNode('object_filter_voter')->defaultFalse()->end()

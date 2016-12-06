@@ -446,6 +446,69 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
         ));
     }
 
+    public function testOrmSharingDelete()
+    {
+        $container = $this->createContainer(array(array(
+            'role_class' => MockRole::class,
+            'permission_class' => MockPermission::class,
+            'sharing_class' => MockSharing::class,
+            'sharing' => array(
+                'enabled' => true,
+            ),
+            'doctrine' => array(
+                'orm' => array(
+                    'listeners' => array(
+                        'sharing_delete' => true,
+                    ),
+                ),
+            ),
+        )), array(
+            'doctrine.orm.entity_manager.class' => EntityManager::class,
+        ));
+
+        $this->assertTrue($container->hasDefinition('sonatra_security.orm.listener.sharing_delete'));
+    }
+
+    /**
+     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
+     * @expectedExceptionMessage The "sonatra_security.doctrine.orm.listeners.sharing_delete" config require the "doctrine/orm" package
+     */
+    public function testOrmSharingDeleteWithoutDoctrine()
+    {
+        $this->createContainer(array(array(
+            'role_class' => MockRole::class,
+            'permission_class' => MockPermission::class,
+            'doctrine' => array(
+                'orm' => array(
+                    'listeners' => array(
+                        'sharing_delete' => true,
+                    ),
+                ),
+            ),
+        )));
+    }
+
+    /**
+     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
+     * @expectedExceptionMessage The "sonatra_security.sharing" config must be enabled
+     */
+    public function testOrmSharingDeleteDoctrineWithoutEnableSharing()
+    {
+        $this->createContainer(array(array(
+            'role_class' => MockRole::class,
+            'permission_class' => MockPermission::class,
+            'doctrine' => array(
+                'orm' => array(
+                    'listeners' => array(
+                        'sharing_delete' => true,
+                    ),
+                ),
+            ),
+        )), array(
+            'doctrine.orm.entity_manager.class' => EntityManager::class,
+        ));
+    }
+
     public function testPermission()
     {
         $container = $this->createContainer(array(array(
