@@ -12,7 +12,10 @@
 namespace Sonatra\Bundle\SecurityBundle\Tests\DependencyInjection;
 
 use Sonatra\Bundle\SecurityBundle\DependencyInjection\SecurityExtension;
+use Symfony\Bundle\SecurityBundle\DependencyInjection\Security\Factory\SecurityFactoryInterface;
+use Symfony\Bundle\SecurityBundle\DependencyInjection\Security\UserProvider\UserProviderFactoryInterface;
 use Symfony\Bundle\SecurityBundle\DependencyInjection\SecurityExtension as BaseSecurityExtension;
+use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
@@ -75,6 +78,45 @@ class SecurityExtensionTest extends \PHPUnit_Framework_TestCase
             ->willReturn($value);
 
         $this->assertSame($value, $this->ext->getClassesToCompile());
+    }
+
+    public function testGetConfiguration()
+    {
+        /* @var ContainerBuilder $container */
+        $container = $this->getMockBuilder(ContainerBuilder::class)->disableOriginalConstructor()->getMock();
+        $config = array();
+        $configuration = $this->getMockBuilder(ConfigurationInterface::class)->getMock();
+
+        $this->baseExt->expects($this->once())
+            ->method('getConfiguration')
+            ->with($config, $container)
+            ->willReturn($configuration);
+
+        $this->assertSame($configuration, $this->ext->getConfiguration($config, $container));
+    }
+
+    public function testAddSecurityListenerFactory()
+    {
+        /* @var SecurityFactoryInterface $factory */
+        $factory = $this->getMockBuilder(SecurityFactoryInterface::class)->getMock();
+
+        $this->baseExt->expects($this->once())
+            ->method('addSecurityListenerFactory')
+            ->with($factory);
+
+        $this->ext->addSecurityListenerFactory($factory);
+    }
+
+    public function testAddUserProviderFactory()
+    {
+        /* @var UserProviderFactoryInterface $factory */
+        $factory = $this->getMockBuilder(UserProviderFactoryInterface::class)->getMock();
+
+        $this->baseExt->expects($this->once())
+            ->method('addUserProviderFactory')
+            ->with($factory);
+
+        $this->ext->addUserProviderFactory($factory);
     }
 
     public function testLoad()

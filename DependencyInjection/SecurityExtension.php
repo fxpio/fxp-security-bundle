@@ -11,7 +11,10 @@
 
 namespace Sonatra\Bundle\SecurityBundle\DependencyInjection;
 
+use Symfony\Bundle\SecurityBundle\DependencyInjection\Security\Factory\SecurityFactoryInterface;
+use Symfony\Bundle\SecurityBundle\DependencyInjection\Security\UserProvider\UserProviderFactoryInterface;
 use Symfony\Bundle\SecurityBundle\DependencyInjection\SecurityExtension as BaseSecurityExtension;
+use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
@@ -66,9 +69,50 @@ class SecurityExtension extends Extension
     /**
      * {@inheritdoc}
      */
+    public function addClassesToCompile(array $classes)
+    {
+        $this->extension->addClassesToCompile($classes);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getClassesToCompile()
     {
         return array_merge(parent::getClassesToCompile(), $this->extension->getClassesToCompile());
+    }
+
+    /**
+     * Get the configuration.
+     *
+     * @param array            $config    The config
+     * @param ContainerBuilder $container The container
+     *
+     * @return ConfigurationInterface
+     */
+    public function getConfiguration(array $config, ContainerBuilder $container)
+    {
+        return $this->extension->getConfiguration($config, $container);
+    }
+
+    /**
+     * Add the security factory.
+     *
+     * @param SecurityFactoryInterface $factory The security factory
+     */
+    public function addSecurityListenerFactory(SecurityFactoryInterface $factory)
+    {
+        $this->extension->addSecurityListenerFactory($factory);
+    }
+
+    /**
+     * Add the user provider factory.
+     *
+     * @param UserProviderFactoryInterface $factory The user provider factory
+     */
+    public function addUserProviderFactory(UserProviderFactoryInterface $factory)
+    {
+        $this->extension->addUserProviderFactory($factory);
     }
 
     /**
