@@ -13,8 +13,8 @@
         <service id="sonatra_security.permission_provider"
                  class="%sonatra_security.permission_provider.class%"
                  public="false">
-            <argument type="expression">service('doctrine').getEntityManagerForClass(parameter('sonatra_security.role_class')).getRepository(parameter('sonatra_security.role_class'))</argument>
-            <argument type="expression">service('doctrine').getEntityManagerForClass(parameter('sonatra_security.permission_class')).getRepository(parameter('sonatra_security.permission_class'))</argument>
+            <argument type="expression">service('doctrine').getManagerForClass(parameter('sonatra_security.role_class')).getRepository(parameter('sonatra_security.role_class'))</argument>
+            <argument type="expression">service('doctrine').getManagerForClass(parameter('sonatra_security.permission_class')).getRepository(parameter('sonatra_security.permission_class'))</argument>
         </service>
     </services>
 </container>
