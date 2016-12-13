@@ -134,6 +134,42 @@ class SecurityAnnotationSubscriberTest extends \PHPUnit_Framework_TestCase
         $this->listener->onKernelController($event);
     }
 
+    public function testOnKernelControllerWithRequestVariables()
+    {
+        $token = $this->getMockBuilder(TokenInterface::class)->getMock();
+        $request = $this->createRequest(new Security(array('expression' => 'has_role("ROLE_ADMIN")')));
+        $event = new FilterControllerEvent($this->kernel, $this->controller, $request, HttpKernelInterface::MASTER_REQUEST);
+
+        $request->attributes->add(array(
+            'foo' => 'bar',
+        ));
+
+        $this->tokenStorage->expects($this->once())
+            ->method('getToken')
+            ->willReturn($token);
+
+        $this->dispatcher->addListener(ExpressionVariableEvents::GET, function (GetExpressionVariablesEvent $event) use ($token) {
+            $this->assertSame($token, $event->getToken());
+        });
+
+        $this->expression->expects($this->once())
+            ->method('evaluate')
+            ->with('has_role("ROLE_ADMIN")', array(
+                'object' => $request,
+                'request' => $request,
+                'foo' => 'bar',
+            ))
+            ->willReturnCallback(function ($expression, $variables) {
+                $this->assertSame('has_role("ROLE_ADMIN")', $expression);
+                $this->assertArrayHasKey('object', $variables);
+                $this->assertArrayHasKey('request', $variables);
+
+                return true;
+            });
+
+        $this->listener->onKernelController($event);
+    }
+
     /**
      * @expectedException \Symfony\Component\Security\Core\Exception\AccessDeniedException
      * @expectedExceptionMessage Access Denied

@@ -104,10 +104,23 @@ class SecurityAnnotationSubscriber implements EventSubscriberInterface
         $event = new GetExpressionVariablesEvent($token);
         $this->dispatcher->dispatch(ExpressionVariableEvents::GET, $event);
 
-        $variables = array_merge($event->getVariables(), array(
+        $variables = array_merge(array(
             'object' => $request,
             'request' => $request,
-        ));
+        ), $event->getVariables(), $this->getRequestVariables($request));
+
+        return $variables;
+    }
+
+    private function getRequestVariables(Request $request)
+    {
+        $variables = array();
+
+        foreach ($request->attributes->all() as $key => $value) {
+            if (false === strpos($key, '_')) {
+                $variables[$key] = $value;
+            }
+        }
 
         return $variables;
     }
