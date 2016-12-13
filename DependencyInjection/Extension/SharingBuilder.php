@@ -35,6 +35,7 @@ class SharingBuilder implements ExtensionBuilderInterface
             $loader->load('sharing.xml');
             $this->buildSharingConfigs($container, $config);
             BuilderUtils::loadProvider($loader, $config, 'sharing');
+            $this->buildDoctrineOrmProvider($container, $config);
         }
 
         $this->buildDoctrineSharingFilter($container, $loader, $config);
@@ -63,6 +64,18 @@ class SharingBuilder implements ExtensionBuilderInterface
 
         $container->getDefinition('sonatra_security.sharing_manager')->replaceArgument(1, $subjectConfigs);
         $container->getDefinition('sonatra_security.sharing_manager')->replaceArgument(2, $identityConfigs);
+    }
+
+    /**
+     * Build the config of merge organizational roles with doctrine orm sharing listener.
+     *
+     * @param ContainerBuilder $container The container
+     * @param array            $config    The config
+     */
+    private function buildDoctrineOrmProvider(ContainerBuilder $container, array $config)
+    {
+        $def = $container->getDefinition('sonatra_security.sharing_provider');
+        $def->replaceArgument(4, $config['doctrine']['orm']['providers']['merge_organizational_roles']);
     }
 
     /**

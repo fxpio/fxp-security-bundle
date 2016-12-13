@@ -17,6 +17,7 @@
             <argument type="expression">service('doctrine').getManagerForClass(parameter('sonatra_security.sharing_class')).getRepository(parameter('sonatra_security.sharing_class'))</argument>
             <argument type="service" id="sonatra_security.security_identity_manager"/>
             <argument type="service" id="security.token_storage"/>
+            <argument>true</argument>
         </service>
     </services>
 </container>
