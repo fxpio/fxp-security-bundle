@@ -15,6 +15,7 @@
             <tag name="sonatra_security.event_subscriber"/>
             <argument type="service" id="doctrine.orm.entity_manager"/>
             <argument>%sonatra_security.sharing_class%</argument>
+            <argument type="service" id="security.token_storage" on-invalid="ignore"/>
         </service>
     </services>
 </container>
