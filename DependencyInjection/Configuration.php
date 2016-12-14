@@ -221,8 +221,47 @@ class Configuration implements ConfigurationInterface
                 ->canBeDisabled()
                 ->children()
                     ->scalarNode('master')->defaultNull()->end()
+                    ->arrayNode('master_mapping_permissions')
+                        ->useAttributeAsKey('master_permission', false)
+                        ->normalizeKeys(false)
+                        ->prototype('scalar')->end()
+                    ->end()
+                    ->arrayNode('operations')
+                        ->prototype('scalar')->end()
+                    ->end()
                     ->booleanNode('build_fields')->defaultTrue()->end()
-                    ->arrayNode('fields')
+                    ->append($this->getPermissionFieldsNode())
+                ->end()
+            ->end()
+        ;
+
+        return $node;
+    }
+
+    /**
+     * Get permission fields node.
+     *
+     * @return NodeDefinition
+     */
+    private function getPermissionFieldsNode()
+    {
+        $node = NodeUtils::createArrayNode('fields');
+
+        $node
+            ->requiresAtLeastOneElement()
+            ->useAttributeAsKey('field', false)
+            ->normalizeKeys(false)
+            ->prototype('array')
+                ->addDefaultsIfNotSet()
+                ->beforeNormalization()
+                    ->ifArray()
+                    ->then(function ($v) {
+                        return array('operations' => $v);
+                    })
+                ->end()
+                ->canBeDisabled()
+                ->children()
+                    ->arrayNode('operations')
                         ->prototype('scalar')->end()
                     ->end()
                 ->end()

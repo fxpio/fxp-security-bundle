@@ -560,8 +560,8 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
             'permissions' => array(
                 MockObject::class => array(
                     'fields' => array(
-                        'id',
-                        'name',
+                        'id' => null,
+                        'name' => null,
                     ),
                 ),
             ),
@@ -586,7 +586,7 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
             'permissions' => array(
                 MockObject::class => array(
                     'fields' => array(
-                        'foo',
+                        'foo' => null,
                     ),
                 ),
             ),

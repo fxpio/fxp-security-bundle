@@ -13,6 +13,7 @@ namespace Sonatra\Bundle\SecurityBundle\Tests\DependencyInjection;
 
 use Sonatra\Bundle\SecurityBundle\DependencyInjection\Configuration;
 use Sonatra\Component\Security\SharingVisibilities;
+use Sonatra\Component\Security\Tests\Fixtures\Model\MockObject;
 use Sonatra\Component\Security\Tests\Fixtures\Model\MockPermission;
 use Sonatra\Component\Security\Tests\Fixtures\Model\MockRole;
 use Sonatra\Component\Security\Tests\Fixtures\Model\MockSharing;
@@ -53,6 +54,66 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
 
         $this->assertArrayHasKey('permissions', $res);
         $this->assertArrayHasKey(\stdClass::class, $res['permissions']);
+    }
+
+    public function testPermissionFieldOperationNormalization()
+    {
+        $operations = array(
+            'read',
+            'edit',
+        );
+        $config = array(
+            'role_class' => MockRole::class,
+            'permission_class' => MockPermission::class,
+            'permissions' => array(
+                MockObject::class => array(
+                    'fields' => array(
+                        'name' => $operations,
+                    ),
+                ),
+            ),
+        );
+
+        $processor = new Processor();
+        $configuration = new Configuration(array(), array());
+        $res = $processor->processConfiguration($configuration, array($config));
+
+        $this->assertArrayHasKey('permissions', $res);
+        $this->assertArrayHasKey(MockObject::class, $res['permissions']);
+        $this->assertArrayHasKey('master_mapping_permissions', $res['permissions'][MockObject::class]);
+
+        $cConf = $res['permissions'][MockObject::class];
+
+        $this->assertArrayHasKey('fields', $cConf);
+        $this->assertArrayHasKey('name', $cConf['fields']);
+        $this->assertArrayHasKey('operations', $cConf['fields']['name']);
+        $this->assertSame($operations, $cConf['fields']['name']['operations']);
+    }
+
+    public function testPermissionMasterFieldMapping()
+    {
+        $config = array(
+            'role_class' => MockRole::class,
+            'permission_class' => MockPermission::class,
+            'permissions' => array(
+                \stdClass::class => array(
+                    'master_mapping_permissions' => array(
+                        'view' => 'read',
+                        'update' => 'edit',
+                    ),
+                ),
+            ),
+        );
+
+        $processor = new Processor();
+        $configuration = new Configuration(array(), array());
+        $res = $processor->processConfiguration($configuration, array($config));
+
+        $this->assertArrayHasKey('permissions', $res);
+        $this->assertArrayHasKey(\stdClass::class, $res['permissions']);
+        $this->assertArrayHasKey('master_mapping_permissions', $res['permissions'][\stdClass::class]);
+        $this->assertArrayHasKey('view', $res['permissions'][\stdClass::class]['master_mapping_permissions']);
+        $this->assertArrayHasKey('update', $res['permissions'][\stdClass::class]['master_mapping_permissions']);
     }
 
     public function testSharingSubjectConfigNormalization()

@@ -12,6 +12,7 @@
 namespace Sonatra\Bundle\SecurityBundle\DependencyInjection\Extension;
 
 use Sonatra\Component\Security\Permission\PermissionConfig;
+use Sonatra\Component\Security\Permission\PermissionFieldConfig;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -59,49 +60,79 @@ class PermissionBuilder implements ExtensionBuilderInterface
             throw new InvalidConfigurationException(sprintf($msg, $type));
         }
 
-        $def = new Definition(PermissionConfig::class, array(
+        return $this->createConfigDefinition($container, PermissionConfig::class, $type, array(
             $type,
-            $this->buildPermissionConfigFields($type, $config),
+            $config['operations'],
+            $this->buildPermissionConfigFields($container, $type, $config),
             $config['master'],
+            $config['master_mapping_permissions'],
         ));
-        $def->setPublic(false);
-
-        $id = 'sonatra_security.permission_config.'.strtolower(str_replace('\\', '_', $type));
-        $container->setDefinition($id, $def);
-
-        return new Reference($id);
     }
 
     /**
      * Build the fields of permission config.
      *
-     * @param string $type   The type of permission
-     * @param array  $config The config of permissions
+     * @param ContainerBuilder $container The container
+     * @param string           $type   The type of permission
+     * @param array            $config The config of permissions
      *
      * @return string[]
      */
-    private function buildPermissionConfigFields($type, array $config)
+    private function buildPermissionConfigFields(ContainerBuilder $container, $type, array $config)
     {
         $fields = array();
         $ref = new \ReflectionClass($type);
 
         if ($config['build_fields'] && 0 === count($config['fields'])) {
             foreach ($ref->getProperties() as $property) {
-                $fields[] = $property->getName();
-            }
-        } else {
-            foreach ($config['fields'] as $field) {
-                if (!$ref->hasProperty($field)) {
-                    $msg = 'The permission field "%s" does not exist in "%s" class';
-
-                    throw new InvalidConfigurationException(sprintf($msg, $field, $type));
-                }
-
-                $fields[] = $field;
+                $config['fields'][$property->getName()] = array(
+                    'enabled' => true,
+                    'operations' => array(),
+                );
             }
         }
 
+        foreach ($config['fields'] as $field => $fieldConfig) {
+            if (!$ref->hasProperty($field)) {
+                $msg = 'The permission field "%s" does not exist in "%s" class';
+
+                throw new InvalidConfigurationException(sprintf($msg, $field, $type));
+            }
+
+            $fields[] = $this->createConfigDefinition($container, PermissionFieldConfig::class, $type, array(
+                $field,
+                $fieldConfig['operations'],
+            ), $field);
+        }
+
         return $fields;
+    }
+
+    /**
+     * Create the permission configuration service and get the service id reference.
+     *
+     * @param ContainerBuilder $container The container
+     * @param string           $class     The config class
+     * @param string           $type      The type of permission
+     * @param array            $arguments The config class arguments
+     * @param string|null      $field     The field of permission
+     *
+     * @return Reference
+     */
+    private function createConfigDefinition(ContainerBuilder $container, $class, $type, array $arguments, $field = null)
+    {
+        $def = new Definition($class, $arguments);
+        $def->setPublic(false);
+
+        $id = 'sonatra_security.permission_config.'.strtolower(str_replace('\\', '_', $type));
+
+        if (null !== $field) {
+            $id .= '.fields.'.$field;
+        }
+
+        $container->setDefinition($id, $def);
+
+        return new Reference($id);
     }
 
     /**
