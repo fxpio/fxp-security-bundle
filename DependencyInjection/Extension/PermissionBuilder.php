@@ -73,8 +73,8 @@ class PermissionBuilder implements ExtensionBuilderInterface
      * Build the fields of permission config.
      *
      * @param ContainerBuilder $container The container
-     * @param string           $type   The type of permission
-     * @param array            $config The config of permissions
+     * @param string           $type      The type of permission
+     * @param array            $config    The config of permissions
      *
      * @return string[]
      */
