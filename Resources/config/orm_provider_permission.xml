@@ -15,6 +15,7 @@
                  public="false">
             <argument type="expression">service('doctrine').getManagerForClass(parameter('sonatra_security.role_class')).getRepository(parameter('sonatra_security.role_class'))</argument>
             <argument type="expression">service('doctrine').getManagerForClass(parameter('sonatra_security.permission_class')).getRepository(parameter('sonatra_security.permission_class'))</argument>
+            <argument type="service" id="doctrine"/>
             <argument>true</argument>
         </service>
     </services>

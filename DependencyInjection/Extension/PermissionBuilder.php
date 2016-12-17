@@ -144,7 +144,7 @@ class PermissionBuilder implements ExtensionBuilderInterface
     private function buildDoctrineOrmProvider(ContainerBuilder $container, array $config)
     {
         $def = $container->getDefinition('sonatra_security.permission_provider');
-        $def->replaceArgument(2, $config['doctrine']['orm']['providers']['merge_organizational_roles']);
+        $def->replaceArgument(3, $config['doctrine']['orm']['providers']['merge_organizational_roles']);
     }
 
     /**
