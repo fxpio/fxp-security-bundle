@@ -531,7 +531,7 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
         $def = $container->getDefinition('sonatra_security.permission_manager');
         $permConfigs = $def->getArgument(4);
 
-        $this->assertTrue(is_array($permConfigs));
+        $this->assertInternalType('array', $permConfigs);
         $this->assertCount(1, $permConfigs);
 
         $this->assertTrue($container->hasDefinition('sonatra_security.permission_checker.orm.listener'));
@@ -570,7 +570,7 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
         $def = $container->getDefinition('sonatra_security.permission_manager');
         $permConfigs = $def->getArgument(4);
 
-        $this->assertTrue(is_array($permConfigs));
+        $this->assertInternalType('array', $permConfigs);
         $this->assertCount(1, $permConfigs);
     }
 
@@ -636,7 +636,7 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
         $def = $container->getDefinition('sonatra_security.sharing_manager');
         $identityConfigs = $def->getArgument(2);
 
-        $this->assertTrue(is_array($identityConfigs));
+        $this->assertInternalType('array', $identityConfigs);
         $this->assertCount(1, $identityConfigs);
     }
 
@@ -672,7 +672,7 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
         $def = $container->getDefinition('sonatra_security.sharing_manager');
         $identityConfigs = $def->getArgument(2);
 
-        $this->assertTrue(is_array($identityConfigs));
+        $this->assertInternalType('array', $identityConfigs);
         $this->assertCount(1, $identityConfigs);
     }
 
@@ -716,7 +716,7 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
         $def = $container->getDefinition('sonatra_security.sharing_manager');
         $subjectConfigs = $def->getArgument(1);
 
-        $this->assertTrue(is_array($subjectConfigs));
+        $this->assertInternalType('array', $subjectConfigs);
         $this->assertCount(1, $subjectConfigs);
     }
 

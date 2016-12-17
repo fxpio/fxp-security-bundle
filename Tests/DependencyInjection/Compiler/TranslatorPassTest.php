@@ -57,7 +57,7 @@ class TranslatorPassTest extends \PHPUnit_Framework_TestCase
         $dirname = dirname($reflection->getFileName());
         $file = realpath($dirname.'/Resources/config/translations/validators.en.xlf');
 
-        $this->assertTrue(file_exists($file));
+        $this->assertFileExists($file);
 
         $translator = $this->getMockBuilder(Definition::class)->disableOriginalConstructor()->getMock();
 

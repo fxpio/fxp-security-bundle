@@ -58,8 +58,8 @@ class ValidationPassTest extends \PHPUnit_Framework_TestCase
         $permissionFile = realpath($dirname.'/Resources/config/validation/Permission.xml');
         $sharingFile = realpath($dirname.'/Resources/config/validation/Sharing.xml');
 
-        $this->assertTrue(file_exists($permissionFile));
-        $this->assertTrue(file_exists($sharingFile));
+        $this->assertFileExists($permissionFile);
+        $this->assertFileExists($sharingFile);
 
         $validator = $this->getMockBuilder(Definition::class)->disableOriginalConstructor()->getMock();
 
