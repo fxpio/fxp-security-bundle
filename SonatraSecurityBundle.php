@@ -11,22 +11,22 @@
 
 namespace Sonatra\Bundle\SecurityBundle;
 
+use Doctrine\Bundle\DoctrineBundle\DependencyInjection\Compiler\DoctrineOrmMappingsPass;
 use Sonatra\Bundle\SecurityBundle\DependencyInjection\Compiler\AccessControlPass;
 use Sonatra\Bundle\SecurityBundle\DependencyInjection\Compiler\ExpressionVariableStoragePass;
+use Sonatra\Bundle\SecurityBundle\DependencyInjection\Compiler\ObjectFilterPass;
 use Sonatra\Bundle\SecurityBundle\DependencyInjection\Compiler\OrganizationalPass;
 use Sonatra\Bundle\SecurityBundle\DependencyInjection\Compiler\TranslatorPass;
 use Sonatra\Bundle\SecurityBundle\DependencyInjection\Compiler\ValidationPass;
 use Sonatra\Bundle\SecurityBundle\DependencyInjection\SecurityExtension;
+use Sonatra\Bundle\SecurityBundle\Factory\HostRoleFactory;
 use Sonatra\Component\Security\Exception\LogicException;
 use Sonatra\Component\Security\ReachableRoleEvents;
 use Symfony\Bundle\SecurityBundle\DependencyInjection\SecurityExtension as BaseSecurityExtension;
 use Symfony\Component\DependencyInjection\Compiler\PassConfig;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\EventDispatcher\DependencyInjection\RegisterListenersPass;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Sonatra\Bundle\SecurityBundle\DependencyInjection\Compiler\ObjectFilterPass;
-use Sonatra\Bundle\SecurityBundle\Factory\HostRoleFactory;
-use Doctrine\Bundle\DoctrineBundle\DependencyInjection\Compiler\DoctrineOrmMappingsPass;
 
 /**
  * @author François Pluchino <francois.pluchino@sonatra.com>
