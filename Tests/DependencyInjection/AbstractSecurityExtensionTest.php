@@ -45,6 +45,7 @@ abstract class AbstractSecurityExtensionTest extends \PHPUnit_Framework_TestCase
                 'SecurityBundle' => SecurityBundle::class,
                 'SonatraSecurityBundle' => SonatraSecurityBundle::class,
             ),
+            'kernel.bundles_metadata' => array(),
             'kernel.cache_dir' => sys_get_temp_dir().'/sonatra_security_bundle',
             'kernel.debug' => false,
             'kernel.environment' => 'test',
