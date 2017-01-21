@@ -19,9 +19,8 @@
         <!-- Security Firewall -->
         <service id="sonatra_security.host_role.authentication.listener"
                  class="%sonatra_security.host_role.authentication.listener.class%">
-            <argument type="service" id="security.token_storage"/>
+            <argument type="service" id="sonatra_security.security_identity_manager"/>
             <argument type="collection"/>
-            <argument type="service" id="security.authentication.listener.anonymous"/>
         </service>
     </services>
 </container>
