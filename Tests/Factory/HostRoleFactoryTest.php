@@ -53,8 +53,8 @@ class HostRoleFactoryTest extends \PHPUnit_Framework_TestCase
 
         $res = $factory->create($container, 'test_id', array(), 'user_provider', 'default_entry_point');
         $valid = array(
-            'sonatra_security.authentication.provider.host_role.test_id',
-            'sonatra_security.authentication.listener.host_role.test_id',
+            'sonatra_security.authentication.provider.host_roles.test_id',
+            'sonatra_security.authentication.listener.host_roles.test_id',
             'default_entry_point',
         );
 

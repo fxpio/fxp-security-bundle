@@ -12,6 +12,7 @@
 namespace Sonatra\Bundle\SecurityBundle\DependencyInjection;
 
 use Sonatra\Bundle\SecurityBundle\DependencyInjection\Extension\AnnotationBuilder;
+use Sonatra\Bundle\SecurityBundle\DependencyInjection\Extension\AnonymousRoleBuilder;
 use Sonatra\Bundle\SecurityBundle\DependencyInjection\Extension\ExpressionLanguageBuilder;
 use Sonatra\Bundle\SecurityBundle\DependencyInjection\Extension\ExtensionBuilderInterface;
 use Sonatra\Bundle\SecurityBundle\DependencyInjection\Extension\HostRoleBuilder;
@@ -66,6 +67,7 @@ class SonatraSecurityExtension extends Extension
             new PermissionBuilder(),
             new ObjectFilterBuilder(),
             new HostRoleBuilder(),
+            new AnonymousRoleBuilder(),
             new RoleHierarchyBuilder(),
             new SecurityVoterBuilder(),
             new OrganizationalContextBuilder(),

@@ -17,16 +17,16 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 /**
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-class HostRoleBuilder implements ExtensionBuilderInterface
+class AnonymousRoleBuilder implements ExtensionBuilderInterface
 {
     /**
      * {@inheritdoc}
      */
     public function build(ContainerBuilder $container, LoaderInterface $loader, array $config)
     {
-        $loader->load('host_role.xml');
+        $loader->load('anonymous_role.xml');
 
-        $def = $container->getDefinition('sonatra_security.authentication.listener.host_roles');
-        $def->addMethodCall('setEnabled', array($config['host_role']['enabled']));
+        $def = $container->getDefinition('sonatra_security.authentication.listener.anonymous_role');
+        $def->addMethodCall('setEnabled', array($config['anonymous_role']['enabled']));
     }
 }

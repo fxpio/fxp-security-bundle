@@ -48,6 +48,7 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('sharing_class')->defaultValue('Sonatra\Component\Security\Model\SharingInterface')->end()
             ->end()
             ->append($this->getHostRoleNode())
+            ->append($this->getAnonymousRoleNode())
             ->append($this->getRoleHierarchyNode())
             ->append($this->getSecurityVoterNode())
             ->append($this->getObjectFilterNode())
@@ -70,6 +71,23 @@ class Configuration implements ConfigurationInterface
     private function getHostRoleNode()
     {
         $node = NodeUtils::createArrayNode('host_role');
+
+        $node
+            ->addDefaultsIfNotSet()
+            ->canBeEnabled()
+        ;
+
+        return $node;
+    }
+
+    /**
+     * Get anonymous role node.
+     *
+     * @return NodeDefinition
+     */
+    private function getAnonymousRoleNode()
+    {
+        $node = NodeUtils::createArrayNode('anonymous_role');
 
         $node
             ->addDefaultsIfNotSet()

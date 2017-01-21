@@ -19,6 +19,7 @@ use Sonatra\Bundle\SecurityBundle\DependencyInjection\Compiler\OrganizationalPas
 use Sonatra\Bundle\SecurityBundle\DependencyInjection\Compiler\TranslatorPass;
 use Sonatra\Bundle\SecurityBundle\DependencyInjection\Compiler\ValidationPass;
 use Sonatra\Bundle\SecurityBundle\DependencyInjection\SecurityExtension;
+use Sonatra\Bundle\SecurityBundle\Factory\AnonymousRoleFactory;
 use Sonatra\Bundle\SecurityBundle\Factory\HostRoleFactory;
 use Sonatra\Component\Security\Exception\LogicException;
 use Sonatra\Component\Security\ReachableRoleEvents;
@@ -33,6 +34,9 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
  */
 class SonatraSecurityBundle extends Bundle
 {
+    /**
+     * {@inheritdoc}
+     */
     public function build(ContainerBuilder $container)
     {
         parent::build($container);
@@ -65,6 +69,7 @@ class SonatraSecurityBundle extends Bundle
         /* @var BaseSecurityExtension $extension */
         $extension = $container->getExtension('security');
         $extension->addSecurityListenerFactory(new HostRoleFactory());
+        $extension->addSecurityListenerFactory(new AnonymousRoleFactory());
 
         $container->registerExtension(new SecurityExtension($extension));
         $container->addCompilerPass(new AccessControlPass());

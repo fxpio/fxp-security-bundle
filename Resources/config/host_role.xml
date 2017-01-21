@@ -5,20 +5,20 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-        <parameter key="sonatra_security.host_role.authentication.provider.class">Sonatra\Component\Security\Authentication\Provider\HostRoleProvider</parameter>
-        <parameter key="sonatra_security.host_role.authentication.listener.class">Sonatra\Component\Security\Firewall\HostRoleListener</parameter>
+        <parameter key="sonatra_security.authentication.provider.host_roles.class">Sonatra\Component\Security\Authentication\Provider\HostRoleProvider</parameter>
+        <parameter key="sonatra_security.authentication.listener.host_roles.class">Sonatra\Component\Security\Firewall\HostRoleListener</parameter>
     </parameters>
 
     <services>
         <!-- Authentication Provider -->
-        <service id="sonatra_security.host_role.authentication.provider"
-                 class="%sonatra_security.host_role.authentication.provider.class%">
+        <service id="sonatra_security.authentication.provider.host_roles"
+                 class="%sonatra_security.authentication.provider.host_roles.class%">
             <argument type="collection"/>
         </service>
 
         <!-- Security Firewall -->
-        <service id="sonatra_security.host_role.authentication.listener"
-                 class="%sonatra_security.host_role.authentication.listener.class%">
+        <service id="sonatra_security.authentication.listener.host_roles"
+                 class="%sonatra_security.authentication.listener.host_roles.class%">
             <argument type="service" id="sonatra_security.security_identity_manager"/>
             <argument type="collection"/>
         </service>
