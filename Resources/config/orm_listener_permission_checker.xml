@@ -12,7 +12,7 @@
         <!-- Doctrine ORM Permission Checker Listener -->
         <service id="sonatra_security.permission_checker.orm.listener"
                  class="%sonatra_security.permission_checker.orm.listener.class%">
-            <tag name="doctrine.event_subscriber" priority="1"/>
+            <tag name="doctrine.event_subscriber" priority="256"/>
             <property name="container" type="service" id="service_container"/>
         </service>
     </services>

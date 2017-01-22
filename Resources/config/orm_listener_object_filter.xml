@@ -12,7 +12,7 @@
         <!-- Doctrine ORM Object Filter Listener -->
         <service id="sonatra_security.object_filter.orm.listener"
                  class="%sonatra_security.object_filter.orm.listener.class%">
-            <tag name="doctrine.event_subscriber" priority="1"/>
+            <tag name="doctrine.event_subscriber" priority="255"/>
             <property name="container" type="service" id="service_container"/>
         </service>
     </services>
