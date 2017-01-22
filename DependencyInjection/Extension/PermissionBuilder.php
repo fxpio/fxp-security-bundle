@@ -63,6 +63,7 @@ class PermissionBuilder implements ExtensionBuilderInterface
         return $this->createConfigDefinition($container, PermissionConfig::class, $type, array(
             $type,
             $config['operations'],
+            $config['mapping_permissions'],
             $this->buildPermissionConfigFields($container, $type, $config),
             $config['master'],
             $config['master_mapping_permissions'],
@@ -88,6 +89,7 @@ class PermissionBuilder implements ExtensionBuilderInterface
                 $config['fields'][$property->getName()] = array(
                     'enabled' => true,
                     'operations' => array(),
+                    'mapping_permissions' => array(),
                 );
             }
         }
@@ -102,6 +104,7 @@ class PermissionBuilder implements ExtensionBuilderInterface
             $fields[] = $this->createConfigDefinition($container, PermissionFieldConfig::class, $type, array(
                 $field,
                 $fieldConfig['operations'],
+                $fieldConfig['mapping_permissions'],
             ), $field);
         }
 
