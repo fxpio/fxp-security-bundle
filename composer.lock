@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "9f24e144c7e25ea8be1ac45f3977d5cd",
-    "content-hash": "0627c7f8a0db2b6c09f97f8a6f5c0358",
+    "hash": "b3ffba0e48d8076d14b7dc17da484bca",
+    "content-hash": "2f247ec5c637eaaf532c5a959d60cb66",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -553,12 +553,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonatra/sonatra-security.git",
-                "reference": "211d475491884e01bc008ec3cf22d99da0efb6db"
+                "reference": "7c1b5b30ff8de61a31bfb20883cafe510563b90f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonatra/sonatra-security/zipball/211d475491884e01bc008ec3cf22d99da0efb6db",
-                "reference": "211d475491884e01bc008ec3cf22d99da0efb6db",
+                "url": "https://api.github.com/repos/sonatra/sonatra-security/zipball/7c1b5b30ff8de61a31bfb20883cafe510563b90f",
+                "reference": "7c1b5b30ff8de61a31bfb20883cafe510563b90f",
                 "shasum": ""
             },
             "require": {
@@ -607,7 +607,7 @@
                 "security",
                 "sharing"
             ],
-            "time": "2017-01-26 15:57:03"
+            "time": "2017-01-26 16:15:41"
         },
         {
             "name": "symfony/cache",
@@ -3358,7 +3358,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=5.6.0"
+        "php": ">=7.0.0"
     },
     "platform-dev": []
 }
