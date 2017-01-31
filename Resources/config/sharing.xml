@@ -15,6 +15,9 @@
             <argument type="service" id="sonatra_security.sharing_provider"/>
             <argument/>
             <argument/>
+            <call method="setEventDispatcher">
+                <argument type="service" id="event_dispatcher" on-invalid="ignore"/>
+            </call>
         </service>
     </services>
 </container>

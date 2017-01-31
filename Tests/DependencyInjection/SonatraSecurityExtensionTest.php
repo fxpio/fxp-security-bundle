@@ -337,7 +337,7 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
             'doctrine.orm.entity_manager.class' => EntityManager::class,
         ));
 
-        $this->assertTrue($container->hasDefinition('sonatra_security.orm.listener.sharing'));
+        $this->assertTrue($container->hasDefinition('sonatra_security.orm.filter.subscriber.sharing'));
     }
 
     /**
@@ -403,7 +403,7 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
             'doctrine.orm.entity_manager.class' => EntityManager::class,
         ));
 
-        $this->assertTrue($container->hasDefinition('sonatra_security.sharing_filter.orm.private_listener'));
+        $this->assertTrue($container->hasDefinition('sonatra_security.orm.filter.sharing.private_listener'));
     }
 
     /**

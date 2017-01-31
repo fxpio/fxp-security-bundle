@@ -553,12 +553,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonatra/sonatra-security.git",
-                "reference": "7c1b5b30ff8de61a31bfb20883cafe510563b90f"
+                "reference": "f484d120dc488d7a3cf85fa08efcf098b500f852"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonatra/sonatra-security/zipball/7c1b5b30ff8de61a31bfb20883cafe510563b90f",
-                "reference": "7c1b5b30ff8de61a31bfb20883cafe510563b90f",
+                "url": "https://api.github.com/repos/sonatra/sonatra-security/zipball/f484d120dc488d7a3cf85fa08efcf098b500f852",
+                "reference": "f484d120dc488d7a3cf85fa08efcf098b500f852",
                 "shasum": ""
             },
             "require": {
@@ -573,6 +573,7 @@
             "require-dev": {
                 "doctrine/orm": "~2.5",
                 "sonatra/cache": "~1.0@dev",
+                "sonatra/doctrine-extensions": "~1.0@dev",
                 "symfony/dependency-injection": "~3.1"
             },
             "type": "library",
@@ -607,7 +608,7 @@
                 "security",
                 "sharing"
             ],
-            "time": "2017-01-26 16:15:41"
+            "time": "2017-01-31 13:53:30"
         },
         {
             "name": "symfony/cache",
@@ -2495,12 +2496,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfSymfony/FOSUserBundle.git",
-                "reference": "86a156577bd7a360b2e28b47d23819537d5317f5"
+                "reference": "d01739f70df32e6ab441b23b88395ae26715c5f3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/86a156577bd7a360b2e28b47d23819537d5317f5",
-                "reference": "86a156577bd7a360b2e28b47d23819537d5317f5",
+                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/d01739f70df32e6ab441b23b88395ae26715c5f3",
+                "reference": "d01739f70df32e6ab441b23b88395ae26715c5f3",
                 "shasum": ""
             },
             "require": {
@@ -2563,7 +2564,7 @@
             "keywords": [
                 "User management"
             ],
-            "time": "2017-01-26 10:33:07"
+            "time": "2017-01-30 16:02:42"
         },
         {
             "name": "jdorn/sql-formatter",
