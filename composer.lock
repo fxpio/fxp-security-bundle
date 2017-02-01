@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "b3ffba0e48d8076d14b7dc17da484bca",
+    "hash": "fa67d587805f719cceb4821a87f0fed4",
     "content-hash": "2f247ec5c637eaaf532c5a959d60cb66",
     "packages": [
         {
@@ -553,12 +553,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonatra/sonatra-security.git",
-                "reference": "f484d120dc488d7a3cf85fa08efcf098b500f852"
+                "reference": "a92befb4361aabce596fbb114791cba2c5136427"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonatra/sonatra-security/zipball/f484d120dc488d7a3cf85fa08efcf098b500f852",
-                "reference": "f484d120dc488d7a3cf85fa08efcf098b500f852",
+                "url": "https://api.github.com/repos/sonatra/sonatra-security/zipball/a92befb4361aabce596fbb114791cba2c5136427",
+                "reference": "a92befb4361aabce596fbb114791cba2c5136427",
                 "shasum": ""
             },
             "require": {
@@ -600,15 +600,16 @@
                     "email": "francois.pluchino@sonatra.com"
                 }
             ],
-            "description": "A Role-Based Access Control Level 2 with advanced permissions and sharing rules",
+            "description": "A Extended Role-Based Access Control with sharing rules",
             "homepage": "https://github.com/sonatra/sonatra-security",
             "keywords": [
+                "E-RBAC",
                 "permission",
                 "rbac",
                 "security",
                 "sharing"
             ],
-            "time": "2017-01-31 13:53:30"
+            "time": "2017-02-01 20:26:55"
         },
         {
             "name": "symfony/cache",
@@ -2496,12 +2497,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfSymfony/FOSUserBundle.git",
-                "reference": "d01739f70df32e6ab441b23b88395ae26715c5f3"
+                "reference": "f9ccd6b4b4b65757b27ba19ff0a7ecd381f74b6c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/d01739f70df32e6ab441b23b88395ae26715c5f3",
-                "reference": "d01739f70df32e6ab441b23b88395ae26715c5f3",
+                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/f9ccd6b4b4b65757b27ba19ff0a7ecd381f74b6c",
+                "reference": "f9ccd6b4b4b65757b27ba19ff0a7ecd381f74b6c",
                 "shasum": ""
             },
             "require": {
@@ -2511,7 +2512,8 @@
                 "symfony/framework-bundle": "^2.7 || ^3.0",
                 "symfony/security-bundle": "^2.7 || ^3.0",
                 "symfony/templating": "^2.7 || ^3.0",
-                "symfony/twig-bundle": "^2.7 || ^3.0"
+                "symfony/twig-bundle": "^2.7 || ^3.0",
+                "twig/twig": "^1.28 || ^2.0"
             },
             "conflict": {
                 "doctrine/doctrine-bundle": "<1.3",
@@ -2564,7 +2566,7 @@
             "keywords": [
                 "User management"
             ],
-            "time": "2017-01-30 16:02:42"
+            "time": "2017-02-01 19:45:47"
         },
         {
             "name": "jdorn/sql-formatter",
@@ -2618,16 +2620,16 @@
         },
         {
             "name": "sensio/framework-extra-bundle",
-            "version": "v3.0.19",
+            "version": "v3.0.20",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sensiolabs/SensioFrameworkExtraBundle.git",
-                "reference": "d57c2f297d17ee82baf8cae0b16dae34a9378784"
+                "reference": "0d8fa024edb41f9228daf78f96552f9d9079854e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sensiolabs/SensioFrameworkExtraBundle/zipball/d57c2f297d17ee82baf8cae0b16dae34a9378784",
-                "reference": "d57c2f297d17ee82baf8cae0b16dae34a9378784",
+                "url": "https://api.github.com/repos/sensiolabs/SensioFrameworkExtraBundle/zipball/0d8fa024edb41f9228daf78f96552f9d9079854e",
+                "reference": "0d8fa024edb41f9228daf78f96552f9d9079854e",
                 "shasum": ""
             },
             "require": {
@@ -2682,7 +2684,7 @@
                 "annotations",
                 "controllers"
             ],
-            "time": "2017-01-10 19:42:56"
+            "time": "2017-02-01 15:59:54"
         },
         {
             "name": "symfony/console",

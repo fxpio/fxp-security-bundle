@@ -1,8 +1,8 @@
 {
     "name": "sonatra/security-bundle",
     "type": "symfony-bundle",
-    "description": "A Role-Based Access Control Level 2 with advanced permissions and sharing rules",
-    "keywords": ["RBAC", "Permission", "Sharing", "Security"],
+    "description": "A Extended Role-Based Access Control with sharing rules",
+    "keywords": ["RBAC", "E-RBAC", "Permission", "Sharing", "Security"],
     "homepage": "https://github.com/sonatra/sonatra-security-bundle",
     "license": "MIT",
     "authors": [
