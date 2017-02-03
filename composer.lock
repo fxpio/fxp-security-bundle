@@ -553,12 +553,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonatra/sonatra-security.git",
-                "reference": "a92befb4361aabce596fbb114791cba2c5136427"
+                "reference": "0b0f7ab626762789223d05a14bac4a66f9b43b20"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonatra/sonatra-security/zipball/a92befb4361aabce596fbb114791cba2c5136427",
-                "reference": "a92befb4361aabce596fbb114791cba2c5136427",
+                "url": "https://api.github.com/repos/sonatra/sonatra-security/zipball/0b0f7ab626762789223d05a14bac4a66f9b43b20",
+                "reference": "0b0f7ab626762789223d05a14bac4a66f9b43b20",
                 "shasum": ""
             },
             "require": {
@@ -609,7 +609,7 @@
                 "security",
                 "sharing"
             ],
-            "time": "2017-02-01 20:26:55"
+            "time": "2017-02-03 10:38:26"
         },
         {
             "name": "symfony/cache",
@@ -2497,12 +2497,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfSymfony/FOSUserBundle.git",
-                "reference": "f9ccd6b4b4b65757b27ba19ff0a7ecd381f74b6c"
+                "reference": "a314d4aef3c3a34742bb6ae99065f27e6e49e000"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/f9ccd6b4b4b65757b27ba19ff0a7ecd381f74b6c",
-                "reference": "f9ccd6b4b4b65757b27ba19ff0a7ecd381f74b6c",
+                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/a314d4aef3c3a34742bb6ae99065f27e6e49e000",
+                "reference": "a314d4aef3c3a34742bb6ae99065f27e6e49e000",
                 "shasum": ""
             },
             "require": {
@@ -2566,7 +2566,7 @@
             "keywords": [
                 "User management"
             ],
-            "time": "2017-02-01 19:45:47"
+            "time": "2017-02-02 14:13:19"
         },
         {
             "name": "jdorn/sql-formatter",
@@ -2620,16 +2620,16 @@
         },
         {
             "name": "sensio/framework-extra-bundle",
-            "version": "v3.0.20",
+            "version": "v3.0.21",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sensiolabs/SensioFrameworkExtraBundle.git",
-                "reference": "0d8fa024edb41f9228daf78f96552f9d9079854e"
+                "reference": "ed86f6fb1753e76b39ff8b87f527045ca6b97169"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sensiolabs/SensioFrameworkExtraBundle/zipball/0d8fa024edb41f9228daf78f96552f9d9079854e",
-                "reference": "0d8fa024edb41f9228daf78f96552f9d9079854e",
+                "url": "https://api.github.com/repos/sensiolabs/SensioFrameworkExtraBundle/zipball/ed86f6fb1753e76b39ff8b87f527045ca6b97169",
+                "reference": "ed86f6fb1753e76b39ff8b87f527045ca6b97169",
                 "shasum": ""
             },
             "require": {
@@ -2684,7 +2684,7 @@
                 "annotations",
                 "controllers"
             ],
-            "time": "2017-02-01 15:59:54"
+            "time": "2017-02-02 15:31:23"
         },
         {
             "name": "symfony/console",

@@ -40,7 +40,6 @@ class PermissionBuilder implements ExtensionBuilderInterface
 
         $container->getDefinition('sonatra_security.permission_manager')->replaceArgument(4, $configs);
         BuilderUtils::loadProvider($loader, $config, 'permission');
-        $this->buildDoctrineOrmProvider($container, $config);
         $this->buildDoctrineOrmChecker($container, $loader, $config);
     }
 
@@ -136,18 +135,6 @@ class PermissionBuilder implements ExtensionBuilderInterface
         $container->setDefinition($id, $def);
 
         return new Reference($id);
-    }
-
-    /**
-     * Build the config of merge organizational roles with doctrine orm permission listener.
-     *
-     * @param ContainerBuilder $container The container
-     * @param array            $config    The config
-     */
-    private function buildDoctrineOrmProvider(ContainerBuilder $container, array $config)
-    {
-        $def = $container->getDefinition('sonatra_security.permission_provider');
-        $def->replaceArgument(3, $config['doctrine']['orm']['providers']['merge_organizational_roles']);
     }
 
     /**

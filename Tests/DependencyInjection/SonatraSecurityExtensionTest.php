@@ -227,7 +227,6 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
                 'override_voter' => true,
                 'functions' => array(
                     'is_basic_auth' => true,
-                    'has_org_role' => true,
                     'is_granted' => true,
                 ),
             ),
@@ -243,28 +242,7 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
         $this->assertSame(ExpressionVoter::class, $def->getClass());
 
         $this->assertTrue($container->hasDefinition('sonatra_security.expression.functions.is_basic_auth'));
-        $this->assertTrue($container->hasDefinition('sonatra_security.expression.functions.has_org_role'));
         $this->assertTrue($container->hasDefinition('sonatra_security.expression.functions.is_granted'));
-    }
-
-    /**
-     * @expectedException \Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException
-     * @expectedExceptionMessage The service "sonatra_security.expression.functions.has_org_role" has a dependency on a non-existent service "sonatra_security.organizational_role"
-     */
-    public function testExpressionLanguageWitMissingDependencies()
-    {
-        $this->createContainer(array(array(
-            'role_class' => MockRole::class,
-            'permission_class' => MockPermission::class,
-            'expression' => array(
-                'override_voter' => true,
-                'functions' => array(
-                    'has_org_role' => true,
-                ),
-            ),
-        )), array(), array(
-            'security.authentication.trust_resolver' => new Definition(AuthenticationTrustResolver::class),
-        ));
     }
 
     /**
