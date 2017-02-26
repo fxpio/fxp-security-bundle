@@ -61,7 +61,7 @@ class ExpressionVariableStoragePass implements CompilerPassInterface
             $value = ltrim($value, '@');
             $optional = 0 === strpos($value, '?');
             $value = ltrim($value, '?');
-            $hasDef = $container->hasDefinition($value);
+            $hasDef = $container->hasDefinition($value) || $container->hasAlias($value);
 
             if (!$hasDef && !$optional) {
                 throw new ServiceNotFoundException($value, $serviceId);

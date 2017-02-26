@@ -211,6 +211,7 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
         )));
 
         $this->assertTrue($container->hasDefinition('sonatra_security.organizational_context.default'));
+        $this->assertTrue($container->hasAlias('sonatra_security.organizational_context'));
         $this->assertTrue($container->hasDefinition('security.access.organization_voter'));
         $this->assertTrue($container->hasDefinition('sonatra_security.subscriber.security_identity.organization'));
     }
@@ -228,6 +229,7 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
                 'functions' => array(
                     'is_basic_auth' => true,
                     'is_granted' => true,
+                    'is_organization' => true,
                 ),
             ),
         )), array(), array(
@@ -237,12 +239,15 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
 
         $this->assertTrue($container->hasDefinition('sonatra_security.expression.variable_storage'));
         $this->assertTrue($container->hasDefinition('security.access.expression_voter'));
+        $this->assertTrue($container->hasDefinition('sonatra_security.organizational_context.default'));
+        $this->assertTrue($container->hasAlias('sonatra_security.organizational_context'));
 
         $def = $container->getDefinition('security.access.expression_voter');
         $this->assertSame(ExpressionVoter::class, $def->getClass());
 
         $this->assertTrue($container->hasDefinition('sonatra_security.expression.functions.is_basic_auth'));
         $this->assertTrue($container->hasDefinition('sonatra_security.expression.functions.is_granted'));
+        $this->assertTrue($container->hasDefinition('sonatra_security.expression.functions.is_organization'));
     }
 
     /**
@@ -263,6 +268,24 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
         )), array(), array(
             'security.authentication.trust_resolver' => new Definition(AuthenticationTrustResolver::class),
         ));
+    }
+
+    /**
+     * @expectedException \Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException
+     * @expectedExceptionMessage The service "sonatra_security.expression.functions.is_organization" has a dependency on a non-existent service "sonatra_security.organizational_context"
+     */
+    public function testExpressionLanguageWitMissingDependenciesForIsOrganization()
+    {
+        $this->createContainer(array(array(
+            'role_class' => MockRole::class,
+            'permission_class' => MockPermission::class,
+            'expression' => array(
+                'override_voter' => true,
+                'functions' => array(
+                    'is_organization' => true,
+                ),
+            ),
+        )));
     }
 
     public function testAnnotation()
