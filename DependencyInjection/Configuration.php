@@ -11,6 +11,8 @@
 
 namespace Sonatra\Bundle\SecurityBundle\DependencyInjection;
 
+use Sonatra\Component\Security\Model\PermissionInterface;
+use Sonatra\Component\Security\Model\SharingInterface;
 use Sonatra\Component\Security\SharingVisibilities;
 use Symfony\Component\Config\Definition\Builder\NodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
@@ -149,6 +151,15 @@ class Configuration implements ConfigurationInterface
         $node
             ->addDefaultsIfNotSet()
             ->canBeEnabled()
+            ->children()
+                ->arrayNode('excluded_classes')
+                    ->prototype('scalar')->end()
+                    ->defaultValue(array(
+                        PermissionInterface::class,
+                        SharingInterface::class,
+                    ))
+                ->end()
+            ->end()
         ;
 
         return $node;

@@ -12,6 +12,8 @@
 namespace Sonatra\Bundle\SecurityBundle\Tests\DependencyInjection;
 
 use Sonatra\Bundle\SecurityBundle\DependencyInjection\Configuration;
+use Sonatra\Component\Security\Model\PermissionInterface;
+use Sonatra\Component\Security\Model\SharingInterface;
 use Sonatra\Component\Security\SharingVisibilities;
 use Sonatra\Component\Security\Tests\Fixtures\Model\MockObject;
 use Sonatra\Component\Security\Tests\Fixtures\Model\MockPermission;
@@ -136,5 +138,49 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('sharing', $res);
         $this->assertArrayHasKey('subjects', $res['sharing']);
         $this->assertArrayHasKey(\stdClass::class, $res['sharing']['subjects']);
+    }
+
+    public function testObjectFilterConfigByDefault()
+    {
+        $expected = array(
+            PermissionInterface::class,
+            SharingInterface::class,
+        );
+
+        $config = array(
+            'role_class' => MockRole::class,
+            'permission_class' => MockPermission::class,
+        );
+
+        $processor = new Processor();
+        $configuration = new Configuration(array(), array());
+        $res = $processor->processConfiguration($configuration, array($config));
+
+        $this->assertArrayHasKey('object_filter', $res);
+        $this->assertArrayHasKey('excluded_classes', $res['object_filter']);
+        $this->assertSame($expected, $res['object_filter']['excluded_classes']);
+    }
+
+    public function testObjectFilterConfig()
+    {
+        $expected = array(
+            \stdClass::class,
+        );
+
+        $config = array(
+            'role_class' => MockRole::class,
+            'permission_class' => MockPermission::class,
+            'object_filter' => array(
+                'excluded_classes' => $expected,
+            ),
+        );
+
+        $processor = new Processor();
+        $configuration = new Configuration(array(), array());
+        $res = $processor->processConfiguration($configuration, array($config));
+
+        $this->assertArrayHasKey('object_filter', $res);
+        $this->assertArrayHasKey('excluded_classes', $res['object_filter']);
+        $this->assertSame($expected, $res['object_filter']['excluded_classes']);
     }
 }
