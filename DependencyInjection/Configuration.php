@@ -57,6 +57,7 @@ class Configuration implements ConfigurationInterface
             ->append($this->getOrganizationalContextNode())
             ->append($this->getExpressionLanguageNode())
             ->append($this->getAnnotationNode())
+            ->append($this->getFieldConfigPermissionNode())
             ->append($this->getPermissionNode())
             ->append($this->getSharingNode())
             ->append($this->getDoctrineNode())
@@ -72,14 +73,10 @@ class Configuration implements ConfigurationInterface
      */
     private function getHostRoleNode()
     {
-        $node = NodeUtils::createArrayNode('host_role');
-
-        $node
+        return NodeUtils::createArrayNode('host_role')
             ->addDefaultsIfNotSet()
             ->canBeEnabled()
         ;
-
-        return $node;
     }
 
     /**
@@ -89,14 +86,10 @@ class Configuration implements ConfigurationInterface
      */
     private function getAnonymousRoleNode()
     {
-        $node = NodeUtils::createArrayNode('anonymous_role');
-
-        $node
+        return NodeUtils::createArrayNode('anonymous_role')
             ->addDefaultsIfNotSet()
             ->canBeEnabled()
         ;
-
-        return $node;
     }
 
     /**
@@ -106,17 +99,13 @@ class Configuration implements ConfigurationInterface
      */
     private function getRoleHierarchyNode()
     {
-        $node = NodeUtils::createArrayNode('role_hierarchy');
-
-        $node
+        return NodeUtils::createArrayNode('role_hierarchy')
             ->addDefaultsIfNotSet()
             ->canBeEnabled()
             ->children()
                 ->scalarNode('cache')->defaultNull()->info('The service id of cache')->end()
             ->end()
         ;
-
-        return $node;
     }
 
     /**
@@ -126,17 +115,13 @@ class Configuration implements ConfigurationInterface
      */
     private function getSecurityVoterNode()
     {
-        $node = NodeUtils::createArrayNode('security_voter');
-
-        $node
+        return NodeUtils::createArrayNode('security_voter')
             ->addDefaultsIfNotSet()
             ->children()
                 ->scalarNode('role_security_identity')->defaultFalse()->end()
                 ->scalarNode('groupable')->defaultFalse()->end()
             ->end()
         ;
-
-        return $node;
     }
 
     /**
@@ -146,9 +131,7 @@ class Configuration implements ConfigurationInterface
      */
     private function getObjectFilterNode()
     {
-        $node = NodeUtils::createArrayNode('object_filter');
-
-        $node
+        return NodeUtils::createArrayNode('object_filter')
             ->addDefaultsIfNotSet()
             ->canBeEnabled()
             ->children()
@@ -161,8 +144,6 @@ class Configuration implements ConfigurationInterface
                 ->end()
             ->end()
         ;
-
-        return $node;
     }
 
     /**
@@ -172,17 +153,13 @@ class Configuration implements ConfigurationInterface
      */
     private function getOrganizationalContextNode()
     {
-        $node = NodeUtils::createArrayNode('organizational_context');
-
-        $node
+        return NodeUtils::createArrayNode('organizational_context')
             ->addDefaultsIfNotSet()
             ->canBeEnabled()
             ->children()
                 ->scalarNode('service_id')->defaultNull()->end()
             ->end()
         ;
-
-        return $node;
     }
 
     /**
@@ -192,9 +169,7 @@ class Configuration implements ConfigurationInterface
      */
     private function getExpressionLanguageNode()
     {
-        $node = NodeUtils::createArrayNode('expression');
-
-        $node
+        return NodeUtils::createArrayNode('expression')
             ->addDefaultsIfNotSet()
             ->children()
                 ->scalarNode('override_voter')->defaultFalse()->end()
@@ -208,8 +183,6 @@ class Configuration implements ConfigurationInterface
                 ->end()
             ->end()
         ;
-
-        return $node;
     }
 
     /**
@@ -219,16 +192,25 @@ class Configuration implements ConfigurationInterface
      */
     private function getAnnotationNode()
     {
-        $node = NodeUtils::createArrayNode('annotations');
-
-        $node
+        return NodeUtils::createArrayNode('annotations')
             ->addDefaultsIfNotSet()
             ->children()
                 ->scalarNode('security')->defaultFalse()->end()
             ->end()
         ;
+    }
 
-        return $node;
+    /**
+     * Get permission node.
+     *
+     * @return NodeDefinition
+     */
+    private function getFieldConfigPermissionNode()
+    {
+        return NodeUtils::createArrayNode('default_permissions')
+            ->addDefaultsIfNotSet()
+            ->append($this->getPermissionFieldsNode())
+        ;
     }
 
     /**
@@ -238,9 +220,7 @@ class Configuration implements ConfigurationInterface
      */
     private function getPermissionNode()
     {
-        $node = NodeUtils::createArrayNode('permissions');
-
-        $node
+        return NodeUtils::createArrayNode('permissions')
             ->requiresAtLeastOneElement()
             ->useAttributeAsKey('permission', false)
             ->normalizeKeys(false)
@@ -264,12 +244,11 @@ class Configuration implements ConfigurationInterface
                         ->prototype('scalar')->end()
                     ->end()
                     ->booleanNode('build_fields')->defaultTrue()->end()
+                    ->booleanNode('build_default_fields')->defaultTrue()->end()
                     ->append($this->getPermissionFieldsNode())
                 ->end()
             ->end()
         ;
-
-        return $node;
     }
 
     /**
@@ -279,9 +258,7 @@ class Configuration implements ConfigurationInterface
      */
     private function getPermissionFieldsNode()
     {
-        $node = NodeUtils::createArrayNode('fields');
-
-        $node
+        return NodeUtils::createArrayNode('fields')
             ->requiresAtLeastOneElement()
             ->useAttributeAsKey('field', false)
             ->normalizeKeys(false)
@@ -306,8 +283,6 @@ class Configuration implements ConfigurationInterface
                 ->end()
             ->end()
         ;
-
-        return $node;
     }
 
     /**
@@ -317,9 +292,7 @@ class Configuration implements ConfigurationInterface
      */
     private function getSharingNode()
     {
-        $node = NodeUtils::createArrayNode('sharing');
-
-        $node
+        return NodeUtils::createArrayNode('sharing')
             ->addDefaultsIfNotSet()
             ->canBeEnabled()
             ->children()
@@ -361,8 +334,6 @@ class Configuration implements ConfigurationInterface
                 ->end()
             ->end()
         ;
-
-        return $node;
     }
 
     /**
@@ -372,9 +343,7 @@ class Configuration implements ConfigurationInterface
      */
     private function getDoctrineNode()
     {
-        $node = NodeUtils::createArrayNode('doctrine');
-
-        $node
+        return NodeUtils::createArrayNode('doctrine')
             ->addDefaultsIfNotSet()
             ->children()
                 ->arrayNode('orm')
@@ -401,7 +370,5 @@ class Configuration implements ConfigurationInterface
                 ->end()
             ->end()
         ;
-
-        return $node;
     }
 }
