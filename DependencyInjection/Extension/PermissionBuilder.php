@@ -67,8 +67,27 @@ class PermissionBuilder implements ExtensionBuilderInterface
             $config['mapping_permissions'],
             $this->buildPermissionConfigFields($container, $type, $config, $defaultPerms['fields']),
             $config['master'],
-            $config['master_mapping_permissions'],
+            $this->buildMasterMappingPermissions($config, $defaultPerms['master_mapping_permissions']),
         ));
+    }
+
+    /**
+     * Build the master mapping permissions.
+     *
+     * @param array $config         The config of permissions
+     * @param array $defaultMapping The config of default master mapping permissions
+     *
+     * @return array
+     */
+    private function buildMasterMappingPermissions(array $config, array $defaultMapping)
+    {
+        $mapping = $config['master_mapping_permissions'];
+
+        if (!empty($defaultMapping) && empty($mapping) && null !== $config['master']) {
+            $mapping = $defaultMapping;
+        }
+
+        return $mapping;
     }
 
     /**

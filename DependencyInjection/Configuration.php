@@ -210,6 +210,13 @@ class Configuration implements ConfigurationInterface
         return NodeUtils::createArrayNode('default_permissions')
             ->addDefaultsIfNotSet()
             ->append($this->getPermissionFieldsNode())
+            ->children()
+                ->arrayNode('master_mapping_permissions')
+                    ->useAttributeAsKey('master_mapping_permission', false)
+                    ->normalizeKeys(false)
+                    ->prototype('scalar')->end()
+                ->end()
+            ->end()
         ;
     }
 
@@ -231,7 +238,7 @@ class Configuration implements ConfigurationInterface
                 ->children()
                     ->scalarNode('master')->defaultNull()->end()
                     ->arrayNode('master_mapping_permissions')
-                        ->useAttributeAsKey('master_permission', false)
+                        ->useAttributeAsKey('master_mapping_permission', false)
                         ->normalizeKeys(false)
                         ->prototype('scalar')->end()
                     ->end()

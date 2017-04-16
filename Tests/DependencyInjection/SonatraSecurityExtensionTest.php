@@ -601,6 +601,33 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
         $this->assertCount(1, $permConfigs);
     }
 
+    public function testMasterMappingPermissionWithDefaultMapping()
+    {
+        $container = $this->createContainer(array(array(
+            'role_class' => MockRole::class,
+            'permission_class' => MockPermission::class,
+            'default_permissions' => array(
+                'master_mapping_permissions' => array(
+                    'view' => 'read',
+                    'update' => 'edit',
+                    'create' => 'edit',
+                    'delete' => 'edit',
+                ),
+            ),
+            'permissions' => array(
+                MockObject::class => array(
+                    'master' => 'name',
+                ),
+            ),
+        )));
+
+        $def = $container->getDefinition('sonatra_security.permission_manager');
+        $permConfigs = $def->getArgument(4);
+
+        $this->assertInternalType('array', $permConfigs);
+        $this->assertCount(1, $permConfigs);
+    }
+
     /**
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
      * @expectedExceptionMessage The permission field "foo" does not exist in "Sonatra\Component\Security\Tests\Fixtures\Model\MockObject" class
