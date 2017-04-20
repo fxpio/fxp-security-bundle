@@ -107,7 +107,7 @@ class PermissionBuilder implements ExtensionBuilderInterface
         $config = $this->buildDefaultPermissionConfigFields($ref, $config, $defaultPerms);
 
         foreach ($config['fields'] as $field => $fieldConfig) {
-            if (!$ref->hasProperty($field)) {
+            if (!$this->isValidField($ref, $field)) {
                 $msg = 'The permission field "%s" does not exist in "%s" class';
 
                 throw new InvalidConfigurationException(sprintf($msg, $field, $type));
@@ -198,5 +198,22 @@ class PermissionBuilder implements ExtensionBuilderInterface
             BuilderUtils::validate($container, 'doctrine.orm.listeners.permission_checker', 'doctrine.orm.entity_manager.class', 'doctrine/orm');
             $loader->load('orm_listener_permission_checker.xml');
         }
+    }
+
+    /**
+     * Check if the permission field is valid.
+     *
+     * @param \ReflectionClass $reflectionClass The reflection class
+     * @param string           $field           The field name
+     *
+     * @return bool
+     */
+    private function isValidField(\ReflectionClass $reflectionClass, $field)
+    {
+        $getField = 'get'.ucfirst($field);
+        $hasField = 'has'.ucfirst($field);
+        $isField = 'is'.ucfirst($field);
+
+        return $reflectionClass->hasProperty($field) || $reflectionClass->hasMethod($field) || $reflectionClass->hasMethod($getField) || $reflectionClass->hasMethod($hasField) || $reflectionClass->hasMethod($isField);
     }
 }
