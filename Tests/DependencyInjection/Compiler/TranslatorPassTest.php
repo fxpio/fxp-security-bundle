@@ -72,6 +72,10 @@ class TranslatorPassTest extends \PHPUnit_Framework_TestCase
             ->willReturn($translator);
 
         $translator->expects($this->once())
+            ->method('getArguments')
+            ->willReturn([null, null, [], []]);
+
+        $translator->expects($this->once())
             ->method('getArgument')
             ->with(3)
             ->willReturn(array());
