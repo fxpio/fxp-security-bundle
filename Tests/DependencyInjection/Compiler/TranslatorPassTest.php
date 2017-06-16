@@ -74,7 +74,7 @@ class TranslatorPassTest extends TestCase
 
         $translator->expects($this->once())
             ->method('getArguments')
-            ->willReturn([null, null, [], []]);
+            ->willReturn(array(null, null, array(), array()));
 
         $translator->expects($this->once())
             ->method('getArgument')

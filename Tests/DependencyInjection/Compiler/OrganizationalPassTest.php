@@ -29,9 +29,9 @@ class OrganizationalPassTest extends TestCase
         $container = new ContainerBuilder();
         $compiler = new OrganizationalPass();
 
-        $this->assertCount(0, $container->getDefinitions());
+        $this->assertCount(1, $container->getDefinitions());
         $compiler->process($container);
-        $this->assertCount(0, $container->getDefinitions());
+        $this->assertCount(1, $container->getDefinitions());
     }
 
     public function testProcess()

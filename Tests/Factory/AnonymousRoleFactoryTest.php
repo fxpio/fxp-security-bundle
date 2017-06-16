@@ -75,7 +75,7 @@ class AnonymousRoleFactoryTest extends TestCase
         $container = new ContainerBuilder();
         $factory = new AnonymousRoleFactory();
 
-        $this->assertCount(0, $container->getDefinitions());
+        $this->assertCount(1, $container->getDefinitions());
 
         $res = $factory->create($container, 'test_id', array(), 'user_provider', 'default_entry_point');
         $valid = array(
@@ -85,6 +85,6 @@ class AnonymousRoleFactoryTest extends TestCase
         );
 
         $this->assertEquals($valid, $res);
-        $this->assertCount(2, $container->getDefinitions());
+        $this->assertCount(3, $container->getDefinitions());
     }
 }

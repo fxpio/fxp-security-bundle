@@ -28,7 +28,7 @@ class AccessControlConfigurationTest extends TestCase
 
         $processor = new Processor();
         $configuration = new AccessControlConfiguration(array(), array());
-        $processor->processConfiguration($configuration, array($config));
+        $this->assertCount(1, $processor->processConfiguration($configuration, array($config)));
     }
 
     public function testConfig()

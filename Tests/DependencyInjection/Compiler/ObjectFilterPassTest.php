@@ -30,9 +30,9 @@ class ObjectFilterPassTest extends TestCase
         $container = new ContainerBuilder();
         $compiler = new ObjectFilterPass();
 
-        $this->assertCount(0, $container->getDefinitions());
+        $this->assertCount(1, $container->getDefinitions());
         $compiler->process($container);
-        $this->assertCount(0, $container->getDefinitions());
+        $this->assertCount(1, $container->getDefinitions());
     }
 
     public function testProcess()
@@ -52,7 +52,7 @@ class ObjectFilterPassTest extends TestCase
         $container->setDefinition('sonatra_security.object_filter.voter.mixed', $defVoter);
 
         $compiler->process($container);
-        $this->assertCount(2, $container->getDefinitions());
+        $this->assertCount(3, $container->getDefinitions());
         $this->assertCount(1, $def->getArgument(0));
     }
 }
