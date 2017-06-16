@@ -15,8 +15,8 @@
     "prefer-stable": true,
     "require": {
         "php": ">=7.0.0",
-        "symfony/framework-bundle": "^3.2.0",
-        "symfony/security-bundle": "^3.2.0",
+        "symfony/framework-bundle": "^3.3.0",
+        "symfony/security-bundle": "^3.3.0",
         "sonatra/security": "^1.0.0"
     },
     "require-dev": {
