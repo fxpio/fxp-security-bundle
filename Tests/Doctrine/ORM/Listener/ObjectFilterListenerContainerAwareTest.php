@@ -12,6 +12,7 @@
 namespace Sonatra\Bundle\SecurityBundle\Tests\Doctrine\ORM\Listener;
 
 use Doctrine\ORM\Event\OnFlushEventArgs;
+use PHPUnit\Framework\TestCase;
 use Sonatra\Bundle\SecurityBundle\Doctrine\ORM\Listener\ObjectFilterListenerContainerAware;
 use Sonatra\Component\Security\ObjectFilter\ObjectFilterInterface;
 use Sonatra\Component\Security\Permission\PermissionManagerInterface;
@@ -23,7 +24,7 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
  *
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-class ObjectFilterListenerContainerAwareTest extends \PHPUnit_Framework_TestCase
+class ObjectFilterListenerContainerAwareTest extends TestCase
 {
     public function testOnFlush()
     {

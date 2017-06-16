@@ -11,6 +11,7 @@
 
 namespace Sonatra\Bundle\SecurityBundle\Tests\Factory;
 
+use PHPUnit\Framework\TestCase;
 use Sonatra\Bundle\SecurityBundle\Factory\AnonymousRoleFactory;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Processor;
@@ -21,7 +22,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  *
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-class AnonymousRoleFactoryTest extends \PHPUnit_Framework_TestCase
+class AnonymousRoleFactoryTest extends TestCase
 {
     public function testGetPosition()
     {

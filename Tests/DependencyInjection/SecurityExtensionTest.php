@@ -11,6 +11,7 @@
 
 namespace Sonatra\Bundle\SecurityBundle\Tests\DependencyInjection;
 
+use PHPUnit\Framework\TestCase;
 use Sonatra\Bundle\SecurityBundle\DependencyInjection\SecurityExtension;
 use Symfony\Bundle\SecurityBundle\DependencyInjection\Security\Factory\SecurityFactoryInterface;
 use Symfony\Bundle\SecurityBundle\DependencyInjection\Security\UserProvider\UserProviderFactoryInterface;
@@ -23,7 +24,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  *
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-class SecurityExtensionTest extends \PHPUnit_Framework_TestCase
+class SecurityExtensionTest extends TestCase
 {
     /**
      * @var BaseSecurityExtension|\PHPUnit_Framework_MockObject_MockObject

@@ -11,6 +11,7 @@
 
 namespace Sonatra\Bundle\SecurityBundle\Tests\DependencyInjection\Compiler;
 
+use PHPUnit\Framework\TestCase;
 use Sonatra\Bundle\SecurityBundle\DependencyInjection\Compiler\ValidationPass;
 use Sonatra\Component\Security\PermissionEvents;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -21,7 +22,7 @@ use Symfony\Component\DependencyInjection\Definition;
  *
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-class ValidationPassTest extends \PHPUnit_Framework_TestCase
+class ValidationPassTest extends TestCase
 {
     /**
      * @var ContainerBuilder|\PHPUnit_Framework_MockObject_MockObject

@@ -11,6 +11,7 @@
 
 namespace Sonatra\Bundle\SecurityBundle\Tests\Configuration;
 
+use PHPUnit\Framework\TestCase;
 use Sonatra\Bundle\SecurityBundle\Configuration\Security;
 
 /**
@@ -18,7 +19,7 @@ use Sonatra\Bundle\SecurityBundle\Configuration\Security;
  *
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-class SecurityTest extends \PHPUnit_Framework_TestCase
+class SecurityTest extends TestCase
 {
     public function testSecurityAnnotation()
     {

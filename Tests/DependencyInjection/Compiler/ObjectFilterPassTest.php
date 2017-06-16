@@ -11,6 +11,7 @@
 
 namespace Sonatra\Bundle\SecurityBundle\Tests\DependencyInjection\Compiler;
 
+use PHPUnit\Framework\TestCase;
 use Sonatra\Bundle\SecurityBundle\DependencyInjection\Compiler\ObjectFilterPass;
 use Sonatra\Component\Security\ObjectFilter\MixedValue;
 use Sonatra\Component\Security\ObjectFilter\ObjectFilterExtension;
@@ -22,7 +23,7 @@ use Symfony\Component\DependencyInjection\Definition;
  *
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-class ObjectFilterPassTest extends \PHPUnit_Framework_TestCase
+class ObjectFilterPassTest extends TestCase
 {
     public function testProcessWithoutExtension()
     {

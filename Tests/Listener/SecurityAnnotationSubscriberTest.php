@@ -11,6 +11,7 @@
 
 namespace Sonatra\Bundle\SecurityBundle\Tests;
 
+use PHPUnit\Framework\TestCase;
 use Sonatra\Bundle\SecurityBundle\Configuration\Security;
 use Sonatra\Bundle\SecurityBundle\Listener\SecurityAnnotationSubscriber;
 use Sonatra\Component\Security\Event\GetExpressionVariablesEvent;
@@ -29,7 +30,7 @@ use Symfony\Component\Security\Core\Authorization\ExpressionLanguage;
  *
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-class SecurityAnnotationSubscriberTest extends \PHPUnit_Framework_TestCase
+class SecurityAnnotationSubscriberTest extends TestCase
 {
     /**
      * @var EventDispatcher

@@ -11,6 +11,7 @@
 
 namespace Sonatra\Bundle\SecurityBundle\Tests\DependencyInjection\Compiler;
 
+use PHPUnit\Framework\TestCase;
 use Sonatra\Bundle\SecurityBundle\DependencyInjection\Compiler\ExpressionVariableStoragePass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
@@ -19,7 +20,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  *
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-class ExpressionVariableStoragePassTest extends \PHPUnit_Framework_TestCase
+class ExpressionVariableStoragePassTest extends TestCase
 {
     public function testProcessWithoutExtension()
     {

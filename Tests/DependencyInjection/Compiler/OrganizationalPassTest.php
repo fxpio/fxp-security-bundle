@@ -11,6 +11,7 @@
 
 namespace Sonatra\Bundle\SecurityBundle\Tests\DependencyInjection\Compiler;
 
+use PHPUnit\Framework\TestCase;
 use Sonatra\Bundle\SecurityBundle\DependencyInjection\Compiler\OrganizationalPass;
 use Sonatra\Component\Security\Organizational\OrganizationalContext;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -21,7 +22,7 @@ use Symfony\Component\DependencyInjection\Definition;
  *
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-class OrganizationalPassTest extends \PHPUnit_Framework_TestCase
+class OrganizationalPassTest extends TestCase
 {
     public function testProcessWithoutService()
     {

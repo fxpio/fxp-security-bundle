@@ -11,6 +11,7 @@
 
 namespace Sonatra\Bundle\SecurityBundle\Tests\DependencyInjection;
 
+use PHPUnit\Framework\TestCase;
 use Sonatra\Bundle\SecurityBundle\DependencyInjection\SonatraSecurityExtension;
 use Sonatra\Bundle\SecurityBundle\SonatraSecurityBundle;
 use Symfony\Bundle\FrameworkBundle\DependencyInjection\FrameworkExtension;
@@ -26,7 +27,7 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
  *
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-abstract class AbstractSecurityExtensionTest extends \PHPUnit_Framework_TestCase
+abstract class AbstractSecurityExtensionTest extends TestCase
 {
     /**
      * Create container.

@@ -11,6 +11,7 @@
 
 namespace Sonatra\Bundle\SecurityBundle\Tests\Doctrine\ORM\Listener;
 
+use PHPUnit\Framework\TestCase;
 use Sonatra\Bundle\SecurityBundle\Doctrine\ORM\Listener\SharingDeleteListenerContainerAware;
 use Sonatra\Component\Security\Sharing\SharingManagerInterface;
 use Sonatra\Component\Security\Tests\Fixtures\Model\MockSharing;
@@ -21,7 +22,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-class SharingDeleteListenerContainerAwareTest extends \PHPUnit_Framework_TestCase
+class SharingDeleteListenerContainerAwareTest extends TestCase
 {
     public function testGetPermissionManager()
     {

@@ -11,6 +11,7 @@
 
 namespace Sonatra\Bundle\SecurityBundle\Tests\DependencyInjection;
 
+use PHPUnit\Framework\TestCase;
 use Sonatra\Bundle\SecurityBundle\DependencyInjection\AccessControlConfiguration;
 use Symfony\Component\Config\Definition\Processor;
 
@@ -19,7 +20,7 @@ use Symfony\Component\Config\Definition\Processor;
  *
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-class AccessControlConfigurationTest extends \PHPUnit_Framework_TestCase
+class AccessControlConfigurationTest extends TestCase
 {
     public function testNoConfig()
     {

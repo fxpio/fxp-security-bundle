@@ -11,6 +11,7 @@
 
 namespace Sonatra\Bundle\SecurityBundle\Tests\Factory;
 
+use PHPUnit\Framework\TestCase;
 use Sonatra\Bundle\SecurityBundle\Factory\HostRoleFactory;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -20,7 +21,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  *
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-class HostRoleFactoryTest extends \PHPUnit_Framework_TestCase
+class HostRoleFactoryTest extends TestCase
 {
     public function testGetPosition()
     {

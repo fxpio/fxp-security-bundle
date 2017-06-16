@@ -11,6 +11,7 @@
 
 namespace Sonatra\Bundle\SecurityBundle\Tests\DependencyInjection\Compiler;
 
+use PHPUnit\Framework\TestCase;
 use Sonatra\Bundle\SecurityBundle\DependencyInjection\Compiler\AccessControlPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -22,7 +23,7 @@ use Symfony\Component\Security\Http\AccessMap;
  *
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-class AccessControlPassTest extends \PHPUnit_Framework_TestCase
+class AccessControlPassTest extends TestCase
 {
     /**
      * @var ContainerBuilder

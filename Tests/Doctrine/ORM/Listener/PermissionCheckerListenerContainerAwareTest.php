@@ -12,6 +12,7 @@
 namespace Sonatra\Bundle\SecurityBundle\Tests\Doctrine\ORM\Listener;
 
 use Doctrine\ORM\Event\OnFlushEventArgs;
+use PHPUnit\Framework\TestCase;
 use Sonatra\Bundle\SecurityBundle\Doctrine\ORM\Listener\PermissionCheckerListenerContainerAware;
 use Sonatra\Component\Security\Permission\PermissionManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -23,7 +24,7 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
  *
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-class PermissionCheckerListenerContainerAwareTest extends \PHPUnit_Framework_TestCase
+class PermissionCheckerListenerContainerAwareTest extends TestCase
 {
     public function testOnFlush()
     {

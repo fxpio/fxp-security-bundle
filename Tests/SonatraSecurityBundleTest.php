@@ -11,6 +11,7 @@
 
 namespace Sonatra\Bundle\SecurityBundle\Tests;
 
+use PHPUnit\Framework\TestCase;
 use Sonatra\Bundle\SecurityBundle\SonatraSecurityBundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
@@ -19,7 +20,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  *
  * @author François Pluchino <francois.pluchino@sonatra.com>
  */
-class SonatraSecurityBundleTest extends \PHPUnit_Framework_TestCase
+class SonatraSecurityBundleTest extends TestCase
 {
     /**
      * @expectedException \Sonatra\Component\Security\Exception\LogicException
