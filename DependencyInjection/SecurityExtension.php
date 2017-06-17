@@ -152,10 +152,6 @@ class SecurityExtension extends Extension
             return;
         }
 
-        $this->addClassesToCompile(array(
-            'Symfony\\Component\\Security\\Http\\AccessMap',
-        ));
-
         $container->setParameter('sonatra_security.access_control', $config['access_control']);
     }
 }

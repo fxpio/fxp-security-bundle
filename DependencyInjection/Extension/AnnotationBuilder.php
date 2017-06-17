@@ -44,7 +44,7 @@ class AnnotationBuilder implements ExtensionBuilderInterface
             BuilderUtils::validate($container, 'annotations.security', 'sensio_framework_extra.view.guesser.class', 'sensio/framework-extra-bundle');
             $loader->load('annotation_security.xml');
 
-            $this->ext->addClassesToCompile(array(
+            $this->ext->addAnnotatedClassesToCompile(array(
                 'Sonatra\\Bundle\\SecurityBundle\\Listener\\SecurityAnnotationSubscriber',
             ));
         }
