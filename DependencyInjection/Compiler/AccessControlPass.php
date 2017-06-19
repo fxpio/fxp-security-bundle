@@ -146,8 +146,7 @@ class AccessControlPass implements CompilerPassInterface
             ->register($id, SerializedParsedExpression::class)
             ->setPublic(false)
             ->addArgument($expression)
-            ->addArgument(serialize($this->getExpressionLanguage($container)->parse(
-                $expression,
+            ->addArgument(serialize($this->getExpressionLanguage($container)->parse($expression,
                 self::$availableExpressionNames)->getNodes()
             ))
         ;
