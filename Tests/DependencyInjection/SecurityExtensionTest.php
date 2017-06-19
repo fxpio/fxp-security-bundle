@@ -69,18 +69,6 @@ class SecurityExtensionTest extends TestCase
         $this->assertSame('XSD', $this->ext->getXsdValidationBasePath());
     }
 
-    public function testGetClassesToCompile()
-    {
-        $value = array(
-            'CLASS',
-        );
-        $this->baseExt->expects($this->once())
-            ->method('getClassesToCompile')
-            ->willReturn($value);
-
-        $this->assertSame($value, $this->ext->getClassesToCompile());
-    }
-
     public function testGetConfiguration()
     {
         /* @var ContainerBuilder $container */

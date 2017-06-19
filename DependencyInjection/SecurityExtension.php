@@ -67,22 +67,6 @@ class SecurityExtension extends Extension
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function addClassesToCompile(array $classes)
-    {
-        $this->extension->addClassesToCompile($classes);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getClassesToCompile()
-    {
-        return array_merge(parent::getClassesToCompile(), $this->extension->getClassesToCompile());
-    }
-
-    /**
      * Get the configuration.
      *
      * @param array            $config    The config
