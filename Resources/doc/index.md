@@ -287,4 +287,5 @@ Sonatra SecurityBundle, you are ready to learn more about using this bundle.
 The following documents are available:
 
 - [Using Groups with Sonatra SecurityBundle](groups.md)
+- [Using cache with Sonatra CacheBundle](cache.md)
 - [Using Organizations](organizations.md)
