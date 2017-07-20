@@ -12,8 +12,8 @@
 namespace Sonatra\Bundle\SecurityBundle\Factory;
 
 use Symfony\Bundle\SecurityBundle\DependencyInjection\Security\Factory\SecurityFactoryInterface;
+use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\DefinitionDecorator;
 
 /**
  * Abstract factory for role injection in security identity manager.
@@ -29,12 +29,12 @@ abstract class AbstractRoleFactory implements SecurityFactoryInterface
     {
         $providerId = $this->getServiceId('provider').'.'.$id;
         $container
-            ->setDefinition($providerId, new DefinitionDecorator($this->getServiceId('provider')))
+            ->setDefinition($providerId, new ChildDefinition($this->getServiceId('provider')))
         ;
 
         $listenerId = $this->getServiceId('listener').'.'.$id;
         $container
-            ->setDefinition($listenerId, new DefinitionDecorator($this->getServiceId('listener')))
+            ->setDefinition($listenerId, new ChildDefinition($this->getServiceId('listener')))
             ->replaceArgument(1, $config)
         ;
 
