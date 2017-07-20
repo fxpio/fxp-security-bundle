@@ -289,4 +289,5 @@ The following documents are available:
 - [Using Groups with Sonatra SecurityBundle](groups.md)
 - [Using cache with Sonatra CacheBundle](cache.md)
 - [Using permissions](permissions.md)
+- [Using the sharing entries](sharing.md)
 - [Using Organizations](organizations.md)
