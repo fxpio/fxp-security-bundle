@@ -112,7 +112,7 @@ $postIdentity = SubjectIdentity::fromObject($post);
 $share = (new Sharing())
     ->setSubjectClass($postIdentity->getType())
     ->setSubjectId($postIdentity->getIdentifier())
-    ->setIdentityClass(ClassUtils::getClass($user))
+    ->setIdentityClass($userIdentity->getType())
     ->setIdentityName($userIdentity->getIdentifier())
 ;
 
@@ -153,7 +153,7 @@ $permissionSendEmails = $permissionRepository->findOneBy(array(
 $share = $shareRepository->findOneBy(array(
     'subjectClass' => $postIdentity->getType(),
     'subjectId' => $postIdentity->getIdentifier(),
-    'identityClass' => ClassUtils::getClass($user),
+    'identityClass' => $userIdentity->getType(),
     'identityName' => $userIdentity->getIdentifier(),
 ));
 
@@ -193,7 +193,7 @@ $adminRole = $roleRepository->findOneByName('ROLE_ADMIN');
 $share = $shareRepository->findOneBy(array(
     'subjectClass' => $postIdentity->getType(),
     'subjectId' => $postIdentity->getIdentifier(),
-    'identityClass' => ClassUtils::getClass($user),
+    'identityClass' => $userIdentity->getType(),
     'identityName' => $userIdentity->getIdentifier(),
 ));
 
