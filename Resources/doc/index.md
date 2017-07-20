@@ -3,7 +3,7 @@ Getting Started
 
 ## Prerequisites
 
-This version of the bundle requires Symfony 3.1+.
+This version of the bundle requires Symfony 3.3+.
 
 This example requires `friendsofsymfony/user-bundle` as a dependency in
 a [Symfony Standard Edition](https://github.com/symfony/symfony-standard)
@@ -30,10 +30,15 @@ Follow the installation instructions in the [official documentation of Symfony]
 Add Sonatra SecurityBundle in your composer.json:
 
 ```
-$ composer require sonatra/security-bundle "~1.0"
+$ composer require sonatra/security-bundle:"^1.0.0" sonatra/doctrine-extensions:"^1.0.0"
 ```
 
 Composer will install the bundle to your project's `vendor/sonatra` directory.
+
+> **Note:**
+>
+> Because this example enable all features, you must add the dependency
+> `sonatra/doctrine-extensions` to use role hierarchy and sharing features.
 
 ### Step 3: Enable the bundle
 
@@ -230,6 +235,7 @@ sonatra_security:
     security_voter:
         role_security_identity:     true # Override the Symfony Role Hierarchy Voter (optional)
     sharing:
+        enabled:                    true # (optional)
         identity_types:
             AppBundle\Entity\User:
                 roleable:           true # (optional)
@@ -237,7 +243,7 @@ sonatra_security:
                 permissible:        true # (optional)
     doctrine:
         orm:
-            object_filter_voter:    true # Ebable the Doctrine ORM Collection Object Filter (optional)
+            object_filter_voter:    true # Enable the Doctrine ORM Collection Object Filter (optional)
             listeners:
                 permission_checker: true # Enable the Doctrine ORM Permission Checker Listener (optional)
                 object_filter:      true # Enable the Doctrine ORM Object Filter Listener(optional)
@@ -249,10 +255,14 @@ doctrine:
         entity_managers:
             default:
                 filters:
-                    sonatra_sharing:
+                    sonatra_sharing:     # Enable the SQL Filter for sharing (optional)
                         class:      Sonatra\Component\Security\Doctrine\ORM\Filter\SharingFilter
                         enabled:    true
 ```
+
+> **Note:**
+>
+> If you use the role hierarchy or sharing, you must add the optional dependency `sonatra/doctrine-extensions`
 
 ### Step 9: Configure and initialize the permissions
 
