@@ -23,8 +23,8 @@ doctrine:
             default:
                 filters:
                     sonatra_sharing:
-                        class:      Sonatra\Component\Security\Doctrine\ORM\Filter\SharingFilter
-                        enabled:    true
+                        class:   Sonatra\Component\Security\Doctrine\ORM\Filter\SharingFilter
+                        enabled: true
 ```
 
 This filter requires a small configuration to know what you want to do with it. By
@@ -34,6 +34,13 @@ all class that need a sharing, and for that, you will need to add this configura
 
 ```yaml
 sonatra_security:
+    doctrine:
+        orm:
+            listeners:
+                private_sharing: true # Enable the 'private' sharing filter type
+                sharing_delete:  true # Enable the auto sharing delete when the entity is deleted
+            filters:
+                sharing:         true # Enable the Doctrine ORM SQL Filter for sharing the entities (optional)
     sharing:
         subjects:
             AppBundle\Entity\Post: private

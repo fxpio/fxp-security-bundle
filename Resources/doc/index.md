@@ -248,6 +248,8 @@ sonatra_security:
                 permission_checker: true # Enable the Doctrine ORM Permission Checker Listener (optional)
                 object_filter:      true # Enable the Doctrine ORM Object Filter Listener(optional)
                 role_hierarchy:     true # Enable the Doctrine ORM listener of role hierarchy (optional)
+                private_sharing:    true # Enable the 'private' sharing filter type (optional)
+                sharing_delete:     true # Enable the auto sharing delete when the entity is deleted (optional)
             filters:
                 sharing:            true # Enable the Doctrine ORM SQL Filter for sharing the entities (optional)
 doctrine:
