@@ -12,7 +12,8 @@
     <services>
         <!-- Object Filter -->
         <service id="sonatra_security.object_filter"
-                 class="%sonatra_security.object_filter.class%">
+                 class="%sonatra_security.object_filter.class%"
+                 public="true">
             <argument type="service" id="sonatra_security.object_filter.extension"/>
             <argument type="service" id="sonatra_security.permission_manager"/>
             <argument type="service" id="security.authorization_checker"/>

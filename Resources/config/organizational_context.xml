@@ -12,13 +12,13 @@
 
     <services>
         <!-- Default Organizational Context -->
-        <service id="sonatra_security.organizational_context.default" class="%sonatra_security.organizational_context.default.class%">
+        <service id="sonatra_security.organizational_context.default" class="%sonatra_security.organizational_context.default.class%" public="true">
             <argument type="service" id="security.token_storage"/>
             <argument type="service" id="event_dispatcher" on-invalid="ignore"/>
         </service>
 
         <!-- Organizational Context -->
-        <service id="sonatra_security.organizational_context" alias="sonatra_security.organizational_context.default" />
+        <service id="sonatra_security.organizational_context" alias="sonatra_security.organizational_context.default" public="true"/>
 
         <!-- Organizational Security Voter -->
         <service id="security.access.organization_voter"

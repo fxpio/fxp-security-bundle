@@ -11,7 +11,8 @@
     <services>
         <!-- Permission Validator -->
         <service id="sonatra_security.validator.permission"
-                 class="%sonatra_security.validator.permission.class%">
+                 class="%sonatra_security.validator.permission.class%"
+                 public="true">
             <tag name="validator.constraint_validator" />
             <argument type="service" id="sonatra_security.permission_manager"/>
             <argument type="service" id="property_accessor"/>

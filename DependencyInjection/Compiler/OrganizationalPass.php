@@ -42,7 +42,7 @@ class OrganizationalPass implements CompilerPassInterface
 
         if (null !== $serviceId) {
             $serviceId = $this->getServiceId($container, $serviceId);
-            $container->setAlias('sonatra_security.organizational_context', $serviceId);
+            $container->setAlias('sonatra_security.organizational_context', $serviceId)->setPublic(true);
             $container->removeDefinition('sonatra_security.organizational_context.default');
             $pb->remove('sonatra_security.organizational_context.default.class');
         }

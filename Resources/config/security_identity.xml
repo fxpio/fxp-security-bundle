@@ -11,7 +11,8 @@
     <services>
         <!-- Security Identity Manager -->
         <service id="sonatra_security.security_identity_manager"
-                 class="%sonatra_security.security_identity_manager.class%">
+                 class="%sonatra_security.security_identity_manager.class%"
+                 public="true">
             <argument type="service" id="event_dispatcher"/>
             <argument type="service" id="security.role_hierarchy"/>
             <argument type="service" id="security.authentication.trust_resolver"/>

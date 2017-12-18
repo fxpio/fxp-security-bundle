@@ -11,7 +11,8 @@
     <services>
         <!-- Sharing Validator -->
         <service id="sonatra_security.validator.sharing"
-                 class="%sonatra_security.validator.sharing.class%">
+                 class="%sonatra_security.validator.sharing.class%"
+                 public="true">
             <tag name="validator.constraint_validator" />
             <argument type="service" id="sonatra_security.sharing_manager"/>
             <argument type="service" id="property_accessor"/>
