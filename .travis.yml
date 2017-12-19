@@ -20,7 +20,8 @@ matrix:
 before_script:
     - composer self-update
     - composer global require --prefer-source phpunit/phpunit:"6.2.*" satooshi/php-coveralls:^1.0.0
-    - composer install --prefer-source
+    - if [ "$TRAVIS_PHP_VERSION" != "7.1" ]; then composer update --prefer-source; fi;
+    - if [ "$TRAVIS_PHP_VERSION" == "7.1" ]; then composer install --prefer-source; fi;
     - mkdir -p ./build/logs
 
 script:
