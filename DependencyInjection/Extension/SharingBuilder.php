@@ -71,12 +71,14 @@ class SharingBuilder implements ExtensionBuilderInterface
      * @param ContainerBuilder $container The container
      * @param LoaderInterface  $loader    The config loader
      * @param array            $config    The config
+     *
+     * @throws
      */
     private function buildDoctrineSharingFilter(ContainerBuilder $container, LoaderInterface $loader,
                                                 array $config)
     {
         if ($config['doctrine']['orm']['filters']['sharing']) {
-            BuilderUtils::validate($container, 'doctrine.orm.filter.sharing', 'doctrine.orm.entity_manager.class', 'doctrine/orm');
+            BuilderUtils::validate($container, 'doctrine.orm.filter.sharing', 'doctrine.orm.entity_manager', 'doctrine/orm');
 
             if (!$config['sharing']['enabled']) {
                 throw new InvalidConfigurationException('The "sonatra_security.sharing" config must be enabled');
@@ -92,13 +94,15 @@ class SharingBuilder implements ExtensionBuilderInterface
      * @param ContainerBuilder $container The container
      * @param LoaderInterface  $loader    The config loader
      * @param array            $config    The config
+     *
+     * @throws
      */
     private function buildDoctrineSharingListener(ContainerBuilder $container, LoaderInterface $loader,
                                                   array $config)
     {
         // doctrine orm sharing filter listener for private sharing
         if ($config['doctrine']['orm']['listeners']['private_sharing']) {
-            BuilderUtils::validate($container, 'doctrine.orm.listeners.private_sharing', 'doctrine.orm.entity_manager.class', 'doctrine/orm');
+            BuilderUtils::validate($container, 'doctrine.orm.listeners.private_sharing', 'doctrine.orm.entity_manager', 'doctrine/orm');
 
             if (!$config['doctrine']['orm']['filters']['sharing']) {
                 throw new InvalidConfigurationException('The "sonatra_security.doctrine.orm.filters.sharing" config must be enabled');
@@ -114,6 +118,8 @@ class SharingBuilder implements ExtensionBuilderInterface
      * @param ContainerBuilder $container The container
      * @param LoaderInterface  $loader    The config loader
      * @param array            $config    The config
+     *
+     * @throws
      */
     private function buildDoctrineSharingDeleteListener(ContainerBuilder $container,
                                                         LoaderInterface $loader,
@@ -121,7 +127,7 @@ class SharingBuilder implements ExtensionBuilderInterface
     {
         // doctrine orm sharing delete listener for private sharing
         if ($config['doctrine']['orm']['listeners']['sharing_delete']) {
-            BuilderUtils::validate($container, 'doctrine.orm.listeners.sharing_delete', 'doctrine.orm.entity_manager.class', 'doctrine/orm');
+            BuilderUtils::validate($container, 'doctrine.orm.listeners.sharing_delete', 'doctrine.orm.entity_manager', 'doctrine/orm');
 
             if (!$config['sharing']['enabled']) {
                 throw new InvalidConfigurationException('The "sonatra_security.sharing" config must be enabled');

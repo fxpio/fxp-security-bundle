@@ -191,11 +191,13 @@ class PermissionBuilder implements ExtensionBuilderInterface
      * @param ContainerBuilder $container The container
      * @param LoaderInterface  $loader    The config loader
      * @param array            $config    The config
+     *
+     * @throws
      */
     private function buildDoctrineOrmChecker(ContainerBuilder $container, LoaderInterface $loader, array $config)
     {
         if ($config['doctrine']['orm']['listeners']['permission_checker']) {
-            BuilderUtils::validate($container, 'doctrine.orm.listeners.permission_checker', 'doctrine.orm.entity_manager.class', 'doctrine/orm');
+            BuilderUtils::validate($container, 'doctrine.orm.listeners.permission_checker', 'doctrine.orm.entity_manager', 'doctrine/orm');
             $loader->load('orm_listener_permission_checker.xml');
         }
     }

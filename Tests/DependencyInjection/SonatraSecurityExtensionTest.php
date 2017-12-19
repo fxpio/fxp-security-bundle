@@ -58,8 +58,8 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
                     ),
                 ),
             ),
-        )), array(
-            'doctrine.orm.entity_manager.class' => EntityManager::class,
+        )), array(), array(
+            'doctrine.orm.entity_manager' => new Definition(EntityManager::class),
         ));
 
         $this->assertTrue($container->hasDefinition('sonatra_security.object_filter'));
@@ -147,9 +147,9 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
                     ),
                 ),
             ),
-        )), array(
-            'doctrine.class' => Registry::class,
-            'doctrine.orm.entity_manager.class' => EntityManager::class,
+        )), array(), array(
+            'doctrine' => new Definition(Registry::class),
+            'doctrine.orm.entity_manager' => new Definition(EntityManager::class),
         ));
 
         $this->assertTrue($container->hasDefinition('security.role_hierarchy'));
@@ -195,8 +195,8 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
                     ),
                 ),
             ),
-        )), array(
-            'doctrine.class' => Registry::class,
+        )), array(), array(
+            'doctrine' => new Definition(Registry::class),
         ));
     }
 
@@ -296,8 +296,8 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
             'annotations' => array(
                 'security' => true,
             ),
-        )), array(
-            'sensio_framework_extra.view.guesser.class' => TemplateGuesser::class,
+        )), array(), array(
+            'sensio_framework_extra.view.guesser' => new Definition(TemplateGuesser::class),
         ));
 
         $this->assertTrue($container->hasDefinition('sonatra_security.subscriber.security_annotation'));
@@ -334,8 +334,8 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
                     ),
                 ),
             ),
-        )), array(
-            'doctrine.orm.entity_manager.class' => EntityManager::class,
+        )), array(), array(
+            'doctrine.orm.entity_manager' => new Definition(EntityManager::class),
         ));
 
         $this->assertTrue($container->hasDefinition('sonatra_security.orm.filter.subscriber.sharing'));
@@ -350,6 +350,10 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
         $this->createContainer(array(array(
             'role_class' => MockRole::class,
             'permission_class' => MockPermission::class,
+            'sharing_class' => MockSharing::class,
+            'sharing' => array(
+                'enabled' => true,
+            ),
             'doctrine' => array(
                 'orm' => array(
                     'filters' => array(
@@ -377,7 +381,7 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
                 ),
             ),
         )), array(
-            'doctrine.orm.entity_manager.class' => EntityManager::class,
+            'doctrine.orm.entity_manager' => new Definition(EntityManager::class),
         ));
     }
 
@@ -400,8 +404,8 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
                     ),
                 ),
             ),
-        )), array(
-            'doctrine.orm.entity_manager.class' => EntityManager::class,
+        )), array(), array(
+            'doctrine.orm.entity_manager' => new Definition(EntityManager::class),
         ));
 
         $this->assertTrue($container->hasDefinition('sonatra_security.orm.filter.sharing.private_listener'));
@@ -409,15 +413,22 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
 
     /**
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage The "sonatra_security.doctrine.orm.listeners.private_sharing" config require the "doctrine/orm" package
+     * @expectedExceptionMessage The "sonatra_security.doctrine.orm.filter.sharing" config require the "doctrine/orm" package
      */
     public function testOrmSharingPrivateListenerWithoutDoctrine()
     {
         $this->createContainer(array(array(
             'role_class' => MockRole::class,
             'permission_class' => MockPermission::class,
+            'sharing_class' => MockSharing::class,
+            'sharing' => array(
+                'enabled' => true,
+            ),
             'doctrine' => array(
                 'orm' => array(
+                    'filters' => array(
+                        'sharing' => true,
+                    ),
                     'listeners' => array(
                         'private_sharing' => true,
                     ),
@@ -443,7 +454,7 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
                 ),
             ),
         )), array(
-            'doctrine.orm.entity_manager.class' => EntityManager::class,
+            'doctrine.orm.entity_manager' => new Definition(EntityManager::class),
         ));
     }
 
@@ -463,8 +474,8 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
                     ),
                 ),
             ),
-        )), array(
-            'doctrine.orm.entity_manager.class' => EntityManager::class,
+        )), array(), array(
+            'doctrine.orm.entity_manager' => new Definition(EntityManager::class),
         ));
 
         $this->assertTrue($container->hasDefinition('sonatra_security.orm.listener.sharing_delete'));
@@ -479,6 +490,10 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
         $this->createContainer(array(array(
             'role_class' => MockRole::class,
             'permission_class' => MockPermission::class,
+            'sharing_class' => MockSharing::class,
+            'sharing' => array(
+                'enabled' => true,
+            ),
             'doctrine' => array(
                 'orm' => array(
                     'listeners' => array(
@@ -506,7 +521,7 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
                 ),
             ),
         )), array(
-            'doctrine.orm.entity_manager.class' => EntityManager::class,
+            'doctrine.orm.entity_manager' => new Definition(EntityManager::class),
         ));
     }
 
@@ -525,8 +540,8 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
                     ),
                 ),
             ),
-        )), array(
-            'doctrine.orm.entity_manager.class' => EntityManager::class,
+        )), array(), array(
+            'doctrine.orm.entity_manager' => new Definition(EntityManager::class),
         ));
 
         $def = $container->getDefinition('sonatra_security.permission_manager');

@@ -11,7 +11,6 @@
 
 namespace Sonatra\Bundle\SecurityBundle\DependencyInjection\Extension;
 
-use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
@@ -25,16 +24,17 @@ abstract class BuilderUtils
      *
      * @param ContainerBuilder $container The container
      * @param string           $config    The name of config
-     * @param string           $parameter The required parameter
+     * @param string           $service   The required service id
      * @param string           $package   The required package name
      */
-    public static function validate(ContainerBuilder $container, $config, $parameter, $package)
+    public static function validate(ContainerBuilder $container, $config, $service, $package)
     {
-        if (!$container->hasParameter($parameter)) {
-            $msg = 'The "sonatra_security.%s" config require the "%s" package';
+        $missingServices = $container->hasParameter('sonatra_security.missing_services')
+            ? $container->getParameter('sonatra_security.missing_services')
+            : array();
 
-            throw new InvalidConfigurationException(sprintf($msg, $config, $package));
-        }
+        $missingServices[$config] = array($service, $package);
+        $container->setParameter('sonatra_security.missing_services', $missingServices);
     }
 
     /**
@@ -43,6 +43,8 @@ abstract class BuilderUtils
      * @param LoaderInterface $loader The config loader
      * @param array           $config The config
      * @param string          $type   The provider type
+     *
+     * @throws
      */
     public static function loadProvider(LoaderInterface $loader, array $config, $type)
     {

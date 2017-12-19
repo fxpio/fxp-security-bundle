@@ -26,7 +26,7 @@ class RoleHierarchyBuilder implements ExtensionBuilderInterface
     public function build(ContainerBuilder $container, LoaderInterface $loader, array $config)
     {
         if ($config['role_hierarchy']['enabled']) {
-            BuilderUtils::validate($container, 'role_hierarchy', 'doctrine.class', 'doctrine/doctrine-bundle');
+            BuilderUtils::validate($container, 'role_hierarchy', 'doctrine', 'doctrine/doctrine-bundle');
             $loader->load('role_hierarchy.xml');
 
             // role hierarchy cache
@@ -37,7 +37,7 @@ class RoleHierarchyBuilder implements ExtensionBuilderInterface
 
             // doctrine orm role hierarchy listener
             if ($config['doctrine']['orm']['listeners']['role_hierarchy']) {
-                BuilderUtils::validate($container, 'doctrine.orm.listeners.role_hierarchy', 'doctrine.orm.entity_manager.class', 'doctrine/orm');
+                BuilderUtils::validate($container, 'doctrine.orm.listeners.role_hierarchy', 'doctrine.orm.entity_manager', 'doctrine/orm');
                 $loader->load('orm_listener_role_hierarchy.xml');
             }
         }

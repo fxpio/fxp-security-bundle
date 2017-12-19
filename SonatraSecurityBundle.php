@@ -13,6 +13,7 @@ namespace Sonatra\Bundle\SecurityBundle;
 
 use Doctrine\Bundle\DoctrineBundle\DependencyInjection\Compiler\DoctrineOrmMappingsPass;
 use Sonatra\Bundle\SecurityBundle\DependencyInjection\Compiler\AccessControlPass;
+use Sonatra\Bundle\SecurityBundle\DependencyInjection\Compiler\ConfigDependencyValidationPass;
 use Sonatra\Bundle\SecurityBundle\DependencyInjection\Compiler\ExpressionVariableStoragePass;
 use Sonatra\Bundle\SecurityBundle\DependencyInjection\Compiler\ObjectFilterPass;
 use Sonatra\Bundle\SecurityBundle\DependencyInjection\Compiler\OrganizationalPass;
@@ -43,6 +44,7 @@ class SonatraSecurityBundle extends Bundle
 
         $this->registerSecurityExtension($container);
 
+        $container->addCompilerPass(new ConfigDependencyValidationPass());
         $container->addCompilerPass(new ValidationPass());
         $container->addCompilerPass(new TranslatorPass());
         $container->addCompilerPass(new ExpressionVariableStoragePass());

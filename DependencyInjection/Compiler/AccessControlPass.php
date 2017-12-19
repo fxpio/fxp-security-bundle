@@ -68,8 +68,7 @@ class AccessControlPass implements CompilerPassInterface
     private function createAuthorization(ContainerBuilder $container, array $accesses)
     {
         foreach ($accesses as $access) {
-            $matcher = $this->createRequestMatcher(
-                $container,
+            $matcher = $this->createRequestMatcher($container,
                 $access['path'],
                 $access['host'],
                 $access['methods'],

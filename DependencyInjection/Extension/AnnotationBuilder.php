@@ -41,7 +41,7 @@ class AnnotationBuilder implements ExtensionBuilderInterface
     public function build(ContainerBuilder $container, LoaderInterface $loader, array $config)
     {
         if ($config['annotations']['security']) {
-            BuilderUtils::validate($container, 'annotations.security', 'sensio_framework_extra.view.guesser.class', 'sensio/framework-extra-bundle');
+            BuilderUtils::validate($container, 'annotations.security', 'sensio_framework_extra.view.guesser', 'sensio/framework-extra-bundle');
             $loader->load('annotation_security.xml');
 
             $this->ext->addAnnotatedClassesToCompile(array(
