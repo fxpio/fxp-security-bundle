@@ -20,7 +20,7 @@
         "sonatra/security": "^1.0.0"
     },
     "require-dev": {
-        "sensio/framework-extra-bundle": "^3.0.0",
+        "sensio/framework-extra-bundle": "^5.1.0",
         "friendsofsymfony/user-bundle": "^2.0.0",
         "doctrine/doctrine-bundle": "^1.6.0",
         "doctrine/orm": "^2.5.0"
