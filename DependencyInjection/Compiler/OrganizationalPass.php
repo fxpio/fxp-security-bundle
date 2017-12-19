@@ -13,6 +13,7 @@ namespace Sonatra\Bundle\SecurityBundle\DependencyInjection\Compiler;
 
 use Sonatra\Component\Security\Organizational\OrganizationalContextInterface;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
+use Symfony\Component\DependencyInjection\Alias;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
@@ -42,7 +43,7 @@ class OrganizationalPass implements CompilerPassInterface
 
         if (null !== $serviceId) {
             $serviceId = $this->getServiceId($container, $serviceId);
-            $container->setAlias('sonatra_security.organizational_context', $serviceId)->setPublic(true);
+            $container->setAlias('sonatra_security.organizational_context', new Alias($serviceId, true));
             $container->removeDefinition('sonatra_security.organizational_context.default');
             $pb->remove('sonatra_security.organizational_context.default.class');
         }
