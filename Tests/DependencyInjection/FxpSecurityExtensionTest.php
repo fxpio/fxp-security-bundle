@@ -127,8 +127,7 @@ class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
         $this->assertTrue($container->hasDefinition('security.access.groupable_voter'));
         $this->assertTrue($container->hasDefinition('fxp_security.subscriber.security_identity.group'));
 
-        $this->assertSame('%fxp_security.access.role_security_identity_voter.class%', $container->getDefinition('security.access.role_hierarchy_voter')->getClass());
-        $this->assertSame(RoleSecurityIdentityVoter::class, $container->getParameter('fxp_security.access.role_security_identity_voter.class'));
+        $this->assertSame(RoleSecurityIdentityVoter::class, $container->getDefinition('security.access.role_hierarchy_voter')->getClass());
     }
 
     public function testRoleHierarchy()
@@ -157,8 +156,7 @@ class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
         $this->assertTrue($container->hasDefinition('fxp_security.role_hierarchy.cache.listener'));
 
         $def = $container->getDefinition('security.role_hierarchy');
-        $this->assertSame('%security.role_hierarchy.class%', $def->getClass());
-        $this->assertSame(OrganizationalRoleHierarchy::class, $container->getParameter('security.role_hierarchy.class'));
+        $this->assertSame(OrganizationalRoleHierarchy::class, $def->getClass());
     }
 
     /**

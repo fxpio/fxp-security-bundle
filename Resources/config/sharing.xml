@@ -4,14 +4,10 @@
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
-    <parameters>
-        <parameter key="fxp_security.sharing_manager.class">Fxp\Component\Security\Sharing\SharingManager</parameter>
-    </parameters>
-
     <services>
         <!-- Sharing Manager -->
         <service id="fxp_security.sharing_manager"
-                 class="%fxp_security.sharing_manager.class%"
+                 class="Fxp\Component\Security\Sharing\SharingManager"
                  public="true">
             <argument type="service" id="fxp_security.sharing_provider"/>
             <argument/>

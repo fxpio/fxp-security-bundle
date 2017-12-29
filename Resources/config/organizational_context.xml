@@ -4,15 +4,11 @@
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
-    <parameters>
-        <parameter key="fxp_security.organizational_context.default.class">Fxp\Component\Security\Organizational\OrganizationalContext</parameter>
-        <parameter key="security.access.organization_voter.class">Fxp\Component\Security\Authorization\Voter\OrganizationVoter</parameter>
-        <parameter key="fxp_security.subscriber.security_identity.organization.class">Fxp\Component\Security\Listener\OrganizationSecurityIdentitySubscriber</parameter>
-    </parameters>
-
     <services>
         <!-- Default Organizational Context -->
-        <service id="fxp_security.organizational_context.default" class="%fxp_security.organizational_context.default.class%" public="true">
+        <service id="fxp_security.organizational_context.default"
+                 class="Fxp\Component\Security\Organizational\OrganizationalContext"
+                 public="true">
             <argument type="service" id="security.token_storage"/>
             <argument type="service" id="event_dispatcher" on-invalid="ignore"/>
         </service>
@@ -22,7 +18,7 @@
 
         <!-- Organizational Security Voter -->
         <service id="security.access.organization_voter"
-                 class="%security.access.organization_voter.class%"
+                 class="Fxp\Component\Security\Authorization\Voter\OrganizationVoter"
                  public="false">
             <tag name="security.voter" priority="245"/>
             <argument type="service" id="fxp_security.security_identity_manager"/>
@@ -30,7 +26,7 @@
 
         <!-- Organization Security Identity Subscriber -->
         <service id="fxp_security.subscriber.security_identity.organization"
-                 class="%fxp_security.subscriber.security_identity.organization.class%">
+                 class="Fxp\Component\Security\Listener\OrganizationSecurityIdentitySubscriber">
             <tag name="fxp_security.event_subscriber"/>
             <argument type="service" id="security.role_hierarchy"/>
             <argument type="service" id="fxp_security.organizational_context"/>

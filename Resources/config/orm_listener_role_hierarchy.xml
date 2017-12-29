@@ -4,14 +4,10 @@
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
-    <parameters>
-        <parameter key="fxp_security.role_hierarchy.cache.listener.class">Fxp\Component\Security\Doctrine\ORM\Listener\RoleHierarchyListener</parameter>
-    </parameters>
-
     <services>
         <!-- Role Hierarchy Doctrine ORM Listener -->
         <service id="fxp_security.role_hierarchy.cache.listener"
-                 class="%fxp_security.role_hierarchy.cache.listener.class%">
+                 class="Fxp\Component\Security\Doctrine\ORM\Listener\RoleHierarchyListener">
             <tag name="doctrine.event_subscriber" priority="252"/>
             <argument type="service" id="fxp_security.security_identity_manager"/>
             <argument type="service" id="fxp_security.role_hierarchy.cache" on-invalid="null"/>

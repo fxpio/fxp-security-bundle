@@ -4,15 +4,10 @@
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
-    <parameters>
-        <parameter key="fxp_security.object_filter.extension.class">Fxp\Component\Security\ObjectFilter\ObjectFilterExtension</parameter>
-        <parameter key="fxp_security.object_filter.class">Fxp\Component\Security\ObjectFilter\ObjectFilter</parameter>
-    </parameters>
-
     <services>
         <!-- Object Filter -->
         <service id="fxp_security.object_filter"
-                 class="%fxp_security.object_filter.class%"
+                 class="Fxp\Component\Security\ObjectFilter\ObjectFilter"
                  public="true">
             <argument type="service" id="fxp_security.object_filter.extension"/>
             <argument type="service" id="fxp_security.permission_manager"/>
@@ -22,7 +17,7 @@
 
         <!-- Object Filter Extension -->
         <service id="fxp_security.object_filter.extension"
-                 class="%fxp_security.object_filter.extension.class%"
+                 class="Fxp\Component\Security\ObjectFilter\ObjectFilterExtension"
                  public="false">
             <argument type="collection"/>
             <property name="container" type="service" id="service_container"/>

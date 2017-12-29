@@ -4,17 +4,10 @@
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
-    <parameters>
-        <parameter key="fxp_security.permission_manager.class">Fxp\Component\Security\Permission\PermissionManager</parameter>
-        <parameter key="fxp_security.subscriber.permission.disable.class">Fxp\Component\Security\Listener\DisablePermissionSubscriber</parameter>
-        <parameter key="fxp_security.listener.permission_exception.class">Fxp\Component\Security\Listener\PermissionExceptionListener</parameter>
-        <parameter key="fxp_security.access.permission_voter.class">Fxp\Component\Security\Authorization\Voter\PermissionVoter</parameter>
-    </parameters>
-
     <services>
         <!-- Permission Manager -->
         <service id="fxp_security.permission_manager"
-                 class="%fxp_security.permission_manager.class%"
+                 class="Fxp\Component\Security\Permission\PermissionManager"
                  public="true">
             <argument type="service" id="event_dispatcher"/>
             <argument type="service" id="fxp_security.permission_provider"/>
@@ -25,20 +18,20 @@
 
         <!-- Disable Permission Subscriber -->
         <service id="fxp_security.subscriber.permission.disable"
-                 class="%fxp_security.subscriber.permission.disable.class%">
+                 class="Fxp\Component\Security\Listener\DisablePermissionSubscriber">
             <tag name="kernel.event_subscriber"/>
             <argument type="service" id="fxp_security.permission_manager"/>
         </service>
 
         <!-- Permission Exception Listener -->
         <service id="fxp_security.listener.permission_exception"
-                 class="%fxp_security.listener.permission_exception.class%">
+                 class="Fxp\Component\Security\Listener\PermissionExceptionListener">
             <tag name="kernel.event_listener" event="kernel.exception" method="onKernelException"/>
         </service>
 
         <!-- Voter -->
         <service id="fxp_security.access.permission_voter"
-                 class="%fxp_security.access.permission_voter.class%"
+                 class="Fxp\Component\Security\Authorization\Voter\PermissionVoter"
                  public="false">
             <argument type="service" id="fxp_security.permission_manager"/>
             <argument type="service" id="fxp_security.security_identity_manager"/>
