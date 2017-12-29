@@ -63,7 +63,7 @@ class AccessControlConfiguration implements ConfigurationInterface
                     ->scalarNode('host')->defaultNull()->end()
                     ->arrayNode('ips')
                         ->beforeNormalization()->ifString()->then(function ($v) {
-                            return array($v);
+                            return [$v];
                         })->end()
                         ->prototype('scalar')->end()
                     ->end()

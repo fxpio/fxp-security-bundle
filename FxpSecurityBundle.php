@@ -90,10 +90,10 @@ class FxpSecurityBundle extends Bundle
             $ref = new \ReflectionClass(ReachableRoleEvents::class);
             $container->addCompilerPass(
                 DoctrineOrmMappingsPass::createXmlMappingDriver(
-                    array(
+                    [
                         realpath(dirname($ref->getFileName()).'/Resources/config/doctrine/model') => 'Fxp\Component\Security\Model',
-                    ),
-                    array(),
+                    ],
+                    [],
                     'fxp_security.backend_type_orm'
                 )
             );

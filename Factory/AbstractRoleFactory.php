@@ -38,7 +38,7 @@ abstract class AbstractRoleFactory implements SecurityFactoryInterface
             ->replaceArgument(1, $config)
         ;
 
-        return array($providerId, $listenerId, $defaultEntryPoint);
+        return [$providerId, $listenerId, $defaultEntryPoint];
     }
 
     /**

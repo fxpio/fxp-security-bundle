@@ -74,22 +74,22 @@ class TranslatorPassTest extends TestCase
 
         $translator->expects($this->once())
             ->method('getArguments')
-            ->willReturn(array(null, null, array(), array()));
+            ->willReturn([null, null, [], []]);
 
         $translator->expects($this->once())
             ->method('getArgument')
             ->with(3)
-            ->willReturn(array());
+            ->willReturn([]);
 
         $translator->expects($this->once())
             ->method('replaceArgument')
-            ->with(3, array(
-                'resource_files' => array(
-                    'en' => array(
+            ->with(3, [
+                'resource_files' => [
+                    'en' => [
                         $file,
-                    ),
-                ),
-            ));
+                    ],
+                ],
+            ]);
 
         $this->compiler->process($this->container);
     }

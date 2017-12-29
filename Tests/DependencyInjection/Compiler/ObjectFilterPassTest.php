@@ -41,9 +41,9 @@ class ObjectFilterPassTest extends TestCase
         $compiler = new ObjectFilterPass();
 
         $def = new Definition(ObjectFilterExtension::class);
-        $def->setArguments(array(
-            array(),
-        ));
+        $def->setArguments([
+            [],
+        ]);
         $def->setProperty('container', $container);
         $container->setDefinition('fxp_security.object_filter.extension', $def);
 

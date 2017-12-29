@@ -76,12 +76,12 @@ class ValidationPassTest extends TestCase
 
         $validator->expects($this->once())
             ->method('addMethodCall')
-            ->with('addXmlMappings', array(
-                array(
+            ->with('addXmlMappings', [
+                [
                     $permissionFile,
                     $sharingFile,
-                ),
-            ));
+                ],
+            ]);
 
         $this->compiler->process($this->container);
     }

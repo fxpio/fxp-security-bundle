@@ -31,29 +31,29 @@ class ConfigurationTest extends TestCase
 {
     public function testNoConfig()
     {
-        $config = array(
+        $config = [
             'role_class' => MockRole::class,
             'permission_class' => MockPermission::class,
-        );
+        ];
 
         $processor = new Processor();
-        $configuration = new Configuration(array(), array());
-        $this->assertCount(16, $processor->processConfiguration($configuration, array($config)));
+        $configuration = new Configuration([], []);
+        $this->assertCount(16, $processor->processConfiguration($configuration, [$config]));
     }
 
     public function testPermissionConfigNormalization()
     {
-        $config = array(
+        $config = [
             'role_class' => MockRole::class,
             'permission_class' => MockPermission::class,
-            'permissions' => array(
+            'permissions' => [
                 \stdClass::class => true,
-            ),
-        );
+            ],
+        ];
 
         $processor = new Processor();
-        $configuration = new Configuration(array(), array());
-        $res = $processor->processConfiguration($configuration, array($config));
+        $configuration = new Configuration([], []);
+        $res = $processor->processConfiguration($configuration, [$config]);
 
         $this->assertArrayHasKey('permissions', $res);
         $this->assertArrayHasKey(\stdClass::class, $res['permissions']);
@@ -61,25 +61,25 @@ class ConfigurationTest extends TestCase
 
     public function testPermissionFieldOperationNormalization()
     {
-        $operations = array(
+        $operations = [
             'read',
             'edit',
-        );
-        $config = array(
+        ];
+        $config = [
             'role_class' => MockRole::class,
             'permission_class' => MockPermission::class,
-            'permissions' => array(
-                MockObject::class => array(
-                    'fields' => array(
+            'permissions' => [
+                MockObject::class => [
+                    'fields' => [
                         'name' => $operations,
-                    ),
-                ),
-            ),
-        );
+                    ],
+                ],
+            ],
+        ];
 
         $processor = new Processor();
-        $configuration = new Configuration(array(), array());
-        $res = $processor->processConfiguration($configuration, array($config));
+        $configuration = new Configuration([], []);
+        $res = $processor->processConfiguration($configuration, [$config]);
 
         $this->assertArrayHasKey('permissions', $res);
         $this->assertArrayHasKey(MockObject::class, $res['permissions']);
@@ -95,22 +95,22 @@ class ConfigurationTest extends TestCase
 
     public function testPermissionMasterFieldMapping()
     {
-        $config = array(
+        $config = [
             'role_class' => MockRole::class,
             'permission_class' => MockPermission::class,
-            'permissions' => array(
-                \stdClass::class => array(
-                    'master_mapping_permissions' => array(
+            'permissions' => [
+                \stdClass::class => [
+                    'master_mapping_permissions' => [
                         'view' => 'read',
                         'update' => 'edit',
-                    ),
-                ),
-            ),
-        );
+                    ],
+                ],
+            ],
+        ];
 
         $processor = new Processor();
-        $configuration = new Configuration(array(), array());
-        $res = $processor->processConfiguration($configuration, array($config));
+        $configuration = new Configuration([], []);
+        $res = $processor->processConfiguration($configuration, [$config]);
 
         $this->assertArrayHasKey('permissions', $res);
         $this->assertArrayHasKey(\stdClass::class, $res['permissions']);
@@ -121,20 +121,20 @@ class ConfigurationTest extends TestCase
 
     public function testSharingSubjectConfigNormalization()
     {
-        $config = array(
+        $config = [
             'role_class' => MockRole::class,
             'permission_class' => MockPermission::class,
             'sharing_class' => MockSharing::class,
-            'sharing' => array(
-                'subjects' => array(
+            'sharing' => [
+                'subjects' => [
                     \stdClass::class => SharingVisibilities::TYPE_PRIVATE,
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
 
         $processor = new Processor();
-        $configuration = new Configuration(array(), array());
-        $res = $processor->processConfiguration($configuration, array($config));
+        $configuration = new Configuration([], []);
+        $res = $processor->processConfiguration($configuration, [$config]);
 
         $this->assertArrayHasKey('sharing', $res);
         $this->assertArrayHasKey('subjects', $res['sharing']);
@@ -143,19 +143,19 @@ class ConfigurationTest extends TestCase
 
     public function testObjectFilterConfigByDefault()
     {
-        $expected = array(
+        $expected = [
             PermissionInterface::class,
             SharingInterface::class,
-        );
+        ];
 
-        $config = array(
+        $config = [
             'role_class' => MockRole::class,
             'permission_class' => MockPermission::class,
-        );
+        ];
 
         $processor = new Processor();
-        $configuration = new Configuration(array(), array());
-        $res = $processor->processConfiguration($configuration, array($config));
+        $configuration = new Configuration([], []);
+        $res = $processor->processConfiguration($configuration, [$config]);
 
         $this->assertArrayHasKey('object_filter', $res);
         $this->assertArrayHasKey('excluded_classes', $res['object_filter']);
@@ -164,21 +164,21 @@ class ConfigurationTest extends TestCase
 
     public function testObjectFilterConfig()
     {
-        $expected = array(
+        $expected = [
             \stdClass::class,
-        );
+        ];
 
-        $config = array(
+        $config = [
             'role_class' => MockRole::class,
             'permission_class' => MockPermission::class,
-            'object_filter' => array(
+            'object_filter' => [
                 'excluded_classes' => $expected,
-            ),
-        );
+            ],
+        ];
 
         $processor = new Processor();
-        $configuration = new Configuration(array(), array());
-        $res = $processor->processConfiguration($configuration, array($config));
+        $configuration = new Configuration([], []);
+        $res = $processor->processConfiguration($configuration, [$config]);
 
         $this->assertArrayHasKey('object_filter', $res);
         $this->assertArrayHasKey('excluded_classes', $res['object_filter']);

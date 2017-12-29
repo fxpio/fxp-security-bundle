@@ -40,7 +40,7 @@ class TranslatorPass implements CompilerPassInterface
             $optionsArgumentIndex = count($translator->getArguments()) - 1;
             $options = array_merge_recursive(
                 $translator->getArgument($optionsArgumentIndex),
-                array('resource_files' => $xlfTranslations)
+                ['resource_files' => $xlfTranslations]
             );
 
             $translator->replaceArgument($optionsArgumentIndex, $options);
@@ -58,7 +58,7 @@ class TranslatorPass implements CompilerPassInterface
     {
         $reflection = new \ReflectionClass(PermissionEvents::class);
         $dirname = dirname($reflection->getFileName());
-        $files = array();
+        $files = [];
 
         if (is_dir($dir = $dirname.'/Resources/config/translations')) {
             $files = $this->findTranslationFiles($dir);
@@ -77,7 +77,7 @@ class TranslatorPass implements CompilerPassInterface
      */
     private function findTranslationFiles($dir)
     {
-        $files = array();
+        $files = [];
         $finder = Finder::create()
             ->files()
             ->filter(function (\SplFileInfo $file) {
@@ -89,7 +89,7 @@ class TranslatorPass implements CompilerPassInterface
         foreach ($finder as $file) {
             list(, $locale) = explode('.', $file->getBasename(), 3);
             if (!isset($files[$locale])) {
-                $files[$locale] = array();
+                $files[$locale] = [];
             }
 
             $files[$locale][] = realpath((string) $file);

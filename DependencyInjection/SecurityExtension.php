@@ -104,7 +104,7 @@ class SecurityExtension extends Extension
      */
     public function load(array $configs, ContainerBuilder $container)
     {
-        $parentConfigs = array();
+        $parentConfigs = [];
 
         foreach ($configs as $config) {
             if (isset($config['rule'])) {

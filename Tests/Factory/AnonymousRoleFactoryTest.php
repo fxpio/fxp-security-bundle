@@ -40,13 +40,13 @@ class AnonymousRoleFactoryTest extends TestCase
 
     public function getConfiguration()
     {
-        return array(
-            array(true, 'ROLE_ANONYMOUS'),
-            array(false, null),
-            array(null, null),
-            array(array('role' => 'ROLE_CUSTOM_ANONYMOUS'), 'ROLE_CUSTOM_ANONYMOUS'),
-            array(array('role' => null), null),
-        );
+        return [
+            [true, 'ROLE_ANONYMOUS'],
+            [false, null],
+            [null, null],
+            [['role' => 'ROLE_CUSTOM_ANONYMOUS'], 'ROLE_CUSTOM_ANONYMOUS'],
+            [['role' => null], null],
+        ];
     }
 
     /**
@@ -63,7 +63,7 @@ class AnonymousRoleFactoryTest extends TestCase
         $this->assertSame($builder, $factory->addConfiguration($builder));
 
         $processor = new Processor();
-        $res = $processor->process($builder->getNode(), array($config));
+        $res = $processor->process($builder->getNode(), [$config]);
 
         $this->assertInternalType('array', $res);
         $this->assertArrayHasKey('role', $res);
@@ -77,12 +77,12 @@ class AnonymousRoleFactoryTest extends TestCase
 
         $this->assertCount(1, $container->getDefinitions());
 
-        $res = $factory->create($container, 'test_id', array(), 'user_provider', 'default_entry_point');
-        $valid = array(
+        $res = $factory->create($container, 'test_id', [], 'user_provider', 'default_entry_point');
+        $valid = [
             'fxp_security.authentication.provider.anonymous_role.test_id',
             'fxp_security.authentication.listener.anonymous_role.test_id',
             'default_entry_point',
-        );
+        ];
 
         $this->assertEquals($valid, $res);
         $this->assertCount(3, $container->getDefinitions());

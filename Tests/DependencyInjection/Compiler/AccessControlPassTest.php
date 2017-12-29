@@ -38,26 +38,26 @@ class AccessControlPassTest extends TestCase
     /**
      * @var array
      */
-    protected $accessControl = array(
-        array(
+    protected $accessControl = [
+        [
             'path' => '^/path/',
             'allow_if' => 'has_role("ROLE_ADMIN") and identity("input")',
             'requires_channel' => null,
             'host' => null,
-            'ips' => array(),
-            'methods' => array('GET'),
-            'roles' => array(),
-        ),
-        array(
+            'ips' => [],
+            'methods' => ['GET'],
+            'roles' => [],
+        ],
+        [
             'path' => '^/path/',
             'allow_if' => 'has_role("ROLE_ADMIN") and identity("input")',
             'requires_channel' => null,
             'host' => null,
-            'ips' => array(),
-            'methods' => array('GET'),
-            'roles' => array(),
-        ),
-    );
+            'ips' => [],
+            'methods' => ['GET'],
+            'roles' => [],
+        ],
+    ];
 
     protected function setUp()
     {

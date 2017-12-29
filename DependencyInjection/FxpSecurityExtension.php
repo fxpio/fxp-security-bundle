@@ -61,7 +61,7 @@ class FxpSecurityExtension extends Extension
      */
     private function getExtensionBuilders()
     {
-        return array(
+        return [
             new ModelBuilder($this->getAlias()),
             new SecurityIdentityBuilder(),
             new PermissionBuilder(),
@@ -75,6 +75,6 @@ class FxpSecurityExtension extends Extension
             new AnnotationBuilder($this),
             new SharingBuilder(),
             new ValidatorBuilder(),
-        );
+        ];
     }
 }

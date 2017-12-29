@@ -27,6 +27,6 @@ class AnonymousRoleBuilder implements ExtensionBuilderInterface
         $loader->load('anonymous_role.xml');
 
         $def = $container->getDefinition('fxp_security.authentication.listener.anonymous_role');
-        $def->addMethodCall('setEnabled', array($config['anonymous_role']['enabled']));
+        $def->addMethodCall('setEnabled', [$config['anonymous_role']['enabled']]);
     }
 }

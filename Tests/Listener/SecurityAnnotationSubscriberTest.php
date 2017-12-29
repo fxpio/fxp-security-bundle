@@ -97,7 +97,7 @@ class SecurityAnnotationSubscriberTest extends TestCase
      */
     public function testOnKernelControllerWithoutToken()
     {
-        $request = $this->createRequest(new Security(array('expression' => 'has_role("ROLE_ADMIN")')));
+        $request = $this->createRequest(new Security(['expression' => 'has_role("ROLE_ADMIN")']));
         $event = new FilterControllerEvent($this->kernel, $this->controller, $request, HttpKernelInterface::MASTER_REQUEST);
 
         $this->tokenStorage->expects($this->once())
@@ -110,7 +110,7 @@ class SecurityAnnotationSubscriberTest extends TestCase
     public function testOnKernelController()
     {
         $token = $this->getMockBuilder(TokenInterface::class)->getMock();
-        $request = $this->createRequest(new Security(array('expression' => 'has_role("ROLE_ADMIN")')));
+        $request = $this->createRequest(new Security(['expression' => 'has_role("ROLE_ADMIN")']));
         $event = new FilterControllerEvent($this->kernel, $this->controller, $request, HttpKernelInterface::MASTER_REQUEST);
 
         $this->tokenStorage->expects($this->once())
@@ -123,7 +123,7 @@ class SecurityAnnotationSubscriberTest extends TestCase
 
         $this->expression->expects($this->once())
             ->method('evaluate')
-            ->with('has_role("ROLE_ADMIN")', array('object' => $request, 'request' => $request))
+            ->with('has_role("ROLE_ADMIN")', ['object' => $request, 'request' => $request])
             ->willReturnCallback(function ($expression, $variables) {
                 $this->assertSame('has_role("ROLE_ADMIN")', $expression);
                 $this->assertArrayHasKey('object', $variables);
@@ -138,12 +138,12 @@ class SecurityAnnotationSubscriberTest extends TestCase
     public function testOnKernelControllerWithRequestVariables()
     {
         $token = $this->getMockBuilder(TokenInterface::class)->getMock();
-        $request = $this->createRequest(new Security(array('expression' => 'has_role("ROLE_ADMIN")')));
+        $request = $this->createRequest(new Security(['expression' => 'has_role("ROLE_ADMIN")']));
         $event = new FilterControllerEvent($this->kernel, $this->controller, $request, HttpKernelInterface::MASTER_REQUEST);
 
-        $request->attributes->add(array(
+        $request->attributes->add([
             'foo' => 'bar',
-        ));
+        ]);
 
         $this->tokenStorage->expects($this->once())
             ->method('getToken')
@@ -155,11 +155,11 @@ class SecurityAnnotationSubscriberTest extends TestCase
 
         $this->expression->expects($this->once())
             ->method('evaluate')
-            ->with('has_role("ROLE_ADMIN")', array(
+            ->with('has_role("ROLE_ADMIN")', [
                 'object' => $request,
                 'request' => $request,
                 'foo' => 'bar',
-            ))
+            ])
             ->willReturnCallback(function ($expression, $variables) {
                 $this->assertSame('has_role("ROLE_ADMIN")', $expression);
                 $this->assertArrayHasKey('object', $variables);
@@ -178,7 +178,7 @@ class SecurityAnnotationSubscriberTest extends TestCase
     public function testOnKernelControllerWithAccessDeniedException()
     {
         $token = $this->getMockBuilder(TokenInterface::class)->getMock();
-        $request = $this->createRequest(new Security(array('expression' => 'has_role("ROLE_ADMIN")')));
+        $request = $this->createRequest(new Security(['expression' => 'has_role("ROLE_ADMIN")']));
         $event = new FilterControllerEvent($this->kernel, $this->controller, $request, HttpKernelInterface::MASTER_REQUEST);
 
         $this->tokenStorage->expects($this->once())
@@ -191,7 +191,7 @@ class SecurityAnnotationSubscriberTest extends TestCase
 
         $this->expression->expects($this->once())
             ->method('evaluate')
-            ->with('has_role("ROLE_ADMIN")', array('object' => $request, 'request' => $request))
+            ->with('has_role("ROLE_ADMIN")', ['object' => $request, 'request' => $request])
             ->willReturnCallback(function ($expression, $variables) {
                 $this->assertSame('has_role("ROLE_ADMIN")', $expression);
                 $this->assertArrayHasKey('object', $variables);
@@ -212,8 +212,8 @@ class SecurityAnnotationSubscriberTest extends TestCase
      */
     private function createRequest(Security $security = null)
     {
-        return new Request(array(), array(), array(
+        return new Request([], [], [
             '_fxp_security' => $security,
-        ));
+        ]);
     }
 }

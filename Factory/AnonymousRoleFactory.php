@@ -43,7 +43,7 @@ class AnonymousRoleFactory extends AbstractRoleFactory
                     return is_bool($v) || is_string($v);
                 })
                 ->then(function ($v) {
-                    return array('role' => $this->getAnonymousRole($v));
+                    return ['role' => $this->getAnonymousRole($v)];
                 })
             ->end()
             ->children()

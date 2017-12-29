@@ -35,7 +35,7 @@ class HostRoleFactory extends AbstractRoleFactory
     public function addConfiguration(NodeDefinition $builder)
     {
         /* @var ArrayNodeDefinition $builder */
-        $builder->example(array('*.domain.*' => 'ROLE_WEBSITE', '*' => 'ROLE_PUBLIC'));
+        $builder->example(['*.domain.*' => 'ROLE_WEBSITE', '*' => 'ROLE_PUBLIC']);
         $builder->prototype('scalar')->end();
 
         return $builder;

@@ -26,19 +26,19 @@ class AccessControlPass implements CompilerPassInterface
     /**
      * @var string[]
      */
-    private static $availableExpressionNames = array(
+    private static $availableExpressionNames = [
         'token', 'user', 'object', 'roles', 'request', 'trust_resolver',
-    );
+    ];
 
     /**
      * @var Reference[]
      */
-    private $requestMatchers = array();
+    private $requestMatchers = [];
 
     /**
      * @var Reference[]
      */
-    private $expressions = array();
+    private $expressions = [];
 
     /**
      * @var ExpressionLanguage|null
@@ -82,7 +82,7 @@ class AccessControlPass implements CompilerPassInterface
             }
 
             $container->getDefinition('security.access_map')
-                ->addMethodCall('add', array($matcher, $attributes, $access['requires_channel']));
+                ->addMethodCall('add', [$matcher, $attributes, $access['requires_channel']]);
         }
     }
 
@@ -99,13 +99,13 @@ class AccessControlPass implements CompilerPassInterface
      * @return Reference
      */
     private function createRequestMatcher(ContainerBuilder $container, $path = null, $host = null,
-                                          $methods = array(), $ip = null, array $attributes = array())
+                                          $methods = [], $ip = null, array $attributes = [])
     {
         if (!empty($methods)) {
             $methods = array_map('strtoupper', (array) $methods);
         }
 
-        $serialized = serialize(array($path, $host, $methods, $ip, $attributes));
+        $serialized = serialize([$path, $host, $methods, $ip, $attributes]);
         $id = 'security.request_matcher.'.md5($serialized).sha1($serialized);
 
         if (isset($this->requestMatchers[$id])) {
@@ -113,7 +113,7 @@ class AccessControlPass implements CompilerPassInterface
         }
 
         // only add arguments that are necessary
-        $arguments = array($path, $host, $methods, $ip, $attributes);
+        $arguments = [$path, $host, $methods, $ip, $attributes];
         while (count($arguments) > 0 && !end($arguments)) {
             array_pop($arguments);
         }
@@ -181,7 +181,7 @@ class AccessControlPass implements CompilerPassInterface
      */
     private function getExpressionFunctions(ContainerBuilder $container)
     {
-        $providers = array();
+        $providers = [];
         $services = $container->findTaggedServiceIds('security.expression_language_provider');
 
         foreach ($services as $id => $attributes) {

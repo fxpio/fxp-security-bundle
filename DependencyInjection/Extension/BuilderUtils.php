@@ -31,9 +31,9 @@ abstract class BuilderUtils
     {
         $missingServices = $container->hasParameter('fxp_security.missing_services')
             ? $container->getParameter('fxp_security.missing_services')
-            : array();
+            : [];
 
-        $missingServices[$config] = array($service, $package);
+        $missingServices[$config] = [$service, $package];
         $container->setParameter('fxp_security.missing_services', $missingServices);
     }
 

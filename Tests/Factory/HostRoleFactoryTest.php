@@ -52,12 +52,12 @@ class HostRoleFactoryTest extends TestCase
 
         $this->assertCount(1, $container->getDefinitions());
 
-        $res = $factory->create($container, 'test_id', array(), 'user_provider', 'default_entry_point');
-        $valid = array(
+        $res = $factory->create($container, 'test_id', [], 'user_provider', 'default_entry_point');
+        $valid = [
             'fxp_security.authentication.provider.host_roles.test_id',
             'fxp_security.authentication.listener.host_roles.test_id',
             'default_entry_point',
-        );
+        ];
 
         $this->assertEquals($valid, $res);
         $this->assertCount(3, $container->getDefinitions());

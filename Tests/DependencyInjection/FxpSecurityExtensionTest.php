@@ -35,32 +35,32 @@ class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
 {
     public function testExtensionExist()
     {
-        $container = $this->createContainer(array(array(
+        $container = $this->createContainer([[
             'role_class' => MockRole::class,
             'permission_class' => MockPermission::class,
-        )));
+        ]]);
         $this->assertTrue($container->hasExtension('fxp_security'));
     }
 
     public function testObjectFilter()
     {
-        $container = $this->createContainer(array(array(
+        $container = $this->createContainer([[
             'role_class' => MockRole::class,
             'permission_class' => MockPermission::class,
-            'object_filter' => array(
+            'object_filter' => [
                 'enabled' => true,
-            ),
-            'doctrine' => array(
-                'orm' => array(
+            ],
+            'doctrine' => [
+                'orm' => [
                     'object_filter_voter' => true,
-                    'listeners' => array(
+                    'listeners' => [
                         'object_filter' => true,
-                    ),
-                ),
-            ),
-        )), array(), array(
+                    ],
+                ],
+            ],
+        ]], [], [
             'doctrine.orm.entity_manager' => new Definition(EntityManager::class),
-        ));
+        ]);
 
         $this->assertTrue($container->hasDefinition('fxp_security.object_filter'));
         $this->assertTrue($container->hasDefinition('fxp_security.object_filter.extension'));
@@ -76,18 +76,18 @@ class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
      */
     public function testOrmObjectFilterVoterWithoutDoctrine()
     {
-        $this->createContainer(array(array(
+        $this->createContainer([[
             'role_class' => MockRole::class,
             'permission_class' => MockPermission::class,
-            'object_filter' => array(
+            'object_filter' => [
                 'enabled' => true,
-            ),
-            'doctrine' => array(
-                'orm' => array(
+            ],
+            'doctrine' => [
+                'orm' => [
                     'object_filter_voter' => true,
-                ),
-            ),
-        )));
+                ],
+            ],
+        ]]);
     }
 
     /**
@@ -96,32 +96,32 @@ class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
      */
     public function testOrmObjectFilterListenerWithoutDoctrine()
     {
-        $this->createContainer(array(array(
+        $this->createContainer([[
             'role_class' => MockRole::class,
             'permission_class' => MockPermission::class,
-            'object_filter' => array(
+            'object_filter' => [
                 'enabled' => true,
-            ),
-            'doctrine' => array(
-                'orm' => array(
-                    'listeners' => array(
+            ],
+            'doctrine' => [
+                'orm' => [
+                    'listeners' => [
                         'object_filter' => true,
-                    ),
-                ),
-            ),
-        )));
+                    ],
+                ],
+            ],
+        ]]);
     }
 
     public function testSecurityVoter()
     {
-        $container = $this->createContainer(array(array(
+        $container = $this->createContainer([[
             'role_class' => MockRole::class,
             'permission_class' => MockPermission::class,
-            'security_voter' => array(
+            'security_voter' => [
                 'role_security_identity' => true,
                 'groupable' => true,
-            ),
-        )));
+            ],
+        ]]);
 
         $this->assertTrue($container->hasDefinition('security.access.role_hierarchy_voter'));
         $this->assertTrue($container->hasDefinition('security.access.groupable_voter'));
@@ -133,24 +133,24 @@ class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
 
     public function testRoleHierarchy()
     {
-        $container = $this->createContainer(array(array(
+        $container = $this->createContainer([[
             'role_class' => MockRole::class,
             'permission_class' => MockPermission::class,
-            'role_hierarchy' => array(
+            'role_hierarchy' => [
                 'enabled' => true,
                 'cache' => 'test_cache',
-            ),
-            'doctrine' => array(
-                'orm' => array(
-                    'listeners' => array(
+            ],
+            'doctrine' => [
+                'orm' => [
+                    'listeners' => [
                         'role_hierarchy' => true,
-                    ),
-                ),
-            ),
-        )), array(), array(
+                    ],
+                ],
+            ],
+        ]], [], [
             'doctrine' => new Definition(Registry::class),
             'doctrine.orm.entity_manager' => new Definition(EntityManager::class),
-        ));
+        ]);
 
         $this->assertTrue($container->hasDefinition('security.role_hierarchy'));
         $this->assertTrue($container->hasAlias('fxp_security.role_hierarchy.cache'));
@@ -167,13 +167,13 @@ class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
      */
     public function testRoleHierarchyWithoutDoctrineBundle()
     {
-        $this->createContainer(array(array(
+        $this->createContainer([[
             'role_class' => MockRole::class,
             'permission_class' => MockPermission::class,
-            'role_hierarchy' => array(
+            'role_hierarchy' => [
                 'enabled' => true,
-            ),
-        )));
+            ],
+        ]]);
     }
 
     /**
@@ -182,33 +182,33 @@ class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
      */
     public function testOrmRoleHierarchyListenerWithoutDoctrine()
     {
-        $this->createContainer(array(array(
+        $this->createContainer([[
             'role_class' => MockRole::class,
             'permission_class' => MockPermission::class,
-            'role_hierarchy' => array(
+            'role_hierarchy' => [
                 'enabled' => true,
-            ),
-            'doctrine' => array(
-                'orm' => array(
-                    'listeners' => array(
+            ],
+            'doctrine' => [
+                'orm' => [
+                    'listeners' => [
                         'role_hierarchy' => true,
-                    ),
-                ),
-            ),
-        )), array(), array(
+                    ],
+                ],
+            ],
+        ]], [], [
             'doctrine' => new Definition(Registry::class),
-        ));
+        ]);
     }
 
     public function testOrganizationalContext()
     {
-        $container = $this->createContainer(array(array(
+        $container = $this->createContainer([[
             'role_class' => MockRole::class,
             'permission_class' => MockPermission::class,
-            'organizational_context' => array(
+            'organizational_context' => [
                 'enabled' => true,
-            ),
-        )));
+            ],
+        ]]);
 
         $this->assertTrue($container->hasDefinition('fxp_security.organizational_context.default'));
         $this->assertTrue($container->hasAlias('fxp_security.organizational_context'));
@@ -218,24 +218,24 @@ class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
 
     public function testExpressionLanguage()
     {
-        $container = $this->createContainer(array(array(
+        $container = $this->createContainer([[
             'role_class' => MockRole::class,
             'permission_class' => MockPermission::class,
-            'organizational_context' => array(
+            'organizational_context' => [
                 'enabled' => true,
-            ),
-            'expression' => array(
+            ],
+            'expression' => [
                 'override_voter' => true,
-                'functions' => array(
+                'functions' => [
                     'is_basic_auth' => true,
                     'is_granted' => true,
                     'is_organization' => true,
-                ),
-            ),
-        )), array(), array(
+                ],
+            ],
+        ]], [], [
             'security.authorization_checker' => new Definition(AuthorizationChecker::class),
             'security.authentication.trust_resolver' => new Definition(AuthenticationTrustResolver::class),
-        ));
+        ]);
 
         $this->assertTrue($container->hasDefinition('fxp_security.expression.variable_storage'));
         $this->assertTrue($container->hasDefinition('security.access.expression_voter'));
@@ -256,18 +256,18 @@ class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
      */
     public function testExpressionLanguageWitMissingDependenciesForIsGranted()
     {
-        $this->createContainer(array(array(
+        $this->createContainer([[
             'role_class' => MockRole::class,
             'permission_class' => MockPermission::class,
-            'expression' => array(
+            'expression' => [
                 'override_voter' => true,
-                'functions' => array(
+                'functions' => [
                     'is_granted' => true,
-                ),
-            ),
-        )), array(), array(
+                ],
+            ],
+        ]], [], [
             'security.authentication.trust_resolver' => new Definition(AuthenticationTrustResolver::class),
-        ));
+        ]);
     }
 
     /**
@@ -276,29 +276,29 @@ class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
      */
     public function testExpressionLanguageWitMissingDependenciesForIsOrganization()
     {
-        $this->createContainer(array(array(
+        $this->createContainer([[
             'role_class' => MockRole::class,
             'permission_class' => MockPermission::class,
-            'expression' => array(
+            'expression' => [
                 'override_voter' => true,
-                'functions' => array(
+                'functions' => [
                     'is_organization' => true,
-                ),
-            ),
-        )));
+                ],
+            ],
+        ]]);
     }
 
     public function testAnnotation()
     {
-        $container = $this->createContainer(array(array(
+        $container = $this->createContainer([[
             'role_class' => MockRole::class,
             'permission_class' => MockPermission::class,
-            'annotations' => array(
+            'annotations' => [
                 'security' => true,
-            ),
-        )), array(), array(
+            ],
+        ]], [], [
             'sensio_framework_extra.view.guesser' => new Definition(TemplateGuesser::class),
-        ));
+        ]);
 
         $this->assertTrue($container->hasDefinition('fxp_security.subscriber.security_annotation'));
     }
@@ -309,34 +309,34 @@ class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
      */
     public function testAnnotationWitMissingDependencies()
     {
-        $this->createContainer(array(array(
+        $this->createContainer([[
             'role_class' => MockRole::class,
             'permission_class' => MockPermission::class,
-            'annotations' => array(
+            'annotations' => [
                 'security' => true,
-            ),
-        )));
+            ],
+        ]]);
     }
 
     public function testOrmSharing()
     {
-        $container = $this->createContainer(array(array(
+        $container = $this->createContainer([[
             'role_class' => MockRole::class,
             'permission_class' => MockPermission::class,
             'sharing_class' => MockSharing::class,
-            'sharing' => array(
+            'sharing' => [
                 'enabled' => true,
-            ),
-            'doctrine' => array(
-                'orm' => array(
-                    'filters' => array(
+            ],
+            'doctrine' => [
+                'orm' => [
+                    'filters' => [
                         'sharing' => true,
-                    ),
-                ),
-            ),
-        )), array(), array(
+                    ],
+                ],
+            ],
+        ]], [], [
             'doctrine.orm.entity_manager' => new Definition(EntityManager::class),
-        ));
+        ]);
 
         $this->assertTrue($container->hasDefinition('fxp_security.orm.filter.subscriber.sharing'));
     }
@@ -347,21 +347,21 @@ class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
      */
     public function testOrmSharingWithoutDoctrine()
     {
-        $this->createContainer(array(array(
+        $this->createContainer([[
             'role_class' => MockRole::class,
             'permission_class' => MockPermission::class,
             'sharing_class' => MockSharing::class,
-            'sharing' => array(
+            'sharing' => [
                 'enabled' => true,
-            ),
-            'doctrine' => array(
-                'orm' => array(
-                    'filters' => array(
+            ],
+            'doctrine' => [
+                'orm' => [
+                    'filters' => [
                         'sharing' => true,
-                    ),
-                ),
-            ),
-        )));
+                    ],
+                ],
+            ],
+        ]]);
     }
 
     /**
@@ -370,43 +370,43 @@ class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
      */
     public function testOrmSharingDoctrineWithoutEnableSharing()
     {
-        $this->createContainer(array(array(
+        $this->createContainer([[
             'role_class' => MockRole::class,
             'permission_class' => MockPermission::class,
-            'doctrine' => array(
-                'orm' => array(
-                    'filters' => array(
+            'doctrine' => [
+                'orm' => [
+                    'filters' => [
                         'sharing' => true,
-                    ),
-                ),
-            ),
-        )), array(
+                    ],
+                ],
+            ],
+        ]], [
             'doctrine.orm.entity_manager' => new Definition(EntityManager::class),
-        ));
+        ]);
     }
 
     public function testOrmSharingPrivateListener()
     {
-        $container = $this->createContainer(array(array(
+        $container = $this->createContainer([[
             'role_class' => MockRole::class,
             'permission_class' => MockPermission::class,
             'sharing_class' => MockSharing::class,
-            'sharing' => array(
+            'sharing' => [
                 'enabled' => true,
-            ),
-            'doctrine' => array(
-                'orm' => array(
-                    'filters' => array(
+            ],
+            'doctrine' => [
+                'orm' => [
+                    'filters' => [
                         'sharing' => true,
-                    ),
-                    'listeners' => array(
+                    ],
+                    'listeners' => [
                         'private_sharing' => true,
-                    ),
-                ),
-            ),
-        )), array(), array(
+                    ],
+                ],
+            ],
+        ]], [], [
             'doctrine.orm.entity_manager' => new Definition(EntityManager::class),
-        ));
+        ]);
 
         $this->assertTrue($container->hasDefinition('fxp_security.orm.filter.sharing.private_listener'));
     }
@@ -417,24 +417,24 @@ class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
      */
     public function testOrmSharingPrivateListenerWithoutDoctrine()
     {
-        $this->createContainer(array(array(
+        $this->createContainer([[
             'role_class' => MockRole::class,
             'permission_class' => MockPermission::class,
             'sharing_class' => MockSharing::class,
-            'sharing' => array(
+            'sharing' => [
                 'enabled' => true,
-            ),
-            'doctrine' => array(
-                'orm' => array(
-                    'filters' => array(
+            ],
+            'doctrine' => [
+                'orm' => [
+                    'filters' => [
                         'sharing' => true,
-                    ),
-                    'listeners' => array(
+                    ],
+                    'listeners' => [
                         'private_sharing' => true,
-                    ),
-                ),
-            ),
-        )));
+                    ],
+                ],
+            ],
+        ]]);
     }
 
     /**
@@ -443,40 +443,40 @@ class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
      */
     public function testOrmSharingPrivateListenerWithoutEnableSharing()
     {
-        $this->createContainer(array(array(
+        $this->createContainer([[
             'role_class' => MockRole::class,
             'permission_class' => MockPermission::class,
-            'doctrine' => array(
-                'orm' => array(
-                    'listeners' => array(
+            'doctrine' => [
+                'orm' => [
+                    'listeners' => [
                         'private_sharing' => true,
-                    ),
-                ),
-            ),
-        )), array(
+                    ],
+                ],
+            ],
+        ]], [
             'doctrine.orm.entity_manager' => new Definition(EntityManager::class),
-        ));
+        ]);
     }
 
     public function testOrmSharingDelete()
     {
-        $container = $this->createContainer(array(array(
+        $container = $this->createContainer([[
             'role_class' => MockRole::class,
             'permission_class' => MockPermission::class,
             'sharing_class' => MockSharing::class,
-            'sharing' => array(
+            'sharing' => [
                 'enabled' => true,
-            ),
-            'doctrine' => array(
-                'orm' => array(
-                    'listeners' => array(
+            ],
+            'doctrine' => [
+                'orm' => [
+                    'listeners' => [
                         'sharing_delete' => true,
-                    ),
-                ),
-            ),
-        )), array(), array(
+                    ],
+                ],
+            ],
+        ]], [], [
             'doctrine.orm.entity_manager' => new Definition(EntityManager::class),
-        ));
+        ]);
 
         $this->assertTrue($container->hasDefinition('fxp_security.orm.listener.sharing_delete'));
     }
@@ -487,21 +487,21 @@ class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
      */
     public function testOrmSharingDeleteWithoutDoctrine()
     {
-        $this->createContainer(array(array(
+        $this->createContainer([[
             'role_class' => MockRole::class,
             'permission_class' => MockPermission::class,
             'sharing_class' => MockSharing::class,
-            'sharing' => array(
+            'sharing' => [
                 'enabled' => true,
-            ),
-            'doctrine' => array(
-                'orm' => array(
-                    'listeners' => array(
+            ],
+            'doctrine' => [
+                'orm' => [
+                    'listeners' => [
                         'sharing_delete' => true,
-                    ),
-                ),
-            ),
-        )));
+                    ],
+                ],
+            ],
+        ]]);
     }
 
     /**
@@ -510,39 +510,39 @@ class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
      */
     public function testOrmSharingDeleteDoctrineWithoutEnableSharing()
     {
-        $this->createContainer(array(array(
+        $this->createContainer([[
             'role_class' => MockRole::class,
             'permission_class' => MockPermission::class,
-            'doctrine' => array(
-                'orm' => array(
-                    'listeners' => array(
+            'doctrine' => [
+                'orm' => [
+                    'listeners' => [
                         'sharing_delete' => true,
-                    ),
-                ),
-            ),
-        )), array(
+                    ],
+                ],
+            ],
+        ]], [
             'doctrine.orm.entity_manager' => new Definition(EntityManager::class),
-        ));
+        ]);
     }
 
     public function testPermission()
     {
-        $container = $this->createContainer(array(array(
+        $container = $this->createContainer([[
             'role_class' => MockRole::class,
             'permission_class' => MockPermission::class,
-            'permissions' => array(
+            'permissions' => [
                 MockObject::class => true,
-            ),
-            'doctrine' => array(
-                'orm' => array(
-                    'listeners' => array(
+            ],
+            'doctrine' => [
+                'orm' => [
+                    'listeners' => [
                         'permission_checker' => true,
-                    ),
-                ),
-            ),
-        )), array(), array(
+                    ],
+                ],
+            ],
+        ]], [], [
             'doctrine.orm.entity_manager' => new Definition(EntityManager::class),
-        ));
+        ]);
 
         $def = $container->getDefinition('fxp_security.permission_manager');
         $permConfigs = $def->getArgument(4);
@@ -559,29 +559,29 @@ class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
      */
     public function testPermissionWithNonExistentClass()
     {
-        $this->createContainer(array(array(
+        $this->createContainer([[
             'role_class' => MockRole::class,
             'permission_class' => MockPermission::class,
-            'permissions' => array(
+            'permissions' => [
                 'FooBar' => true,
-            ),
-        )));
+            ],
+        ]]);
     }
 
     public function testPermissionWithFields()
     {
-        $container = $this->createContainer(array(array(
+        $container = $this->createContainer([[
             'role_class' => MockRole::class,
             'permission_class' => MockPermission::class,
-            'permissions' => array(
-                MockObject::class => array(
-                    'fields' => array(
+            'permissions' => [
+                MockObject::class => [
+                    'fields' => [
                         'id' => null,
                         'name' => null,
-                    ),
-                ),
-            ),
-        )));
+                    ],
+                ],
+            ],
+        ]]);
 
         $def = $container->getDefinition('fxp_security.permission_manager');
         $permConfigs = $def->getArgument(4);
@@ -592,22 +592,22 @@ class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
 
     public function testPermissionWithDefaultFields()
     {
-        $container = $this->createContainer(array(array(
+        $container = $this->createContainer([[
             'role_class' => MockRole::class,
             'permission_class' => MockPermission::class,
-            'default_permissions' => array(
-                'fields' => array(
-                    'id' => array('read'),
-                ),
-            ),
-            'permissions' => array(
-                MockObject::class => array(
-                    'fields' => array(
+            'default_permissions' => [
+                'fields' => [
+                    'id' => ['read'],
+                ],
+            ],
+            'permissions' => [
+                MockObject::class => [
+                    'fields' => [
                         'name' => null,
-                    ),
-                ),
-            ),
-        )));
+                    ],
+                ],
+            ],
+        ]]);
 
         $def = $container->getDefinition('fxp_security.permission_manager');
         $permConfigs = $def->getArgument(4);
@@ -618,23 +618,23 @@ class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
 
     public function testMasterMappingPermissionWithDefaultMapping()
     {
-        $container = $this->createContainer(array(array(
+        $container = $this->createContainer([[
             'role_class' => MockRole::class,
             'permission_class' => MockPermission::class,
-            'default_permissions' => array(
-                'master_mapping_permissions' => array(
+            'default_permissions' => [
+                'master_mapping_permissions' => [
                     'view' => 'read',
                     'update' => 'edit',
                     'create' => 'edit',
                     'delete' => 'edit',
-                ),
-            ),
-            'permissions' => array(
-                MockObject::class => array(
+                ],
+            ],
+            'permissions' => [
+                MockObject::class => [
                     'master' => 'name',
-                ),
-            ),
-        )));
+                ],
+            ],
+        ]]);
 
         $def = $container->getDefinition('fxp_security.permission_manager');
         $permConfigs = $def->getArgument(4);
@@ -649,17 +649,17 @@ class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
      */
     public function testPermissionWithNonExistentField()
     {
-        $this->createContainer(array(array(
+        $this->createContainer([[
             'role_class' => MockRole::class,
             'permission_class' => MockPermission::class,
-            'permissions' => array(
-                MockObject::class => array(
-                    'fields' => array(
+            'permissions' => [
+                MockObject::class => [
+                    'fields' => [
                         'foo' => null,
-                    ),
-                ),
-            ),
-        )));
+                    ],
+                ],
+            ],
+        ]]);
     }
 
     /**
@@ -668,39 +668,39 @@ class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
      */
     public function testOrmPermissionCheckerListenerWithoutDoctrine()
     {
-        $this->createContainer(array(array(
+        $this->createContainer([[
             'role_class' => MockRole::class,
             'permission_class' => MockPermission::class,
-            'permissions' => array(
-                MockObject::class => array(),
-            ),
-            'doctrine' => array(
-                'orm' => array(
-                    'listeners' => array(
+            'permissions' => [
+                MockObject::class => [],
+            ],
+            'doctrine' => [
+                'orm' => [
+                    'listeners' => [
                         'permission_checker' => true,
-                    ),
-                ),
-            ),
-        )));
+                    ],
+                ],
+            ],
+        ]]);
     }
 
     public function testSharing()
     {
-        $container = $this->createContainer(array(array(
+        $container = $this->createContainer([[
             'role_class' => MockRole::class,
             'permission_class' => MockPermission::class,
             'sharing_class' => MockSharing::class,
-            'sharing' => array(
+            'sharing' => [
                 'enabled' => true,
-                'identity_types' => array(
-                    MockRole::class => array(
+                'identity_types' => [
+                    MockRole::class => [
                         'alias' => 'foo',
                         'roleable' => true,
                         'permissible' => true,
-                    ),
-                ),
-            ),
-        )));
+                    ],
+                ],
+            ],
+        ]]);
 
         $def = $container->getDefinition('fxp_security.sharing_manager');
         $identityConfigs = $def->getArgument(2);
@@ -715,28 +715,28 @@ class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
      */
     public function testSharingWithoutSharingClass()
     {
-        $this->createContainer(array(array(
+        $this->createContainer([[
             'role_class' => MockRole::class,
             'permission_class' => MockPermission::class,
-            'sharing' => array(
+            'sharing' => [
                 'enabled' => true,
-            ),
-        )));
+            ],
+        ]]);
     }
 
     public function testSharingWithDirectIdentityAlias()
     {
-        $container = $this->createContainer(array(array(
+        $container = $this->createContainer([[
             'role_class' => MockRole::class,
             'permission_class' => MockPermission::class,
             'sharing_class' => MockSharing::class,
-            'sharing' => array(
+            'sharing' => [
                 'enabled' => true,
-                'identity_types' => array(
+                'identity_types' => [
                     MockRole::class => 'foo',
-                ),
-            ),
-        )));
+                ],
+            ],
+        ]]);
 
         $def = $container->getDefinition('fxp_security.sharing_manager');
         $identityConfigs = $def->getArgument(2);
@@ -751,36 +751,36 @@ class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
      */
     public function testSharingWithNonExistentIdentityClass()
     {
-        $this->createContainer(array(array(
+        $this->createContainer([[
             'role_class' => MockRole::class,
             'permission_class' => MockPermission::class,
             'sharing_class' => MockSharing::class,
-            'sharing' => array(
+            'sharing' => [
                 'enabled' => true,
-                'identity_types' => array(
-                    'FooBar' => array(
+                'identity_types' => [
+                    'FooBar' => [
                         'alias' => 'foo',
                         'roleable' => true,
                         'permissible' => true,
-                    ),
-                ),
-            ),
-        )));
+                    ],
+                ],
+            ],
+        ]]);
     }
 
     public function testSharingWithSubject()
     {
-        $container = $this->createContainer(array(array(
+        $container = $this->createContainer([[
             'role_class' => MockRole::class,
             'permission_class' => MockPermission::class,
             'sharing_class' => MockSharing::class,
-            'sharing' => array(
+            'sharing' => [
                 'enabled' => true,
-                'subjects' => array(
+                'subjects' => [
                     MockObject::class => SharingVisibilities::TYPE_PRIVATE,
-                ),
-            ),
-        )));
+                ],
+            ],
+        ]]);
 
         $def = $container->getDefinition('fxp_security.sharing_manager');
         $subjectConfigs = $def->getArgument(1);
@@ -795,18 +795,18 @@ class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
      */
     public function testSharingWithNonExistentSubjectClass()
     {
-        $this->createContainer(array(array(
+        $this->createContainer([[
             'role_class' => MockRole::class,
             'permission_class' => MockPermission::class,
             'sharing_class' => MockSharing::class,
-            'sharing' => array(
+            'sharing' => [
                 'enabled' => true,
-                'subjects' => array(
-                    'FooBar' => array(
+                'subjects' => [
+                    'FooBar' => [
                         'visibility' => SharingVisibilities::TYPE_PRIVATE,
-                    ),
-                ),
-            ),
-        )));
+                    ],
+                ],
+            ],
+        ]]);
     }
 }

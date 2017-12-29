@@ -73,7 +73,7 @@ class SecurityExtensionTest extends TestCase
     {
         /* @var ContainerBuilder $container */
         $container = $this->getMockBuilder(ContainerBuilder::class)->disableOriginalConstructor()->getMock();
-        $config = array();
+        $config = [];
         $configuration = $this->getMockBuilder(ConfigurationInterface::class)->getMock();
 
         $this->baseExt->expects($this->once())
@@ -112,25 +112,25 @@ class SecurityExtensionTest extends TestCase
     {
         /* @var ContainerBuilder|\PHPUnit_Framework_MockObject_MockObject $container */
         $container = $this->getMockBuilder(ContainerBuilder::class)->getMock();
-        $accessControl = array(
-            array(
+        $accessControl = [
+            [
                 'path' => '^/path/',
                 'allow_if' => 'has_role("ROLE_ADMIN")',
                 'requires_channel' => null,
                 'host' => null,
-                'ips' => array(),
-                'methods' => array(),
-                'roles' => array(),
-            ),
-        );
-        $configs = array(array(
+                'ips' => [],
+                'methods' => [],
+                'roles' => [],
+            ],
+        ];
+        $configs = [[
             'rule' => 'RULE',
             'access_control' => $accessControl,
             'KEY' => 'VALUE',
-        ));
-        $validConfigs = array(array(
+        ]];
+        $validConfigs = [[
             'KEY' => 'VALUE',
-        ));
+        ]];
 
         $this->baseExt->expects($this->once())
             ->method('load')
@@ -147,14 +147,14 @@ class SecurityExtensionTest extends TestCase
     {
         /* @var ContainerBuilder|\PHPUnit_Framework_MockObject_MockObject $container */
         $container = $this->getMockBuilder(ContainerBuilder::class)->getMock();
-        $configs = array(array(
+        $configs = [[
             'rule' => 'RULE',
-            'access_control' => array(),
+            'access_control' => [],
             'KEY' => 'VALUE',
-        ));
-        $validConfigs = array(array(
+        ]];
+        $validConfigs = [[
             'KEY' => 'VALUE',
-        ));
+        ]];
 
         $this->baseExt->expects($this->once())
             ->method('load')

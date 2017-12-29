@@ -27,6 +27,6 @@ class HostRoleBuilder implements ExtensionBuilderInterface
         $loader->load('host_role.xml');
 
         $def = $container->getDefinition('fxp_security.authentication.listener.host_roles');
-        $def->addMethodCall('setEnabled', array($config['host_role']['enabled']));
+        $def->addMethodCall('setEnabled', [$config['host_role']['enabled']]);
     }
 }

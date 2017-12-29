@@ -24,41 +24,41 @@ class AccessControlConfigurationTest extends TestCase
 {
     public function testNoConfig()
     {
-        $config = array();
+        $config = [];
 
         $processor = new Processor();
-        $configuration = new AccessControlConfiguration(array(), array());
-        $this->assertCount(1, $processor->processConfiguration($configuration, array($config)));
+        $configuration = new AccessControlConfiguration([], []);
+        $this->assertCount(1, $processor->processConfiguration($configuration, [$config]));
     }
 
     public function testConfig()
     {
-        $config = array(
-            'access_control' => array(
-                array(
+        $config = [
+            'access_control' => [
+                [
                     'ips' => '127.0.0.1',
                     'methods' => 'GET,POST',
                     'roles' => 'ROLE_USER,ROLE_ADMIN',
-                ),
-            ),
-        );
-        $validConfig = array(
-            'access_control' => array(
-                array(
-                    'methods' => array('GET', 'POST'),
-                    'roles' => array('ROLE_USER', 'ROLE_ADMIN'),
-                    'ips' => array('127.0.0.1'),
+                ],
+            ],
+        ];
+        $validConfig = [
+            'access_control' => [
+                [
+                    'methods' => ['GET', 'POST'],
+                    'roles' => ['ROLE_USER', 'ROLE_ADMIN'],
+                    'ips' => ['127.0.0.1'],
                     'requires_channel' => null,
                     'path' => null,
                     'host' => null,
                     'allow_if' => null,
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
 
         $processor = new Processor();
-        $configuration = new AccessControlConfiguration(array(), array());
-        $fConfig = $processor->processConfiguration($configuration, array($config));
+        $configuration = new AccessControlConfiguration([], []);
+        $fConfig = $processor->processConfiguration($configuration, [$config]);
 
         $this->assertEquals($validConfig, $fConfig);
     }

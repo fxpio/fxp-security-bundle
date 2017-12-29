@@ -26,7 +26,7 @@ class ObjectFilterBuilder implements ExtensionBuilderInterface
     {
         if ($config['object_filter']['enabled']) {
             $loader->load('object_filter.xml');
-            $container->getDefinition('fxp_security.object_filter')->addMethodCall('setExcludedClasses', array($config['object_filter']['excluded_classes']));
+            $container->getDefinition('fxp_security.object_filter')->addMethodCall('setExcludedClasses', [$config['object_filter']['excluded_classes']]);
 
             // doctrine orm object filter voters
             if ($config['doctrine']['orm']['object_filter_voter']) {

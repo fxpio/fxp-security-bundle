@@ -32,7 +32,7 @@ class ObjectFilterPass implements CompilerPassInterface
             return;
         }
 
-        $voters = array();
+        $voters = [];
         foreach ($container->findTaggedServiceIds('fxp_security.object_filter.voter') as $id => $attributes) {
             $priority = isset($attributes[0]['priority']) ? $attributes[0]['priority'] : 0;
             $voters[$priority][] = new Reference($id);

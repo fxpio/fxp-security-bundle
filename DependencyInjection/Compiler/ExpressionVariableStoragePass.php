@@ -30,7 +30,7 @@ class ExpressionVariableStoragePass implements CompilerPassInterface
             return;
         }
 
-        $variables = array();
+        $variables = [];
         foreach ($container->findTaggedServiceIds('fxp_security.expression.variables') as $id => $tags) {
             foreach ($tags as $attributes) {
                 foreach ($attributes as $name => $value) {

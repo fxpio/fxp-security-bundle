@@ -38,15 +38,15 @@ abstract class AbstractSecurityExtensionTest extends TestCase
      *
      * @return ContainerBuilder
      */
-    protected function createContainer(array $configs = array(), array $parameters = array(), array $services = array())
+    protected function createContainer(array $configs = [], array $parameters = [], array $services = [])
     {
-        $container = new ContainerBuilder(new ParameterBag(array(
-            'kernel.bundles' => array(
+        $container = new ContainerBuilder(new ParameterBag([
+            'kernel.bundles' => [
                 'FrameworkBundle' => FrameworkBundle::class,
                 'SecurityBundle' => SecurityBundle::class,
                 'FxpSecurityBundle' => FxpSecurityBundle::class,
-            ),
-            'kernel.bundles_metadata' => array(),
+            ],
+            'kernel.bundles_metadata' => [],
             'kernel.cache_dir' => sys_get_temp_dir().'/fxp_security_bundle',
             'kernel.debug' => false,
             'kernel.environment' => 'test',
@@ -54,7 +54,7 @@ abstract class AbstractSecurityExtensionTest extends TestCase
             'kernel.root_dir' => sys_get_temp_dir().'/fxp_security_bundle',
             'kernel.project_dir' => sys_get_temp_dir().'/fxp_security_bundle',
             'kernel.charset' => 'UTF-8',
-        )));
+        ]));
 
         $container->setParameter('doctrine.default_entity_manager', 'test');
         $container->setDefinition('doctrine.orm.test_metadata_driver', new Definition(\stdClass::class));
@@ -75,14 +75,14 @@ abstract class AbstractSecurityExtensionTest extends TestCase
             $container->setDefinition($id, $definition);
         }
 
-        $sfExt->load(array(array('form' => true)), $container);
+        $sfExt->load([['form' => true]], $container);
         $extension->load($configs, $container);
 
         $bundle = new FxpSecurityBundle();
         $bundle->build($container);
 
-        $container->getCompilerPassConfig()->setOptimizationPasses(array());
-        $container->getCompilerPassConfig()->setRemovingPasses(array());
+        $container->getCompilerPassConfig()->setOptimizationPasses([]);
+        $container->getCompilerPassConfig()->setRemovingPasses([]);
         $container->compile();
 
         return $container;

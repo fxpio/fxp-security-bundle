@@ -37,7 +37,7 @@ class ValidationPass implements CompilerPassInterface
 
         if (count($xmlMappings) > 0) {
             $container->getDefinition('validator.builder')
-                ->addMethodCall('addXmlMappings', array($xmlMappings));
+                ->addMethodCall('addXmlMappings', [$xmlMappings]);
         }
     }
 
@@ -50,7 +50,7 @@ class ValidationPass implements CompilerPassInterface
      */
     private function getValidatorMappingFiles(ContainerBuilder $container)
     {
-        $files = array();
+        $files = [];
 
         $reflection = new \ReflectionClass(PermissionEvents::class);
         $dirname = dirname($reflection->getFileName());

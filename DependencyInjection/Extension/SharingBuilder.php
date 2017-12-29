@@ -50,8 +50,8 @@ class SharingBuilder implements ExtensionBuilderInterface
      */
     private function buildSharingConfigs(ContainerBuilder $container, array $config)
     {
-        $subjectConfigs = array();
-        $identityConfigs = array();
+        $subjectConfigs = [];
+        $identityConfigs = [];
 
         foreach ($config['sharing']['subjects'] as $type => $subjectConfig) {
             $subjectConfigs[] = $this->buildSharingSubjectConfig($container, $type, $subjectConfig);
@@ -170,10 +170,10 @@ class SharingBuilder implements ExtensionBuilderInterface
             throw new InvalidConfigurationException(sprintf($msg, $type));
         }
 
-        $def = new Definition(SharingSubjectConfig::class, array(
+        $def = new Definition(SharingSubjectConfig::class, [
             $type,
             $config['visibility'],
-        ));
+        ]);
         $def->setPublic(false);
 
         $id = 'fxp_security.sharing_subject_config.'.strtolower(str_replace('\\', '_', $type));
@@ -198,12 +198,12 @@ class SharingBuilder implements ExtensionBuilderInterface
             throw new InvalidConfigurationException(sprintf($msg, $type));
         }
 
-        $def = new Definition(SharingIdentityConfig::class, array(
+        $def = new Definition(SharingIdentityConfig::class, [
             $type,
             $config['alias'],
             $config['roleable'],
             $config['permissible'],
-        ));
+        ]);
         $def->setPublic(false);
 
         $id = 'fxp_security.sharing_identity_config.'.strtolower(str_replace('\\', '_', $type));

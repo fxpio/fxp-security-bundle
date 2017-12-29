@@ -25,9 +25,9 @@ class SecurityTest extends TestCase
     {
         $exp = 'has_role("ROLE_USER")';
         $exp2 = 'has_role("ROLE_ADMIN")';
-        $security = new Security(array(
+        $security = new Security([
             'expression' => $exp,
-        ));
+        ]);
 
         $this->assertSame('fxp_security', $security->getAliasName());
         $this->assertFalse($security->allowArray());

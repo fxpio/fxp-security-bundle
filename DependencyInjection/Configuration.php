@@ -32,7 +32,7 @@ class Configuration implements ConfigurationInterface
     {
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('fxp_security');
-        $supportedDrivers = array('orm', 'custom');
+        $supportedDrivers = ['orm', 'custom'];
 
         $rootNode
             ->children()
@@ -137,10 +137,10 @@ class Configuration implements ConfigurationInterface
             ->children()
                 ->arrayNode('excluded_classes')
                     ->prototype('scalar')->end()
-                    ->defaultValue(array(
+                    ->defaultValue([
                         PermissionInterface::class,
                         SharingInterface::class,
-                    ))
+                    ])
                 ->end()
             ->end()
         ;
@@ -274,7 +274,7 @@ class Configuration implements ConfigurationInterface
                 ->beforeNormalization()
                     ->ifArray()
                     ->then(function ($v) {
-                        return array('operations' => $v);
+                        return ['operations' => $v];
                     })
                 ->end()
                 ->canBeDisabled()
@@ -312,7 +312,7 @@ class Configuration implements ConfigurationInterface
                         ->beforeNormalization()
                             ->ifString()
                             ->then(function ($v) {
-                                return array('visibility' => $v);
+                                return ['visibility' => $v];
                             })
                         ->end()
                         ->children()
@@ -329,7 +329,7 @@ class Configuration implements ConfigurationInterface
                         ->beforeNormalization()
                             ->ifString()
                             ->then(function ($v) {
-                                return array('alias' => $v);
+                                return ['alias' => $v];
                             })
                         ->end()
                         ->children()

@@ -31,7 +31,7 @@ class PermissionBuilder implements ExtensionBuilderInterface
     {
         $loader->load('permission.xml');
         $defaultPerms = $config['default_permissions'];
-        $configs = array();
+        $configs = [];
 
         foreach ($config['permissions'] as $type => $permConfig) {
             if ($permConfig['enabled']) {
@@ -61,14 +61,14 @@ class PermissionBuilder implements ExtensionBuilderInterface
             throw new InvalidConfigurationException(sprintf($msg, $type));
         }
 
-        return $this->createConfigDefinition($container, PermissionConfig::class, $type, array(
+        return $this->createConfigDefinition($container, PermissionConfig::class, $type, [
             $type,
             $config['operations'],
             $config['mapping_permissions'],
             $this->buildPermissionConfigFields($container, $type, $config, $defaultPerms['fields']),
             $config['master'],
             $this->buildMasterMappingPermissions($config, $defaultPerms['master_mapping_permissions']),
-        ));
+        ]);
     }
 
     /**
@@ -102,7 +102,7 @@ class PermissionBuilder implements ExtensionBuilderInterface
      */
     private function buildPermissionConfigFields(ContainerBuilder $container, $type, array $config, array $defaultPerms)
     {
-        $fields = array();
+        $fields = [];
         $ref = new \ReflectionClass($type);
         $config = $this->buildDefaultPermissionConfigFields($ref, $config, $defaultPerms);
 
@@ -113,11 +113,11 @@ class PermissionBuilder implements ExtensionBuilderInterface
                 throw new InvalidConfigurationException(sprintf($msg, $field, $type));
             }
 
-            $fields[] = $this->createConfigDefinition($container, PermissionFieldConfig::class, $type, array(
+            $fields[] = $this->createConfigDefinition($container, PermissionFieldConfig::class, $type, [
                 $field,
                 $fieldConfig['operations'],
                 $fieldConfig['mapping_permissions'],
-            ), $field);
+            ], $field);
         }
 
         return $fields;
@@ -146,11 +146,11 @@ class PermissionBuilder implements ExtensionBuilderInterface
                 if ($buildDefaultField && !isset($config['fields'][$field]) && isset($defaultPerms[$field])) {
                     $config['fields'][$field] = $defaultPerms[$field];
                 } elseif ($buildField && !$hasFields) {
-                    $config['fields'][$field] = array(
+                    $config['fields'][$field] = [
                         'enabled' => true,
-                        'operations' => array(),
-                        'mapping_permissions' => array(),
-                    );
+                        'operations' => [],
+                        'mapping_permissions' => [],
+                    ];
                 }
             }
         }

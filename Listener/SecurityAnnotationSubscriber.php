@@ -66,7 +66,7 @@ class SecurityAnnotationSubscriber implements EventSubscriberInterface
      */
     public static function getSubscribedEvents()
     {
-        return array(KernelEvents::CONTROLLER => 'onKernelController');
+        return [KernelEvents::CONTROLLER => 'onKernelController'];
     }
 
     /**
@@ -104,17 +104,17 @@ class SecurityAnnotationSubscriber implements EventSubscriberInterface
         $event = new GetExpressionVariablesEvent($token);
         $this->dispatcher->dispatch(ExpressionVariableEvents::GET, $event);
 
-        $variables = array_merge(array(
+        $variables = array_merge([
             'object' => $request,
             'request' => $request,
-        ), $event->getVariables(), $this->getRequestVariables($request));
+        ], $event->getVariables(), $this->getRequestVariables($request));
 
         return $variables;
     }
 
     private function getRequestVariables(Request $request)
     {
-        $variables = array();
+        $variables = [];
 
         foreach ($request->attributes->all() as $key => $value) {
             if (false === strpos($key, '_')) {
