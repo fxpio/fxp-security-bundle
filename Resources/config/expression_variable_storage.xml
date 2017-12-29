@@ -6,10 +6,10 @@
 
     <services>
         <!-- Expression Variable Storage -->
-        <service id="sonatra_security.expression.variable_storage" class="Sonatra\Component\Security\Expression\ExpressionVariableStorage" public="true">
+        <service id="fxp_security.expression.variable_storage" class="Fxp\Component\Security\Expression\ExpressionVariableStorage" public="true">
             <argument/>
-            <argument type="service" id="sonatra_security.security_identity_manager" on-invalid="ignore" />
-            <tag name="sonatra_security.event_subscriber"/>
+            <argument type="service" id="fxp_security.security_identity_manager" on-invalid="ignore" />
+            <tag name="fxp_security.event_subscriber"/>
             <call method="add">
                 <argument>trust_resolver</argument>
                 <argument type="service" id="security.authentication.trust_resolver"/>

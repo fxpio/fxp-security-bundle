@@ -1,18 +1,18 @@
 <?php
 
 /*
- * This file is part of the Sonatra package.
+ * This file is part of the Fxp package.
  *
- * (c) François Pluchino <francois.pluchino@sonatra.com>
+ * (c) François Pluchino <francois.pluchino@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Bundle\SecurityBundle\Tests\DependencyInjection\Compiler;
+namespace Fxp\Bundle\SecurityBundle\Tests\DependencyInjection\Compiler;
 
+use Fxp\Bundle\SecurityBundle\DependencyInjection\Compiler\AccessControlPass;
 use PHPUnit\Framework\TestCase;
-use Sonatra\Bundle\SecurityBundle\DependencyInjection\Compiler\AccessControlPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\ExpressionLanguage\Tests\Fixtures\TestProvider;
@@ -21,7 +21,7 @@ use Symfony\Component\Security\Http\AccessMap;
 /**
  * Access Control Pass tests.
  *
- * @author François Pluchino <francois.pluchino@sonatra.com>
+ * @author François Pluchino <francois.pluchino@gmail.com>
  */
 class AccessControlPassTest extends TestCase
 {
@@ -81,7 +81,7 @@ class AccessControlPassTest extends TestCase
         $container = $this->getMockBuilder(ContainerBuilder::class)->getMock();
         $container->expects($this->once())
             ->method('hasParameter')
-            ->with('sonatra_security.access_control')
+            ->with('fxp_security.access_control')
             ->willReturn(false);
 
         $this->compiler->process($container);
@@ -89,10 +89,10 @@ class AccessControlPassTest extends TestCase
 
     public function testProcess()
     {
-        $this->container->setParameter('sonatra_security.access_control', $this->accessControl);
+        $this->container->setParameter('fxp_security.access_control', $this->accessControl);
 
         $this->compiler->process($this->container);
 
-        $this->assertFalse($this->container->hasParameter('sonatra_security.access_control'));
+        $this->assertFalse($this->container->hasParameter('fxp_security.access_control'));
     }
 }

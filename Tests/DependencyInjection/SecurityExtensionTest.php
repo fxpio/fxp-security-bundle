@@ -1,18 +1,18 @@
 <?php
 
 /*
- * This file is part of the Sonatra package.
+ * This file is part of the Fxp package.
  *
- * (c) François Pluchino <francois.pluchino@sonatra.com>
+ * (c) François Pluchino <francois.pluchino@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Bundle\SecurityBundle\Tests\DependencyInjection;
+namespace Fxp\Bundle\SecurityBundle\Tests\DependencyInjection;
 
+use Fxp\Bundle\SecurityBundle\DependencyInjection\SecurityExtension;
 use PHPUnit\Framework\TestCase;
-use Sonatra\Bundle\SecurityBundle\DependencyInjection\SecurityExtension;
 use Symfony\Bundle\SecurityBundle\DependencyInjection\Security\Factory\SecurityFactoryInterface;
 use Symfony\Bundle\SecurityBundle\DependencyInjection\Security\UserProvider\UserProviderFactoryInterface;
 use Symfony\Bundle\SecurityBundle\DependencyInjection\SecurityExtension as BaseSecurityExtension;
@@ -22,7 +22,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 /**
  * Symfony security extension tests.
  *
- * @author François Pluchino <francois.pluchino@sonatra.com>
+ * @author François Pluchino <francois.pluchino@gmail.com>
  */
 class SecurityExtensionTest extends TestCase
 {
@@ -138,7 +138,7 @@ class SecurityExtensionTest extends TestCase
 
         $container->expects($this->once())
             ->method('setParameter')
-            ->with('sonatra_security.access_control', $accessControl);
+            ->with('fxp_security.access_control', $accessControl);
 
         $this->ext->load($configs, $container);
     }

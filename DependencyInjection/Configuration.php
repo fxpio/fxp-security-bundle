@@ -1,27 +1,27 @@
 <?php
 
 /*
- * This file is part of the Sonatra package.
+ * This file is part of the Fxp package.
  *
- * (c) François Pluchino <francois.pluchino@sonatra.com>
+ * (c) François Pluchino <francois.pluchino@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Bundle\SecurityBundle\DependencyInjection;
+namespace Fxp\Bundle\SecurityBundle\DependencyInjection;
 
-use Sonatra\Component\Security\Model\PermissionInterface;
-use Sonatra\Component\Security\Model\SharingInterface;
-use Sonatra\Component\Security\SharingVisibilities;
+use Fxp\Component\Security\Model\PermissionInterface;
+use Fxp\Component\Security\Model\SharingInterface;
+use Fxp\Component\Security\SharingVisibilities;
 use Symfony\Component\Config\Definition\Builder\NodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 /**
- * Configuration of the securitybundle to get the sonatra_security options.
+ * Configuration of the securitybundle to get the fxp_security options.
  *
- * @author François Pluchino <francois.pluchino@sonatra.com>
+ * @author François Pluchino <francois.pluchino@gmail.com>
  */
 class Configuration implements ConfigurationInterface
 {
@@ -31,7 +31,7 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('sonatra_security');
+        $rootNode = $treeBuilder->root('fxp_security');
         $supportedDrivers = array('orm', 'custom');
 
         $rootNode
@@ -45,9 +45,9 @@ class Configuration implements ConfigurationInterface
                     ->cannotBeEmpty()
                     ->defaultValue('orm')
                 ->end()
-                ->scalarNode('role_class')->defaultValue('Sonatra\Component\Security\Model\RoleInterface')->isRequired()->end()
-                ->scalarNode('permission_class')->defaultValue('Sonatra\Component\Security\Model\PermissionInterface')->isRequired()->end()
-                ->scalarNode('sharing_class')->defaultValue('Sonatra\Component\Security\Model\SharingInterface')->end()
+                ->scalarNode('role_class')->defaultValue('Fxp\Component\Security\Model\RoleInterface')->isRequired()->end()
+                ->scalarNode('permission_class')->defaultValue('Fxp\Component\Security\Model\PermissionInterface')->isRequired()->end()
+                ->scalarNode('sharing_class')->defaultValue('Fxp\Component\Security\Model\SharingInterface')->end()
             ->end()
             ->append($this->getHostRoleNode())
             ->append($this->getAnonymousRoleNode())
@@ -362,7 +362,7 @@ class Configuration implements ConfigurationInterface
                                 ->scalarNode('role_hierarchy')->defaultFalse()->end()
                                 ->scalarNode('permission_checker')->defaultfalse()->end()
                                 ->scalarNode('object_filter')->defaultfalse()->end()
-                                ->scalarNode('private_sharing')->defaultfalse()->info('Require to enable the "sonatra_security.doctrine.orm.filters.sharing" option')->end()
+                                ->scalarNode('private_sharing')->defaultfalse()->info('Require to enable the "fxp_security.doctrine.orm.filters.sharing" option')->end()
                                 ->scalarNode('sharing_delete')->defaultfalse()->end()
                             ->end()
                         ->end()

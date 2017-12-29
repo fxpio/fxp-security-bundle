@@ -5,21 +5,21 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-        <parameter key="sonatra_security.authentication.provider.anonymous_role.class">Sonatra\Component\Security\Authentication\Provider\AnonymousRoleProvider</parameter>
-        <parameter key="sonatra_security.authentication.listener.anonymous_role.class">Sonatra\Component\Security\Firewall\AnonymousRoleListener</parameter>
+        <parameter key="fxp_security.authentication.provider.anonymous_role.class">Fxp\Component\Security\Authentication\Provider\AnonymousRoleProvider</parameter>
+        <parameter key="fxp_security.authentication.listener.anonymous_role.class">Fxp\Component\Security\Firewall\AnonymousRoleListener</parameter>
     </parameters>
 
     <services>
         <!-- Authentication Provider -->
-        <service id="sonatra_security.authentication.provider.anonymous_role"
-                 class="%sonatra_security.authentication.provider.anonymous_role.class%">
+        <service id="fxp_security.authentication.provider.anonymous_role"
+                 class="%fxp_security.authentication.provider.anonymous_role.class%">
             <argument type="collection"/>
         </service>
 
         <!-- Security Firewall -->
-        <service id="sonatra_security.authentication.listener.anonymous_role"
-                 class="%sonatra_security.authentication.listener.anonymous_role.class%">
-            <argument type="service" id="sonatra_security.security_identity_manager"/>
+        <service id="fxp_security.authentication.listener.anonymous_role"
+                 class="%fxp_security.authentication.listener.anonymous_role.class%">
+            <argument type="service" id="fxp_security.security_identity_manager"/>
             <argument type="collection"/>
             <argument type="service" id="security.authentication.trust_resolver"/>
             <argument type="service" id="security.token_storage"/>

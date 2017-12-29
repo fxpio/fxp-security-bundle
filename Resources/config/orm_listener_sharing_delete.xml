@@ -5,15 +5,15 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-        <parameter key="sonatra_security.orm.listener.sharing_delete.class">Sonatra\Bundle\SecurityBundle\Doctrine\ORM\Listener\SharingDeleteListenerContainerAware</parameter>
+        <parameter key="fxp_security.orm.listener.sharing_delete.class">Fxp\Bundle\SecurityBundle\Doctrine\ORM\Listener\SharingDeleteListenerContainerAware</parameter>
     </parameters>
 
     <services>
         <!-- Doctrine ORM Sharing Delete Listener -->
-        <service id="sonatra_security.orm.listener.sharing_delete"
-                 class="%sonatra_security.orm.listener.sharing_delete.class%">
+        <service id="fxp_security.orm.listener.sharing_delete"
+                 class="%fxp_security.orm.listener.sharing_delete.class%">
             <tag name="doctrine.event_subscriber" priority="1"/>
-            <argument>%sonatra_security.sharing_class%</argument>
+            <argument>%fxp_security.sharing_class%</argument>
             <property name="container" type="service" id="service_container"/>
         </service>
     </services>

@@ -70,7 +70,7 @@ $em->flush();
 ### Hard config of permissions
 
 It isn't required to define the permissions for the fields of a class, You can look the
-[configuration](https://github.com/sonatra/sonatra-security-bundle/blob/master/DependencyInjection/Configuration.php)
+[configuration](https://github.com/fxpio/fxp-security-bundle/blob/master/DependencyInjection/Configuration.php)
 for sections `default_permissions`, `permissions` and `permissions.fields`, it's very flexible
 to limit the manual configuration.
 
@@ -89,7 +89,7 @@ fields, like `id`, `createdAt`, `updatedAt`, etc...
 **Config example:**
 
 ```yaml
-sonatra_security:
+fxp_security:
     default_permissions:
         fields:
             id:               [read]
@@ -180,7 +180,7 @@ $this->get('security.authorization_checker')->isGranted('perm_update', PostInter
 **Check the authorization on the field of object:**
 
 ```php
-use Sonatra\Component\Security\Permission\FieldVote;
+use Fxp\Component\Security\Permission\FieldVote;
 
 $this->get('security.authorization_checker')->isGranted('perm_edit', new FieldVote($entity, 'title'));
 $this->get('security.authorization_checker')->isGranted('perm_edit', new FieldVote(PostInterface::class, 'title'));
@@ -189,7 +189,7 @@ $this->get('security.authorization_checker')->isGranted('perm_edit', new FieldVo
 If you prefer to use the annotations, you can use the `@Security` annotation in your controllers:
 
 ```php
-use Sonatra\Bundle\SecurityBundle\Configuration\Security;
+use Fxp\Bundle\SecurityBundle\Configuration\Security;
 
 MyController {
     /**
@@ -219,4 +219,4 @@ can be used to filter the display of role permissions or sharing permissions on 
 
 This library doesn't include a manager to manage permissions with roles, because it uses natively Doctrine,
 and leaves you the choice to using Doctrine directly, to creating you a specific manager or to using a
-resource management library (like [sonatra/resource-bundle](https://github.com/sonatra/sonatra-resource-bundle)).
+resource management library (like [fxp/resource-bundle](https://github.com/fxpio/fxp-resource-bundle)).

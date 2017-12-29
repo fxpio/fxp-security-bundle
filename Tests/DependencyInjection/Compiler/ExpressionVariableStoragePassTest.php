@@ -1,24 +1,24 @@
 <?php
 
 /*
- * This file is part of the Sonatra package.
+ * This file is part of the Fxp package.
  *
- * (c) François Pluchino <francois.pluchino@sonatra.com>
+ * (c) François Pluchino <francois.pluchino@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Bundle\SecurityBundle\Tests\DependencyInjection\Compiler;
+namespace Fxp\Bundle\SecurityBundle\Tests\DependencyInjection\Compiler;
 
+use Fxp\Bundle\SecurityBundle\DependencyInjection\Compiler\ExpressionVariableStoragePass;
 use PHPUnit\Framework\TestCase;
-use Sonatra\Bundle\SecurityBundle\DependencyInjection\Compiler\ExpressionVariableStoragePass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
  * Expression Variable Storage Pass Test.
  *
- * @author François Pluchino <francois.pluchino@sonatra.com>
+ * @author François Pluchino <francois.pluchino@gmail.com>
  */
 class ExpressionVariableStoragePassTest extends TestCase
 {

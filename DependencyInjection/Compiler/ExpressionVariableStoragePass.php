@@ -1,15 +1,15 @@
 <?php
 
 /*
- * This file is part of the Sonatra package.
+ * This file is part of the Fxp package.
  *
- * (c) François Pluchino <francois.pluchino@sonatra.com>
+ * (c) François Pluchino <francois.pluchino@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Bundle\SecurityBundle\DependencyInjection\Compiler;
+namespace Fxp\Bundle\SecurityBundle\DependencyInjection\Compiler;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -17,7 +17,7 @@ use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
- * @author François Pluchino <francois.pluchino@sonatra.com>
+ * @author François Pluchino <francois.pluchino@gmail.com>
  */
 class ExpressionVariableStoragePass implements CompilerPassInterface
 {
@@ -26,12 +26,12 @@ class ExpressionVariableStoragePass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        if (!$container->hasDefinition('sonatra_security.expression.variable_storage')) {
+        if (!$container->hasDefinition('fxp_security.expression.variable_storage')) {
             return;
         }
 
         $variables = array();
-        foreach ($container->findTaggedServiceIds('sonatra_security.expression.variables') as $id => $tags) {
+        foreach ($container->findTaggedServiceIds('fxp_security.expression.variables') as $id => $tags) {
             foreach ($tags as $attributes) {
                 foreach ($attributes as $name => $value) {
                     $value = $this->buildValue($container, $id, $value);
@@ -43,7 +43,7 @@ class ExpressionVariableStoragePass implements CompilerPassInterface
             }
         }
 
-        $container->getDefinition('sonatra_security.expression.variable_storage')->replaceArgument(0, $variables);
+        $container->getDefinition('fxp_security.expression.variable_storage')->replaceArgument(0, $variables);
     }
 
     /**

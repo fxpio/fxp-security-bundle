@@ -1,26 +1,26 @@
 <?php
 
 /*
- * This file is part of the Sonatra package.
+ * This file is part of the Fxp package.
  *
- * (c) François Pluchino <francois.pluchino@sonatra.com>
+ * (c) François Pluchino <francois.pluchino@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Bundle\SecurityBundle\Doctrine\ORM\Listener;
+namespace Fxp\Bundle\SecurityBundle\Doctrine\ORM\Listener;
 
-use Sonatra\Component\Security\Doctrine\ORM\Listener\ObjectFilterListener;
-use Sonatra\Component\Security\ObjectFilter\ObjectFilterInterface;
-use Sonatra\Component\Security\Permission\PermissionManagerInterface;
+use Fxp\Component\Security\Doctrine\ORM\Listener\ObjectFilterListener;
+use Fxp\Component\Security\ObjectFilter\ObjectFilterInterface;
+use Fxp\Component\Security\Permission\PermissionManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 /**
  * This class listens to all database activity and automatically adds constraints as permissions.
  *
- * @author François Pluchino <francois.pluchino@sonatra.com>
+ * @author François Pluchino <francois.pluchino@gmail.com>
  */
 class ObjectFilterListenerContainerAware extends ObjectFilterListener
 {
@@ -38,9 +38,9 @@ class ObjectFilterListenerContainerAware extends ObjectFilterListener
             /* @var TokenStorageInterface $tokenStorage */
             $tokenStorage = $this->container->get('security.token_storage');
             /* @var PermissionManagerInterface $permManager */
-            $permManager = $this->container->get('sonatra_security.permission_manager');
+            $permManager = $this->container->get('fxp_security.permission_manager');
             /* @var ObjectFilterInterface $objectFilter */
-            $objectFilter = $this->container->get('sonatra_security.object_filter');
+            $objectFilter = $this->container->get('fxp_security.object_filter');
 
             $this->setTokenStorage($tokenStorage);
             $this->setPermissionManager($permManager);

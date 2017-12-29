@@ -1,17 +1,17 @@
 <?php
 
 /*
- * This file is part of the Sonatra package.
+ * This file is part of the Fxp package.
  *
- * (c) François Pluchino <francois.pluchino@sonatra.com>
+ * (c) François Pluchino <francois.pluchino@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Bundle\SecurityBundle\DependencyInjection\Compiler;
+namespace Fxp\Bundle\SecurityBundle\DependencyInjection\Compiler;
 
-use Sonatra\Component\Security\Organizational\OrganizationalContextInterface;
+use Fxp\Component\Security\Organizational\OrganizationalContextInterface;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\DependencyInjection\Alias;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
@@ -21,7 +21,7 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 /**
  * Configure the organizational context service.
  *
- * @author François Pluchino <francois.pluchino@sonatra.com>
+ * @author François Pluchino <francois.pluchino@gmail.com>
  */
 class OrganizationalPass implements CompilerPassInterface
 {
@@ -32,8 +32,8 @@ class OrganizationalPass implements CompilerPassInterface
     {
         /* @var $pb ParameterBag */
         $pb = $container->getParameterBag();
-        $alias = 'sonatra_security.organizational_context';
-        $serviceIdName = 'sonatra_security.organizational_context.service_id';
+        $alias = 'fxp_security.organizational_context';
+        $serviceIdName = 'fxp_security.organizational_context.service_id';
 
         if (!$container->hasAlias($alias) || !$container->hasParameter($serviceIdName)) {
             return;
@@ -43,9 +43,9 @@ class OrganizationalPass implements CompilerPassInterface
 
         if (null !== $serviceId) {
             $serviceId = $this->getServiceId($container, $serviceId);
-            $container->setAlias('sonatra_security.organizational_context', new Alias($serviceId, true));
-            $container->removeDefinition('sonatra_security.organizational_context.default');
-            $pb->remove('sonatra_security.organizational_context.default.class');
+            $container->setAlias('fxp_security.organizational_context', new Alias($serviceId, true));
+            $container->removeDefinition('fxp_security.organizational_context.default');
+            $pb->remove('fxp_security.organizational_context.default.class');
         }
 
         $pb->remove($serviceIdName);

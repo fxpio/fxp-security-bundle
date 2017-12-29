@@ -5,43 +5,43 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-        <parameter key="sonatra_security.permission_manager.class">Sonatra\Component\Security\Permission\PermissionManager</parameter>
-        <parameter key="sonatra_security.subscriber.permission.disable.class">Sonatra\Component\Security\Listener\DisablePermissionSubscriber</parameter>
-        <parameter key="sonatra_security.listener.permission_exception.class">Sonatra\Component\Security\Listener\PermissionExceptionListener</parameter>
-        <parameter key="sonatra_security.access.permission_voter.class">Sonatra\Component\Security\Authorization\Voter\PermissionVoter</parameter>
+        <parameter key="fxp_security.permission_manager.class">Fxp\Component\Security\Permission\PermissionManager</parameter>
+        <parameter key="fxp_security.subscriber.permission.disable.class">Fxp\Component\Security\Listener\DisablePermissionSubscriber</parameter>
+        <parameter key="fxp_security.listener.permission_exception.class">Fxp\Component\Security\Listener\PermissionExceptionListener</parameter>
+        <parameter key="fxp_security.access.permission_voter.class">Fxp\Component\Security\Authorization\Voter\PermissionVoter</parameter>
     </parameters>
 
     <services>
         <!-- Permission Manager -->
-        <service id="sonatra_security.permission_manager"
-                 class="%sonatra_security.permission_manager.class%"
+        <service id="fxp_security.permission_manager"
+                 class="%fxp_security.permission_manager.class%"
                  public="true">
             <argument type="service" id="event_dispatcher"/>
-            <argument type="service" id="sonatra_security.permission_provider"/>
+            <argument type="service" id="fxp_security.permission_provider"/>
             <argument type="service" id="property_accessor"/>
-            <argument type="service" id="sonatra_security.sharing_manager" on-invalid="ignore"/>
+            <argument type="service" id="fxp_security.sharing_manager" on-invalid="ignore"/>
             <argument/>
         </service>
 
         <!-- Disable Permission Subscriber -->
-        <service id="sonatra_security.subscriber.permission.disable"
-                 class="%sonatra_security.subscriber.permission.disable.class%">
+        <service id="fxp_security.subscriber.permission.disable"
+                 class="%fxp_security.subscriber.permission.disable.class%">
             <tag name="kernel.event_subscriber"/>
-            <argument type="service" id="sonatra_security.permission_manager"/>
+            <argument type="service" id="fxp_security.permission_manager"/>
         </service>
 
         <!-- Permission Exception Listener -->
-        <service id="sonatra_security.listener.permission_exception"
-                 class="%sonatra_security.listener.permission_exception.class%">
+        <service id="fxp_security.listener.permission_exception"
+                 class="%fxp_security.listener.permission_exception.class%">
             <tag name="kernel.event_listener" event="kernel.exception" method="onKernelException"/>
         </service>
 
         <!-- Voter -->
-        <service id="sonatra_security.access.permission_voter"
-                 class="%sonatra_security.access.permission_voter.class%"
+        <service id="fxp_security.access.permission_voter"
+                 class="%fxp_security.access.permission_voter.class%"
                  public="false">
-            <argument type="service" id="sonatra_security.permission_manager"/>
-            <argument type="service" id="sonatra_security.security_identity_manager"/>
+            <argument type="service" id="fxp_security.permission_manager"/>
+            <argument type="service" id="fxp_security.security_identity_manager"/>
             <tag name="security.voter" priority="260"/>
         </service>
     </services>

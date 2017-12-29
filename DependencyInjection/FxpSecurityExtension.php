@@ -1,30 +1,30 @@
 <?php
 
 /*
- * This file is part of the Sonatra package.
+ * This file is part of the Fxp package.
  *
- * (c) François Pluchino <francois.pluchino@sonatra.com>
+ * (c) François Pluchino <francois.pluchino@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Bundle\SecurityBundle\DependencyInjection;
+namespace Fxp\Bundle\SecurityBundle\DependencyInjection;
 
-use Sonatra\Bundle\SecurityBundle\DependencyInjection\Extension\AnnotationBuilder;
-use Sonatra\Bundle\SecurityBundle\DependencyInjection\Extension\AnonymousRoleBuilder;
-use Sonatra\Bundle\SecurityBundle\DependencyInjection\Extension\ExpressionLanguageBuilder;
-use Sonatra\Bundle\SecurityBundle\DependencyInjection\Extension\ExtensionBuilderInterface;
-use Sonatra\Bundle\SecurityBundle\DependencyInjection\Extension\HostRoleBuilder;
-use Sonatra\Bundle\SecurityBundle\DependencyInjection\Extension\ModelBuilder;
-use Sonatra\Bundle\SecurityBundle\DependencyInjection\Extension\ObjectFilterBuilder;
-use Sonatra\Bundle\SecurityBundle\DependencyInjection\Extension\OrganizationalContextBuilder;
-use Sonatra\Bundle\SecurityBundle\DependencyInjection\Extension\PermissionBuilder;
-use Sonatra\Bundle\SecurityBundle\DependencyInjection\Extension\RoleHierarchyBuilder;
-use Sonatra\Bundle\SecurityBundle\DependencyInjection\Extension\SecurityIdentityBuilder;
-use Sonatra\Bundle\SecurityBundle\DependencyInjection\Extension\SecurityVoterBuilder;
-use Sonatra\Bundle\SecurityBundle\DependencyInjection\Extension\SharingBuilder;
-use Sonatra\Bundle\SecurityBundle\DependencyInjection\Extension\ValidatorBuilder;
+use Fxp\Bundle\SecurityBundle\DependencyInjection\Extension\AnnotationBuilder;
+use Fxp\Bundle\SecurityBundle\DependencyInjection\Extension\AnonymousRoleBuilder;
+use Fxp\Bundle\SecurityBundle\DependencyInjection\Extension\ExpressionLanguageBuilder;
+use Fxp\Bundle\SecurityBundle\DependencyInjection\Extension\ExtensionBuilderInterface;
+use Fxp\Bundle\SecurityBundle\DependencyInjection\Extension\HostRoleBuilder;
+use Fxp\Bundle\SecurityBundle\DependencyInjection\Extension\ModelBuilder;
+use Fxp\Bundle\SecurityBundle\DependencyInjection\Extension\ObjectFilterBuilder;
+use Fxp\Bundle\SecurityBundle\DependencyInjection\Extension\OrganizationalContextBuilder;
+use Fxp\Bundle\SecurityBundle\DependencyInjection\Extension\PermissionBuilder;
+use Fxp\Bundle\SecurityBundle\DependencyInjection\Extension\RoleHierarchyBuilder;
+use Fxp\Bundle\SecurityBundle\DependencyInjection\Extension\SecurityIdentityBuilder;
+use Fxp\Bundle\SecurityBundle\DependencyInjection\Extension\SecurityVoterBuilder;
+use Fxp\Bundle\SecurityBundle\DependencyInjection\Extension\SharingBuilder;
+use Fxp\Bundle\SecurityBundle\DependencyInjection\Extension\ValidatorBuilder;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader;
@@ -33,9 +33,9 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 /**
  * The extension that fulfills the infos for the container from configuration.
  *
- * @author François Pluchino <francois.pluchino@sonatra.com>
+ * @author François Pluchino <francois.pluchino@gmail.com>
  */
-class SonatraSecurityExtension extends Extension
+class FxpSecurityExtension extends Extension
 {
     /**
      * {@inheritdoc}

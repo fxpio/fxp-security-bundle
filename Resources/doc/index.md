@@ -27,18 +27,18 @@ Follow the installation instructions in the [official documentation of Symfony]
 
 ### Step 2: Download the bundle using composer
 
-Add Sonatra SecurityBundle in your composer.json:
+Add Fxp SecurityBundle in your composer.json:
 
 ```
-$ composer require sonatra/security-bundle:"^1.0.0" sonatra/doctrine-extensions:"^1.0.0"
+$ composer require fxp/security-bundle:"^1.0.0" fxp/doctrine-extensions:"^1.0.0"
 ```
 
-Composer will install the bundle to your project's `vendor/sonatra` directory.
+Composer will install the bundle to your project's `vendor/fxp` directory.
 
 > **Note:**
 >
 > Because this example enable all features, you must add the dependency
-> `sonatra/doctrine-extensions` to use role hierarchy and sharing features.
+> `fxp/doctrine-extensions` to use role hierarchy and sharing features.
 
 ### Step 3: Enable the bundle
 
@@ -51,14 +51,14 @@ public function registerBundles()
 {
     $bundles = array(
         // ...
-        new Sonatra\Bundle\SecurityBundle\SonatraSecurityBundle(),
+        new Fxp\Bundle\SecurityBundle\FxpSecurityBundle(),
     );
 }
 ```
 
 ### Step 4: Update your user model
 
-Add the `Sonatra\Component\Security\Model\UserInterface` into your group model:
+Add the `Fxp\Component\Security\Model\UserInterface` into your group model:
 
 ```php
 // src/AppBundle/Entity/User.php
@@ -66,7 +66,7 @@ Add the `Sonatra\Component\Security\Model\UserInterface` into your group model:
 namespace AppBundle\Entity;
 
 use FOS\UserBundle\Model\User as BaseUser;
-use Sonatra\Component\Security\Model\UserInterface;
+use Fxp\Component\Security\Model\UserInterface;
 
 class User extends BaseUser implements UserInterface
 {
@@ -83,7 +83,7 @@ class User extends BaseUser implements UserInterface
 
 namespace AppBundle\Entity;
 
-use Sonatra\Component\Security\Model\Role as BaseRole;
+use Fxp\Component\Security\Model\Role as BaseRole;
 
 class Role extends BaseRole
 {
@@ -141,7 +141,7 @@ class Role extends BaseRole
 
 namespace AppBundle\Entity;
 
-use Sonatra\Component\Security\Model\Permission as BasePermission;
+use Fxp\Component\Security\Model\Permission as BasePermission;
 
 class Permission extends BasePermission
 {
@@ -178,7 +178,7 @@ class Permission extends BasePermission
 
 namespace AppBundle\Entity;
 
-use Sonatra\Component\Security\Model\Sharing as BaseSharing;
+use Fxp\Component\Security\Model\Sharing as BaseSharing;
 
 class Sharing extends BaseSharing
 {
@@ -223,7 +223,7 @@ Add the following configuration to your `config.yml`.
 
 ```yaml
 # app/config/config.yml
-sonatra_security:
+fxp_security:
     role_class:                     AppBundle\Entity\Role
     permission_class:               AppBundle\Entity\Permission
     sharing_class:                  AppBundle\Entity\Sharing
@@ -257,14 +257,14 @@ doctrine:
         entity_managers:
             default:
                 filters:
-                    sonatra_sharing:     # Enable the SQL Filter for sharing (optional)
-                        class:      Sonatra\Component\Security\Doctrine\ORM\Filter\SharingFilter
+                    fxp_sharing:     # Enable the SQL Filter for sharing (optional)
+                        class:      Fxp\Component\Security\Doctrine\ORM\Filter\SharingFilter
                         enabled:    true
 ```
 
 > **Note:**
 >
-> If you use the role hierarchy or sharing, you must add the optional dependency `sonatra/doctrine-extensions`
+> If you use the role hierarchy or sharing, you must add the optional dependency `fxp/doctrine-extensions`
 
 ### Step 9: Configure and initialize the permissions
 
@@ -276,20 +276,20 @@ $ php bin/console doctrine:schema:update --force
 
 ### Next Steps
 
-You can override the default configuration adding `sonatra_security` tree in `app/config/config.yml`.
-To get an overview off all the available Sonatra Security configuration options, execute the command:
+You can override the default configuration adding `fxp_security` tree in `app/config/config.yml`.
+To get an overview off all the available Fxp Security configuration options, execute the command:
 
 ```bash
-$ php bin/console config:dump-reference SonatraSecurityBundle
+$ php bin/console config:dump-reference FxpSecurityBundle
 ```
 
 Now that you have completed the basic installation and configuration of the
-Sonatra SecurityBundle, you are ready to learn more about using this bundle.
+Fxp SecurityBundle, you are ready to learn more about using this bundle.
 
 The following documents are available:
 
-- [Using Groups with Sonatra SecurityBundle](groups.md)
-- [Using cache with Sonatra CacheBundle](cache.md)
+- [Using Groups with Fxp SecurityBundle](groups.md)
+- [Using cache with Fxp CacheBundle](cache.md)
 - [Using permissions](permissions.md)
 - [Using the sharing entries](sharing.md)
 - [Using Organizations](organizations.md)

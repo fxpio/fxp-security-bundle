@@ -1,19 +1,19 @@
 <?php
 
 /*
- * This file is part of the Sonatra package.
+ * This file is part of the Fxp package.
  *
- * (c) François Pluchino <francois.pluchino@sonatra.com>
+ * (c) François Pluchino <francois.pluchino@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Bundle\SecurityBundle\DependencyInjection\Extension;
+namespace Fxp\Bundle\SecurityBundle\DependencyInjection\Extension;
 
-use Sonatra\Component\Security\Model\SharingInterface;
-use Sonatra\Component\Security\Sharing\SharingIdentityConfig;
-use Sonatra\Component\Security\Sharing\SharingSubjectConfig;
+use Fxp\Component\Security\Model\SharingInterface;
+use Fxp\Component\Security\Sharing\SharingIdentityConfig;
+use Fxp\Component\Security\Sharing\SharingSubjectConfig;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -21,7 +21,7 @@ use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
- * @author François Pluchino <francois.pluchino@sonatra.com>
+ * @author François Pluchino <francois.pluchino@gmail.com>
  */
 class SharingBuilder implements ExtensionBuilderInterface
 {
@@ -31,7 +31,7 @@ class SharingBuilder implements ExtensionBuilderInterface
     public function build(ContainerBuilder $container, LoaderInterface $loader, array $config)
     {
         if ($config['sharing']['enabled']) {
-            $container->setParameter('sonatra_security.sharing_class', $this->validateSharingClass($config['sharing_class']));
+            $container->setParameter('fxp_security.sharing_class', $this->validateSharingClass($config['sharing_class']));
             $loader->load('sharing.xml');
             $this->buildSharingConfigs($container, $config);
             BuilderUtils::loadProvider($loader, $config, 'sharing');
@@ -61,8 +61,8 @@ class SharingBuilder implements ExtensionBuilderInterface
             $identityConfigs[] = $this->buildSharingIdentityConfig($container, $type, $identityConfig);
         }
 
-        $container->getDefinition('sonatra_security.sharing_manager')->replaceArgument(1, $subjectConfigs);
-        $container->getDefinition('sonatra_security.sharing_manager')->replaceArgument(2, $identityConfigs);
+        $container->getDefinition('fxp_security.sharing_manager')->replaceArgument(1, $subjectConfigs);
+        $container->getDefinition('fxp_security.sharing_manager')->replaceArgument(2, $identityConfigs);
     }
 
     /**
@@ -81,7 +81,7 @@ class SharingBuilder implements ExtensionBuilderInterface
             BuilderUtils::validate($container, 'doctrine.orm.filter.sharing', 'doctrine.orm.entity_manager', 'doctrine/orm');
 
             if (!$config['sharing']['enabled']) {
-                throw new InvalidConfigurationException('The "sonatra_security.sharing" config must be enabled');
+                throw new InvalidConfigurationException('The "fxp_security.sharing" config must be enabled');
             }
 
             $loader->load('orm_filter_sharing.xml');
@@ -105,7 +105,7 @@ class SharingBuilder implements ExtensionBuilderInterface
             BuilderUtils::validate($container, 'doctrine.orm.listeners.private_sharing', 'doctrine.orm.entity_manager', 'doctrine/orm');
 
             if (!$config['doctrine']['orm']['filters']['sharing']) {
-                throw new InvalidConfigurationException('The "sonatra_security.doctrine.orm.filters.sharing" config must be enabled');
+                throw new InvalidConfigurationException('The "fxp_security.doctrine.orm.filters.sharing" config must be enabled');
             }
 
             $loader->load('orm_listener_private_sharing.xml');
@@ -130,7 +130,7 @@ class SharingBuilder implements ExtensionBuilderInterface
             BuilderUtils::validate($container, 'doctrine.orm.listeners.sharing_delete', 'doctrine.orm.entity_manager', 'doctrine/orm');
 
             if (!$config['sharing']['enabled']) {
-                throw new InvalidConfigurationException('The "sonatra_security.sharing" config must be enabled');
+                throw new InvalidConfigurationException('The "fxp_security.sharing" config must be enabled');
             }
 
             $loader->load('orm_listener_sharing_delete.xml');
@@ -147,7 +147,7 @@ class SharingBuilder implements ExtensionBuilderInterface
     private function validateSharingClass($class)
     {
         if (SharingInterface::class === $class || !class_exists($class)) {
-            $msg = 'The "sonatra_security.sharing_class" config must be configured with a valid class';
+            $msg = 'The "fxp_security.sharing_class" config must be configured with a valid class';
             throw new InvalidConfigurationException($msg);
         }
 
@@ -176,7 +176,7 @@ class SharingBuilder implements ExtensionBuilderInterface
         ));
         $def->setPublic(false);
 
-        $id = 'sonatra_security.sharing_subject_config.'.strtolower(str_replace('\\', '_', $type));
+        $id = 'fxp_security.sharing_subject_config.'.strtolower(str_replace('\\', '_', $type));
         $container->setDefinition($id, $def);
 
         return new Reference($id);
@@ -206,7 +206,7 @@ class SharingBuilder implements ExtensionBuilderInterface
         ));
         $def->setPublic(false);
 
-        $id = 'sonatra_security.sharing_identity_config.'.strtolower(str_replace('\\', '_', $type));
+        $id = 'fxp_security.sharing_identity_config.'.strtolower(str_replace('\\', '_', $type));
         $container->setDefinition($id, $def);
 
         return new Reference($id);

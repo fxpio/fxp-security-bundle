@@ -1,23 +1,23 @@
 <?php
 
 /*
- * This file is part of the Sonatra package.
+ * This file is part of the Fxp package.
  *
- * (c) François Pluchino <francois.pluchino@sonatra.com>
+ * (c) François Pluchino <francois.pluchino@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Bundle\SecurityBundle\Tests\Configuration;
+namespace Fxp\Bundle\SecurityBundle\Tests\Configuration;
 
+use Fxp\Bundle\SecurityBundle\Configuration\Security;
 use PHPUnit\Framework\TestCase;
-use Sonatra\Bundle\SecurityBundle\Configuration\Security;
 
 /**
  * Security Tests.
  *
- * @author François Pluchino <francois.pluchino@sonatra.com>
+ * @author François Pluchino <francois.pluchino@gmail.com>
  */
 class SecurityTest extends TestCase
 {
@@ -29,7 +29,7 @@ class SecurityTest extends TestCase
             'expression' => $exp,
         ));
 
-        $this->assertSame('sonatra_security', $security->getAliasName());
+        $this->assertSame('fxp_security', $security->getAliasName());
         $this->assertFalse($security->allowArray());
         $this->assertSame($exp, $security->getExpression());
 

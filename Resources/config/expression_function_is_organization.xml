@@ -6,9 +6,9 @@
 
     <services>
         <!-- Is organization expression language function -->
-        <service id="sonatra_security.expression.functions.is_organization" class="Sonatra\Component\Security\Authorization\Expression\IsOrganizationProvider" public="false">
+        <service id="fxp_security.expression.functions.is_organization" class="Fxp\Component\Security\Authorization\Expression\IsOrganizationProvider" public="false">
             <tag name="security.expression_language_provider" />
-            <tag name="sonatra_security.expression.variables" organizational_context="@sonatra_security.organizational_context" />
+            <tag name="fxp_security.expression.variables" organizational_context="@fxp_security.organizational_context" />
         </service>
     </services>
 </container>

@@ -5,35 +5,35 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-        <parameter key="sonatra_security.organizational_context.default.class">Sonatra\Component\Security\Organizational\OrganizationalContext</parameter>
-        <parameter key="security.access.organization_voter.class">Sonatra\Component\Security\Authorization\Voter\OrganizationVoter</parameter>
-        <parameter key="sonatra_security.subscriber.security_identity.organization.class">Sonatra\Component\Security\Listener\OrganizationSecurityIdentitySubscriber</parameter>
+        <parameter key="fxp_security.organizational_context.default.class">Fxp\Component\Security\Organizational\OrganizationalContext</parameter>
+        <parameter key="security.access.organization_voter.class">Fxp\Component\Security\Authorization\Voter\OrganizationVoter</parameter>
+        <parameter key="fxp_security.subscriber.security_identity.organization.class">Fxp\Component\Security\Listener\OrganizationSecurityIdentitySubscriber</parameter>
     </parameters>
 
     <services>
         <!-- Default Organizational Context -->
-        <service id="sonatra_security.organizational_context.default" class="%sonatra_security.organizational_context.default.class%" public="true">
+        <service id="fxp_security.organizational_context.default" class="%fxp_security.organizational_context.default.class%" public="true">
             <argument type="service" id="security.token_storage"/>
             <argument type="service" id="event_dispatcher" on-invalid="ignore"/>
         </service>
 
         <!-- Organizational Context -->
-        <service id="sonatra_security.organizational_context" alias="sonatra_security.organizational_context.default" public="true"/>
+        <service id="fxp_security.organizational_context" alias="fxp_security.organizational_context.default" public="true"/>
 
         <!-- Organizational Security Voter -->
         <service id="security.access.organization_voter"
                  class="%security.access.organization_voter.class%"
                  public="false">
             <tag name="security.voter" priority="245"/>
-            <argument type="service" id="sonatra_security.security_identity_manager"/>
+            <argument type="service" id="fxp_security.security_identity_manager"/>
         </service>
 
         <!-- Organization Security Identity Subscriber -->
-        <service id="sonatra_security.subscriber.security_identity.organization"
-                 class="%sonatra_security.subscriber.security_identity.organization.class%">
-            <tag name="sonatra_security.event_subscriber"/>
+        <service id="fxp_security.subscriber.security_identity.organization"
+                 class="%fxp_security.subscriber.security_identity.organization.class%">
+            <tag name="fxp_security.event_subscriber"/>
             <argument type="service" id="security.role_hierarchy"/>
-            <argument type="service" id="sonatra_security.organizational_context"/>
+            <argument type="service" id="fxp_security.organizational_context"/>
         </service>
     </services>
 </container>

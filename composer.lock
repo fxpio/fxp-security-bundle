@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "46a55fdb7df1e15ba259694ad8fc5d15",
+    "content-hash": "d13a79e7686f9c9afea2eb3703a0f6ef",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -410,6 +410,70 @@
             "time": "2014-09-09T13:34:57+00:00"
         },
         {
+            "name": "fxp/security",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/fxpio/fxp-security.git",
+                "reference": "127a1dc04e04750ef5d18a990fc5c263f41d29c6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/fxpio/fxp-security/zipball/127a1dc04e04750ef5d18a990fc5c263f41d29c6",
+                "reference": "127a1dc04e04750ef5d18a990fc5c263f41d29c6",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/common": "^2.8.0",
+                "php": "^7.1.0",
+                "psr/cache": "^1.0.0",
+                "symfony/event-dispatcher": "^3.4.0|^4.0.0",
+                "symfony/expression-language": "^3.4.0|^4.0.0",
+                "symfony/security": "^3.4.0|^4.0.0",
+                "symfony/validator": "^3.4.0|^4.0.0"
+            },
+            "require-dev": {
+                "doctrine/orm": "^2.6.0",
+                "fxp/cache": "^1.0.0",
+                "fxp/doctrine-extensions": "^1.0.0",
+                "symfony/dependency-injection": "^3.4.0|^4.0.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Fxp\\Component\\Security\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "François Pluchino",
+                    "email": "francois.pluchino@gmail.com"
+                }
+            ],
+            "description": "A Extended Role-Based Access Control with sharing rules",
+            "homepage": "https://github.com/fxpio/fxp-security",
+            "keywords": [
+                "E-RBAC",
+                "permission",
+                "rbac",
+                "security",
+                "sharing"
+            ],
+            "time": "2017-12-29T14:29:11+00:00"
+        },
+        {
             "name": "psr/cache",
             "version": "1.0.1",
             "source": {
@@ -598,70 +662,6 @@
                 "simple-cache"
             ],
             "time": "2017-01-02T13:31:39+00:00"
-        },
-        {
-            "name": "sonatra/security",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/sonatra/sonatra-security.git",
-                "reference": "2b09a75842cdb87cc3b9ca9ec87881d07ebed6e2"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/sonatra/sonatra-security/zipball/2b09a75842cdb87cc3b9ca9ec87881d07ebed6e2",
-                "reference": "2b09a75842cdb87cc3b9ca9ec87881d07ebed6e2",
-                "shasum": ""
-            },
-            "require": {
-                "doctrine/common": "^2.8.0",
-                "php": "^7.1.0",
-                "psr/cache": "^1.0.0",
-                "symfony/event-dispatcher": "^3.4.0|^4.0.0",
-                "symfony/expression-language": "^3.4.0|^4.0.0",
-                "symfony/security": "^3.4.0|^4.0.0",
-                "symfony/validator": "^3.4.0|^4.0.0"
-            },
-            "require-dev": {
-                "doctrine/orm": "^2.6.0",
-                "sonatra/cache": "^1.0.0",
-                "sonatra/doctrine-extensions": "^1.0.0",
-                "symfony/dependency-injection": "^3.4.0|^4.0.0"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.0-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Sonatra\\Component\\Security\\": ""
-                },
-                "exclude-from-classmap": [
-                    "/Tests/"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "François Pluchino",
-                    "email": "francois.pluchino@sonatra.com"
-                }
-            ],
-            "description": "A Extended Role-Based Access Control with sharing rules",
-            "homepage": "https://github.com/sonatra/sonatra-security",
-            "keywords": [
-                "E-RBAC",
-                "permission",
-                "rbac",
-                "security",
-                "sharing"
-            ],
-            "time": "2017-12-26T18:44:15+00:00"
         },
         {
             "name": "symfony/cache",
@@ -2343,12 +2343,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfSymfony/FOSUserBundle.git",
-                "reference": "5d1c3ff4fdbb4789050ecd54dc49b5f07eaf79a7"
+                "reference": "17c299bc5b244b3e0c0a601e175009a3a5599313"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/5d1c3ff4fdbb4789050ecd54dc49b5f07eaf79a7",
-                "reference": "5d1c3ff4fdbb4789050ecd54dc49b5f07eaf79a7",
+                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/17c299bc5b244b3e0c0a601e175009a3a5599313",
+                "reference": "17c299bc5b244b3e0c0a601e175009a3a5599313",
                 "shasum": ""
             },
             "require": {
@@ -2411,7 +2411,7 @@
             "keywords": [
                 "User management"
             ],
-            "time": "2017-12-21T12:37:12+00:00"
+            "time": "2017-12-27T10:56:32+00:00"
         },
         {
             "name": "jdorn/sql-formatter",

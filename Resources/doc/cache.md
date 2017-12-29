@@ -1,16 +1,16 @@
-Using cache with Sonatra CacheBundle
+Using cache with Fxp CacheBundle
 ====================================
 
 Allow to use the app cache for the role hierarchy to optimize the count of query on database. 
 
-This example requires `sonatra/cache-bundle` as a dependency in
+This example requires `fxp/cache-bundle` as a dependency in
 a [Symfony Standard Edition](https://github.com/symfony/symfony-standard)
 project.
 
-### Install the Sonatra CacheBundle
+### Install the Fxp CacheBundle
 
 Follow the installation instructions in the [documentation]
-(https://github.com/sonatra/sonatra-cache-bundle/blob/master/Resources/doc/index.md).
+(https://github.com/fxpio/fxp-cache-bundle/blob/master/Resources/doc/index.md).
 
 ### Configure your application's config.yml
 
@@ -26,7 +26,7 @@ framework:
                 default_lifetime: 31536000
                 public:           true
 
-sonatra_security:
+fxp_security:
     role_hierarchy:
         enabled: true                     # Already enabled
         cache:   cache.app.role_hierarchy # The service id of cache 

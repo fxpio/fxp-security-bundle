@@ -1,26 +1,26 @@
 <?php
 
 /*
- * This file is part of the Sonatra package.
+ * This file is part of the Fxp package.
  *
- * (c) François Pluchino <francois.pluchino@sonatra.com>
+ * (c) François Pluchino <francois.pluchino@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Bundle\SecurityBundle\Tests\DependencyInjection\Compiler;
+namespace Fxp\Bundle\SecurityBundle\Tests\DependencyInjection\Compiler;
 
+use Fxp\Bundle\SecurityBundle\DependencyInjection\Compiler\OrganizationalPass;
+use Fxp\Component\Security\Organizational\OrganizationalContext;
 use PHPUnit\Framework\TestCase;
-use Sonatra\Bundle\SecurityBundle\DependencyInjection\Compiler\OrganizationalPass;
-use Sonatra\Component\Security\Organizational\OrganizationalContext;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 
 /**
  * Organizational Pass tests.
  *
- * @author François Pluchino <francois.pluchino@sonatra.com>
+ * @author François Pluchino <francois.pluchino@gmail.com>
  */
 class OrganizationalPassTest extends TestCase
 {
@@ -38,12 +38,12 @@ class OrganizationalPassTest extends TestCase
     {
         $container = new ContainerBuilder();
         $compiler = new OrganizationalPass();
-        $serviceIdName = 'sonatra_security.organizational_context.service_id';
-        $serviceIdDefault = 'sonatra_security.organizational_context.default';
+        $serviceIdName = 'fxp_security.organizational_context.service_id';
+        $serviceIdDefault = 'fxp_security.organizational_context.default';
         $serviceId = 'test';
 
         $container->setParameter($serviceIdName, $serviceId);
-        $container->setAlias('sonatra_security.organizational_context', $serviceId);
+        $container->setAlias('fxp_security.organizational_context', $serviceId);
 
         $defDefault = new Definition(OrganizationalContext::class);
         $container->setDefinition($serviceIdDefault, $defDefault);
@@ -53,7 +53,7 @@ class OrganizationalPassTest extends TestCase
 
         $compiler->process($container);
 
-        $this->assertTrue($container->hasAlias('sonatra_security.organizational_context'));
+        $this->assertTrue($container->hasAlias('fxp_security.organizational_context'));
         $this->assertTrue($container->hasDefinition($serviceId));
         $this->assertFalse($container->hasDefinition($serviceIdDefault));
         $this->assertFalse($container->hasParameter($serviceIdName));
@@ -61,17 +61,17 @@ class OrganizationalPassTest extends TestCase
 
     /**
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage The service "test" must implement the Sonatra\Component\Security\Organizational\OrganizationalContextInterface
+     * @expectedExceptionMessage The service "test" must implement the Fxp\Component\Security\Organizational\OrganizationalContextInterface
      */
     public function testProcessWithInvalidInterface()
     {
         $container = new ContainerBuilder();
         $compiler = new OrganizationalPass();
-        $serviceIdName = 'sonatra_security.organizational_context.service_id';
+        $serviceIdName = 'fxp_security.organizational_context.service_id';
         $serviceId = 'test';
 
         $container->setParameter($serviceIdName, $serviceId);
-        $container->setAlias('sonatra_security.organizational_context', $serviceId);
+        $container->setAlias('fxp_security.organizational_context', $serviceId);
 
         $def = new Definition(\stdClass::class);
         $container->setDefinition($serviceId, $def);

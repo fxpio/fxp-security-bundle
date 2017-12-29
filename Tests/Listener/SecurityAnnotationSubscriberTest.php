@@ -1,21 +1,21 @@
 <?php
 
 /*
- * This file is part of the Sonatra package.
+ * This file is part of the Fxp package.
  *
- * (c) François Pluchino <francois.pluchino@sonatra.com>
+ * (c) François Pluchino <francois.pluchino@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Bundle\SecurityBundle\Tests;
+namespace Fxp\Bundle\SecurityBundle\Tests;
 
+use Fxp\Bundle\SecurityBundle\Configuration\Security;
+use Fxp\Bundle\SecurityBundle\Listener\SecurityAnnotationSubscriber;
+use Fxp\Component\Security\Event\GetExpressionVariablesEvent;
+use Fxp\Component\Security\ExpressionVariableEvents;
 use PHPUnit\Framework\TestCase;
-use Sonatra\Bundle\SecurityBundle\Configuration\Security;
-use Sonatra\Bundle\SecurityBundle\Listener\SecurityAnnotationSubscriber;
-use Sonatra\Component\Security\Event\GetExpressionVariablesEvent;
-use Sonatra\Component\Security\ExpressionVariableEvents;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -28,7 +28,7 @@ use Symfony\Component\Security\Core\Authorization\ExpressionLanguage;
 /**
  * Security annotation subscriber tests.
  *
- * @author François Pluchino <francois.pluchino@sonatra.com>
+ * @author François Pluchino <francois.pluchino@gmail.com>
  */
 class SecurityAnnotationSubscriberTest extends TestCase
 {
@@ -213,7 +213,7 @@ class SecurityAnnotationSubscriberTest extends TestCase
     private function createRequest(Security $security = null)
     {
         return new Request(array(), array(), array(
-            '_sonatra_security' => $security,
+            '_fxp_security' => $security,
         ));
     }
 }

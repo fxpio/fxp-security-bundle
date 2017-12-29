@@ -5,17 +5,17 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-        <parameter key="sonatra_security.role_hierarchy.cache.listener.class">Sonatra\Component\Security\Doctrine\ORM\Listener\RoleHierarchyListener</parameter>
+        <parameter key="fxp_security.role_hierarchy.cache.listener.class">Fxp\Component\Security\Doctrine\ORM\Listener\RoleHierarchyListener</parameter>
     </parameters>
 
     <services>
         <!-- Role Hierarchy Doctrine ORM Listener -->
-        <service id="sonatra_security.role_hierarchy.cache.listener"
-                 class="%sonatra_security.role_hierarchy.cache.listener.class%">
+        <service id="fxp_security.role_hierarchy.cache.listener"
+                 class="%fxp_security.role_hierarchy.cache.listener.class%">
             <tag name="doctrine.event_subscriber" priority="252"/>
-            <argument type="service" id="sonatra_security.security_identity_manager"/>
-            <argument type="service" id="sonatra_security.role_hierarchy.cache" on-invalid="null"/>
-            <argument type="service" id="sonatra_security.organizational_context" on-invalid="null"/>
+            <argument type="service" id="fxp_security.security_identity_manager"/>
+            <argument type="service" id="fxp_security.role_hierarchy.cache" on-invalid="null"/>
+            <argument type="service" id="fxp_security.organizational_context" on-invalid="null"/>
         </service>
     </services>
 </container>

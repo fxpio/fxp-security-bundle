@@ -2,7 +2,7 @@ Using the sharing
 =================
 
 Given that you cannot set permissions directly on entity, you must use the SharingManager
-(`sonatra_security.sharing_manager`).
+(`fxp_security.sharing_manager`).
 
 ## Enable the sharing for a class
 
@@ -14,7 +14,7 @@ doctrine queries. To do this, you must enable and configure the sharing.
 
 For entities to be filtered at the time of the Doctrine query, you have the option to
 build your own `SQLFilter`, Or use the `SharingFilter` class in this bundle (see the
-[doc](https://github.com/sonatra/sonatra-security-bundle/blob/master/Resources/doc/index.md#step-8-configure-your-applications-configyml)):
+[doc](https://github.com/fxpio/fxp-security-bundle/blob/master/Resources/doc/index.md#step-8-configure-your-applications-configyml)):
 
 ```yaml
 doctrine:
@@ -22,8 +22,8 @@ doctrine:
         entity_managers:
             default:
                 filters:
-                    sonatra_sharing:
-                        class:   Sonatra\Component\Security\Doctrine\ORM\Filter\SharingFilter
+                    fxp_sharing:
+                        class:   Fxp\Component\Security\Doctrine\ORM\Filter\SharingFilter
                         enabled: true
 ```
 
@@ -33,7 +33,7 @@ records and showing only the shared records, you will use the `private` value fo
 all class that need a sharing, and for that, you will need to add this configuration:
 
 ```yaml
-sonatra_security:
+fxp_security:
     doctrine:
         orm:
             listeners:
@@ -51,7 +51,7 @@ a user, a role, a group, or an organization.
 
 > **Note:**
 >
-> You will find the values and their descriptions in the class `Sonatra\Component\Security\SharingVisibilities`.
+> You will find the values and their descriptions in the class `Fxp\Component\Security\SharingVisibilities`.
 
 ## Create the sharing entry
 
@@ -70,11 +70,11 @@ this required fields:
 - identity name (the username, role name, group name or organization name)
 
 The sharing model works with the Subject Identities for the entities (see
-`Sonatra\Component\Security\Identity\SubjectIdentity`) and Security Identity for the user, role,
-group, and organization (see `Sonatra\Component\Security\Identity\UserSecurityIdentity`,
-`Sonatra\Component\Security\Identity\RoleSecurityIdentity`,
-`Sonatra\Component\Security\Identity\GroupSecurityIdentity` and
-`Sonatra\Component\Security\Identity\OrganizationSecurityIdentity`).
+`Fxp\Component\Security\Identity\SubjectIdentity`) and Security Identity for the user, role,
+group, and organization (see `Fxp\Component\Security\Identity\UserSecurityIdentity`,
+`Fxp\Component\Security\Identity\RoleSecurityIdentity`,
+`Fxp\Component\Security\Identity\GroupSecurityIdentity` and
+`Fxp\Component\Security\Identity\OrganizationSecurityIdentity`).
 
 To retrieve the subject infos, you have these helpers:
 
@@ -92,7 +92,7 @@ To retrieve the identity infos, you have these helpers:
 - `OrganizationSecurityIdentity::fromAccount($organization)`
 - `OrganizationSecurityIdentity::fromToken($organization, $context = null, $roleHierarchy = null)`
 
-All helpers return the instance of `Sonatra\Component\Security\Identity\SecurityIdentityInterface`,
+All helpers return the instance of `Fxp\Component\Security\Identity\SecurityIdentityInterface`,
 and you retrieve the type and the identifier that will must be used for the sharing instance.
 
 It's not necessary to have a specific manager to manage the sharing entry,
@@ -107,8 +107,8 @@ use AppBundle\Entity\Post;
 use AppBundle\Entity\Sharing;
 use AppBundle\Entity\User;
 use Doctrine\Common\Util\ClassUtils;
-use Sonatra\Component\Security\Identity\SubjectIdentity;
-use Sonatra\Component\Security\Identity\UserSecurityIdentity;
+use Fxp\Component\Security\Identity\SubjectIdentity;
+use Fxp\Component\Security\Identity\UserSecurityIdentity;
 
 $user = $userRepository->findOneByUsername('foo.bar');
 $userIdentity = UserSecurityIdentity::fromAccount($user);
@@ -143,8 +143,8 @@ use AppBundle\Entity\Post;
 use AppBundle\Entity\Sharing;
 use AppBundle\Entity\User;
 use Doctrine\Common\Util\ClassUtils;
-use Sonatra\Component\Security\Identity\SubjectIdentity;
-use Sonatra\Component\Security\Identity\UserSecurityIdentity;
+use Fxp\Component\Security\Identity\SubjectIdentity;
+use Fxp\Component\Security\Identity\UserSecurityIdentity;
 
 $user = $userRepository->findOneByUsername('foo.bar');
 $userIdentity = UserSecurityIdentity::fromAccount($user);
@@ -185,9 +185,9 @@ use AppBundle\Entity\Post;
 use AppBundle\Entity\Sharing;
 use AppBundle\Entity\User;
 use Doctrine\Common\Util\ClassUtils;
-use Sonatra\Component\Security\Identity\RoleSecurityIdentity;
-use Sonatra\Component\Security\Identity\SubjectIdentity;
-use Sonatra\Component\Security\Identity\UserSecurityIdentity;
+use Fxp\Component\Security\Identity\RoleSecurityIdentity;
+use Fxp\Component\Security\Identity\SubjectIdentity;
+use Fxp\Component\Security\Identity\UserSecurityIdentity;
 
 $user = $userRepository->findOneByUsername('foo.bar');
 $userIdentity = UserSecurityIdentity::fromAccount($user);
@@ -236,4 +236,4 @@ only after a date.
 
 This library doesn't include a manager to manage sharing with entities, because it uses natively Doctrine,
 and leaves you the choice to using Doctrine directly, to creating you a specific manager or to using a
-resource management library (like [sonatra/resource-bundle](https://github.com/sonatra/sonatra-resource-bundle)).
+resource management library (like [fxp/resource-bundle](https://github.com/fxpio/fxp-resource-bundle)).

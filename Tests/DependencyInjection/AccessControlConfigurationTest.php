@@ -1,24 +1,24 @@
 <?php
 
 /*
- * This file is part of the Sonatra package.
+ * This file is part of the Fxp package.
  *
- * (c) François Pluchino <francois.pluchino@sonatra.com>
+ * (c) François Pluchino <francois.pluchino@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Bundle\SecurityBundle\Tests\DependencyInjection;
+namespace Fxp\Bundle\SecurityBundle\Tests\DependencyInjection;
 
+use Fxp\Bundle\SecurityBundle\DependencyInjection\AccessControlConfiguration;
 use PHPUnit\Framework\TestCase;
-use Sonatra\Bundle\SecurityBundle\DependencyInjection\AccessControlConfiguration;
 use Symfony\Component\Config\Definition\Processor;
 
 /**
  * Access Control Tests.
  *
- * @author François Pluchino <francois.pluchino@sonatra.com>
+ * @author François Pluchino <francois.pluchino@gmail.com>
  */
 class AccessControlConfigurationTest extends TestCase
 {

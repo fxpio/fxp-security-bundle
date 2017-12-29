@@ -6,7 +6,7 @@
 
     <services>
         <!-- Override Security Access Expression Voter -->
-        <service id="security.access.expression_voter" class="Sonatra\Component\Security\Authorization\Voter\ExpressionVoter" public="false">
+        <service id="security.access.expression_voter" class="Fxp\Component\Security\Authorization\Voter\ExpressionVoter" public="false">
             <argument type="service" id="event_dispatcher" />
             <argument type="service" id="security.expression_language" />
             <tag name="security.voter" priority="245" />

@@ -1,27 +1,27 @@
 <?php
 
 /*
- * This file is part of the Sonatra package.
+ * This file is part of the Fxp package.
  *
- * (c) François Pluchino <francois.pluchino@sonatra.com>
+ * (c) François Pluchino <francois.pluchino@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Bundle\SecurityBundle\Tests\DependencyInjection;
+namespace Fxp\Bundle\SecurityBundle\Tests\DependencyInjection;
 
 use Doctrine\Bundle\DoctrineBundle\Registry;
 use Doctrine\ORM\EntityManager;
+use Fxp\Component\Security\Authorization\Voter\ExpressionVoter;
+use Fxp\Component\Security\Authorization\Voter\RoleSecurityIdentityVoter;
+use Fxp\Component\Security\Role\OrganizationalRoleHierarchy;
+use Fxp\Component\Security\SharingVisibilities;
+use Fxp\Component\Security\Tests\Fixtures\Model\MockObject;
+use Fxp\Component\Security\Tests\Fixtures\Model\MockPermission;
+use Fxp\Component\Security\Tests\Fixtures\Model\MockRole;
+use Fxp\Component\Security\Tests\Fixtures\Model\MockSharing;
 use Sensio\Bundle\FrameworkExtraBundle\Templating\TemplateGuesser;
-use Sonatra\Component\Security\Authorization\Voter\ExpressionVoter;
-use Sonatra\Component\Security\Authorization\Voter\RoleSecurityIdentityVoter;
-use Sonatra\Component\Security\Role\OrganizationalRoleHierarchy;
-use Sonatra\Component\Security\SharingVisibilities;
-use Sonatra\Component\Security\Tests\Fixtures\Model\MockObject;
-use Sonatra\Component\Security\Tests\Fixtures\Model\MockPermission;
-use Sonatra\Component\Security\Tests\Fixtures\Model\MockRole;
-use Sonatra\Component\Security\Tests\Fixtures\Model\MockSharing;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\Security\Core\Authentication\AuthenticationTrustResolver;
 use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
@@ -29,9 +29,9 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
 /**
  * Security extension tests.
  *
- * @author François Pluchino <francois.pluchino@sonatra.com>
+ * @author François Pluchino <francois.pluchino@gmail.com>
  */
-class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
+class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
 {
     public function testExtensionExist()
     {
@@ -39,7 +39,7 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
             'role_class' => MockRole::class,
             'permission_class' => MockPermission::class,
         )));
-        $this->assertTrue($container->hasExtension('sonatra_security'));
+        $this->assertTrue($container->hasExtension('fxp_security'));
     }
 
     public function testObjectFilter()
@@ -62,17 +62,17 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
             'doctrine.orm.entity_manager' => new Definition(EntityManager::class),
         ));
 
-        $this->assertTrue($container->hasDefinition('sonatra_security.object_filter'));
-        $this->assertTrue($container->hasDefinition('sonatra_security.object_filter.extension'));
-        $this->assertTrue($container->hasDefinition('sonatra_security.object_filter.voter.mixed'));
+        $this->assertTrue($container->hasDefinition('fxp_security.object_filter'));
+        $this->assertTrue($container->hasDefinition('fxp_security.object_filter.extension'));
+        $this->assertTrue($container->hasDefinition('fxp_security.object_filter.voter.mixed'));
 
-        $this->assertTrue($container->hasDefinition('sonatra_security.object_filter.voter.doctrine_orm_collection'));
-        $this->assertTrue($container->hasDefinition('sonatra_security.object_filter.orm.listener'));
+        $this->assertTrue($container->hasDefinition('fxp_security.object_filter.voter.doctrine_orm_collection'));
+        $this->assertTrue($container->hasDefinition('fxp_security.object_filter.orm.listener'));
     }
 
     /**
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage The "sonatra_security.doctrine.orm.object_filter_voter" config require the "doctrine/orm" package
+     * @expectedExceptionMessage The "fxp_security.doctrine.orm.object_filter_voter" config require the "doctrine/orm" package
      */
     public function testOrmObjectFilterVoterWithoutDoctrine()
     {
@@ -92,7 +92,7 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
 
     /**
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage The "sonatra_security.doctrine.orm.listeners.object_filter" config require the "doctrine/orm" package
+     * @expectedExceptionMessage The "fxp_security.doctrine.orm.listeners.object_filter" config require the "doctrine/orm" package
      */
     public function testOrmObjectFilterListenerWithoutDoctrine()
     {
@@ -125,10 +125,10 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
 
         $this->assertTrue($container->hasDefinition('security.access.role_hierarchy_voter'));
         $this->assertTrue($container->hasDefinition('security.access.groupable_voter'));
-        $this->assertTrue($container->hasDefinition('sonatra_security.subscriber.security_identity.group'));
+        $this->assertTrue($container->hasDefinition('fxp_security.subscriber.security_identity.group'));
 
-        $this->assertSame('%sonatra_security.access.role_security_identity_voter.class%', $container->getDefinition('security.access.role_hierarchy_voter')->getClass());
-        $this->assertSame(RoleSecurityIdentityVoter::class, $container->getParameter('sonatra_security.access.role_security_identity_voter.class'));
+        $this->assertSame('%fxp_security.access.role_security_identity_voter.class%', $container->getDefinition('security.access.role_hierarchy_voter')->getClass());
+        $this->assertSame(RoleSecurityIdentityVoter::class, $container->getParameter('fxp_security.access.role_security_identity_voter.class'));
     }
 
     public function testRoleHierarchy()
@@ -153,8 +153,8 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
         ));
 
         $this->assertTrue($container->hasDefinition('security.role_hierarchy'));
-        $this->assertTrue($container->hasAlias('sonatra_security.role_hierarchy.cache'));
-        $this->assertTrue($container->hasDefinition('sonatra_security.role_hierarchy.cache.listener'));
+        $this->assertTrue($container->hasAlias('fxp_security.role_hierarchy.cache'));
+        $this->assertTrue($container->hasDefinition('fxp_security.role_hierarchy.cache.listener'));
 
         $def = $container->getDefinition('security.role_hierarchy');
         $this->assertSame('%security.role_hierarchy.class%', $def->getClass());
@@ -163,7 +163,7 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
 
     /**
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage The "sonatra_security.role_hierarchy" config require the "doctrine/doctrine-bundle" package
+     * @expectedExceptionMessage The "fxp_security.role_hierarchy" config require the "doctrine/doctrine-bundle" package
      */
     public function testRoleHierarchyWithoutDoctrineBundle()
     {
@@ -178,7 +178,7 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
 
     /**
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage The "sonatra_security.doctrine.orm.listeners.role_hierarchy" config require the "doctrine/orm" package
+     * @expectedExceptionMessage The "fxp_security.doctrine.orm.listeners.role_hierarchy" config require the "doctrine/orm" package
      */
     public function testOrmRoleHierarchyListenerWithoutDoctrine()
     {
@@ -210,10 +210,10 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
             ),
         )));
 
-        $this->assertTrue($container->hasDefinition('sonatra_security.organizational_context.default'));
-        $this->assertTrue($container->hasAlias('sonatra_security.organizational_context'));
+        $this->assertTrue($container->hasDefinition('fxp_security.organizational_context.default'));
+        $this->assertTrue($container->hasAlias('fxp_security.organizational_context'));
         $this->assertTrue($container->hasDefinition('security.access.organization_voter'));
-        $this->assertTrue($container->hasDefinition('sonatra_security.subscriber.security_identity.organization'));
+        $this->assertTrue($container->hasDefinition('fxp_security.subscriber.security_identity.organization'));
     }
 
     public function testExpressionLanguage()
@@ -237,22 +237,22 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
             'security.authentication.trust_resolver' => new Definition(AuthenticationTrustResolver::class),
         ));
 
-        $this->assertTrue($container->hasDefinition('sonatra_security.expression.variable_storage'));
+        $this->assertTrue($container->hasDefinition('fxp_security.expression.variable_storage'));
         $this->assertTrue($container->hasDefinition('security.access.expression_voter'));
-        $this->assertTrue($container->hasDefinition('sonatra_security.organizational_context.default'));
-        $this->assertTrue($container->hasAlias('sonatra_security.organizational_context'));
+        $this->assertTrue($container->hasDefinition('fxp_security.organizational_context.default'));
+        $this->assertTrue($container->hasAlias('fxp_security.organizational_context'));
 
         $def = $container->getDefinition('security.access.expression_voter');
         $this->assertSame(ExpressionVoter::class, $def->getClass());
 
-        $this->assertTrue($container->hasDefinition('sonatra_security.expression.functions.is_basic_auth'));
-        $this->assertTrue($container->hasDefinition('sonatra_security.expression.functions.is_granted'));
-        $this->assertTrue($container->hasDefinition('sonatra_security.expression.functions.is_organization'));
+        $this->assertTrue($container->hasDefinition('fxp_security.expression.functions.is_basic_auth'));
+        $this->assertTrue($container->hasDefinition('fxp_security.expression.functions.is_granted'));
+        $this->assertTrue($container->hasDefinition('fxp_security.expression.functions.is_organization'));
     }
 
     /**
      * @expectedException \Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException
-     * @expectedExceptionMessage The service "sonatra_security.expression.functions.is_granted" has a dependency on a non-existent service "security.authorization_checker"
+     * @expectedExceptionMessage The service "fxp_security.expression.functions.is_granted" has a dependency on a non-existent service "security.authorization_checker"
      */
     public function testExpressionLanguageWitMissingDependenciesForIsGranted()
     {
@@ -272,7 +272,7 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
 
     /**
      * @expectedException \Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException
-     * @expectedExceptionMessage The service "sonatra_security.expression.functions.is_organization" has a dependency on a non-existent service "sonatra_security.organizational_context"
+     * @expectedExceptionMessage The service "fxp_security.expression.functions.is_organization" has a dependency on a non-existent service "fxp_security.organizational_context"
      */
     public function testExpressionLanguageWitMissingDependenciesForIsOrganization()
     {
@@ -300,12 +300,12 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
             'sensio_framework_extra.view.guesser' => new Definition(TemplateGuesser::class),
         ));
 
-        $this->assertTrue($container->hasDefinition('sonatra_security.subscriber.security_annotation'));
+        $this->assertTrue($container->hasDefinition('fxp_security.subscriber.security_annotation'));
     }
 
     /**
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage The "sonatra_security.annotations.security" config require the "sensio/framework-extra-bundle" package
+     * @expectedExceptionMessage The "fxp_security.annotations.security" config require the "sensio/framework-extra-bundle" package
      */
     public function testAnnotationWitMissingDependencies()
     {
@@ -338,12 +338,12 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
             'doctrine.orm.entity_manager' => new Definition(EntityManager::class),
         ));
 
-        $this->assertTrue($container->hasDefinition('sonatra_security.orm.filter.subscriber.sharing'));
+        $this->assertTrue($container->hasDefinition('fxp_security.orm.filter.subscriber.sharing'));
     }
 
     /**
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage The "sonatra_security.doctrine.orm.filter.sharing" config require the "doctrine/orm" package
+     * @expectedExceptionMessage The "fxp_security.doctrine.orm.filter.sharing" config require the "doctrine/orm" package
      */
     public function testOrmSharingWithoutDoctrine()
     {
@@ -366,7 +366,7 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
 
     /**
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage The "sonatra_security.sharing" config must be enabled
+     * @expectedExceptionMessage The "fxp_security.sharing" config must be enabled
      */
     public function testOrmSharingDoctrineWithoutEnableSharing()
     {
@@ -408,12 +408,12 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
             'doctrine.orm.entity_manager' => new Definition(EntityManager::class),
         ));
 
-        $this->assertTrue($container->hasDefinition('sonatra_security.orm.filter.sharing.private_listener'));
+        $this->assertTrue($container->hasDefinition('fxp_security.orm.filter.sharing.private_listener'));
     }
 
     /**
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage The "sonatra_security.doctrine.orm.filter.sharing" config require the "doctrine/orm" package
+     * @expectedExceptionMessage The "fxp_security.doctrine.orm.filter.sharing" config require the "doctrine/orm" package
      */
     public function testOrmSharingPrivateListenerWithoutDoctrine()
     {
@@ -439,7 +439,7 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
 
     /**
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage The "sonatra_security.doctrine.orm.filters.sharing" config must be enabled
+     * @expectedExceptionMessage The "fxp_security.doctrine.orm.filters.sharing" config must be enabled
      */
     public function testOrmSharingPrivateListenerWithoutEnableSharing()
     {
@@ -478,12 +478,12 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
             'doctrine.orm.entity_manager' => new Definition(EntityManager::class),
         ));
 
-        $this->assertTrue($container->hasDefinition('sonatra_security.orm.listener.sharing_delete'));
+        $this->assertTrue($container->hasDefinition('fxp_security.orm.listener.sharing_delete'));
     }
 
     /**
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage The "sonatra_security.doctrine.orm.listeners.sharing_delete" config require the "doctrine/orm" package
+     * @expectedExceptionMessage The "fxp_security.doctrine.orm.listeners.sharing_delete" config require the "doctrine/orm" package
      */
     public function testOrmSharingDeleteWithoutDoctrine()
     {
@@ -506,7 +506,7 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
 
     /**
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage The "sonatra_security.sharing" config must be enabled
+     * @expectedExceptionMessage The "fxp_security.sharing" config must be enabled
      */
     public function testOrmSharingDeleteDoctrineWithoutEnableSharing()
     {
@@ -544,13 +544,13 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
             'doctrine.orm.entity_manager' => new Definition(EntityManager::class),
         ));
 
-        $def = $container->getDefinition('sonatra_security.permission_manager');
+        $def = $container->getDefinition('fxp_security.permission_manager');
         $permConfigs = $def->getArgument(4);
 
         $this->assertInternalType('array', $permConfigs);
         $this->assertCount(1, $permConfigs);
 
-        $this->assertTrue($container->hasDefinition('sonatra_security.permission_checker.orm.listener'));
+        $this->assertTrue($container->hasDefinition('fxp_security.permission_checker.orm.listener'));
     }
 
     /**
@@ -583,7 +583,7 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
             ),
         )));
 
-        $def = $container->getDefinition('sonatra_security.permission_manager');
+        $def = $container->getDefinition('fxp_security.permission_manager');
         $permConfigs = $def->getArgument(4);
 
         $this->assertInternalType('array', $permConfigs);
@@ -609,7 +609,7 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
             ),
         )));
 
-        $def = $container->getDefinition('sonatra_security.permission_manager');
+        $def = $container->getDefinition('fxp_security.permission_manager');
         $permConfigs = $def->getArgument(4);
 
         $this->assertInternalType('array', $permConfigs);
@@ -636,7 +636,7 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
             ),
         )));
 
-        $def = $container->getDefinition('sonatra_security.permission_manager');
+        $def = $container->getDefinition('fxp_security.permission_manager');
         $permConfigs = $def->getArgument(4);
 
         $this->assertInternalType('array', $permConfigs);
@@ -645,7 +645,7 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
 
     /**
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage The permission field "foo" does not exist in "Sonatra\Component\Security\Tests\Fixtures\Model\MockObject" class
+     * @expectedExceptionMessage The permission field "foo" does not exist in "Fxp\Component\Security\Tests\Fixtures\Model\MockObject" class
      */
     public function testPermissionWithNonExistentField()
     {
@@ -664,7 +664,7 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
 
     /**
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage The "sonatra_security.doctrine.orm.listeners.permission_checker" config require the "doctrine/orm" package
+     * @expectedExceptionMessage The "fxp_security.doctrine.orm.listeners.permission_checker" config require the "doctrine/orm" package
      */
     public function testOrmPermissionCheckerListenerWithoutDoctrine()
     {
@@ -702,7 +702,7 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
             ),
         )));
 
-        $def = $container->getDefinition('sonatra_security.sharing_manager');
+        $def = $container->getDefinition('fxp_security.sharing_manager');
         $identityConfigs = $def->getArgument(2);
 
         $this->assertInternalType('array', $identityConfigs);
@@ -711,7 +711,7 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
 
     /**
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage The "sonatra_security.sharing_class" config must be configured with a valid class
+     * @expectedExceptionMessage The "fxp_security.sharing_class" config must be configured with a valid class
      */
     public function testSharingWithoutSharingClass()
     {
@@ -738,7 +738,7 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
             ),
         )));
 
-        $def = $container->getDefinition('sonatra_security.sharing_manager');
+        $def = $container->getDefinition('fxp_security.sharing_manager');
         $identityConfigs = $def->getArgument(2);
 
         $this->assertInternalType('array', $identityConfigs);
@@ -782,7 +782,7 @@ class SonatraSecurityExtensionTest extends AbstractSecurityExtensionTest
             ),
         )));
 
-        $def = $container->getDefinition('sonatra_security.sharing_manager');
+        $def = $container->getDefinition('fxp_security.sharing_manager');
         $subjectConfigs = $def->getArgument(1);
 
         $this->assertInternalType('array', $subjectConfigs);

@@ -1,14 +1,14 @@
 {
-    "name": "sonatra/security-bundle",
+    "name": "fxp/security-bundle",
     "type": "symfony-bundle",
     "description": "A Extended Role-Based Access Control with sharing rules",
     "keywords": ["RBAC", "E-RBAC", "Permission", "Sharing", "Security"],
-    "homepage": "https://github.com/sonatra/sonatra-security-bundle",
+    "homepage": "https://github.com/fxpio/fxp-security-bundle",
     "license": "MIT",
     "authors": [
         {
             "name": "François Pluchino",
-            "email": "francois.pluchino@sonatra.com"
+            "email": "francois.pluchino@gmail.com"
         }
     ],
     "minimum-stability": "dev",
@@ -17,7 +17,7 @@
         "php": "^7.1.0",
         "symfony/framework-bundle": "^3.4.0|^4.0.0",
         "symfony/security-bundle": "^3.4.0|^4.0.0",
-        "sonatra/security": "^1.0.0"
+        "fxp/security": "^1.0.0"
     },
     "require-dev": {
         "sensio/framework-extra-bundle": "^5.1.0",
@@ -26,7 +26,7 @@
         "doctrine/orm": "^2.6.0"
     },
     "autoload": {
-        "psr-4": { "Sonatra\\Bundle\\SecurityBundle\\": "" },
+        "psr-4": { "Fxp\\Bundle\\SecurityBundle\\": "" },
         "exclude-from-classmap": [
             "/Tests/"
         ]

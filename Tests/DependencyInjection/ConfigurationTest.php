@@ -1,31 +1,31 @@
 <?php
 
 /*
- * This file is part of the Sonatra package.
+ * This file is part of the Fxp package.
  *
- * (c) François Pluchino <francois.pluchino@sonatra.com>
+ * (c) François Pluchino <francois.pluchino@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Bundle\SecurityBundle\Tests\DependencyInjection;
+namespace Fxp\Bundle\SecurityBundle\Tests\DependencyInjection;
 
+use Fxp\Bundle\SecurityBundle\DependencyInjection\Configuration;
+use Fxp\Component\Security\Model\PermissionInterface;
+use Fxp\Component\Security\Model\SharingInterface;
+use Fxp\Component\Security\SharingVisibilities;
+use Fxp\Component\Security\Tests\Fixtures\Model\MockObject;
+use Fxp\Component\Security\Tests\Fixtures\Model\MockPermission;
+use Fxp\Component\Security\Tests\Fixtures\Model\MockRole;
+use Fxp\Component\Security\Tests\Fixtures\Model\MockSharing;
 use PHPUnit\Framework\TestCase;
-use Sonatra\Bundle\SecurityBundle\DependencyInjection\Configuration;
-use Sonatra\Component\Security\Model\PermissionInterface;
-use Sonatra\Component\Security\Model\SharingInterface;
-use Sonatra\Component\Security\SharingVisibilities;
-use Sonatra\Component\Security\Tests\Fixtures\Model\MockObject;
-use Sonatra\Component\Security\Tests\Fixtures\Model\MockPermission;
-use Sonatra\Component\Security\Tests\Fixtures\Model\MockRole;
-use Sonatra\Component\Security\Tests\Fixtures\Model\MockSharing;
 use Symfony\Component\Config\Definition\Processor;
 
 /**
  * Configuration Tests.
  *
- * @author François Pluchino <francois.pluchino@sonatra.com>
+ * @author François Pluchino <francois.pluchino@gmail.com>
  */
 class ConfigurationTest extends TestCase
 {

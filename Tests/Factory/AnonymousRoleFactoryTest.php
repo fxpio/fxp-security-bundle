@@ -1,18 +1,18 @@
 <?php
 
 /*
- * This file is part of the Sonatra package.
+ * This file is part of the Fxp package.
  *
- * (c) François Pluchino <francois.pluchino@sonatra.com>
+ * (c) François Pluchino <francois.pluchino@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Bundle\SecurityBundle\Tests\Factory;
+namespace Fxp\Bundle\SecurityBundle\Tests\Factory;
 
+use Fxp\Bundle\SecurityBundle\Factory\AnonymousRoleFactory;
 use PHPUnit\Framework\TestCase;
-use Sonatra\Bundle\SecurityBundle\Factory\AnonymousRoleFactory;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -20,7 +20,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 /**
  * Anonymous Role Factory Tests.
  *
- * @author François Pluchino <francois.pluchino@sonatra.com>
+ * @author François Pluchino <francois.pluchino@gmail.com>
  */
 class AnonymousRoleFactoryTest extends TestCase
 {
@@ -79,8 +79,8 @@ class AnonymousRoleFactoryTest extends TestCase
 
         $res = $factory->create($container, 'test_id', array(), 'user_provider', 'default_entry_point');
         $valid = array(
-            'sonatra_security.authentication.provider.anonymous_role.test_id',
-            'sonatra_security.authentication.listener.anonymous_role.test_id',
+            'fxp_security.authentication.provider.anonymous_role.test_id',
+            'fxp_security.authentication.listener.anonymous_role.test_id',
             'default_entry_point',
         );
 

@@ -1,24 +1,24 @@
 <?php
 
 /*
- * This file is part of the Sonatra package.
+ * This file is part of the Fxp package.
  *
- * (c) François Pluchino <francois.pluchino@sonatra.com>
+ * (c) François Pluchino <francois.pluchino@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Bundle\SecurityBundle\Doctrine\ORM\Listener;
+namespace Fxp\Bundle\SecurityBundle\Doctrine\ORM\Listener;
 
-use Sonatra\Component\Security\Doctrine\ORM\Listener\SharingDeleteListener;
-use Sonatra\Component\Security\Sharing\SharingManagerInterface;
+use Fxp\Component\Security\Doctrine\ORM\Listener\SharingDeleteListener;
+use Fxp\Component\Security\Sharing\SharingManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Doctrine ORM listener for sharing delete.
  *
- * @author François Pluchino <francois.pluchino@sonatra.com>
+ * @author François Pluchino <francois.pluchino@gmail.com>
  */
 class SharingDeleteListenerContainerAware extends SharingDeleteListener
 {
@@ -34,7 +34,7 @@ class SharingDeleteListenerContainerAware extends SharingDeleteListener
     {
         if (null !== $this->container) {
             /* @var SharingManagerInterface $sharingManager */
-            $sharingManager = $this->container->get('sonatra_security.sharing_manager');
+            $sharingManager = $this->container->get('fxp_security.sharing_manager');
 
             $this->setSharingManager($sharingManager);
             $this->initialized = true;

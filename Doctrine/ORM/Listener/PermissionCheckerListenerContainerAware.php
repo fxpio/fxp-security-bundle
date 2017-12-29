@@ -1,18 +1,18 @@
 <?php
 
 /*
- * This file is part of the Sonatra package.
+ * This file is part of the Fxp package.
  *
- * (c) François Pluchino <francois.pluchino@sonatra.com>
+ * (c) François Pluchino <francois.pluchino@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Bundle\SecurityBundle\Doctrine\ORM\Listener;
+namespace Fxp\Bundle\SecurityBundle\Doctrine\ORM\Listener;
 
-use Sonatra\Component\Security\Doctrine\ORM\Listener\PermissionCheckerListener;
-use Sonatra\Component\Security\Permission\PermissionManagerInterface;
+use Fxp\Component\Security\Doctrine\ORM\Listener\PermissionCheckerListener;
+use Fxp\Component\Security\Permission\PermissionManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
@@ -20,7 +20,7 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 /**
  * This class listens to all database activity and automatically adds constraints as permissions.
  *
- * @author François Pluchino <francois.pluchino@sonatra.com>
+ * @author François Pluchino <francois.pluchino@gmail.com>
  */
 class PermissionCheckerListenerContainerAware extends PermissionCheckerListener
 {
@@ -40,7 +40,7 @@ class PermissionCheckerListenerContainerAware extends PermissionCheckerListener
             /* @var AuthorizationCheckerInterface $authChecker */
             $authChecker = $this->container->get('security.authorization_checker');
             /* @var PermissionManagerInterface $permManager */
-            $permManager = $this->container->get('sonatra_security.permission_manager');
+            $permManager = $this->container->get('fxp_security.permission_manager');
 
             $this->setTokenStorage($tokenStorage);
             $this->setAuthorizationChecker($authChecker);

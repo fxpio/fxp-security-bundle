@@ -7,14 +7,14 @@ Allow to associate many user in many organizations.
 
 #### Create the organization class
 
-Extend the `Sonatra\Component\Security\Model\Organization` abstract class:
+Extend the `Fxp\Component\Security\Model\Organization` abstract class:
 
 ```php
 // src/AppBundle/Entity/Organization.php
 
 namespace AppBundle\Entity;
 
-use Sonatra\Component\Security\Model\Organization as BaseOrganization;
+use Fxp\Component\Security\Model\Organization as BaseOrganization;
 
 class Organization extends BaseOrganization
 {
@@ -58,17 +58,17 @@ class Organization extends BaseOrganization
 
 #### Update the user class
 
-Implement the `Sonatra\Component\Security\Model\Traits\UserOrganizationUsersInterface` interface in user class.
+Implement the `Fxp\Component\Security\Model\Traits\UserOrganizationUsersInterface` interface in user class.
 
 ```php
 namespace AppBundle\Entity;
 
 use FOS\UserBundle\Model\User as BaseUser;
-use Sonatra\Component\Security\Model\Traits\OrganizationalOptionalInterface;
-use Sonatra\Component\Security\Model\Traits\OrganizationalOptionalTrait;
-use Sonatra\Component\Security\Model\Traits\UserOrganizationUsersInterface;
-use Sonatra\Component\Security\Model\Traits\UserOrganizationUsersTrait;
-use Sonatra\Component\Security\Model\UserInterface;
+use Fxp\Component\Security\Model\Traits\OrganizationalOptionalInterface;
+use Fxp\Component\Security\Model\Traits\OrganizationalOptionalTrait;
+use Fxp\Component\Security\Model\Traits\UserOrganizationUsersInterface;
+use Fxp\Component\Security\Model\Traits\UserOrganizationUsersTrait;
+use Fxp\Component\Security\Model\UserInterface;
 
 class User extends BaseUser implements
     UserInterface,
@@ -117,14 +117,14 @@ class User extends BaseUser implements
 
 #### Create the organization user class
 
-Extend the `Sonatra\Component\Security\Model\OrganizationUser` abstract class:
+Extend the `Fxp\Component\Security\Model\OrganizationUser` abstract class:
 
 ```php
 // src/AppBundle/Entity/OrganizationUser.php
 
 namespace AppBundle\Entity;
 
-use Sonatra\Component\Security\Model\OrganizationUser as BaseOrganizationUser;
+use Fxp\Component\Security\Model\OrganizationUser as BaseOrganizationUser;
 
 class OrganizationUser extends BaseOrganizationUser
 {
@@ -141,7 +141,7 @@ class OrganizationUser extends BaseOrganizationUser
                   http://raw.github.com/doctrine/doctrine2/master/doctrine-mapping.xsd">
 
     <entity name="AppBundle\Entity\OrganizationUser" table="core_organization_user"
-                repository-class="Helloguest\Bundle\CoreBundle\Entity\Repository\OrganizationUserRepository">
+                repository-class="AppBundle\Entity\Repository\OrganizationUserRepository">
             <unique-constraints>
                 <unique-constraint columns="organization_id,user_id" name="organization_unique_user_idx" />
             </unique-constraints>
@@ -172,7 +172,7 @@ Add the following configuration to your `config.yml`.
 
 ```yaml
 # app/config/config.yml
-sonatra_security:
+fxp_security:
     organizational_context:
             enabled: true # optional
 ```
@@ -185,7 +185,7 @@ $ php bin/console doctrine:schema:update --force
 
 ## Work with organizational context
 
-You can get the organizational context service with `sonatra_security.organizational_context`
+You can get the organizational context service with `fxp_security.organizational_context`
 in container service.
 
 The organizational context allow you to define the current organization

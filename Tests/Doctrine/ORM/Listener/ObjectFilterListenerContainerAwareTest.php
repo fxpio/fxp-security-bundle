@@ -1,28 +1,28 @@
 <?php
 
 /*
- * This file is part of the Sonatra package.
+ * This file is part of the Fxp package.
  *
- * (c) François Pluchino <francois.pluchino@sonatra.com>
+ * (c) François Pluchino <francois.pluchino@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Bundle\SecurityBundle\Tests\Doctrine\ORM\Listener;
+namespace Fxp\Bundle\SecurityBundle\Tests\Doctrine\ORM\Listener;
 
 use Doctrine\ORM\Event\OnFlushEventArgs;
+use Fxp\Bundle\SecurityBundle\Doctrine\ORM\Listener\ObjectFilterListenerContainerAware;
+use Fxp\Component\Security\ObjectFilter\ObjectFilterInterface;
+use Fxp\Component\Security\Permission\PermissionManagerInterface;
 use PHPUnit\Framework\TestCase;
-use Sonatra\Bundle\SecurityBundle\Doctrine\ORM\Listener\ObjectFilterListenerContainerAware;
-use Sonatra\Component\Security\ObjectFilter\ObjectFilterInterface;
-use Sonatra\Component\Security\Permission\PermissionManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 /**
  * Object Filter Listener Container Aware Tests.
  *
- * @author François Pluchino <francois.pluchino@sonatra.com>
+ * @author François Pluchino <francois.pluchino@gmail.com>
  */
 class ObjectFilterListenerContainerAwareTest extends TestCase
 {
@@ -42,12 +42,12 @@ class ObjectFilterListenerContainerAwareTest extends TestCase
 
         $container->expects($this->at(1))
             ->method('get')
-            ->with('sonatra_security.permission_manager')
+            ->with('fxp_security.permission_manager')
             ->willReturn($permissionManager);
 
         $container->expects($this->at(2))
             ->method('get')
-            ->with('sonatra_security.object_filter')
+            ->with('fxp_security.object_filter')
             ->willReturn($objectFilter);
 
         $listener = new ObjectFilterListenerContainerAware();

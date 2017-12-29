@@ -1,29 +1,29 @@
 <?php
 
 /*
- * This file is part of the Sonatra package.
+ * This file is part of the Fxp package.
  *
- * (c) François Pluchino <francois.pluchino@sonatra.com>
+ * (c) François Pluchino <francois.pluchino@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Bundle\SecurityBundle;
+namespace Fxp\Bundle\SecurityBundle;
 
 use Doctrine\Bundle\DoctrineBundle\DependencyInjection\Compiler\DoctrineOrmMappingsPass;
-use Sonatra\Bundle\SecurityBundle\DependencyInjection\Compiler\AccessControlPass;
-use Sonatra\Bundle\SecurityBundle\DependencyInjection\Compiler\ConfigDependencyValidationPass;
-use Sonatra\Bundle\SecurityBundle\DependencyInjection\Compiler\ExpressionVariableStoragePass;
-use Sonatra\Bundle\SecurityBundle\DependencyInjection\Compiler\ObjectFilterPass;
-use Sonatra\Bundle\SecurityBundle\DependencyInjection\Compiler\OrganizationalPass;
-use Sonatra\Bundle\SecurityBundle\DependencyInjection\Compiler\TranslatorPass;
-use Sonatra\Bundle\SecurityBundle\DependencyInjection\Compiler\ValidationPass;
-use Sonatra\Bundle\SecurityBundle\DependencyInjection\SecurityExtension;
-use Sonatra\Bundle\SecurityBundle\Factory\AnonymousRoleFactory;
-use Sonatra\Bundle\SecurityBundle\Factory\HostRoleFactory;
-use Sonatra\Component\Security\Exception\LogicException;
-use Sonatra\Component\Security\ReachableRoleEvents;
+use Fxp\Bundle\SecurityBundle\DependencyInjection\Compiler\AccessControlPass;
+use Fxp\Bundle\SecurityBundle\DependencyInjection\Compiler\ConfigDependencyValidationPass;
+use Fxp\Bundle\SecurityBundle\DependencyInjection\Compiler\ExpressionVariableStoragePass;
+use Fxp\Bundle\SecurityBundle\DependencyInjection\Compiler\ObjectFilterPass;
+use Fxp\Bundle\SecurityBundle\DependencyInjection\Compiler\OrganizationalPass;
+use Fxp\Bundle\SecurityBundle\DependencyInjection\Compiler\TranslatorPass;
+use Fxp\Bundle\SecurityBundle\DependencyInjection\Compiler\ValidationPass;
+use Fxp\Bundle\SecurityBundle\DependencyInjection\SecurityExtension;
+use Fxp\Bundle\SecurityBundle\Factory\AnonymousRoleFactory;
+use Fxp\Bundle\SecurityBundle\Factory\HostRoleFactory;
+use Fxp\Component\Security\Exception\LogicException;
+use Fxp\Component\Security\ReachableRoleEvents;
 use Symfony\Bundle\SecurityBundle\DependencyInjection\SecurityExtension as BaseSecurityExtension;
 use Symfony\Component\DependencyInjection\Compiler\PassConfig;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -31,9 +31,9 @@ use Symfony\Component\EventDispatcher\DependencyInjection\RegisterListenersPass;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 /**
- * @author François Pluchino <francois.pluchino@sonatra.com>
+ * @author François Pluchino <francois.pluchino@gmail.com>
  */
-class SonatraSecurityBundle extends Bundle
+class FxpSecurityBundle extends Bundle
 {
     /**
      * {@inheritdoc}
@@ -51,7 +51,7 @@ class SonatraSecurityBundle extends Bundle
         $container->addCompilerPass(new ObjectFilterPass());
         $container->addCompilerPass(new OrganizationalPass());
         $container->addCompilerPass(new RegisterListenersPass('event_dispatcher',
-            'sonatra_security.event_listener', 'sonatra_security.event_subscriber'),
+            'fxp_security.event_listener', 'fxp_security.event_subscriber'),
             PassConfig::TYPE_BEFORE_REMOVING);
 
         $this->registerMappingsPass($container);
@@ -65,7 +65,7 @@ class SonatraSecurityBundle extends Bundle
     private function registerSecurityExtension(ContainerBuilder $container)
     {
         if (!$container->hasExtension('security')) {
-            throw new LogicException('The SonatraSecurityBundle must be registered after the SecurityBundle in your App Kernel');
+            throw new LogicException('The FxpSecurityBundle must be registered after the SecurityBundle in your App Kernel');
         }
 
         /* @var BaseSecurityExtension $extension */
@@ -91,10 +91,10 @@ class SonatraSecurityBundle extends Bundle
             $container->addCompilerPass(
                 DoctrineOrmMappingsPass::createXmlMappingDriver(
                     array(
-                        realpath(dirname($ref->getFileName()).'/Resources/config/doctrine/model') => 'Sonatra\Component\Security\Model',
+                        realpath(dirname($ref->getFileName()).'/Resources/config/doctrine/model') => 'Fxp\Component\Security\Model',
                     ),
                     array(),
-                    'sonatra_security.backend_type_orm'
+                    'fxp_security.backend_type_orm'
                 )
             );
         }

@@ -1,15 +1,15 @@
 <?php
 
 /*
- * This file is part of the Sonatra package.
+ * This file is part of the Fxp package.
  *
- * (c) François Pluchino <francois.pluchino@sonatra.com>
+ * (c) François Pluchino <francois.pluchino@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Bundle\SecurityBundle\Factory;
+namespace Fxp\Bundle\SecurityBundle\Factory;
 
 use Symfony\Bundle\SecurityBundle\DependencyInjection\Security\Factory\SecurityFactoryInterface;
 use Symfony\Component\DependencyInjection\ChildDefinition;
@@ -18,7 +18,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 /**
  * Abstract factory for role injection in security identity manager.
  *
- * @author François Pluchino <francois.pluchino@sonatra.com>
+ * @author François Pluchino <francois.pluchino@gmail.com>
  */
 abstract class AbstractRoleFactory implements SecurityFactoryInterface
 {
@@ -58,6 +58,6 @@ abstract class AbstractRoleFactory implements SecurityFactoryInterface
      */
     protected function getServiceId($type)
     {
-        return sprintf('sonatra_security.authentication.%s.%s', $type, $this->getKey());
+        return sprintf('fxp_security.authentication.%s.%s', $type, $this->getKey());
     }
 }

@@ -1,18 +1,18 @@
 <?php
 
 /*
- * This file is part of the Sonatra package.
+ * This file is part of the Fxp package.
  *
- * (c) François Pluchino <francois.pluchino@sonatra.com>
+ * (c) François Pluchino <francois.pluchino@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Bundle\SecurityBundle\Listener;
+namespace Fxp\Bundle\SecurityBundle\Listener;
 
-use Sonatra\Component\Security\Event\GetExpressionVariablesEvent;
-use Sonatra\Component\Security\ExpressionVariableEvents;
+use Fxp\Component\Security\Event\GetExpressionVariablesEvent;
+use Fxp\Component\Security\ExpressionVariableEvents;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,7 +26,7 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 /**
  * SecurityListener handles security restrictions on controllers.
  *
- * @author François Pluchino <francois.pluchino@sonatra.com>
+ * @author François Pluchino <francois.pluchino@gmail.com>
  */
 class SecurityAnnotationSubscriber implements EventSubscriberInterface
 {
@@ -78,7 +78,7 @@ class SecurityAnnotationSubscriber implements EventSubscriberInterface
     {
         $request = $event->getRequest();
 
-        if (!$configuration = $request->attributes->get('_sonatra_security')) {
+        if (!$configuration = $request->attributes->get('_fxp_security')) {
             return;
         }
 

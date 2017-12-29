@@ -1,4 +1,4 @@
-Using Groups with Sonatra SecurityBundle
+Using Groups with Fxp SecurityBundle
 ========================================
 
 Allow the usage of groups in the Symfony Security Authorization Checker.
@@ -14,7 +14,7 @@ Follow the installation instructions in the [official documentation of Symfony]
 
 ### Update your group model
 
-Add the `Sonatra\Component\Security\Model\GroupInterface` into your group model:
+Add the `Fxp\Component\Security\Model\GroupInterface` into your group model:
 
 ```php
 // src/AppBundle/Entity/Group.php
@@ -22,7 +22,7 @@ Add the `Sonatra\Component\Security\Model\GroupInterface` into your group model:
 namespace AppBundle\Entity;
 
 use FOS\UserBundle\Model\Group as BaseGroup;
-use Sonatra\Component\Security\Model\GroupInterface;
+use Fxp\Component\Security\Model\GroupInterface;
 
 class Group extends BaseGroup implements GroupInterface
 {
@@ -36,7 +36,7 @@ Add the following configuration to your `config.yml`.
 
 ```yaml
 # app/config/config.yml
-sonatra_security:
+fxp_security:
     security_voter:
         groupable: true # Enable to check the group in the Symfony Security Authorization Checker
 ```

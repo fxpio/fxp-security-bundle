@@ -5,7 +5,7 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-        <parameter key="security.role_hierarchy.class">Sonatra\Component\Security\Role\OrganizationalRoleHierarchy</parameter>
+        <parameter key="security.role_hierarchy.class">Fxp\Component\Security\Role\OrganizationalRoleHierarchy</parameter>
     </parameters>
 
     <services>
@@ -15,9 +15,9 @@
                  public="false">
             <argument>%security.role_hierarchy.roles%</argument>
             <argument type="service" id="doctrine"/>
-            <argument>%sonatra_security.role_class%</argument>
-            <argument type="service" id="sonatra_security.role_hierarchy.cache" on-invalid="null"/>
-            <argument type="service" id="sonatra_security.organizational_context" on-invalid="null"/>
+            <argument>%fxp_security.role_class%</argument>
+            <argument type="service" id="fxp_security.role_hierarchy.cache" on-invalid="null"/>
+            <argument type="service" id="fxp_security.organizational_context" on-invalid="null"/>
             <call method="setEventDispatcher">
                 <argument type="service" id="event_dispatcher"/>
             </call>

@@ -1,19 +1,19 @@
 <?php
 
 /*
- * This file is part of the Sonatra package.
+ * This file is part of the Fxp package.
  *
- * (c) François Pluchino <francois.pluchino@sonatra.com>
+ * (c) François Pluchino <francois.pluchino@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Bundle\SecurityBundle\Tests\DependencyInjection;
+namespace Fxp\Bundle\SecurityBundle\Tests\DependencyInjection;
 
+use Fxp\Bundle\SecurityBundle\DependencyInjection\FxpSecurityExtension;
+use Fxp\Bundle\SecurityBundle\FxpSecurityBundle;
 use PHPUnit\Framework\TestCase;
-use Sonatra\Bundle\SecurityBundle\DependencyInjection\SonatraSecurityExtension;
-use Sonatra\Bundle\SecurityBundle\SonatraSecurityBundle;
 use Symfony\Bundle\FrameworkBundle\DependencyInjection\FrameworkExtension;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Bundle\SecurityBundle\DependencyInjection\SecurityExtension;
@@ -25,7 +25,7 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 /**
  * Base for security extension tests.
  *
- * @author François Pluchino <francois.pluchino@sonatra.com>
+ * @author François Pluchino <francois.pluchino@gmail.com>
  */
 abstract class AbstractSecurityExtensionTest extends TestCase
 {
@@ -44,15 +44,15 @@ abstract class AbstractSecurityExtensionTest extends TestCase
             'kernel.bundles' => array(
                 'FrameworkBundle' => FrameworkBundle::class,
                 'SecurityBundle' => SecurityBundle::class,
-                'SonatraSecurityBundle' => SonatraSecurityBundle::class,
+                'FxpSecurityBundle' => FxpSecurityBundle::class,
             ),
             'kernel.bundles_metadata' => array(),
-            'kernel.cache_dir' => sys_get_temp_dir().'/sonatra_security_bundle',
+            'kernel.cache_dir' => sys_get_temp_dir().'/fxp_security_bundle',
             'kernel.debug' => false,
             'kernel.environment' => 'test',
             'kernel.name' => 'kernel',
-            'kernel.root_dir' => sys_get_temp_dir().'/sonatra_security_bundle',
-            'kernel.project_dir' => sys_get_temp_dir().'/sonatra_security_bundle',
+            'kernel.root_dir' => sys_get_temp_dir().'/fxp_security_bundle',
+            'kernel.project_dir' => sys_get_temp_dir().'/fxp_security_bundle',
             'kernel.charset' => 'UTF-8',
         )));
 
@@ -61,7 +61,7 @@ abstract class AbstractSecurityExtensionTest extends TestCase
 
         $sfExt = new FrameworkExtension();
         $sfSecurityExt = new SecurityExtension();
-        $extension = new SonatraSecurityExtension();
+        $extension = new FxpSecurityExtension();
 
         $container->registerExtension($sfExt);
         $container->registerExtension($sfSecurityExt);
@@ -78,7 +78,7 @@ abstract class AbstractSecurityExtensionTest extends TestCase
         $sfExt->load(array(array('form' => true)), $container);
         $extension->load($configs, $container);
 
-        $bundle = new SonatraSecurityBundle();
+        $bundle = new FxpSecurityBundle();
         $bundle->build($container);
 
         $container->getCompilerPassConfig()->setOptimizationPasses(array());

@@ -1,36 +1,36 @@
 <?php
 
 /*
- * This file is part of the Sonatra package.
+ * This file is part of the Fxp package.
  *
- * (c) François Pluchino <francois.pluchino@sonatra.com>
+ * (c) François Pluchino <francois.pluchino@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Bundle\SecurityBundle\DependencyInjection\Extension;
+namespace Fxp\Bundle\SecurityBundle\DependencyInjection\Extension;
 
-use Sonatra\Bundle\SecurityBundle\DependencyInjection\SonatraSecurityExtension;
+use Fxp\Bundle\SecurityBundle\DependencyInjection\FxpSecurityExtension;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
- * @author François Pluchino <francois.pluchino@sonatra.com>
+ * @author François Pluchino <francois.pluchino@gmail.com>
  */
 class AnnotationBuilder implements ExtensionBuilderInterface
 {
     /**
-     * @var SonatraSecurityExtension
+     * @var FxpSecurityExtension
      */
     private $ext;
 
     /**
      * Constructor.
      *
-     * @param SonatraSecurityExtension $extension The security extension
+     * @param FxpSecurityExtension $extension The security extension
      */
-    public function __construct(SonatraSecurityExtension $extension)
+    public function __construct(FxpSecurityExtension $extension)
     {
         $this->ext = $extension;
     }
@@ -45,7 +45,7 @@ class AnnotationBuilder implements ExtensionBuilderInterface
             $loader->load('annotation_security.xml');
 
             $this->ext->addAnnotatedClassesToCompile(array(
-                'Sonatra\\Bundle\\SecurityBundle\\Listener\\SecurityAnnotationSubscriber',
+                'Fxp\\Bundle\\SecurityBundle\\Listener\\SecurityAnnotationSubscriber',
             ));
         }
     }

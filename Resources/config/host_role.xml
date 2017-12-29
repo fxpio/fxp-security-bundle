@@ -5,21 +5,21 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-        <parameter key="sonatra_security.authentication.provider.host_roles.class">Sonatra\Component\Security\Authentication\Provider\HostRoleProvider</parameter>
-        <parameter key="sonatra_security.authentication.listener.host_roles.class">Sonatra\Component\Security\Firewall\HostRoleListener</parameter>
+        <parameter key="fxp_security.authentication.provider.host_roles.class">Fxp\Component\Security\Authentication\Provider\HostRoleProvider</parameter>
+        <parameter key="fxp_security.authentication.listener.host_roles.class">Fxp\Component\Security\Firewall\HostRoleListener</parameter>
     </parameters>
 
     <services>
         <!-- Authentication Provider -->
-        <service id="sonatra_security.authentication.provider.host_roles"
-                 class="%sonatra_security.authentication.provider.host_roles.class%">
+        <service id="fxp_security.authentication.provider.host_roles"
+                 class="%fxp_security.authentication.provider.host_roles.class%">
             <argument type="collection"/>
         </service>
 
         <!-- Security Firewall -->
-        <service id="sonatra_security.authentication.listener.host_roles"
-                 class="%sonatra_security.authentication.listener.host_roles.class%">
-            <argument type="service" id="sonatra_security.security_identity_manager"/>
+        <service id="fxp_security.authentication.listener.host_roles"
+                 class="%fxp_security.authentication.listener.host_roles.class%">
+            <argument type="service" id="fxp_security.security_identity_manager"/>
             <argument type="collection"/>
         </service>
     </services>

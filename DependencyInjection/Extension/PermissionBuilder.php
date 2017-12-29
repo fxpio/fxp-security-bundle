@@ -1,18 +1,18 @@
 <?php
 
 /*
- * This file is part of the Sonatra package.
+ * This file is part of the Fxp package.
  *
- * (c) François Pluchino <francois.pluchino@sonatra.com>
+ * (c) François Pluchino <francois.pluchino@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Bundle\SecurityBundle\DependencyInjection\Extension;
+namespace Fxp\Bundle\SecurityBundle\DependencyInjection\Extension;
 
-use Sonatra\Component\Security\Permission\PermissionConfig;
-use Sonatra\Component\Security\Permission\PermissionFieldConfig;
+use Fxp\Component\Security\Permission\PermissionConfig;
+use Fxp\Component\Security\Permission\PermissionFieldConfig;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -20,7 +20,7 @@ use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
- * @author François Pluchino <francois.pluchino@sonatra.com>
+ * @author François Pluchino <francois.pluchino@gmail.com>
  */
 class PermissionBuilder implements ExtensionBuilderInterface
 {
@@ -39,7 +39,7 @@ class PermissionBuilder implements ExtensionBuilderInterface
             }
         }
 
-        $container->getDefinition('sonatra_security.permission_manager')->replaceArgument(4, $configs);
+        $container->getDefinition('fxp_security.permission_manager')->replaceArgument(4, $configs);
         BuilderUtils::loadProvider($loader, $config, 'permission');
         $this->buildDoctrineOrmChecker($container, $loader, $config);
     }
@@ -174,7 +174,7 @@ class PermissionBuilder implements ExtensionBuilderInterface
         $def = new Definition($class, $arguments);
         $def->setPublic(false);
 
-        $id = 'sonatra_security.permission_config.'.strtolower(str_replace('\\', '_', $type));
+        $id = 'fxp_security.permission_config.'.strtolower(str_replace('\\', '_', $type));
 
         if (null !== $field) {
             $id .= '.fields.'.$field;

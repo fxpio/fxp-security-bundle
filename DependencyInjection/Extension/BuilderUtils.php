@@ -1,21 +1,21 @@
 <?php
 
 /*
- * This file is part of the Sonatra package.
+ * This file is part of the Fxp package.
  *
- * (c) François Pluchino <francois.pluchino@sonatra.com>
+ * (c) François Pluchino <francois.pluchino@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Bundle\SecurityBundle\DependencyInjection\Extension;
+namespace Fxp\Bundle\SecurityBundle\DependencyInjection\Extension;
 
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
- * @author François Pluchino <francois.pluchino@sonatra.com>
+ * @author François Pluchino <francois.pluchino@gmail.com>
  */
 abstract class BuilderUtils
 {
@@ -29,12 +29,12 @@ abstract class BuilderUtils
      */
     public static function validate(ContainerBuilder $container, $config, $service, $package)
     {
-        $missingServices = $container->hasParameter('sonatra_security.missing_services')
-            ? $container->getParameter('sonatra_security.missing_services')
+        $missingServices = $container->hasParameter('fxp_security.missing_services')
+            ? $container->getParameter('fxp_security.missing_services')
             : array();
 
         $missingServices[$config] = array($service, $package);
-        $container->setParameter('sonatra_security.missing_services', $missingServices);
+        $container->setParameter('fxp_security.missing_services', $missingServices);
     }
 
     /**

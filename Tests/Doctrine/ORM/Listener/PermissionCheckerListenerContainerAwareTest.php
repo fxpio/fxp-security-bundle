@@ -1,20 +1,20 @@
 <?php
 
 /*
- * This file is part of the Sonatra package.
+ * This file is part of the Fxp package.
  *
- * (c) François Pluchino <francois.pluchino@sonatra.com>
+ * (c) François Pluchino <francois.pluchino@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Bundle\SecurityBundle\Tests\Doctrine\ORM\Listener;
+namespace Fxp\Bundle\SecurityBundle\Tests\Doctrine\ORM\Listener;
 
 use Doctrine\ORM\Event\OnFlushEventArgs;
+use Fxp\Bundle\SecurityBundle\Doctrine\ORM\Listener\PermissionCheckerListenerContainerAware;
+use Fxp\Component\Security\Permission\PermissionManagerInterface;
 use PHPUnit\Framework\TestCase;
-use Sonatra\Bundle\SecurityBundle\Doctrine\ORM\Listener\PermissionCheckerListenerContainerAware;
-use Sonatra\Component\Security\Permission\PermissionManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
@@ -22,7 +22,7 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 /**
  * Object Filter Listener Container Aware Tests.
  *
- * @author François Pluchino <francois.pluchino@sonatra.com>
+ * @author François Pluchino <francois.pluchino@gmail.com>
  */
 class PermissionCheckerListenerContainerAwareTest extends TestCase
 {
@@ -47,7 +47,7 @@ class PermissionCheckerListenerContainerAwareTest extends TestCase
 
         $container->expects($this->at(2))
             ->method('get')
-            ->with('sonatra_security.permission_manager')
+            ->with('fxp_security.permission_manager')
             ->willReturn($permissionManager);
 
         $listener = new PermissionCheckerListenerContainerAware();

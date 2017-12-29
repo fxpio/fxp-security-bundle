@@ -1,21 +1,21 @@
 <?php
 
 /*
- * This file is part of the Sonatra package.
+ * This file is part of the Fxp package.
  *
- * (c) François Pluchino <francois.pluchino@sonatra.com>
+ * (c) François Pluchino <francois.pluchino@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace Sonatra\Bundle\SecurityBundle\DependencyInjection\Extension;
+namespace Fxp\Bundle\SecurityBundle\DependencyInjection\Extension;
 
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
- * @author François Pluchino <francois.pluchino@sonatra.com>
+ * @author François Pluchino <francois.pluchino@gmail.com>
  */
 class ObjectFilterBuilder implements ExtensionBuilderInterface
 {
@@ -26,7 +26,7 @@ class ObjectFilterBuilder implements ExtensionBuilderInterface
     {
         if ($config['object_filter']['enabled']) {
             $loader->load('object_filter.xml');
-            $container->getDefinition('sonatra_security.object_filter')->addMethodCall('setExcludedClasses', array($config['object_filter']['excluded_classes']));
+            $container->getDefinition('fxp_security.object_filter')->addMethodCall('setExcludedClasses', array($config['object_filter']['excluded_classes']));
 
             // doctrine orm object filter voters
             if ($config['doctrine']['orm']['object_filter_voter']) {
