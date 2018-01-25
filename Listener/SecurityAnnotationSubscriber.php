@@ -112,6 +112,13 @@ class SecurityAnnotationSubscriber implements EventSubscriberInterface
         return $variables;
     }
 
+    /**
+     * Get the variables for request.
+     *
+     * @param Request $request The request
+     *
+     * @return array
+     */
     private function getRequestVariables(Request $request)
     {
         $variables = [];
