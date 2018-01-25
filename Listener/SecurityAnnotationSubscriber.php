@@ -14,6 +14,7 @@ namespace Fxp\Bundle\SecurityBundle\Listener;
 use Fxp\Bundle\SecurityBundle\Configuration\Security;
 use Fxp\Component\Security\Event\GetExpressionVariablesEvent;
 use Fxp\Component\Security\ExpressionVariableEvents;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\ExpressionLanguage\ExpressionFunctionProviderInterface;
@@ -48,19 +49,27 @@ class SecurityAnnotationSubscriber implements EventSubscriberInterface
     private $expressionLanguage;
 
     /**
+     * @var LoggerInterface|null
+     */
+    private $logger;
+
+    /**
      * Constructor.
      *
      * @param EventDispatcherInterface $dispatcher         The event dispatcher
      * @param TokenStorageInterface    $tokenStorage       The token storage
      * @param ExpressionLanguage       $expressionLanguage The expression language
+     * @param LoggerInterface|null     $logger             The logger
      */
     public function __construct(EventDispatcherInterface $dispatcher,
                                 TokenStorageInterface $tokenStorage,
-                                ExpressionLanguage $expressionLanguage)
+                                ExpressionLanguage $expressionLanguage,
+                                LoggerInterface $logger = null)
     {
         $this->dispatcher = $dispatcher;
         $this->tokenStorage = $tokenStorage;
         $this->expressionLanguage = $expressionLanguage;
+        $this->logger = $logger;
     }
 
     /**
@@ -141,10 +150,11 @@ class SecurityAnnotationSubscriber implements EventSubscriberInterface
 
         $variables = array_merge([
             'object' => $request,
+            'subject' => $request,
             'request' => $request,
-        ], $event->getVariables(), $this->getRequestVariables($request));
+        ], $event->getVariables());
 
-        return $variables;
+        return $this->mergeRequestVariables($variables, $this->getRequestVariables($request));
     }
 
     /**
@@ -165,5 +175,33 @@ class SecurityAnnotationSubscriber implements EventSubscriberInterface
         }
 
         return $variables;
+    }
+
+    /**
+     * Validate and merge the request variables with the built-in security variables.
+     *
+     * @param array $variables
+     * @param array $requestVariables
+     *
+     * @return array
+     */
+    private function mergeRequestVariables(array $variables, array $requestVariables)
+    {
+        if ($diff = array_intersect(array_keys($variables), array_keys($requestVariables))) {
+            foreach ($diff as $key => $variableName) {
+                if ($variables[$variableName] === $requestVariables[$variableName]) {
+                    unset($diff[$key]);
+                }
+            }
+
+            if ($diff) {
+                $singular = 1 === count($diff);
+                if (null !== $this->logger) {
+                    $this->logger->warning(sprintf('Controller argument%s "%s" collided with the built-in Fxp Security expression variables. The built-in value%s are being used for the @Security expression.', $singular ? '' : 's', implode('", "', $diff), $singular ? 's' : ''));
+                }
+            }
+        }
+
+        return array_merge($requestVariables, $variables);
     }
 }
