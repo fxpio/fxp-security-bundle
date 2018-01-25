@@ -15,6 +15,7 @@ use Fxp\Component\Security\Event\GetExpressionVariablesEvent;
 use Fxp\Component\Security\ExpressionVariableEvents;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\ExpressionLanguage\ExpressionFunctionProviderInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -59,6 +60,16 @@ class SecurityAnnotationSubscriber implements EventSubscriberInterface
         $this->dispatcher = $dispatcher;
         $this->tokenStorage = $tokenStorage;
         $this->expressionLanguage = $expressionLanguage;
+    }
+
+    /**
+     * Add the expression function provider.
+     *
+     * @param ExpressionFunctionProviderInterface $provider The expression function provider
+     */
+    public function addExpressionLanguageProvider(ExpressionFunctionProviderInterface $provider)
+    {
+        $this->expressionLanguage->registerProvider($provider);
     }
 
     /**

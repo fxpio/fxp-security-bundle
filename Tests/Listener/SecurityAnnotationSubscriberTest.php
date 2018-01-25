@@ -17,6 +17,7 @@ use Fxp\Component\Security\Event\GetExpressionVariablesEvent;
 use Fxp\Component\Security\ExpressionVariableEvents;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\ExpressionLanguage\ExpressionFunctionProviderInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
@@ -78,6 +79,18 @@ class SecurityAnnotationSubscriberTest extends TestCase
         );
 
         $this->assertCount(1, $this->listener->getSubscribedEvents());
+    }
+
+    public function testAddExpressionLanguageProvider()
+    {
+        /* @var ExpressionFunctionProviderInterface $provider */
+        $provider = $this->getMockBuilder(ExpressionFunctionProviderInterface::class)->getMock();
+
+        $this->expression->expects($this->once())
+            ->method('registerProvider')
+            ->with($provider);
+
+        $this->listener->addExpressionLanguageProvider($provider);
     }
 
     public function testOnKernelControllerWithoutAnnotation()

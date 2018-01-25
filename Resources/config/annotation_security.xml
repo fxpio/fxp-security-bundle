@@ -5,13 +5,15 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
+        <service id="fxp_security.annotation.expression_language" class="Symfony\Component\Security\Core\Authorization\ExpressionLanguage" />
+
         <!-- Security Annotation Subscriber -->
         <service id="fxp_security.subscriber.security_annotation"
                  class="Fxp\Bundle\SecurityBundle\Listener\SecurityAnnotationSubscriber">
             <tag name="kernel.event_subscriber" />
             <argument type="service" id="event_dispatcher" />
             <argument type="service" id="security.token_storage" />
-            <argument type="service" id="security.expression_language" />
+            <argument type="service" id="fxp_security.annotation.expression_language" />
         </service>
     </services>
 </container>
