@@ -28,6 +28,11 @@ class Security extends ConfigurationAnnotation
     protected $expression;
 
     /**
+     * @var bool
+     */
+    protected $override = false;
+
+    /**
      * Get the expression.
      *
      * @return string
@@ -58,6 +63,26 @@ class Security extends ConfigurationAnnotation
     }
 
     /**
+     * Define if the annotation override all previous security annotation.
+     *
+     * @param bool $override
+     */
+    public function setOverride($override)
+    {
+        $this->override = (bool) $override;
+    }
+
+    /**
+     * Check if the annotation override all previous security annotation.
+     *
+     * @return bool
+     */
+    public function isOverriding()
+    {
+        return $this->override;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getAliasName()
@@ -70,6 +95,6 @@ class Security extends ConfigurationAnnotation
      */
     public function allowArray()
     {
-        return false;
+        return true;
     }
 }

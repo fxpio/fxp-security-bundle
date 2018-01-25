@@ -30,8 +30,12 @@ class SecurityTest extends TestCase
         ]);
 
         $this->assertSame('fxp_security', $security->getAliasName());
-        $this->assertFalse($security->allowArray());
+        $this->assertTrue($security->allowArray());
+        $this->assertFalse($security->isOverriding());
         $this->assertSame($exp, $security->getExpression());
+
+        $security->setOverride(true);
+        $this->assertTrue($security->isOverriding());
 
         $security->setExpression($exp2);
         $this->assertSame($exp2, $security->getExpression());

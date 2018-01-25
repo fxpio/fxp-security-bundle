@@ -110,7 +110,7 @@ class SecurityAnnotationSubscriberTest extends TestCase
      */
     public function testOnKernelControllerWithoutToken()
     {
-        $request = $this->createRequest(new Security(['expression' => 'has_role("ROLE_ADMIN")']));
+        $request = $this->createRequest([new Security(['expression' => 'has_role("ROLE_ADMIN")'])]);
         $event = new FilterControllerEvent($this->kernel, $this->controller, $request, HttpKernelInterface::MASTER_REQUEST);
 
         $this->tokenStorage->expects($this->once())
@@ -123,7 +123,7 @@ class SecurityAnnotationSubscriberTest extends TestCase
     public function testOnKernelController()
     {
         $token = $this->getMockBuilder(TokenInterface::class)->getMock();
-        $request = $this->createRequest(new Security(['expression' => 'has_role("ROLE_ADMIN")']));
+        $request = $this->createRequest([new Security(['expression' => 'has_role("ROLE_ADMIN")'])]);
         $event = new FilterControllerEvent($this->kernel, $this->controller, $request, HttpKernelInterface::MASTER_REQUEST);
 
         $this->tokenStorage->expects($this->once())
@@ -151,7 +151,7 @@ class SecurityAnnotationSubscriberTest extends TestCase
     public function testOnKernelControllerWithRequestVariables()
     {
         $token = $this->getMockBuilder(TokenInterface::class)->getMock();
-        $request = $this->createRequest(new Security(['expression' => 'has_role("ROLE_ADMIN")']));
+        $request = $this->createRequest([new Security(['expression' => 'has_role("ROLE_ADMIN")'])]);
         $event = new FilterControllerEvent($this->kernel, $this->controller, $request, HttpKernelInterface::MASTER_REQUEST);
 
         $request->attributes->add([
@@ -191,7 +191,7 @@ class SecurityAnnotationSubscriberTest extends TestCase
     public function testOnKernelControllerWithAccessDeniedException()
     {
         $token = $this->getMockBuilder(TokenInterface::class)->getMock();
-        $request = $this->createRequest(new Security(['expression' => 'has_role("ROLE_ADMIN")']));
+        $request = $this->createRequest([new Security(['expression' => 'has_role("ROLE_ADMIN")'])]);
         $event = new FilterControllerEvent($this->kernel, $this->controller, $request, HttpKernelInterface::MASTER_REQUEST);
 
         $this->tokenStorage->expects($this->once())
@@ -216,14 +216,76 @@ class SecurityAnnotationSubscriberTest extends TestCase
         $this->listener->onKernelController($event);
     }
 
+    public function testOnKernelControllerWithMultipleAnnotations()
+    {
+        $token = $this->getMockBuilder(TokenInterface::class)->getMock();
+        $request = $this->createRequest([
+            new Security(['expression' => 'has_role("ROLE_USER")']),
+            new Security(['expression' => 'has_role("ROLE_ADMIN")']),
+        ]);
+        $event = new FilterControllerEvent($this->kernel, $this->controller, $request, HttpKernelInterface::MASTER_REQUEST);
+
+        $this->tokenStorage->expects($this->once())
+            ->method('getToken')
+            ->willReturn($token);
+
+        $this->dispatcher->addListener(ExpressionVariableEvents::GET, function (GetExpressionVariablesEvent $event) use ($token) {
+            $this->assertSame($token, $event->getToken());
+        });
+
+        $this->expression->expects($this->once())
+            ->method('evaluate')
+            ->with('(has_role("ROLE_USER")) and (has_role("ROLE_ADMIN"))', ['object' => $request, 'request' => $request])
+            ->willReturnCallback(function ($expression, $variables) {
+                $this->assertSame('(has_role("ROLE_USER")) and (has_role("ROLE_ADMIN"))', $expression);
+                $this->assertArrayHasKey('object', $variables);
+                $this->assertArrayHasKey('request', $variables);
+
+                return true;
+            });
+
+        $this->listener->onKernelController($event);
+    }
+
+    public function testOnKernelControllerWithOverridePreviousAnnotation()
+    {
+        $token = $this->getMockBuilder(TokenInterface::class)->getMock();
+        $request = $this->createRequest([
+            new Security(['expression' => 'has_role("ROLE_USER")']),
+            new Security(['expression' => 'has_role("ROLE_ADMIN")', 'override' => true]),
+        ]);
+        $event = new FilterControllerEvent($this->kernel, $this->controller, $request, HttpKernelInterface::MASTER_REQUEST);
+
+        $this->tokenStorage->expects($this->once())
+            ->method('getToken')
+            ->willReturn($token);
+
+        $this->dispatcher->addListener(ExpressionVariableEvents::GET, function (GetExpressionVariablesEvent $event) use ($token) {
+            $this->assertSame($token, $event->getToken());
+        });
+
+        $this->expression->expects($this->once())
+            ->method('evaluate')
+            ->with('has_role("ROLE_ADMIN")', ['object' => $request, 'request' => $request])
+            ->willReturnCallback(function ($expression, $variables) {
+                $this->assertSame('has_role("ROLE_ADMIN")', $expression);
+                $this->assertArrayHasKey('object', $variables);
+                $this->assertArrayHasKey('request', $variables);
+
+                return true;
+            });
+
+        $this->listener->onKernelController($event);
+    }
+
     /**
      * Create the request.
      *
-     * @param Security|null $security The security annotation
+     * @param Security[] $security The security annotations
      *
      * @return Request
      */
-    private function createRequest(Security $security = null)
+    private function createRequest(array $security = [])
     {
         return new Request([], [], [
             '_fxp_security' => $security,

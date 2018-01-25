@@ -11,6 +11,7 @@
 
 namespace Fxp\Bundle\SecurityBundle\Listener;
 
+use Fxp\Bundle\SecurityBundle\Configuration\Security;
 use Fxp\Component\Security\Event\GetExpressionVariablesEvent;
 use Fxp\Component\Security\ExpressionVariableEvents;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -89,7 +90,7 @@ class SecurityAnnotationSubscriber implements EventSubscriberInterface
     {
         $request = $event->getRequest();
 
-        if (!$configuration = $request->attributes->get('_fxp_security')) {
+        if (empty($expression = $this->getExpression($request))) {
             return;
         }
 
@@ -97,9 +98,32 @@ class SecurityAnnotationSubscriber implements EventSubscriberInterface
             throw new \LogicException('To use the @Security tag, your controller needs to be behind a firewall.');
         }
 
-        if (!$this->expressionLanguage->evaluate($configuration->getExpression(), $this->getVariables($token, $request))) {
+        if (!$this->expressionLanguage->evaluate($expression, $this->getVariables($token, $request))) {
             throw new AccessDeniedException();
         }
+    }
+
+    /**
+     * Get the expression.
+     *
+     * @param Request $request The request
+     *
+     * @return string
+     */
+    protected function getExpression(Request $request)
+    {
+        /* @var Security[] $configurations */
+        $configurations = $request->attributes->get('_fxp_security', []);
+        $expressions = [];
+
+        foreach ($configurations as $configuration) {
+            if ($configuration->isOverriding()) {
+                $expressions = [];
+            }
+            $expressions[] = $configuration->getExpression();
+        }
+
+        return count($expressions) > 1 ? '('.implode(') and (', $expressions).')' : implode('', $expressions);
     }
 
     /**
