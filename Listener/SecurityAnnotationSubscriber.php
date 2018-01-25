@@ -194,7 +194,7 @@ class SecurityAnnotationSubscriber implements EventSubscriberInterface
                 }
             }
 
-            if ($diff) {
+            if (!empty($diff)) {
                 $singular = 1 === count($diff);
                 if (null !== $this->logger) {
                     $this->logger->warning(sprintf('Controller argument%s "%s" collided with the built-in Fxp Security expression variables. The built-in value%s are being used for the @Security expression.', $singular ? '' : 's', implode('", "', $diff), $singular ? 's' : ''));
