@@ -49,6 +49,11 @@ class SecurityAnnotationSubscriber implements EventSubscriberInterface
     private $expressionLanguage;
 
     /**
+     * @var string|null
+     */
+    private $prefixRenameArguments;
+
+    /**
      * @var LoggerInterface|null
      */
     private $logger;
@@ -56,19 +61,22 @@ class SecurityAnnotationSubscriber implements EventSubscriberInterface
     /**
      * Constructor.
      *
-     * @param EventDispatcherInterface $dispatcher         The event dispatcher
-     * @param TokenStorageInterface    $tokenStorage       The token storage
-     * @param ExpressionLanguage       $expressionLanguage The expression language
-     * @param LoggerInterface|null     $logger             The logger
+     * @param EventDispatcherInterface $dispatcher            The event dispatcher
+     * @param TokenStorageInterface    $tokenStorage          The token storage
+     * @param ExpressionLanguage       $expressionLanguage    The expression language
+     * @param string|null              $prefixRenameArguments Check if the controller arguments can be renamed in conflict
+     * @param LoggerInterface|null     $logger                The logger
      */
     public function __construct(EventDispatcherInterface $dispatcher,
                                 TokenStorageInterface $tokenStorage,
                                 ExpressionLanguage $expressionLanguage,
+                                $prefixRenameArguments = null,
                                 LoggerInterface $logger = null)
     {
         $this->dispatcher = $dispatcher;
         $this->tokenStorage = $tokenStorage;
         $this->expressionLanguage = $expressionLanguage;
+        $this->prefixRenameArguments = $prefixRenameArguments;
         $this->logger = $logger;
     }
 
@@ -195,13 +203,33 @@ class SecurityAnnotationSubscriber implements EventSubscriberInterface
             }
 
             if (!empty($diff)) {
-                $singular = 1 === count($diff);
-                if (null !== $this->logger) {
-                    $this->logger->warning(sprintf('Controller argument%s "%s" collided with the built-in Fxp Security expression variables. The built-in value%s are being used for the @Security expression.', $singular ? '' : 's', implode('", "', $diff), $singular ? 's' : ''));
-                }
+                $requestVariables = $this->cleanRequestVariables($requestVariables, $diff);
             }
         }
 
         return array_merge($requestVariables, $variables);
+    }
+
+    /**
+     * Clean the request variables.
+     *
+     * @param array    $variables The request variables
+     * @param string[] $diff      The list of variable names in conflict
+     *
+     * @return array
+     */
+    private function cleanRequestVariables(array $variables, array $diff)
+    {
+        if (null !== $this->prefixRenameArguments) {
+            foreach ($diff as $name) {
+                $variables[$this->prefixRenameArguments.$name] = $variables[$name];
+                unset($variables[$name]);
+            }
+        } elseif (null !== $this->logger) {
+            $singular = 1 === count($diff);
+            $this->logger->warning(sprintf('Controller argument%s "%s" collided with the built-in Fxp Security expression variables. The built-in value%s are being used for the @Security expression.', $singular ? '' : 's', implode('", "', $diff), $singular ? 's' : ''));
+        }
+
+        return $variables;
     }
 }

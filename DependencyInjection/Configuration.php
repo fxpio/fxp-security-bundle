@@ -195,7 +195,14 @@ class Configuration implements ConfigurationInterface
         return NodeUtils::createArrayNode('annotations')
             ->addDefaultsIfNotSet()
             ->children()
-                ->scalarNode('security')->defaultFalse()->end()
+                ->arrayNode('security')
+                    ->addDefaultsIfNotSet()
+                    ->canBeEnabled()
+                    ->children()
+                        ->scalarNode('rename_arguments')->defaultTrue()->end()
+                        ->scalarNode('rename_arguments_prefix')->defaultValue('controller_argument_')->end()
+                    ->end()
+                ->end()
             ->end()
         ;
     }

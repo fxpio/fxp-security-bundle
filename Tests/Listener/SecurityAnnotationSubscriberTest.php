@@ -83,6 +83,7 @@ class SecurityAnnotationSubscriberTest extends TestCase
             $this->dispatcher,
             $this->tokenStorage,
             $this->expression,
+            null,
             $this->logger
         );
 
@@ -326,6 +327,57 @@ class SecurityAnnotationSubscriberTest extends TestCase
             ->with('Controller argument "token" collided with the built-in Fxp Security expression variables. The built-in values are being used for the @Security expression.');
 
         $this->listener->onKernelController($event);
+    }
+
+    public function testOnKernelControllerWithCollidedButRenamedVariables()
+    {
+        $token = $this->getMockBuilder(TokenInterface::class)->getMock();
+        $request = $this->createRequest([new Security(['expression' => 'has_role("ROLE_ADMIN")'])]);
+        $event = new FilterControllerEvent($this->kernel, $this->controller, $request, HttpKernelInterface::MASTER_REQUEST);
+
+        $this->tokenStorage->expects($this->once())
+            ->method('getToken')
+            ->willReturn($token);
+
+        $this->dispatcher->addListener(ExpressionVariableEvents::GET, function (GetExpressionVariablesEvent $event) use ($token) {
+            $this->assertSame($token, $event->getToken());
+            $event->addVariable('token', $token);
+        });
+
+        $this->expression->expects($this->once())
+            ->method('evaluate')
+            ->with('has_role("ROLE_ADMIN")', [
+                'object' => $request,
+                'request' => $request,
+                'subject' => $request,
+                'token' => $token,
+                'controller_argument_token' => 'duplicate_token_variable',
+            ])
+            ->willReturnCallback(function ($expression, $variables) {
+                $this->assertSame('has_role("ROLE_ADMIN")', $expression);
+                $this->assertArrayHasKey('object', $variables);
+                $this->assertArrayHasKey('request', $variables);
+                $this->assertArrayHasKey('subject', $variables);
+                $this->assertArrayHasKey('token', $variables);
+                $this->assertArrayHasKey('controller_argument_token', $variables);
+
+                return true;
+            });
+
+        $request->attributes->set('token', 'duplicate_token_variable');
+
+        $this->logger->expects($this->never())
+            ->method('warning');
+
+        $listener = new SecurityAnnotationSubscriber(
+            $this->dispatcher,
+            $this->tokenStorage,
+            $this->expression,
+            'controller_argument_',
+            $this->logger
+        );
+
+        $listener->onKernelController($event);
     }
 
     /**
