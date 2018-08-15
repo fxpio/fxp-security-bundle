@@ -106,7 +106,6 @@ use directly the model of the sharing.
 use AppBundle\Entity\Post;
 use AppBundle\Entity\Sharing;
 use AppBundle\Entity\User;
-use Doctrine\Common\Util\ClassUtils;
 use Fxp\Component\Security\Identity\SubjectIdentity;
 use Fxp\Component\Security\Identity\UserSecurityIdentity;
 
@@ -142,7 +141,6 @@ You can define permissions for each sharing entry:
 use AppBundle\Entity\Post;
 use AppBundle\Entity\Sharing;
 use AppBundle\Entity\User;
-use Doctrine\Common\Util\ClassUtils;
 use Fxp\Component\Security\Identity\SubjectIdentity;
 use Fxp\Component\Security\Identity\UserSecurityIdentity;
 
@@ -184,7 +182,6 @@ You can define roles for each sharing entry (user only):
 use AppBundle\Entity\Post;
 use AppBundle\Entity\Sharing;
 use AppBundle\Entity\User;
-use Doctrine\Common\Util\ClassUtils;
 use Fxp\Component\Security\Identity\RoleSecurityIdentity;
 use Fxp\Component\Security\Identity\SubjectIdentity;
 use Fxp\Component\Security\Identity\UserSecurityIdentity;
