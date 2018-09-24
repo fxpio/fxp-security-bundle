@@ -279,7 +279,9 @@ class Configuration implements ConfigurationInterface
             ->prototype('array')
                 ->addDefaultsIfNotSet()
                 ->beforeNormalization()
-                    ->ifArray()
+                    ->ifTrue(function ($v) {
+                        return is_array($v) && isset($v[0]);
+                    })
                     ->then(function ($v) {
                         return ['operations' => $v];
                     })
@@ -294,6 +296,7 @@ class Configuration implements ConfigurationInterface
                         ->normalizeKeys(false)
                         ->prototype('scalar')->end()
                     ->end()
+                    ->booleanNode('editable')->defaultNull()->end()
                 ->end()
             ->end()
         ;

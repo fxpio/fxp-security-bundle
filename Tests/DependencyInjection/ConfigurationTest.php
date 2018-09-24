@@ -91,6 +91,7 @@ class ConfigurationTest extends TestCase
         $this->assertArrayHasKey('name', $cConf['fields']);
         $this->assertArrayHasKey('operations', $cConf['fields']['name']);
         $this->assertSame($operations, $cConf['fields']['name']['operations']);
+        $this->assertNull($cConf['fields']['name']['editable']);
     }
 
     public function testPermissionMasterFieldMapping()
