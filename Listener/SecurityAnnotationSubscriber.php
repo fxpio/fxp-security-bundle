@@ -140,7 +140,7 @@ class SecurityAnnotationSubscriber implements EventSubscriberInterface
             $expressions[] = $configuration->getExpression();
         }
 
-        return count($expressions) > 1 ? '('.implode(') and (', $expressions).')' : implode('', $expressions);
+        return \count($expressions) > 1 ? '('.implode(') and (', $expressions).')' : implode('', $expressions);
     }
 
     /**
@@ -226,7 +226,7 @@ class SecurityAnnotationSubscriber implements EventSubscriberInterface
                 unset($variables[$name]);
             }
         } elseif (null !== $this->logger) {
-            $singular = 1 === count($diff);
+            $singular = 1 === \count($diff);
             $this->logger->warning(sprintf('Controller argument%s "%s" collided with the built-in Fxp Security expression variables. The built-in value%s are being used for the @Security expression.', $singular ? '' : 's', implode('", "', $diff), $singular ? 's' : ''));
         }
 

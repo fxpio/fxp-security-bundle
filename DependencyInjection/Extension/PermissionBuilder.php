@@ -135,8 +135,8 @@ class PermissionBuilder implements ExtensionBuilderInterface
      */
     private function buildDefaultPermissionConfigFields(\ReflectionClass $ref, array $config, array $defaultPerms)
     {
-        $hasFields = count($config['fields']) > 0;
-        $hasDefaults = count($defaultPerms) > 0;
+        $hasFields = \count($config['fields']) > 0;
+        $hasDefaults = \count($defaultPerms) > 0;
         $buildField = $config['build_fields'] && !$hasFields;
         $buildDefaultField = $config['build_default_fields'] && $hasDefaults;
 

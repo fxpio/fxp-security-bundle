@@ -57,7 +57,7 @@ class ExpressionVariableStoragePass implements CompilerPassInterface
      */
     private function buildValue(ContainerBuilder $container, $serviceId, $value)
     {
-        if (is_string($value) && 0 === strpos($value, '@')) {
+        if (\is_string($value) && 0 === strpos($value, '@')) {
             $value = ltrim($value, '@');
             $optional = 0 === strpos($value, '?');
             $value = ltrim($value, '?');

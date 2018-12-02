@@ -35,7 +35,7 @@ class ValidationPass implements CompilerPassInterface
 
         $xmlMappings = $this->getValidatorMappingFiles($container);
 
-        if (count($xmlMappings) > 0) {
+        if (\count($xmlMappings) > 0) {
             $container->getDefinition('validator.builder')
                 ->addMethodCall('addXmlMappings', [$xmlMappings]);
         }
@@ -53,7 +53,7 @@ class ValidationPass implements CompilerPassInterface
         $files = [];
 
         $reflection = new \ReflectionClass(PermissionEvents::class);
-        $dirname = dirname($reflection->getFileName());
+        $dirname = \dirname($reflection->getFileName());
 
         if (is_dir($dir = $dirname.'/Resources/config/validation')) {
             foreach (Finder::create()->files()->in($dir)->name('*.xml') as $file) {

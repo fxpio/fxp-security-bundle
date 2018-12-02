@@ -114,7 +114,7 @@ class AccessControlPass implements CompilerPassInterface
 
         // only add arguments that are necessary
         $arguments = [$path, $host, $methods, $ip, $attributes];
-        while (count($arguments) > 0 && !end($arguments)) {
+        while (\count($arguments) > 0 && !end($arguments)) {
             array_pop($arguments);
         }
 

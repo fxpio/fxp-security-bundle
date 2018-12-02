@@ -39,9 +39,9 @@ class ObjectFilterPass implements CompilerPassInterface
         }
 
         // sort by priority and flatten
-        if (count($voters) > 0) {
+        if (\count($voters) > 0) {
             krsort($voters);
-            $voters = call_user_func_array('array_merge', $voters);
+            $voters = \call_user_func_array('array_merge', $voters);
         }
 
         $container->getDefinition('fxp_security.object_filter.extension')->replaceArgument(0, $voters);

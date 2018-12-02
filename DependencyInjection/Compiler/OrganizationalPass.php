@@ -64,7 +64,7 @@ class OrganizationalPass implements CompilerPassInterface
         $definition = $container->getDefinition($serviceId);
         $interfaces = class_implements($definition->getClass());
 
-        if (!in_array(OrganizationalContextInterface::class, $interfaces)) {
+        if (!\in_array(OrganizationalContextInterface::class, $interfaces)) {
             $msg = 'The service "%s" must implement the %s';
             throw new InvalidConfigurationException(sprintf($msg, $serviceId, OrganizationalContextInterface::class));
         }

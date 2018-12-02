@@ -36,8 +36,8 @@ class TranslatorPass implements CompilerPassInterface
         $translator = $container->getDefinition('translator.default');
         $xlfTranslations = $this->getTranslationFiles($container);
 
-        if (count($xlfTranslations) > 0) {
-            $optionsArgumentIndex = count($translator->getArguments()) - 1;
+        if (\count($xlfTranslations) > 0) {
+            $optionsArgumentIndex = \count($translator->getArguments()) - 1;
             $options = array_merge_recursive(
                 $translator->getArgument($optionsArgumentIndex),
                 ['resource_files' => $xlfTranslations]
@@ -57,7 +57,7 @@ class TranslatorPass implements CompilerPassInterface
     private function getTranslationFiles(ContainerBuilder $container)
     {
         $reflection = new \ReflectionClass(PermissionEvents::class);
-        $dirname = dirname($reflection->getFileName());
+        $dirname = \dirname($reflection->getFileName());
         $files = [];
 
         if (is_dir($dir = $dirname.'/Resources/config/translations')) {

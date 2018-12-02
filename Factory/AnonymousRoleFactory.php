@@ -40,7 +40,7 @@ class AnonymousRoleFactory extends AbstractRoleFactory
             ->addDefaultsIfNotSet()
             ->beforeNormalization()
                 ->ifTrue(function ($v) {
-                    return is_bool($v) || is_string($v);
+                    return \is_bool($v) || \is_string($v);
                 })
                 ->then(function ($v) {
                     return ['role' => $this->getAnonymousRole($v)];
@@ -60,7 +60,7 @@ class AnonymousRoleFactory extends AbstractRoleFactory
             $v = 'ROLE_ANONYMOUS';
         }
 
-        return is_string($v)
+        return \is_string($v)
             ? $v
             : null;
     }

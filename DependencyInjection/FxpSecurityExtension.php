@@ -46,7 +46,7 @@ class FxpSecurityExtension extends Extension
         $config = $this->processConfiguration($configuration, $configs);
 
         $ref = new \ReflectionClass($this);
-        $configPath = dirname(dirname($ref->getFileName())).'/Resources/config';
+        $configPath = \dirname(\dirname($ref->getFileName())).'/Resources/config';
         $loader = new Loader\XmlFileLoader($container, new FileLocator($configPath));
 
         foreach ($this->getExtensionBuilders() as $extensionBuilder) {

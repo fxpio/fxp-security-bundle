@@ -55,7 +55,7 @@ class ValidationPassTest extends TestCase
     public function testProcess()
     {
         $reflection = new \ReflectionClass(PermissionEvents::class);
-        $dirname = dirname($reflection->getFileName());
+        $dirname = \dirname($reflection->getFileName());
         $permissionFile = realpath($dirname.'/Resources/config/validation/Permission.xml');
         $sharingFile = realpath($dirname.'/Resources/config/validation/Sharing.xml');
 

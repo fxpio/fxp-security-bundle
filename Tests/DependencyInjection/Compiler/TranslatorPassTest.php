@@ -55,7 +55,7 @@ class TranslatorPassTest extends TestCase
     public function testProcess()
     {
         $reflection = new \ReflectionClass(PermissionEvents::class);
-        $dirname = dirname($reflection->getFileName());
+        $dirname = \dirname($reflection->getFileName());
         $file = realpath($dirname.'/Resources/config/translations/validators.en.xlf');
 
         $this->assertFileExists($file);

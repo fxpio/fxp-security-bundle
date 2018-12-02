@@ -280,7 +280,7 @@ class Configuration implements ConfigurationInterface
                 ->addDefaultsIfNotSet()
                 ->beforeNormalization()
                     ->ifTrue(function ($v) {
-                        return is_array($v) && isset($v[0]);
+                        return \is_array($v) && isset($v[0]);
                     })
                     ->then(function ($v) {
                         return ['operations' => $v];

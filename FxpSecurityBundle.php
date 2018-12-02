@@ -93,7 +93,7 @@ class FxpSecurityBundle extends Bundle
             $container->addCompilerPass(
                 DoctrineOrmMappingsPass::createXmlMappingDriver(
                     [
-                        realpath(dirname($ref->getFileName()).'/Resources/config/doctrine/model') => 'Fxp\Component\Security\Model',
+                        realpath(\dirname($ref->getFileName()).'/Resources/config/doctrine/model') => 'Fxp\Component\Security\Model',
                     ],
                     [],
                     'fxp_security.backend_type_orm'
