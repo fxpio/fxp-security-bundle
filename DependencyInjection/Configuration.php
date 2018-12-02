@@ -14,6 +14,7 @@ namespace Fxp\Bundle\SecurityBundle\DependencyInjection;
 use Fxp\Component\Security\Model\PermissionInterface;
 use Fxp\Component\Security\Model\SharingInterface;
 use Fxp\Component\Security\SharingVisibilities;
+use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\NodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
@@ -30,8 +31,9 @@ class Configuration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('fxp_security');
+        $treeBuilder = new TreeBuilder('fxp_security');
+        /* @var ArrayNodeDefinition $rootNode */
+        $rootNode = $treeBuilder->getRootNode();
         $supportedDrivers = ['orm', 'custom'];
 
         $rootNode
