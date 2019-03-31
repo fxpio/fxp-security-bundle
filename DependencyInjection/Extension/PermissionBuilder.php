@@ -117,7 +117,7 @@ class PermissionBuilder implements ExtensionBuilderInterface
                 $field,
                 $fieldConfig['operations'],
                 $fieldConfig['mapping_permissions'],
-                array_key_exists('editable', $fieldConfig) ? $fieldConfig['editable'] : null,
+                \array_key_exists('editable', $fieldConfig) ? $fieldConfig['editable'] : null,
             ], $field);
         }
 

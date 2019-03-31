@@ -9,8 +9,7 @@
         <service id="fxp_security.sharing_provider"
                  class="Fxp\Component\Security\Doctrine\ORM\Provider\SharingProvider"
                  public="false">
-            <argument type="expression">service('doctrine').getManagerForClass(parameter('fxp_security.role_class')).getRepository(parameter('fxp_security.role_class'))</argument>
-            <argument type="expression">service('doctrine').getManagerForClass(parameter('fxp_security.sharing_class')).getRepository(parameter('fxp_security.sharing_class'))</argument>
+            <argument type="service" id="doctrine"/>
             <argument type="service" id="fxp_security.security_identity_manager"/>
             <argument type="service" id="security.token_storage"/>
         </service>

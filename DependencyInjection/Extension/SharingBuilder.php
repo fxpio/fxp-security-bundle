@@ -11,7 +11,6 @@
 
 namespace Fxp\Bundle\SecurityBundle\DependencyInjection\Extension;
 
-use Fxp\Component\Security\Model\SharingInterface;
 use Fxp\Component\Security\Sharing\SharingIdentityConfig;
 use Fxp\Component\Security\Sharing\SharingSubjectConfig;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
@@ -31,7 +30,6 @@ class SharingBuilder implements ExtensionBuilderInterface
     public function build(ContainerBuilder $container, LoaderInterface $loader, array $config)
     {
         if ($config['sharing']['enabled']) {
-            $container->setParameter('fxp_security.sharing_class', $this->validateSharingClass($config['sharing_class']));
             $loader->load('sharing.xml');
             $this->buildSharingConfigs($container, $config);
             BuilderUtils::loadProvider($loader, $config, 'sharing');
@@ -135,23 +133,6 @@ class SharingBuilder implements ExtensionBuilderInterface
 
             $loader->load('orm_listener_sharing_delete.xml');
         }
-    }
-
-    /**
-     * Validate the sharing class.
-     *
-     * @param string $class The class name
-     *
-     * @return string
-     */
-    private function validateSharingClass($class)
-    {
-        if (SharingInterface::class === $class || !class_exists($class)) {
-            $msg = 'The "fxp_security.sharing_class" config must be configured with a valid class';
-            throw new InvalidConfigurationException($msg);
-        }
-
-        return $class;
     }
 
     /**

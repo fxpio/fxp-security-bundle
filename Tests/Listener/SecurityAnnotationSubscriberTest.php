@@ -166,6 +166,7 @@ class SecurityAnnotationSubscriberTest extends TestCase
 
         $request->attributes->add([
             'foo' => 'bar',
+            'request' => $request,
         ]);
 
         $this->tokenStorage->expects($this->once())

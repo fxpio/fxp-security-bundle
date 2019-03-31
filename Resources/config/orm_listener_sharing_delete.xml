@@ -9,7 +9,6 @@
         <service id="fxp_security.orm.listener.sharing_delete"
                  class="Fxp\Bundle\SecurityBundle\Doctrine\ORM\Listener\SharingDeleteListenerContainerAware">
             <tag name="doctrine.event_subscriber" priority="1"/>
-            <argument>%fxp_security.sharing_class%</argument>
             <property name="container" type="service" id="service_container"/>
         </service>
     </services>

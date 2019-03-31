@@ -42,8 +42,5 @@ class ModelBuilder implements ExtensionBuilderInterface
         if ('custom' !== $config['db_driver']) {
             $container->setParameter($this->alias.'.backend_type_'.$config['db_driver'], true);
         }
-
-        $container->setParameter('fxp_security.role_class', $config['role_class']);
-        $container->setParameter('fxp_security.permission_class', $config['permission_class']);
     }
 }

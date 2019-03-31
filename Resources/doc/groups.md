@@ -1,48 +1,105 @@
-Using Groups with Fxp SecurityBundle
-========================================
+Using the groups
+================
 
-Allow the usage of groups in the Symfony Security Authorization Checker.
+Add the users and/or organizations in groups and allow the usage of groups in the
+Symfony Security Authorization Checker.
 
-This example requires `friendsofsymfony/user-bundle` as a dependency in
-a [Symfony Standard Edition](https://github.com/symfony/symfony-standard)
-project.
+## Installation
 
-### Configure the groups in FOS UserBundle
+### Step 1: Create the group model
 
-Follow the installation instructions in the [official documentation of Symfony]
-(https://symfony.com/doc/master/bundles/FOSUserBundle/groups.html).
+Run this command to create the Group entity:
 
-### Update your group model
+```
+$ php bin/console make:entity
 
-Add the `Fxp\Component\Security\Model\GroupInterface` into your group model:
+ Class name of the entity to create or update (e.g. BraveGnome):
+ > Group
+
+ created: src/Entity/Group.php
+ created: src/Repository/GroupRepository.php
+
+ Entity generated! Now let's add some fields!
+ You can always add more fields later manually or by re-running this command.
+
+ New property name (press <return> to stop adding fields):
+ >
+```
+
+To make your Group entity compatible with this bundle, you must update the entity by implementing the interface
+`Fxp\Component\Security\Model\GroupInterface` and the trait `Fxp\Component\Security\Model\Traits\GroupTrait` like:
 
 ```php
-// src/AppBundle/Entity/Group.php
-
-namespace AppBundle\Entity;
-
-use FOS\UserBundle\Model\Group as BaseGroup;
 use Fxp\Component\Security\Model\GroupInterface;
+use Fxp\Component\Security\Model\Traits\GroupTrait;
 
-class Group extends BaseGroup implements GroupInterface
+class Group implements GroupInterface
 {
-    //...
+    use GroupTrait;
+
+    // ...
 }
 ```
 
-### Configure your application's config.yml
-
-Add the following configuration to your `config.yml`.
+### Step 2: Enable the group for the security checker
 
 ```yaml
-# app/config/config.yml
+# config/packages/fxp_security.yaml
 fxp_security:
     security_voter:
         groupable: true # Enable to check the group in the Symfony Security Authorization Checker
 ```
 
-### Update your database schema
+```yaml
+# config/packages/doctrine.yaml``
+doctrine:
+    # ...
+    orm:
+        resolve_target_entities:
+            Fxp\Component\Security\Model\GroupInterface: App\Entity\Group # the FQCN of your group entity
+```
 
-```bash
-$ php bin/console doctrine:schema:update --force
+### Step 3: Add the groups in the user model
+
+To make your User entity compatible with the groups, you must update the entity by implementing the interface
+`Fxp\Component\Security\Model\Traits\EditGroupableInterface` and the trait
+`Fxp\Component\Security\Model\Traits\EditGroupableTrait` like:
+
+```php
+use Fxp\Component\Security\Model\Traits\EditGroupableInterface;
+use Fxp\Component\Security\Model\Traits\EditGroupableTrait;
+
+class User implements UserInterface, EditGroupableInterface
+{
+    use EditGroupableTrait;
+
+    // ...
+}
+```
+
+### Step 4: Add the groups in the organization user model (optional)
+
+To make your Organization User entity compatible with the groups, you must update the entity by implementing the interface
+`Fxp\Component\Security\Model\Traits\EditGroupableInterface` and the trait
+`Fxp\Component\Security\Model\Traits\EditGroupableTrait` like:
+
+```php
+use Fxp\Component\Security\Model\Traits\EditGroupableInterface;
+use Fxp\Component\Security\Model\Traits\EditGroupableTrait;
+
+class OrganizationUser implements OrganizationUserInterface, EditGroupableInterface
+{
+    use EditGroupableTrait;
+
+    // ...
+}
+```
+
+### Step 5: Update the Doctrine schema
+
+Also, make sure to make and run a migration for the new entities:
+
+```
+$ php bin/console make:migration
+$ php bin/console doctrine:migrations:migrate
 ```

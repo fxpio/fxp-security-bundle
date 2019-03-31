@@ -1,295 +1,193 @@
 Getting Started
 ===============
 
-## Prerequisites
-
-This version of the bundle requires Symfony 3.3+.
-
-This example requires `friendsofsymfony/user-bundle` as a dependency in
-a [Symfony Standard Edition](https://github.com/symfony/symfony-standard)
-project.
-
 ## Installation
 
-1. Download and install FOS UserBundle
-2. Download the bundle using composer
-3. Enable the bundle
-4. Update your user model
-5. Create the role model
-6. Create the permission model
-7. Configure your application's config.yml
-8. Configure and initialize the permissions
+1. Install the bundle
+2. Create or update your user model
+3. Create the role model
+4. Create the permission model
+5. Configure your application
 
-### Step 1: Download and install FOS UserBundle
+### Step 1: Install the bundle
 
-Follow the installation instructions in the [official documentation of Symfony]
-(https://symfony.com/doc/master/bundles/FOSUserBundle/index.html).
-
-### Step 2: Download the bundle using composer
-
-Add Fxp SecurityBundle in your composer.json:
+In applications using [Symfony Flex](https://symfony.com/doc/current/setup/flex.html), run this command to install
+the security feature before using it:
 
 ```
-$ composer require fxp/security-bundle:"^1.0.0" fxp/doctrine-extensions:"^1.0.0"
+$ composer require fxp/security-bundle
 ```
 
-Composer will install the bundle to your project's `vendor/fxp` directory.
+### Step 2: Create your user model
 
-> **Note:**
->
-> Because this example enable all features, you must add the dependency
-> `fxp/doctrine-extensions` to use role hierarchy and sharing features.
+If you have already created a user entity by following the [official documentation of Symfony]
+(https://symfony.com/doc/current/security.html), you can skip this section, otherwise, run this command:
 
-### Step 3: Enable the bundle
+```
+$ php bin/console make:user
 
-Enable the bundle in the kernel:
+ The name of the security user class (e.g. User) [User]:
+ > User
+
+ Do you want to store user data in the database (via Doctrine)? (yes/no) [yes]:
+ > yes
+
+ Enter a property name that will be the unique "display" name for the user (e.g. email, username, uuid) [email]:
+ > email
+
+ Will this app need to hash/check user passwords? Choose No if passwords are not needed or will be checked/hashed by some other system (e.g. a single sign-on server).
+
+ Does this app need to hash/check user passwords? (yes/no) [yes]:
+ > yes
+
+ created: src/Entity/User.php
+ created: src/Repository/UserRepository.php
+ updated: src/Entity/User.php
+ updated: config/packages/security.yaml
+```
+
+**Make the User entity compatible with this bundle**
+
+To make your User entity compatible with this bundle, you must update the entity by implementing the interface
+`Fxp\Component\Security\Model\UserInterface` and the trait `Fxp\Component\Security\Model\Traits\RoleableTrait` like:
 
 ```php
-// app/AppKernel.php
-
-public function registerBundles()
-{
-    $bundles = array(
-        // ...
-        new Fxp\Bundle\SecurityBundle\FxpSecurityBundle(),
-    );
-}
-```
-
-### Step 4: Update your user model
-
-Add the `Fxp\Component\Security\Model\UserInterface` into your group model:
-
-```php
-// src/AppBundle/Entity/User.php
-
-namespace AppBundle\Entity;
-
-use FOS\UserBundle\Model\User as BaseUser;
+use Fxp\Component\Security\Model\Traits\RoleableTrait;
 use Fxp\Component\Security\Model\UserInterface;
 
-class User extends BaseUser implements UserInterface
+class User implements UserInterface
 {
-    //...
+    use RoleableTrait;
+
+    // ...
 }
 ```
 
-### Step 5: Create the role model
+Otherwise, you must remove the `$roles` property and the `getRoles()` and `setRoles()` methods, because this property
+and methods are already defined in the `RoleableTrait` trait with the specific logic for this bundle.
 
-#### Create the role class
+### Step 3: Create the role model
 
-``` php
-// src/AppBundle/Entity/Role.php
+Run this command to create the Role entity:
 
-namespace AppBundle\Entity;
+```
+$ php bin/console make:entity
 
-use Fxp\Component\Security\Model\Role as BaseRole;
+ Class name of the entity to create or update (e.g. BraveGnome):
+ > Role
 
-class Role extends BaseRole
+ created: src/Entity/Role.php
+ created: src/Repository/RoleRepository.php
+
+ Entity generated! Now let's add some fields!
+ You can always add more fields later manually or by re-running this command.
+
+ New property name (press <return> to stop adding fields):
+ >
+```
+
+To make your Role entity compatible with this bundle, you must update the entity by implementing the interface
+`Fxp\Component\Security\Model\RoleInterface` and the trait `Fxp\Component\Security\Model\Traits\RoleTrait` like:
+
+```php
+use Fxp\Component\Security\Model\RoleInterface;
+use Fxp\Component\Security\Model\Traits\RoleTrait;
+
+class Role implements RoleInterface
 {
+    use RoleTrait;
+
+    // ...
 }
 ```
 
-#### Create the role mapping
+### Step 4: Create the permission model
 
-```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
-                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
-                  http://raw.github.com/doctrine/doctrine2/master/doctrine-mapping.xsd">
+Run this command to create the Permission entity:
 
-    <entity name="AppBundle\Entity\Role" table="core_role">
-        <id name="id" type="integer" column="id">
-            <generator strategy="AUTO"/>
-        </id>
+```
+$ php bin/console make:entity
 
-        <many-to-many field="parents" target-entity="Role" mapped-by="children" />
+ Class name of the entity to create or update (e.g. BraveGnome):
+ > Permission
 
-        <many-to-many field="children" target-entity="Role" inversed-by="parents">
-            <join-table name="core_role_children">
-                <join-columns>
-                    <join-column name="role_id" referenced-column-name="id" />
-                </join-columns>
-                <inverse-join-columns>
-                    <join-column name="children_role_id" referenced-column-name="id" />
-                </inverse-join-columns>
-            </join-table>
-        </many-to-many>
+ created: src/Entity/Permission.php
+ created: src/Repository/PermissionRepository.php
 
-        <many-to-many field="permissions" target-entity="Permission" inversed-by="roles">
-            <join-table name="core_role_permission">
-                <join-columns>
-                    <join-column name="role_id" referenced-column-name="id" />
-                </join-columns>
-                <inverse-join-columns>
-                    <join-column name="permission_id" referenced-column-name="id" />
-                </inverse-join-columns>
-            </join-table>
-        </many-to-many>
+ Entity generated! Now let's add some fields!
+ You can always add more fields later manually or by re-running this command.
 
-    </entity>
-</doctrine-mapping>
+ New property name (press <return> to stop adding fields):
+ >
 ```
 
-### Step 6: Create the permission model
+To make your Permission entity compatible with this bundle, you must update the entity by implementing the interface
+`Fxp\Component\Security\Model\PermissionInterface`, the trait `Fxp\Component\Security\Model\Traits\PermissionTrait` and
+the Doctrine indexes/constraints like:
 
-#### Create the permission class
+```php
+use Doctrine\ORM\Mapping as ORM;
+use Fxp\Component\Security\Model\PermissionInterface;
+use Fxp\Component\Security\Model\Traits\PermissionTrait;
 
-``` php
-// src/AppBundle/Entity/Permission.php
-
-namespace AppBundle\Entity;
-
-use Fxp\Component\Security\Model\Permission as BasePermission;
-
-class Permission extends BasePermission
+/**
+ * ...
+ *
+ * @ORM\Table(
+ *     indexes={
+ *         @ORM\Index(name="idx_permission_operation", columns={"operation"}),
+ *         @ORM\Index(name="idx_permission_class", columns={"class"}),
+ *         @ORM\Index(name="idx_permission_field", columns={"field"})
+ *     },
+ *     uniqueConstraints={
+ *         @ORM\UniqueConstraint(name="uniq_permission", columns={"operation", "class", "field"})
+ *     }
+ * )
+ */
+class Permission implements PermissionInterface
 {
+    use PermissionTrait;
+
+    // ...
 }
 ```
 
-#### Create the permission mapping
+### Step 5: Configure your application
 
-```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
-                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
-                  http://raw.github.com/doctrine/doctrine2/master/doctrine-mapping.xsd">
-
-    <entity name="AppBundle\Entity\Permission" table="core_permission">
-        <id name="id" type="integer" column="id">
-            <generator strategy="AUTO"/>
-        </id>
-
-        <many-to-many field="roles" mapped-by="permissions" target-entity="Role"/>
-
-        <many-to-many field="sharingEntries" mapped-by="permissions" target-entity="Sharing"/>
-    </entity>
-</doctrine-mapping>
-```
-
-### Step 7: Create the sharing model
-
-#### Create the sharing class
-
-``` php
-// src/AppBundle/Entity/Sharing.php
-
-namespace AppBundle\Entity;
-
-use Fxp\Component\Security\Model\Sharing as BaseSharing;
-
-class Sharing extends BaseSharing
-{
-}
-```
-
-#### Create the sharing mapping
-
-```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
-                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
-                  http://raw.github.com/doctrine/doctrine2/master/doctrine-mapping.xsd">
-
-    <entity name="AppBundle\Entity\Sharing" table="core_sharing">
-        <id name="id" type="integer" column="id">
-            <generator strategy="AUTO"/>
-        </id>
-
-        <field name="subjectId" column="subject_id" type="integer" />
-
-        <field name="identityId" column="identity_id" type="integer" />
-
-        <many-to-many field="permissions" target-entity="Permission" inversed-by="sharingEntries">
-            <join-table name="core_sharing_permission">
-                <join-columns>
-                    <join-column name="sharing_id" referenced-column-name="id" />
-                </join-columns>
-                <inverse-join-columns>
-                    <join-column name="permission_id" referenced-column-name="id" />
-                </inverse-join-columns>
-            </join-table>
-        </many-to-many>
-    </entity>
-</doctrine-mapping>
-```
-
-### Step 8: Configure your application's config.yml
-
-Add the following configuration to your `config.yml`.
+Add the interface in Doctrine's target entities resolver:
 
 ```yaml
-# app/config/config.yml
-fxp_security:
-    role_class:                     AppBundle\Entity\Role
-    permission_class:               AppBundle\Entity\Permission
-    sharing_class:                  AppBundle\Entity\Sharing
-    object_filter:
-        enabled:                    true # Enable the object filter (optional)
-    role_hierarchy:
-        enabled:                    true # Enable the role hierarchy for organizational context (optional)
-        cache:                      null # Defined the service cache for role hierarchy (optional)
-    security_voter:
-        role_security_identity:     true # Override the Symfony Role Hierarchy Voter (optional)
-    sharing:
-        enabled:                    true # (optional)
-        identity_types:
-            AppBundle\Entity\User:
-                roleable:           true # (optional)
-            AppBundle\Entity\Role:
-                permissible:        true # (optional)
-    doctrine:
-        orm:
-            object_filter_voter:    true # Enable the Doctrine ORM Collection Object Filter (optional)
-            listeners:
-                permission_checker: true # Enable the Doctrine ORM Permission Checker Listener (optional)
-                object_filter:      true # Enable the Doctrine ORM Object Filter Listener(optional)
-                role_hierarchy:     true # Enable the Doctrine ORM listener of role hierarchy (optional)
-                private_sharing:    true # Enable the 'private' sharing filter type (optional)
-                sharing_delete:     true # Enable the auto sharing delete when the entity is deleted (optional)
-            filters:
-                sharing:            true # Enable the Doctrine ORM SQL Filter for sharing the entities (optional)
+# config/packages/doctrine.yaml``
 doctrine:
+    # ...
     orm:
-        entity_managers:
-            default:
-                filters:
-                    fxp_sharing:     # Enable the SQL Filter for sharing (optional)
-                        class:      Fxp\Component\Security\Doctrine\ORM\Filter\SharingFilter
-                        enabled:    true
+        resolve_target_entities:
+            Fxp\Component\Security\Model\UserInterface: App\Entity\User # the FQCN of your user entity
+            Fxp\Component\Security\Model\RoleInterface: App\Entity\Role # the FQCN of your role entity
+            Fxp\Component\Security\Model\PermissionInterface: App\Entity\Permission # the FQCN of your permission entity
 ```
 
-> **Note:**
->
-> If you use the role hierarchy or sharing, you must add the optional dependency `fxp/doctrine-extensions`
+Also, make sure to make and run a migration for the new entities:
 
-### Step 9: Configure and initialize the permissions
-
-#### Update your database schema
-
-```bash
-$ php bin/console doctrine:schema:update --force
+```
+$ php bin/console make:migration
+$ php bin/console doctrine:migrations:migrate
 ```
 
-### Next Steps
-
-You can override the default configuration adding `fxp_security` tree in `app/config/config.yml`.
-To get an overview off all the available Fxp Security configuration options, execute the command:
-
-```bash
-$ php bin/console config:dump-reference FxpSecurityBundle
-```
+## Next Steps
 
 Now that you have completed the basic installation and configuration of the
 Fxp SecurityBundle, you are ready to learn more about using this bundle.
 
 The following documents are available:
 
-- [Using Groups with Fxp SecurityBundle](groups.md)
-- [Using cache with Fxp CacheBundle](cache.md)
-- [Using permissions](permissions.md)
+- [Using the permissions](permissions.md)
+- [Using the security expressions](expressions.md)
+- [Using the security annotations](annotations.md)
+- [Using the role hierarchy](role_hierarchy.md)
+- [Using the groups](groups.md)
 - [Using the sharing entries](sharing.md)
-- [Using Organizations](organizations.md)
+- [Using the organizations](organizations.md)
+- [Using the object filter](object_filter.md)
+- [Using the anonymous role](anonymous_role.md)
+- [Using the host role](host_role.md)

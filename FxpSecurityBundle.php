@@ -11,7 +11,6 @@
 
 namespace Fxp\Bundle\SecurityBundle;
 
-use Doctrine\Bundle\DoctrineBundle\DependencyInjection\Compiler\DoctrineOrmMappingsPass;
 use Fxp\Bundle\SecurityBundle\DependencyInjection\Compiler\AccessControlPass;
 use Fxp\Bundle\SecurityBundle\DependencyInjection\Compiler\AddExpressionLanguageProvidersPass;
 use Fxp\Bundle\SecurityBundle\DependencyInjection\Compiler\ConfigDependencyValidationPass;
@@ -24,7 +23,6 @@ use Fxp\Bundle\SecurityBundle\DependencyInjection\SecurityExtension;
 use Fxp\Bundle\SecurityBundle\Factory\AnonymousRoleFactory;
 use Fxp\Bundle\SecurityBundle\Factory\HostRoleFactory;
 use Fxp\Component\Security\Exception\LogicException;
-use Fxp\Component\Security\ReachableRoleEvents;
 use Symfony\Bundle\SecurityBundle\DependencyInjection\SecurityExtension as BaseSecurityExtension;
 use Symfony\Component\DependencyInjection\Compiler\PassConfig;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -55,8 +53,6 @@ class FxpSecurityBundle extends Bundle
         $container->addCompilerPass(new RegisterListenersPass('event_dispatcher',
             'fxp_security.event_listener', 'fxp_security.event_subscriber'),
             PassConfig::TYPE_BEFORE_REMOVING);
-
-        $this->registerMappingsPass($container);
     }
 
     /**
@@ -77,28 +73,5 @@ class FxpSecurityBundle extends Bundle
 
         $container->registerExtension(new SecurityExtension($extension));
         $container->addCompilerPass(new AccessControlPass());
-    }
-
-    /**
-     * Register the doctrine mapping.
-     *
-     * @param ContainerBuilder $container The container
-     */
-    private function registerMappingsPass(ContainerBuilder $container)
-    {
-        $ormCompilerClass = 'Doctrine\Bundle\DoctrineBundle\DependencyInjection\Compiler\DoctrineOrmMappingsPass';
-
-        if (class_exists($ormCompilerClass)) {
-            $ref = new \ReflectionClass(ReachableRoleEvents::class);
-            $container->addCompilerPass(
-                DoctrineOrmMappingsPass::createXmlMappingDriver(
-                    [
-                        realpath(\dirname($ref->getFileName()).'/Resources/config/doctrine/model') => 'Fxp\Component\Security\Model',
-                    ],
-                    [],
-                    'fxp_security.backend_type_orm'
-                )
-            );
-        }
     }
 }

@@ -1,5 +1,5 @@
-Using permissions
-=================
+Using the permissions
+=====================
 
 The permissions are defined globally, and afterwards, you can associate the permissions
 with each role. There are 3 types of permissions:
@@ -8,7 +8,7 @@ with each role. There are 3 types of permissions:
 - `class` permissions (with class, without field), ex. `view`, `create`, `update`, `delete`, `undelete`
 - `field` permissions (with class, with field), ex. `read`, `edit`
 
-## Create the permissions
+### Create the permissions
 
 To edit the permissions, you can use directly the object instance of permission like
 any doctrine entity, that is you can use the Symfony Form, Symfony Validator, and Doctrine
@@ -21,12 +21,12 @@ this fields:
 - class (optional, the FQCN)
 - field (optional, the property name in class)
 
-### Examples
+#### Examples
 
 **Add global permission:**
 
 ```php
-use AppBundle\Entity\Permission;
+use App\Entity\Permission;
 
 $perm = (new Permission())
     ->setOperation('send-emails')
@@ -39,8 +39,8 @@ $em->flush();
 **Add class permission:**
 
 ```php
-use AppBundle\Entity\Permission;
-use AppBundle\Entity\Post;
+use App\Entity\Permission;
+use App\Entity\Post;
 
 $perm = (new Permission())
     ->setOperation('view')
@@ -54,8 +54,8 @@ $em->flush();
 **Add field permission:**
 
 ```php
-use AppBundle\Entity\Permission;
-use AppBundle\Entity\Post;
+use App\Entity\Permission;
+use App\Entity\Post;
 
 $perm = (new Permission())
     ->setOperation('read')
@@ -67,7 +67,7 @@ $em->persist($perm);
 $em->flush();
 ```
 
-### Hard config of permissions
+#### Hard config of permissions
 
 It isn't required to define the permissions for the fields of a class, You can look the
 [configuration](https://github.com/fxpio/fxp-security-bundle/blob/master/DependencyInjection/Configuration.php)
@@ -101,18 +101,18 @@ fxp_security:
             create:           edit
             delete:           edit
     permissions:
-        AppBundle\Entity\User:
+        App\Entity\User:
             operations:       [view, create, update, delete]
             fields:
                 username:     [read, edit]
                 email:        [read, edit]
                 roles:        [read]
-        AppBundle\Entity\Post:
+        App\Entity\Post:
             fields:
                 title:        ~
                 body:         ~
                 commentCount: [read]
-        AppBundle\Entity\Comment:
+        App\Entity\Comment:
             master:           post
             operations:       [view, create, update, delete]
             fields:
@@ -137,13 +137,13 @@ Of course, this behavior works for all roles defined by the hierarchy of all rol
 > for all permissions, launched with a command, and create 3 forms to associate
 > each role with the permissions according to the 3 cases of use (global, class, field).
 
-## Attach the permissions on the role
+### Attach the permissions on the role
 
 It's not necessary to have a specific manager to manage the permissions,
 use directly the model of the roles:
 
 ```php
-use AppBundle\Entity\Post;
+use App\Entity\Post;
 
 $permissionView = $permissionRepository->findOneBy(array('operation' => 'view', 'class' => Post::class, 'field' => null));
 $adminRole = $roleRepository->findOneByName('ROLE_ADMIN');
@@ -160,7 +160,7 @@ You can also use directly the doctrine collection of permissions in roles if you
 $adminRole->getRoles()->add($permissionView);
 ```
 
-## Check the authorizations defined by permissions
+### Check the authorizations defined by permissions
 
 This library work with [Symfony Security](http://symfony.com/doc/current/security.html) and you
 can used the same services to validate the authorizations (see the
@@ -186,37 +186,27 @@ $this->get('security.authorization_checker')->isGranted('perm_edit', new FieldVo
 $this->get('security.authorization_checker')->isGranted('perm_edit', new FieldVote(PostInterface::class, 'title'));
 ```
 
-If you prefer to use the annotations, you can use the `@Security` annotation in your controllers:
-
-```php
-use Fxp\Bundle\SecurityBundle\Configuration\Security;
-
-MyController {
-    /**
-     * @Security("is_granted('perm_view', 'AppBundle\\Entity\\Post')")
-     */
-    public function getPostsAction()
-    {
-        //...
-    }
-
-    /**
-     * @Security("is_granted('perm_view', post)
-     */
-    public function getPostAction(PostInterface $post)
-    {
-        //...
-    }
-}
-```
-
-## What is the contexts field in permission class
+### What is the contexts field in permission class
 
 The `contexts` field is not used by the permission manager or sharing manager, but it
 can be used to filter the display of role permissions or sharing permissions on your edit pages.
 
-## Why is there no manager to edit the permissions?
+### Why is there no manager to edit the permissions?
 
 This library doesn't include a manager to manage permissions with roles, because it uses natively Doctrine,
 and leaves you the choice to using Doctrine directly, to creating you a specific manager or to using a
 resource management library (like [fxp/resource-bundle](https://github.com/fxpio/fxp-resource-bundle)).
+
+## Enable the Doctrine permission checker
+
+If you would validate the user permissions during the Doctrine actions, you can enable the permission checker
+listener like:
+
+```yaml
+# config/packages/fxp_security.yaml
+fxp_security:
+    doctrine:
+        orm:
+            listeners:
+                permission_checker: true
+```

@@ -4,7 +4,69 @@ Using the sharing
 Given that you cannot set permissions directly on entity, you must use the SharingManager
 (`fxp_security.sharing_manager`).
 
-## Enable the sharing for a class
+**Important:**
+
+To use the sharing, you must add the dependency `fxp/doctrine-extensions`:
+
+```
+$ composer require fxp/doctrine-extensions
+```
+
+## Installation
+
+### Step 1: Create the sharing model
+
+Run this command to create the Sharing entity:
+
+```
+$ php bin/console make:entity
+
+ Class name of the entity to create or update (e.g. BraveGnome):
+ > Sharing
+
+ created: src/Entity/Sharing.php
+ created: src/Repository/SharingRepository.php
+
+ Entity generated! Now let's add some fields!
+ You can always add more fields later manually or by re-running this command.
+
+ New property name (press <return> to stop adding fields):
+ >
+```
+
+To make your Sharing entity compatible with this bundle, you must update the entity by implementing the interface
+`Fxp\Component\Security\Model\SharingInterface`, the trait `Fxp\Component\Security\Model\Traits\SharingTrait` and
+the Doctrine indexes/constraints like:
+
+```php
+use Doctrine\ORM\Mapping as ORM;
+use Fxp\Component\Security\Model\SharingInterface;
+use Fxp\Component\Security\Model\Traits\SharingTrait;
+
+/**
+ * ...
+ *
+ * @ORM\Table(
+ *     indexes={
+ *         @ORM\Index(name="idx_sharing_subject_class", columns={"subject_class"}),
+ *         @ORM\Index(name="idx_sharing_subject_id", columns={"subject_id"}),
+ *         @ORM\Index(name="idx_sharing_identity_class", columns={"identity_class"}),
+ *         @ORM\Index(name="idx_sharing_identity_name", columns={"identity_name"})
+ *     },
+ *     uniqueConstraints={
+ *         @ORM\UniqueConstraint(name="uniq_sharing", columns={"subject_class", "subject_id", "identity_class", "identity_name"})
+ *     }
+ * )
+ */
+class Sharing implements SharingInterface
+{
+    use SharingTrait;
+
+    // ...
+}
+```
+
+### Step 2: Enable the sharing for a class
 
 There is a difference between permission and sharing. The permissions tell you whether
 the user, role, or group have access rights based on operations (view, create, etc...),
@@ -13,12 +75,15 @@ the Id (always) and the authorized field values. However, permissions do not fil
 doctrine queries. To do this, you must enable and configure the sharing.
 
 For entities to be filtered at the time of the Doctrine query, you have the option to
-build your own `SQLFilter`, Or use the `SharingFilter` class in this bundle (see the
-[doc](https://github.com/fxpio/fxp-security-bundle/blob/master/Resources/doc/index.md#step-8-configure-your-applications-configyml)):
+build your own `SQLFilter`, Or use the `SharingFilter` class in this bundle:
 
 ```yaml
+# config/packages/doctrine.yaml
 doctrine:
     orm:
+        resolve_target_entities:
+            Fxp\Component\Security\Model\SharingInterface: App\Entity\Sharing # the FQCN of your sharing entity
+
         entity_managers:
             default:
                 filters:
@@ -33,6 +98,7 @@ records and showing only the shared records, you will use the `private` value fo
 all class that need a sharing, and for that, you will need to add this configuration:
 
 ```yaml
+# config/packages/fxp_security.yaml
 fxp_security:
     doctrine:
         orm:
@@ -42,8 +108,26 @@ fxp_security:
             filters:
                 sharing:         true # Enable the Doctrine ORM SQL Filter for sharing the entities (optional)
     sharing:
+        enabled:             true
+        identity_types:
+            App\Entity\User:
+                roleable:    true
+                permissible: true
+            App\Entity\Role:
+                permissible: true
+            App\Entity\Group:
+                permissible: true    # If you use the groups
+            App\Entity\Organization:
+                permissible: true    # If you use the organizations
         subjects:
-            AppBundle\Entity\Post: private
+            App\Entity\Post: private
+```
+
+Also, make sure to make and run a migration for the new entities:
+
+```
+$ php bin/console make:migration
+$ php bin/console doctrine:migrations:migrate
 ```
 
 In this way you enable the `SQLFilter` to filter any entity that is not shared with either
@@ -103,9 +187,9 @@ use directly the model of the sharing.
 **Add sharing entry:**
 
 ```php
-use AppBundle\Entity\Post;
-use AppBundle\Entity\Sharing;
-use AppBundle\Entity\User;
+use App\Entity\Post;
+use App\Entity\Sharing;
+use App\Entity\User;
 use Fxp\Component\Security\Identity\SubjectIdentity;
 use Fxp\Component\Security\Identity\UserSecurityIdentity;
 
@@ -138,9 +222,9 @@ sharing entry, or directly with the permissions attached to the sharing entry.
 You can define permissions for each sharing entry:
 
 ```php
-use AppBundle\Entity\Post;
-use AppBundle\Entity\Sharing;
-use AppBundle\Entity\User;
+use App\Entity\Post;
+use App\Entity\Sharing;
+use App\Entity\User;
 use Fxp\Component\Security\Identity\SubjectIdentity;
 use Fxp\Component\Security\Identity\UserSecurityIdentity;
 
@@ -179,9 +263,9 @@ $share->getPermissions()->add($permissionSendEmails);
 You can define roles for each sharing entry (user only):
 
 ```php
-use AppBundle\Entity\Post;
-use AppBundle\Entity\Sharing;
-use AppBundle\Entity\User;
+use App\Entity\Post;
+use App\Entity\Sharing;
+use App\Entity\User;
 use Fxp\Component\Security\Identity\RoleSecurityIdentity;
 use Fxp\Component\Security\Identity\SubjectIdentity;
 use Fxp\Component\Security\Identity\UserSecurityIdentity;
@@ -201,7 +285,7 @@ $share = $shareRepository->findOneBy(array(
     'identityName' => $userIdentity->getIdentifier(),
 ));
 
-$share->addRole($adminRole->getRole());
+$share->addRole($adminRole->getName());
 
 $em->persist($share);
 $em->flush();

@@ -3,184 +3,298 @@ Using Organizations
 
 Allow to associate many user in many organizations.
 
+## Installation
+
 ### Step 1: Create the organization model
 
-#### Create the organization class
+Run this command to create the Organization entity:
 
-Extend the `Fxp\Component\Security\Model\Organization` abstract class:
+```
+$ php bin/console make:entity
+
+ Class name of the entity to create or update (e.g. BraveGnome):
+ > Organization
+
+ created: src/Entity/Organization.php
+ created: src/Repository/OrganizationRepository.php
+
+ Entity generated! Now let's add some fields!
+ You can always add more fields later manually or by re-running this command.
+
+ New property name (press <return> to stop adding fields):
+ >
+```
+
+### Step 2: Create the organization user model
+
+Run this command to create the Organization User entity:
+
+```
+$ php bin/console make:entity
+
+ Class name of the entity to create or update (e.g. BraveGnome):
+ > OrganizationUser
+
+ created: src/Entity/OrganizationUser.php
+ created: src/Repository/OrganizationUserRepository.php
+
+ Entity generated! Now let's add some fields!
+ You can always add more fields later manually or by re-running this command.
+
+ New property name (press <return> to stop adding fields):
+ >
+```
+
+### Step 3: Update the organization model
+
+To make your Organization entity compatible with this bundle, you must update the entity by implementing the interface
+`Fxp\Component\Security\Model\OrganizationInterface` and the trait `Fxp\Component\Security\Model\Traits\OrganizationTrait` like:
 
 ```php
-// src/AppBundle/Entity/Organization.php
+use Fxp\Component\Security\Model\OrganizationInterface;
+use Fxp\Component\Security\Model\Traits\OrganizationTrait;
+use Fxp\Component\Security\Model\Traits\RoleableInterface;
+use Fxp\Component\Security\Model\Traits\RoleableTrait;
 
-namespace AppBundle\Entity;
-
-use Fxp\Component\Security\Model\Organization as BaseOrganization;
-
-class Organization extends BaseOrganization
+class Organization implements OrganizationInterface, RoleableInterface
 {
+    use OrganizationTrait;
+    use RoleableTrait;
+
+    // ...
 }
 ```
 
-#### Create the organization mapping
+> **Note:**
+>
+> The `RoleableInterface` interface is optional
 
-```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
-                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
-                  http://raw.github.com/doctrine/doctrine2/master/doctrine-mapping.xsd">
+### Step 4: Update the organization user model
 
-    <entity name="AppBundle\Entity\Organization" table="core_organization">
-        <id name="id" type="integer" column="id">
-            <generator strategy="AUTO"/>
-        </id>
-
-        <one-to-one field="user" target-entity="User" inversed-by="organization">
-            <cascade>
-                <cascade-persist/>
-                <cascade-remove/>
-            </cascade>
-            <join-column name="user_id" referenced-column-name="id" on-delete="CASCADE" />
-        </one-to-one>
-
-        <one-to-many field="organizationUsers" target-entity="OrganizationUser" mapped-by="organization" fetch="EXTRA_LAZY">
-            <cascade>
-                <cascade-persist/>
-                <cascade-remove/>
-            </cascade>
-        </one-to-many>
-
-    </entity>
-</doctrine-mapping>
-```
-
-### Step 2: Update the user model
-
-#### Update the user class
-
-Implement the `Fxp\Component\Security\Model\Traits\UserOrganizationUsersInterface` interface in user class.
+To make your Organization User entity compatible with this bundle, you must update the entity by implementing the interface
+`Fxp\Component\Security\Model\OrganizationUserInterface` and the trait `Fxp\Component\Security\Model\Traits\OrganizationUserTrait` like:
 
 ```php
-namespace AppBundle\Entity;
+use Fxp\Component\Security\Model\OrganizationUserInterface;
+use Fxp\Component\Security\Model\Traits\OrganizationUserTrait;
+use Fxp\Component\Security\Model\Traits\RoleableInterface;
+use Fxp\Component\Security\Model\Traits\RoleableTrait;
 
-use FOS\UserBundle\Model\User as BaseUser;
+class OrganizationUser implements OrganizationUserInterface, RoleableInterface
+{
+    use OrganizationUserTrait;
+    use RoleableTrait;
+
+    // ...
+}
+```
+
+> **Note:**
+>
+> The `RoleableInterface` interface is optional
+
+### Step 5: Update the user model
+
+Implement in the user model, the `Fxp\Component\Security\Model\Traits\UserOrganizationUsersInterface` interface and
+`Fxp\Component\Security\Model\Traits\OrganizationalOptionalInterface` interface (or `OrganizationalRequiredInterface`
+interface), the `Fxp\Component\Security\Model\Traits\OrganizationalOptionalTrait` trait, the
+`Fxp\Component\Security\Model\Traits\UserOrganizationUsersTrait` and the Doctrine mapping like:
+
+```php
+use Fxp\Component\Security\Model\Traits\RoleableTrait;
 use Fxp\Component\Security\Model\Traits\OrganizationalOptionalInterface;
 use Fxp\Component\Security\Model\Traits\OrganizationalOptionalTrait;
 use Fxp\Component\Security\Model\Traits\UserOrganizationUsersInterface;
 use Fxp\Component\Security\Model\Traits\UserOrganizationUsersTrait;
 use Fxp\Component\Security\Model\UserInterface;
 
-class User extends BaseUser implements
-    UserInterface,
+class User implements UserInterface
     OrganizationalOptionalInterface, // Or OrganizationalRequiredInterface
     UserOrganizationUsersInterface
 {
+    use RoleableTrait;
     use OrganizationalOptionalTrait; // Or OrganizationalRequiredTrait
     use UserOrganizationUsersTrait;
+    
+    /**
+     * @ORM\OneToOne(
+     *     targetEntity="App\Entity\Organization",
+     *     mappedBy="user",
+     *     fetch="EAGER",
+     *     orphanRemoval=true,
+     *     cascade={"persist", "remove"}
+     * )
+     */
+    protected $organization;
+
+    // ...
 }
 ```
 
-#### Update the user mapping
+### Step 6: Make 'organizationable' the role model (optional)
 
-```xml
-<?xml version="1.0" encoding="utf-8"?>
-<!-- src/AppBundle/Resources/config/doctrine/User.orm.xml -->
-<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
-                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-
-    <entity name="AppBundle\Entity\User" table="core_user">
-        <!-- ... previous mapping -->
-
-        <one-to-one field="organization" target-entity="Organization" mapped-by="user" orphan-removal="true" fetch="EAGER">
-            <cascade>
-                <cascade-persist/>
-                <cascade-remove/>
-            </cascade>
-        </one-to-one>
-
-        <one-to-many field="userOrganizations" target-entity="OrganizationUser" orphan-removal="true" mapped-by="user" fetch="EXTRA_LAZY">
-            <cascade>
-                <cascade-persist/>
-                <cascade-remove/>
-            </cascade>
-            <order-by>
-                <order-by-field name="organization" direction="ASC" />
-            </order-by>
-        </one-to-many>
-
-    </entity>
-</doctrine-mapping>
-```
-
-### Step 3: Create the organization user model
-
-#### Create the organization user class
-
-Extend the `Fxp\Component\Security\Model\OrganizationUser` abstract class:
+Implement in the role model, the `Fxp\Component\Security\Model\Traits\OrganizationalOptionalInterface` interface
+(or `OrganizationalRequiredInterface` interface), the `Fxp\Component\Security\Model\Traits\OrganizationalOptionalTrait`
+trait (or `OrganizationalRequiredTrait` interface), and the Doctrine mapping. With the organization, the unique name
+of role must be overridden to include the organization, otherwise, the role name will not unique for each organization,
+like:
 
 ```php
-// src/AppBundle/Entity/OrganizationUser.php
+use Doctrine\ORM\Mapping as ORM;
+use Fxp\Component\Security\Model\Traits\RoleableTrait;
+use Fxp\Component\Security\Model\Traits\OrganizationalOptionalInterface;
+use Fxp\Component\Security\Model\Traits\OrganizationalOptionalTrait;
+use Fxp\Component\Security\Model\Traits\UserOrganizationUsersInterface;
+use Fxp\Component\Security\Model\Traits\UserOrganizationUsersTrait;
+use Fxp\Component\Security\Model\UserInterface;
 
-namespace AppBundle\Entity;
-
-use Fxp\Component\Security\Model\OrganizationUser as BaseOrganizationUser;
-
-class OrganizationUser extends BaseOrganizationUser
+/**
+ * @ORM\Table(
+ *     uniqueConstraints={
+ *         @ORM\UniqueConstraint(name="uniq_role_organization_name", columns={"organization_id", "name"})
+ *     }
+ * )
+ *
+ * @ORM\AttributeOverrides({
+ *     @ORM\AttributeOverride(name="name", column=@ORM\Column(unique=false))
+ * })
+ */
+class Role implements RoleHierarchicalInterface
+    OrganizationalOptionalInterface // Or OrganizationalRequiredInterface
 {
+    use RoleTrait;
+    use RoleHierarchicalTrait;
+    use OrganizationalOptionalTrait; // Or OrganizationalRequiredTrait
+    
+    /**
+     * @ORM\ManyToOne(
+     *     targetEntity="App\Entity\Organization",
+     *     fetch="EXTRA_LAZY",
+     *     inversedBy="organizationRoles"
+     * )
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     */
+    protected $organization;
+
+    // ...
 }
 ```
 
-#### Create the organization user mapping
+Implement in the organization model, the `Fxp\Component\Security\Model\Traits\OrganizationRolesInterface` interface,
+the `Fxp\Component\Security\Model\Traits\OrganizationRolesTrait` trait, and the Doctrine mapping like:
 
-```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
-                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
-                  http://raw.github.com/doctrine/doctrine2/master/doctrine-mapping.xsd">
+```php
+use Fxp\Component\Security\Model\OrganizationInterface;
+use Fxp\Component\Security\Model\Traits\OrganizationRolesInterface;
+use Fxp\Component\Security\Model\Traits\OrganizationRolesTrait;
+use Fxp\Component\Security\Model\Traits\OrganizationTrait;
+use Fxp\Component\Security\Model\Traits\RoleableInterface;
+use Fxp\Component\Security\Model\Traits\RoleableTrait;
 
-    <entity name="AppBundle\Entity\OrganizationUser" table="core_organization_user"
-                repository-class="AppBundle\Entity\Repository\OrganizationUserRepository">
-            <unique-constraints>
-                <unique-constraint columns="organization_id,user_id" name="organization_unique_user_idx" />
-            </unique-constraints>
-    
-            <id name="id" type="integer" column="id">
-                <generator strategy="AUTO"/>
-            </id>
-    
-            <many-to-one field="organization" target-entity="Organization" inversed-by="organizationUsers">
-                <join-column name="organization_id" referenced-column-name="id" on-delete="CASCADE" nullable="false" />
-            </many-to-one>
-    
-            <many-to-one field="user" target-entity="User" inversed-by="userOrganizations">
-                <cascade>
-                    <cascade-persist/>
-                </cascade>
-                <join-column name="user_id" referenced-column-name="id" on-delete="CASCADE" />
-            </many-to-one>
-    
-        </entity>
+class Organization implements OrganizationInterface, RoleableInterface, OrganizationRolesInterface
+{
+    use OrganizationTrait;
+    use RoleableTrait;
+    use OrganizationRolesTrait;
 
-</doctrine-mapping>
+    // ...
+}
 ```
 
-### Step 4: Configure your application's config.yml
+### Step 7: Make 'organizationable' the group model (optional)
 
-Add the following configuration to your `config.yml`.
+TODO OrganizationalOptionalTrait and interface in group + organization add OrganizationGroupsTrait and interface
+
+Implement in the group model, the `Fxp\Component\Security\Model\Traits\OrganizationalOptionalInterface` interface
+(or `OrganizationalRequiredInterface` interface), the `Fxp\Component\Security\Model\Traits\OrganizationalOptionalTrait`
+trait (or `OrganizationalRequiredTrait` interface), and the Doctrine mapping. With the organization, the unique name
+of group must be overridden to include the organization, otherwise, the group name will not unique for each organization,
+like:
+
+```php
+use Doctrine\ORM\Mapping as ORM;
+use Fxp\Component\Security\Model\GroupInterface;
+use Fxp\Component\Security\Model\Traits\GroupTrait;
+use Fxp\Component\Security\Model\Traits\OrganizationalOptionalInterface;
+use Fxp\Component\Security\Model\Traits\OrganizationalOptionalTrait;
+
+/**
+ * @ORM\Table(
+ *     uniqueConstraints={
+ *         @ORM\UniqueConstraint(name="uniq_group_organization_name", columns={"organization_id", "name"})
+ *     }
+ * )
+ *
+ * @ORM\AttributeOverrides({
+ *     @ORM\AttributeOverride(name="name", column=@ORM\Column(unique=false))
+ * })
+ */
+class Group implements GroupInterface, OrganizationalOptionalInterface
+{
+    use GroupTrait;
+    use OrganizationalOptionalTrait; // Or OrganizationalRequiredTrait
+    
+    /**
+     * @ORM\ManyToOne(
+     *     targetEntity="App\Entity\Organization",
+     *     fetch="EXTRA_LAZY",
+     *     inversedBy="organizationGroups"
+     * )
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     */
+    protected $organization;
+
+    // ...
+}
+```
+
+Implement in the organization model, the `Fxp\Component\Security\Model\Traits\OrganizationGroupsInterface` interface,
+the `Fxp\Component\Security\Model\Traits\OrganizationGroupsTrait` trait, and the Doctrine mapping like:
+
+```php
+use Fxp\Component\Security\Model\OrganizationInterface;
+use Fxp\Component\Security\Model\Traits\OrganizationGroupsInterface;
+use Fxp\Component\Security\Model\Traits\OrganizationGroupsTrait;
+use Fxp\Component\Security\Model\Traits\OrganizationTrait;
+
+class Organization implements OrganizationInterface, OrganizationGroupsInterface
+{
+    use OrganizationTrait;
+    use OrganizationGroupsTrait;
+
+    // ...
+}
+```
+
+### Step 8: Configure your application
+
+Add the interface in Doctrine's target entities resolver:
 
 ```yaml
-# app/config/config.yml
-fxp_security:
-    organizational_context:
-            enabled: true # optional
+# config/packages/doctrine.yaml``
+doctrine:
+    # ...
+    orm:
+        resolve_target_entities:
+            Fxp\Component\Security\Model\OrganizationInterface: App\Entity\Organization # the FQCN of your organization entity
+            Fxp\Component\Security\Model\OrganizationUserInterface: App\Entity\OrganizationUser # the FQCN of your organization user entity
 ```
 
-### Step 5: Update your database schema
+And enable the organizational context like:
 
-```bash
-$ php bin/console doctrine:schema:update --force
+```yaml
+# config/packages/fxp_security.yaml
+fxp_security:
+    organizational_context:
+        enabled: true
+```
+
+
+Also, make sure to make and run a migration for the new entities:
+
+```
+$ php bin/console make:migration
+$ php bin/console doctrine:migrations:migrate
 ```
 
 ## Work with organizational context
@@ -190,3 +304,18 @@ in container service.
 
 The organizational context allow you to define the current organization
 and organization user.
+
+## Use your custom organizational context
+
+To use your custom organizational context, you must create a class implementing the
+`Fxp\Component\Security\Organizational\OrganizationalContextInterface` interface. Of course, you can extend the
+`Fxp\Component\Security\Organizational\OrganizationalContext` class.
+
+Register your custom organization context in the container dependency, and enable the organizational context like:
+
+```yaml
+# config/packages/fxp_security.yaml
+fxp_security:
+    organizational_context:
+        service_id: app.custom_organizational_context
+```
