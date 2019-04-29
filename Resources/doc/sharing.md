@@ -137,6 +137,25 @@ a user, a role, a group, or an organization.
 >
 > You will find the values and their descriptions in the class `Fxp\Component\Security\SharingVisibilities`.
 
+### Step 3: Add the mapping between permission and sharing
+
+To make your Permission entity compatible with the sharing, you must update the entity by implementing the interface
+`Fxp\Component\Security\Model\Traits\PermissionSharingEntryInterface`, and the trait
+`Fxp\Component\Security\Model\Traits\PermissionSharingEntryTrait` like:
+
+```php
+use Fxp\Component\Security\Model\Traits\PermissionSharingEntryInterface;
+use Fxp\Component\Security\Model\Traits\PermissionSharingEntryTrait;
+
+class Permission implements PermissionInterface, PermissionSharingEntryInterface
+{
+    use PermissionTrait;
+    use PermissionSharingEntryTrait;
+
+    // ...
+}
+```
+
 ## Create the sharing entry
 
 You can share an entity with a user, a role, a group, or an organization.
