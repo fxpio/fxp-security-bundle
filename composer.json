@@ -21,6 +21,7 @@
     },
     "require-dev": {
         "symfony/form": "^4.2.0",
+        "symfony/translation": "^4.2.0",
         "sensio/framework-extra-bundle": "^5.2.0",
         "doctrine/doctrine-bundle": "^1.9.0",
         "doctrine/orm": "^2.6.0"
