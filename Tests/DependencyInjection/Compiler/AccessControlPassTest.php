@@ -24,7 +24,6 @@ use Symfony\Component\Security\Http\AccessMap;
  * @author François Pluchino <francois.pluchino@gmail.com>
  *
  * @internal
- * @coversNothing
  */
 final class AccessControlPassTest extends TestCase
 {

@@ -33,7 +33,6 @@ use Symfony\Component\Security\Core\Authorization\ExpressionLanguage;
  * @author François Pluchino <francois.pluchino@gmail.com>
  *
  * @internal
- * @coversNothing
  */
 final class SecurityAnnotationSubscriberTest extends TestCase
 {

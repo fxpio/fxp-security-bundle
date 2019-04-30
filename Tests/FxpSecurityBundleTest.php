@@ -21,7 +21,6 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  * @author François Pluchino <francois.pluchino@gmail.com>
  *
  * @internal
- * @coversNothing
  */
 final class FxpSecurityBundleTest extends TestCase
 {

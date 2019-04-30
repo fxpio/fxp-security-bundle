@@ -30,7 +30,6 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
  * @author François Pluchino <francois.pluchino@gmail.com>
  *
  * @internal
- * @coversNothing
  */
 final class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
 {

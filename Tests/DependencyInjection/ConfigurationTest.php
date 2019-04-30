@@ -25,7 +25,6 @@ use Symfony\Component\Config\Definition\Processor;
  * @author François Pluchino <francois.pluchino@gmail.com>
  *
  * @internal
- * @coversNothing
  */
 final class ConfigurationTest extends TestCase
 {
