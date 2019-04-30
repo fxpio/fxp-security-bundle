@@ -23,8 +23,11 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  * Symfony security extension tests.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
+ *
+ * @internal
+ * @coversNothing
  */
-class SecurityExtensionTest extends TestCase
+final class SecurityExtensionTest extends TestCase
 {
     /**
      * @var BaseSecurityExtension|\PHPUnit_Framework_MockObject_MockObject
@@ -36,42 +39,45 @@ class SecurityExtensionTest extends TestCase
      */
     protected $ext;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->baseExt = $this->getMockBuilder(BaseSecurityExtension::class)->disableOriginalConstructor()->getMock();
         $this->ext = new SecurityExtension($this->baseExt);
     }
 
-    public function testGetAlias()
+    public function testGetAlias(): void
     {
         $this->baseExt->expects($this->once())
             ->method('getAlias')
-            ->willReturn('ALIAS');
+            ->willReturn('ALIAS')
+        ;
 
         $this->assertSame('ALIAS', $this->ext->getAlias());
     }
 
-    public function testGetNamespace()
+    public function testGetNamespace(): void
     {
         $this->baseExt->expects($this->once())
             ->method('getNamespace')
-            ->willReturn('NAMESPACE');
+            ->willReturn('NAMESPACE')
+        ;
 
         $this->assertSame('NAMESPACE', $this->ext->getNamespace());
     }
 
-    public function testGetXsdValidationBasePath()
+    public function testGetXsdValidationBasePath(): void
     {
         $this->baseExt->expects($this->once())
             ->method('getXsdValidationBasePath')
-            ->willReturn('XSD');
+            ->willReturn('XSD')
+        ;
 
         $this->assertSame('XSD', $this->ext->getXsdValidationBasePath());
     }
 
-    public function testGetConfiguration()
+    public function testGetConfiguration(): void
     {
-        /* @var ContainerBuilder $container */
+        /** @var ContainerBuilder $container */
         $container = $this->getMockBuilder(ContainerBuilder::class)->disableOriginalConstructor()->getMock();
         $config = [];
         $configuration = $this->getMockBuilder(ConfigurationInterface::class)->getMock();
@@ -79,38 +85,41 @@ class SecurityExtensionTest extends TestCase
         $this->baseExt->expects($this->once())
             ->method('getConfiguration')
             ->with($config, $container)
-            ->willReturn($configuration);
+            ->willReturn($configuration)
+        ;
 
         $this->assertSame($configuration, $this->ext->getConfiguration($config, $container));
     }
 
-    public function testAddSecurityListenerFactory()
+    public function testAddSecurityListenerFactory(): void
     {
-        /* @var SecurityFactoryInterface $factory */
+        /** @var SecurityFactoryInterface $factory */
         $factory = $this->getMockBuilder(SecurityFactoryInterface::class)->getMock();
 
         $this->baseExt->expects($this->once())
             ->method('addSecurityListenerFactory')
-            ->with($factory);
+            ->with($factory)
+        ;
 
         $this->ext->addSecurityListenerFactory($factory);
     }
 
-    public function testAddUserProviderFactory()
+    public function testAddUserProviderFactory(): void
     {
-        /* @var UserProviderFactoryInterface $factory */
+        /** @var UserProviderFactoryInterface $factory */
         $factory = $this->getMockBuilder(UserProviderFactoryInterface::class)->getMock();
 
         $this->baseExt->expects($this->once())
             ->method('addUserProviderFactory')
-            ->with($factory);
+            ->with($factory)
+        ;
 
         $this->ext->addUserProviderFactory($factory);
     }
 
-    public function testLoad()
+    public function testLoad(): void
     {
-        /* @var ContainerBuilder|\PHPUnit_Framework_MockObject_MockObject $container */
+        /** @var ContainerBuilder|\PHPUnit_Framework_MockObject_MockObject $container */
         $container = $this->getMockBuilder(ContainerBuilder::class)->getMock();
         $accessControl = [
             [
@@ -134,18 +143,20 @@ class SecurityExtensionTest extends TestCase
 
         $this->baseExt->expects($this->once())
             ->method('load')
-            ->with($validConfigs, $container);
+            ->with($validConfigs, $container)
+        ;
 
         $container->expects($this->once())
             ->method('setParameter')
-            ->with('fxp_security.access_control', $accessControl);
+            ->with('fxp_security.access_control', $accessControl)
+        ;
 
         $this->ext->load($configs, $container);
     }
 
-    public function testLoadWithoutControlAccess()
+    public function testLoadWithoutControlAccess(): void
     {
-        /* @var ContainerBuilder|\PHPUnit_Framework_MockObject_MockObject $container */
+        /** @var ContainerBuilder|\PHPUnit_Framework_MockObject_MockObject $container */
         $container = $this->getMockBuilder(ContainerBuilder::class)->getMock();
         $configs = [[
             'rule' => 'RULE',
@@ -158,10 +169,12 @@ class SecurityExtensionTest extends TestCase
 
         $this->baseExt->expects($this->once())
             ->method('load')
-            ->with($validConfigs, $container);
+            ->with($validConfigs, $container)
+        ;
 
         $container->expects($this->never())
-            ->method('setParameter');
+            ->method('setParameter')
+        ;
 
         $this->ext->load($configs, $container);
     }

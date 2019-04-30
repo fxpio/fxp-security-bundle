@@ -21,8 +21,11 @@ use Symfony\Component\DependencyInjection\Definition;
  * Validation Pass tests.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
+ *
+ * @internal
+ * @coversNothing
  */
-class ValidationPassTest extends TestCase
+final class ValidationPassTest extends TestCase
 {
     /**
      * @var ContainerBuilder|\PHPUnit_Framework_MockObject_MockObject
@@ -34,25 +37,26 @@ class ValidationPassTest extends TestCase
      */
     protected $compiler;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->container = $this->getMockBuilder(ContainerBuilder::class)->getMock();
         $this->compiler = new ValidationPass();
     }
 
-    public function testProcessWithoutValidator()
+    public function testProcessWithoutValidator(): void
     {
-        /* @var ContainerBuilder|\PHPUnit_Framework_MockObject_MockObject $container */
+        /** @var ContainerBuilder|\PHPUnit_Framework_MockObject_MockObject $container */
         $container = $this->getMockBuilder(ContainerBuilder::class)->getMock();
         $container->expects($this->once())
             ->method('hasDefinition')
             ->with('validator.builder')
-            ->willReturn(false);
+            ->willReturn(false)
+        ;
 
         $this->compiler->process($container);
     }
 
-    public function testProcess()
+    public function testProcess(): void
     {
         $reflection = new \ReflectionClass(PermissionEvents::class);
         $dirname = \dirname($reflection->getFileName());
@@ -67,12 +71,14 @@ class ValidationPassTest extends TestCase
         $this->container->expects($this->once())
             ->method('hasDefinition')
             ->with('validator.builder')
-            ->willReturn(true);
+            ->willReturn(true)
+        ;
 
         $this->container->expects($this->once())
             ->method('getDefinition')
             ->with('validator.builder')
-            ->willReturn($validator);
+            ->willReturn($validator)
+        ;
 
         $validator->expects($this->once())
             ->method('addMethodCall')
@@ -81,7 +87,8 @@ class ValidationPassTest extends TestCase
                     $permissionFile,
                     $sharingFile,
                 ],
-            ]);
+            ])
+        ;
 
         $this->compiler->process($this->container);
     }

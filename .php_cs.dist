@@ -2,9 +2,19 @@
 
 return PhpCsFixer\Config::create()
     ->setRules(array(
-        '@Symfony' => true,
-        '@Symfony:risky' => true,
-        'array_syntax' => array('syntax' => 'short'),
+        '@PhpCsFixer' => true,
+        '@PhpCsFixer:risky' => true,
+        '@PHP71Migration' => true,
+        '@PHP71Migration:risky' => true,
+        '@PHPUnit60Migration:risky' => true,
+        '@DoctrineAnnotation' => true,
+        'array_syntax' => ['syntax' => 'short'],
+        'class_definition' => ['singleLine' => false],
+        'declare_strict_types' => false,
+        'ordered_imports' => true,
+        'php_unit_strict' => false,
+        'self_accessor' => false,
+        'single_line_comment_style' => false,
     ))
     ->setRiskyAllowed(true)
     ->setFinder(

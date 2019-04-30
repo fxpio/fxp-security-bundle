@@ -29,7 +29,7 @@ class AccessControlConfiguration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder('security');
-        /* @var ArrayNodeDefinition $rootNode */
+        /** @var ArrayNodeDefinition $rootNode */
         $rootNode = $treeBuilder->getRootNode();
 
         $rootNode
@@ -53,39 +53,39 @@ class AccessControlConfiguration implements ConfigurationInterface
         $node
             ->cannotBeOverwritten()
             ->prototype('array')
-                ->fixXmlConfig('ip')
-                ->fixXmlConfig('method')
-                ->children()
-                    ->scalarNode('requires_channel')->defaultNull()->end()
-                    ->scalarNode('path')
-                        ->defaultNull()
-                        ->info('use the urldecoded format')
-                        ->example('^/path to resource/')
-                    ->end()
-                    ->scalarNode('host')->defaultNull()->end()
-                    ->arrayNode('ips')
-                        ->beforeNormalization()->ifString()->then(function ($v) {
+            ->fixXmlConfig('ip')
+            ->fixXmlConfig('method')
+            ->children()
+            ->scalarNode('requires_channel')->defaultNull()->end()
+            ->scalarNode('path')
+            ->defaultNull()
+            ->info('use the urldecoded format')
+            ->example('^/path to resource/')
+            ->end()
+            ->scalarNode('host')->defaultNull()->end()
+            ->arrayNode('ips')
+            ->beforeNormalization()->ifString()->then(function ($v) {
                             return [$v];
                         })->end()
-                        ->prototype('scalar')->end()
-                    ->end()
-                    ->arrayNode('methods')
-                        ->beforeNormalization()->ifString()->then(function ($v) {
+            ->prototype('scalar')->end()
+            ->end()
+            ->arrayNode('methods')
+            ->beforeNormalization()->ifString()->then(function ($v) {
                             return preg_split('/\s*,\s*/', $v);
                         })->end()
-                        ->prototype('scalar')->end()
-                    ->end()
-                    ->scalarNode('allow_if')->defaultNull()->end()
-                ->end()
-                ->fixXmlConfig('role')
-                ->children()
-                    ->arrayNode('roles')
-                        ->beforeNormalization()->ifString()->then(function ($v) {
+            ->prototype('scalar')->end()
+            ->end()
+            ->scalarNode('allow_if')->defaultNull()->end()
+            ->end()
+            ->fixXmlConfig('role')
+            ->children()
+            ->arrayNode('roles')
+            ->beforeNormalization()->ifString()->then(function ($v) {
                             return preg_split('/\s*,\s*/', $v);
                         })->end()
-                        ->prototype('scalar')->end()
-                    ->end()
-                ->end()
+            ->prototype('scalar')->end()
+            ->end()
+            ->end()
             ->end()
         ;
 

@@ -22,10 +22,13 @@ use Symfony\Component\DependencyInjection\Definition;
  * Object Filter Pass tests.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
+ *
+ * @internal
+ * @coversNothing
  */
-class ObjectFilterPassTest extends TestCase
+final class ObjectFilterPassTest extends TestCase
 {
-    public function testProcessWithoutExtension()
+    public function testProcessWithoutExtension(): void
     {
         $container = new ContainerBuilder();
         $compiler = new ObjectFilterPass();
@@ -35,7 +38,7 @@ class ObjectFilterPassTest extends TestCase
         $this->assertCount(1, $container->getDefinitions());
     }
 
-    public function testProcess()
+    public function testProcess(): void
     {
         $container = new ContainerBuilder();
         $compiler = new ObjectFilterPass();

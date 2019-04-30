@@ -23,12 +23,15 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
  * Object Filter Listener Container Aware Tests.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
+ *
+ * @internal
+ * @coversNothing
  */
-class PermissionCheckerListenerContainerAwareTest extends TestCase
+final class PermissionCheckerListenerContainerAwareTest extends TestCase
 {
-    public function testOnFlush()
+    public function testOnFlush(): void
     {
-        /* @var OnFlushEventArgs|\PHPUnit_Framework_MockObject_MockObject $args */
+        /** @var OnFlushEventArgs|\PHPUnit_Framework_MockObject_MockObject $args */
         $args = $this->getMockBuilder(OnFlushEventArgs::class)->disableOriginalConstructor()->getMock();
         $tokenStorage = $this->getMockBuilder(TokenStorageInterface::class)->getMock();
         $authChecker = $this->getMockBuilder(AuthorizationCheckerInterface::class)->getMock();
@@ -38,17 +41,20 @@ class PermissionCheckerListenerContainerAwareTest extends TestCase
         $container->expects($this->at(0))
             ->method('get')
             ->with('security.token_storage')
-            ->willReturn($tokenStorage);
+            ->willReturn($tokenStorage)
+        ;
 
         $container->expects($this->at(1))
             ->method('get')
             ->with('security.authorization_checker')
-            ->willReturn($authChecker);
+            ->willReturn($authChecker)
+        ;
 
         $container->expects($this->at(2))
             ->method('get')
             ->with('fxp_security.permission_manager')
-            ->willReturn($permissionManager);
+            ->willReturn($permissionManager)
+        ;
 
         $listener = new PermissionCheckerListenerContainerAware();
         $listener->container = $container;

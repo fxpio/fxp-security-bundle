@@ -21,10 +21,13 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * Sharing Delete Listener Container Aware Tests.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
+ *
+ * @internal
+ * @coversNothing
  */
-class SharingDeleteListenerContainerAwareTest extends TestCase
+final class SharingDeleteListenerContainerAwareTest extends TestCase
 {
-    public function testGetPermissionManager()
+    public function testGetPermissionManager(): void
     {
         $sharingManager = $this->getMockBuilder(SharingManagerInterface::class)->getMock();
         $container = $this->getMockBuilder(ContainerInterface::class)->getMock();
@@ -32,7 +35,8 @@ class SharingDeleteListenerContainerAwareTest extends TestCase
         $container->expects($this->at(0))
             ->method('get')
             ->with('fxp_security.sharing_manager')
-            ->willReturn($sharingManager);
+            ->willReturn($sharingManager)
+        ;
 
         $listener = new SharingDeleteListenerContainerAware(MockSharing::class);
         $listener->container = $container;

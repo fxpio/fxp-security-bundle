@@ -22,7 +22,7 @@ class OrganizationalContextBuilder implements ExtensionBuilderInterface
     /**
      * {@inheritdoc}
      */
-    public function build(ContainerBuilder $container, LoaderInterface $loader, array $config)
+    public function build(ContainerBuilder $container, LoaderInterface $loader, array $config): void
     {
         if ($config['organizational_context']['enabled']) {
             $loader->load('organizational_context.xml');

@@ -19,10 +19,13 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  * Expression Variable Storage Pass Test.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
+ *
+ * @internal
+ * @coversNothing
  */
-class ExpressionVariableStoragePassTest extends TestCase
+final class ExpressionVariableStoragePassTest extends TestCase
 {
-    public function testProcessWithoutExtension()
+    public function testProcessWithoutExtension(): void
     {
         $container = new ContainerBuilder();
         $compiler = new ExpressionVariableStoragePass();

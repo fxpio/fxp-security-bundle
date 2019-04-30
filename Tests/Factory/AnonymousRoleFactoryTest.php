@@ -21,17 +21,20 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  * Anonymous Role Factory Tests.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
+ *
+ * @internal
+ * @coversNothing
  */
-class AnonymousRoleFactoryTest extends TestCase
+final class AnonymousRoleFactoryTest extends TestCase
 {
-    public function testGetPosition()
+    public function testGetPosition(): void
     {
         $factory = new AnonymousRoleFactory();
 
         $this->assertSame('pre_auth', $factory->getPosition());
     }
 
-    public function testGetKey()
+    public function testGetKey(): void
     {
         $factory = new AnonymousRoleFactory();
 
@@ -52,10 +55,10 @@ class AnonymousRoleFactoryTest extends TestCase
     /**
      * @dataProvider getConfiguration
      *
-     * @param array|bool|null $config   The config
-     * @param string|null     $expected The expected value
+     * @param null|array|bool $config   The config
+     * @param null|string     $expected The expected value
      */
-    public function testAddConfiguration($config, $expected)
+    public function testAddConfiguration($config, $expected): void
     {
         $builder = new ArrayNodeDefinition('anonymous_role');
         $factory = new AnonymousRoleFactory();
@@ -70,7 +73,7 @@ class AnonymousRoleFactoryTest extends TestCase
         $this->assertSame($expected, $res['role']);
     }
 
-    public function testCreate()
+    public function testCreate(): void
     {
         $container = new ContainerBuilder();
         $factory = new AnonymousRoleFactory();

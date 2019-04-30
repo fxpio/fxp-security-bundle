@@ -32,14 +32,14 @@ class PermissionCheckerListenerContainerAware extends PermissionCheckerListener
     /**
      * {@inheritdoc}
      */
-    protected function init()
+    protected function init(): void
     {
         if (null !== $this->container) {
-            /* @var TokenStorageInterface $tokenStorage */
+            /** @var TokenStorageInterface $tokenStorage */
             $tokenStorage = $this->container->get('security.token_storage');
-            /* @var AuthorizationCheckerInterface $authChecker */
+            /** @var AuthorizationCheckerInterface $authChecker */
             $authChecker = $this->container->get('security.authorization_checker');
-            /* @var PermissionManagerInterface $permManager */
+            /** @var PermissionManagerInterface $permManager */
             $permManager = $this->container->get('fxp_security.permission_manager');
 
             $this->setTokenStorage($tokenStorage);

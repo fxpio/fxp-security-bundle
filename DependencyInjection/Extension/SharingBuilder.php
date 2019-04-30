@@ -27,7 +27,7 @@ class SharingBuilder implements ExtensionBuilderInterface
     /**
      * {@inheritdoc}
      */
-    public function build(ContainerBuilder $container, LoaderInterface $loader, array $config)
+    public function build(ContainerBuilder $container, LoaderInterface $loader, array $config): void
     {
         if ($config['sharing']['enabled']) {
             $loader->load('sharing.xml');
@@ -46,7 +46,7 @@ class SharingBuilder implements ExtensionBuilderInterface
      * @param ContainerBuilder $container The container
      * @param array            $config    The config
      */
-    private function buildSharingConfigs(ContainerBuilder $container, array $config)
+    private function buildSharingConfigs(ContainerBuilder $container, array $config): void
     {
         $subjectConfigs = [];
         $identityConfigs = [];
@@ -72,9 +72,11 @@ class SharingBuilder implements ExtensionBuilderInterface
      *
      * @throws
      */
-    private function buildDoctrineSharingFilter(ContainerBuilder $container, LoaderInterface $loader,
-                                                array $config)
-    {
+    private function buildDoctrineSharingFilter(
+        ContainerBuilder $container,
+        LoaderInterface $loader,
+        array $config
+    ): void {
         if ($config['doctrine']['orm']['filters']['sharing']) {
             BuilderUtils::validate($container, 'doctrine.orm.filter.sharing', 'doctrine.orm.entity_manager', 'doctrine/orm');
 
@@ -95,9 +97,11 @@ class SharingBuilder implements ExtensionBuilderInterface
      *
      * @throws
      */
-    private function buildDoctrineSharingListener(ContainerBuilder $container, LoaderInterface $loader,
-                                                  array $config)
-    {
+    private function buildDoctrineSharingListener(
+        ContainerBuilder $container,
+        LoaderInterface $loader,
+        array $config
+    ): void {
         // doctrine orm sharing filter listener for private sharing
         if ($config['doctrine']['orm']['listeners']['private_sharing']) {
             BuilderUtils::validate($container, 'doctrine.orm.listeners.private_sharing', 'doctrine.orm.entity_manager', 'doctrine/orm');
@@ -119,10 +123,11 @@ class SharingBuilder implements ExtensionBuilderInterface
      *
      * @throws
      */
-    private function buildDoctrineSharingDeleteListener(ContainerBuilder $container,
-                                                        LoaderInterface $loader,
-                                                        array $config)
-    {
+    private function buildDoctrineSharingDeleteListener(
+        ContainerBuilder $container,
+        LoaderInterface $loader,
+        array $config
+    ): void {
         // doctrine orm sharing delete listener for private sharing
         if ($config['doctrine']['orm']['listeners']['sharing_delete']) {
             BuilderUtils::validate($container, 'doctrine.orm.listeners.sharing_delete', 'doctrine.orm.entity_manager', 'doctrine/orm');
@@ -148,6 +153,7 @@ class SharingBuilder implements ExtensionBuilderInterface
     {
         if (!class_exists($type)) {
             $msg = 'The "%s" sharing subject class does not exist';
+
             throw new InvalidConfigurationException(sprintf($msg, $type));
         }
 
@@ -176,6 +182,7 @@ class SharingBuilder implements ExtensionBuilderInterface
     {
         if (!class_exists($type)) {
             $msg = 'The "%s" sharing identity class does not exist';
+
             throw new InvalidConfigurationException(sprintf($msg, $type));
         }
 

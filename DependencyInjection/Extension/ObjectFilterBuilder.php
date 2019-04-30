@@ -22,7 +22,7 @@ class ObjectFilterBuilder implements ExtensionBuilderInterface
     /**
      * {@inheritdoc}
      */
-    public function build(ContainerBuilder $container, LoaderInterface $loader, array $config)
+    public function build(ContainerBuilder $container, LoaderInterface $loader, array $config): void
     {
         if ($config['object_filter']['enabled']) {
             $loader->load('object_filter.xml');

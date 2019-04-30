@@ -24,16 +24,14 @@ abstract class NodeUtils
      * Create an array node.
      *
      * @param string           $name    The name of the root node
-     * @param NodeBuilder|null $builder The node builder
+     * @param null|NodeBuilder $builder The node builder
      *
      * @return ArrayNodeDefinition
      */
     public static function createArrayNode($name, NodeBuilder $builder = null)
     {
         $treeBuilder = new TreeBuilder($name, 'array', $builder);
-        /* @var ArrayNodeDefinition $node */
-        $node = $treeBuilder->getRootNode();
-
-        return $node;
+        /** @var ArrayNodeDefinition $node */
+        return $treeBuilder->getRootNode();
     }
 }

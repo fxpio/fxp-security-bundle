@@ -26,7 +26,7 @@ class ObjectFilterPass implements CompilerPassInterface
     /**
      * {@inheritdoc}
      */
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         if (!$container->hasDefinition('fxp_security.object_filter.extension')) {
             return;
@@ -34,7 +34,7 @@ class ObjectFilterPass implements CompilerPassInterface
 
         $voters = [];
         foreach ($container->findTaggedServiceIds('fxp_security.object_filter.voter') as $id => $attributes) {
-            $priority = isset($attributes[0]['priority']) ? $attributes[0]['priority'] : 0;
+            $priority = $attributes[0]['priority'] ?? 0;
             $voters[$priority][] = new Reference($id);
         }
 

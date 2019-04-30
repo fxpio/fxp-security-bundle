@@ -27,7 +27,7 @@ class PermissionBuilder implements ExtensionBuilderInterface
     /**
      * {@inheritdoc}
      */
-    public function build(ContainerBuilder $container, LoaderInterface $loader, array $config)
+    public function build(ContainerBuilder $container, LoaderInterface $loader, array $config): void
     {
         $loader->load('permission.xml');
         $defaultPerms = $config['default_permissions'];
@@ -58,6 +58,7 @@ class PermissionBuilder implements ExtensionBuilderInterface
     {
         if (!class_exists($type)) {
             $msg = 'The "%s" permission class does not exist';
+
             throw new InvalidConfigurationException(sprintf($msg, $type));
         }
 
@@ -166,7 +167,7 @@ class PermissionBuilder implements ExtensionBuilderInterface
      * @param string           $class     The config class
      * @param string           $type      The type of permission
      * @param array            $arguments The config class arguments
-     * @param string|null      $field     The field of permission
+     * @param null|string      $field     The field of permission
      *
      * @return Reference
      */
@@ -195,7 +196,7 @@ class PermissionBuilder implements ExtensionBuilderInterface
      *
      * @throws
      */
-    private function buildDoctrineOrmChecker(ContainerBuilder $container, LoaderInterface $loader, array $config)
+    private function buildDoctrineOrmChecker(ContainerBuilder $container, LoaderInterface $loader, array $config): void
     {
         if ($config['doctrine']['orm']['listeners']['permission_checker']) {
             BuilderUtils::validate($container, 'doctrine.orm.listeners.permission_checker', 'doctrine.orm.entity_manager', 'doctrine/orm');

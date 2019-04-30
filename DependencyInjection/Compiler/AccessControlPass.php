@@ -41,14 +41,14 @@ class AccessControlPass implements CompilerPassInterface
     private $expressions = [];
 
     /**
-     * @var ExpressionLanguage|null
+     * @var null|ExpressionLanguage
      */
     private $expressionLanguage;
 
     /**
      * {@inheritdoc}
      */
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         if (!$container->hasParameter('fxp_security.access_control')) {
             return;
@@ -65,10 +65,11 @@ class AccessControlPass implements CompilerPassInterface
      * @param ContainerBuilder $container The container
      * @param array            $accesses  The control accesses
      */
-    private function createAuthorization(ContainerBuilder $container, array $accesses)
+    private function createAuthorization(ContainerBuilder $container, array $accesses): void
     {
         foreach ($accesses as $access) {
-            $matcher = $this->createRequestMatcher($container,
+            $matcher = $this->createRequestMatcher(
+                $container,
                 $access['path'],
                 $access['host'],
                 $access['methods'],
@@ -82,7 +83,8 @@ class AccessControlPass implements CompilerPassInterface
             }
 
             $container->getDefinition('security.access_map')
-                ->addMethodCall('add', [$matcher, $attributes, $access['requires_channel']]);
+                ->addMethodCall('add', [$matcher, $attributes, $access['requires_channel']])
+            ;
         }
     }
 
@@ -90,17 +92,22 @@ class AccessControlPass implements CompilerPassInterface
      * Create the request matcher.
      *
      * @param ContainerBuilder $container  The container
-     * @param string|null      $path       Tha path
-     * @param string|null      $host       The host
+     * @param null|string      $path       Tha path
+     * @param null|string      $host       The host
      * @param array            $methods    The request methods
-     * @param string|null      $ip         The client ip
+     * @param null|string      $ip         The client ip
      * @param array            $attributes The attributes
      *
      * @return Reference
      */
-    private function createRequestMatcher(ContainerBuilder $container, $path = null, $host = null,
-                                          $methods = [], $ip = null, array $attributes = [])
-    {
+    private function createRequestMatcher(
+        ContainerBuilder $container,
+        $path = null,
+        $host = null,
+        $methods = [],
+        $ip = null,
+        array $attributes = []
+    ) {
         if (!empty($methods)) {
             $methods = array_map('strtoupper', (array) $methods);
         }
@@ -145,8 +152,11 @@ class AccessControlPass implements CompilerPassInterface
             ->register($id, SerializedParsedExpression::class)
             ->setPublic(false)
             ->addArgument($expression)
-            ->addArgument(serialize($this->getExpressionLanguage($container)->parse($expression,
-                self::$availableExpressionNames)->getNodes()
+            ->addArgument(serialize(
+                $this->getExpressionLanguage($container)->parse(
+                $expression,
+                self::$availableExpressionNames
+            )->getNodes()
             ))
         ;
 

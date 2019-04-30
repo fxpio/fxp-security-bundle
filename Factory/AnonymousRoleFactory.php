@@ -39,15 +39,15 @@ class AnonymousRoleFactory extends AbstractRoleFactory
             ->example('ROLE_CUSTOM_ANONYMOUS')
             ->addDefaultsIfNotSet()
             ->beforeNormalization()
-                ->ifTrue(function ($v) {
+            ->ifTrue(function ($v) {
                     return \is_bool($v) || \is_string($v);
                 })
-                ->then(function ($v) {
+            ->then(function ($v) {
                     return ['role' => $this->getAnonymousRole($v)];
                 })
             ->end()
             ->children()
-                ->scalarNode('role')->defaultNull()->end()
+            ->scalarNode('role')->defaultNull()->end()
             ->end()
         ;
 

@@ -19,10 +19,13 @@ use Symfony\Component\Config\Definition\Processor;
  * Access Control Tests.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
+ *
+ * @internal
+ * @coversNothing
  */
-class AccessControlConfigurationTest extends TestCase
+final class AccessControlConfigurationTest extends TestCase
 {
-    public function testNoConfig()
+    public function testNoConfig(): void
     {
         $config = [];
 
@@ -31,7 +34,7 @@ class AccessControlConfigurationTest extends TestCase
         $this->assertCount(1, $processor->processConfiguration($configuration, [$config]));
     }
 
-    public function testConfig()
+    public function testConfig(): void
     {
         $config = [
             'access_control' => [

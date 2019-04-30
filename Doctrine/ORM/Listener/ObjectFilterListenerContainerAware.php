@@ -32,14 +32,14 @@ class ObjectFilterListenerContainerAware extends ObjectFilterListener
     /**
      * {@inheritdoc}
      */
-    protected function init()
+    protected function init(): void
     {
         if (null !== $this->container) {
-            /* @var TokenStorageInterface $tokenStorage */
+            /** @var TokenStorageInterface $tokenStorage */
             $tokenStorage = $this->container->get('security.token_storage');
-            /* @var PermissionManagerInterface $permManager */
+            /** @var PermissionManagerInterface $permManager */
             $permManager = $this->container->get('fxp_security.permission_manager');
-            /* @var ObjectFilterInterface $objectFilter */
+            /** @var ObjectFilterInterface $objectFilter */
             $objectFilter = $this->container->get('fxp_security.object_filter');
 
             $this->setTokenStorage($tokenStorage);

@@ -22,10 +22,13 @@ use Symfony\Component\DependencyInjection\Definition;
  * Expression Variable Storage Pass Test.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
+ *
+ * @internal
+ * @coversNothing
  */
-class AddExpressionLanguageProvidersPassTest extends TestCase
+final class AddExpressionLanguageProvidersPassTest extends TestCase
 {
-    public function testProcess()
+    public function testProcess(): void
     {
         $container = new ContainerBuilder();
         $compiler = new AddExpressionLanguageProvidersPass();

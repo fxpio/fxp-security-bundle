@@ -21,8 +21,11 @@ use Symfony\Component\DependencyInjection\Definition;
  * Translator Pass tests.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
+ *
+ * @internal
+ * @coversNothing
  */
-class TranslatorPassTest extends TestCase
+final class TranslatorPassTest extends TestCase
 {
     /**
      * @var ContainerBuilder|\PHPUnit_Framework_MockObject_MockObject
@@ -34,25 +37,26 @@ class TranslatorPassTest extends TestCase
      */
     protected $compiler;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->container = $this->getMockBuilder(ContainerBuilder::class)->getMock();
         $this->compiler = new TranslatorPass();
     }
 
-    public function testProcessWithoutTranslator()
+    public function testProcessWithoutTranslator(): void
     {
-        /* @var ContainerBuilder|\PHPUnit_Framework_MockObject_MockObject $container */
+        /** @var ContainerBuilder|\PHPUnit_Framework_MockObject_MockObject $container */
         $container = $this->getMockBuilder(ContainerBuilder::class)->getMock();
         $container->expects($this->once())
             ->method('hasDefinition')
             ->with('translator.default')
-            ->willReturn(false);
+            ->willReturn(false)
+        ;
 
         $this->compiler->process($container);
     }
 
-    public function testProcess()
+    public function testProcess(): void
     {
         $reflection = new \ReflectionClass(PermissionEvents::class);
         $dirname = \dirname($reflection->getFileName());
@@ -65,21 +69,25 @@ class TranslatorPassTest extends TestCase
         $this->container->expects($this->once())
             ->method('hasDefinition')
             ->with('translator.default')
-            ->willReturn(true);
+            ->willReturn(true)
+        ;
 
         $this->container->expects($this->once())
             ->method('getDefinition')
             ->with('translator.default')
-            ->willReturn($translator);
+            ->willReturn($translator)
+        ;
 
         $translator->expects($this->once())
             ->method('getArguments')
-            ->willReturn([null, null, [], []]);
+            ->willReturn([null, null, [], []])
+        ;
 
         $translator->expects($this->once())
             ->method('getArgument')
             ->with(3)
-            ->willReturn([]);
+            ->willReturn([])
+        ;
 
         $translator->expects($this->once())
             ->method('replaceArgument')
@@ -89,7 +97,8 @@ class TranslatorPassTest extends TestCase
                         $file,
                     ],
                 ],
-            ]);
+            ])
+        ;
 
         $this->compiler->process($this->container);
     }

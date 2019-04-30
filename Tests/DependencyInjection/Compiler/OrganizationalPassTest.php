@@ -21,10 +21,13 @@ use Symfony\Component\DependencyInjection\Definition;
  * Organizational Pass tests.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
+ *
+ * @internal
+ * @coversNothing
  */
-class OrganizationalPassTest extends TestCase
+final class OrganizationalPassTest extends TestCase
 {
-    public function testProcessWithoutService()
+    public function testProcessWithoutService(): void
     {
         $container = new ContainerBuilder();
         $compiler = new OrganizationalPass();
@@ -34,7 +37,7 @@ class OrganizationalPassTest extends TestCase
         $this->assertCount(1, $container->getDefinitions());
     }
 
-    public function testProcess()
+    public function testProcess(): void
     {
         $container = new ContainerBuilder();
         $compiler = new OrganizationalPass();
@@ -59,12 +62,11 @@ class OrganizationalPassTest extends TestCase
         $this->assertFalse($container->hasParameter($serviceIdName));
     }
 
-    /**
-     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage The service "test" must implement the Fxp\Component\Security\Organizational\OrganizationalContextInterface
-     */
-    public function testProcessWithInvalidInterface()
+    public function testProcessWithInvalidInterface(): void
     {
+        $this->expectException(\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException::class);
+        $this->expectExceptionMessage('The service "test" must implement the Fxp\\Component\\Security\\Organizational\\OrganizationalContextInterface');
+
         $container = new ContainerBuilder();
         $compiler = new OrganizationalPass();
         $serviceIdName = 'fxp_security.organizational_context.service_id';

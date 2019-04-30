@@ -38,14 +38,15 @@ class AnnotationBuilder implements ExtensionBuilderInterface
     /**
      * {@inheritdoc}
      */
-    public function build(ContainerBuilder $container, LoaderInterface $loader, array $config)
+    public function build(ContainerBuilder $container, LoaderInterface $loader, array $config): void
     {
         $security = $config['annotations']['security'];
         if ($security['enabled']) {
             BuilderUtils::validate($container, 'annotations.security', 'sensio_framework_extra.view.guesser', 'sensio/framework-extra-bundle');
             $loader->load('annotation_security.xml');
             $container->getDefinition('fxp_security.subscriber.security_annotation')
-                ->replaceArgument(3, $security['rename_arguments'] ? $security['rename_arguments_prefix'] : null);
+                ->replaceArgument(3, $security['rename_arguments'] ? $security['rename_arguments_prefix'] : null)
+            ;
 
             $this->ext->addAnnotatedClassesToCompile([
                 'Fxp\\Bundle\\SecurityBundle\\Listener\\SecurityAnnotationSubscriber',

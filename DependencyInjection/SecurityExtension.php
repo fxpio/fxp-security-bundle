@@ -59,7 +59,7 @@ class SecurityExtension extends Extension
     /**
      * {@inheritdoc}
      *
-     * @return string|false
+     * @return false|string
      */
     public function getXsdValidationBasePath()
     {
@@ -84,7 +84,7 @@ class SecurityExtension extends Extension
      *
      * @param SecurityFactoryInterface $factory The security factory
      */
-    public function addSecurityListenerFactory(SecurityFactoryInterface $factory)
+    public function addSecurityListenerFactory(SecurityFactoryInterface $factory): void
     {
         $this->extension->addSecurityListenerFactory($factory);
     }
@@ -94,7 +94,7 @@ class SecurityExtension extends Extension
      *
      * @param UserProviderFactoryInterface $factory The user provider factory
      */
-    public function addUserProviderFactory(UserProviderFactoryInterface $factory)
+    public function addUserProviderFactory(UserProviderFactoryInterface $factory): void
     {
         $this->extension->addUserProviderFactory($factory);
     }
@@ -102,7 +102,7 @@ class SecurityExtension extends Extension
     /**
      * {@inheritdoc}
      */
-    public function load(array $configs, ContainerBuilder $container)
+    public function load(array $configs, ContainerBuilder $container): void
     {
         $parentConfigs = [];
 
@@ -128,7 +128,7 @@ class SecurityExtension extends Extension
      * @param array            $configs   The configs
      * @param ContainerBuilder $container The container
      */
-    private function createAuthorization(array $configs, ContainerBuilder $container)
+    private function createAuthorization(array $configs, ContainerBuilder $container): void
     {
         $config = $this->processConfiguration(new AccessControlConfiguration(), $configs);
 

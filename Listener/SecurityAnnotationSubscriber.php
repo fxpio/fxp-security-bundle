@@ -49,12 +49,12 @@ class SecurityAnnotationSubscriber implements EventSubscriberInterface
     private $expressionLanguage;
 
     /**
-     * @var string|null
+     * @var null|string
      */
     private $prefixRenameArguments;
 
     /**
-     * @var LoggerInterface|null
+     * @var null|LoggerInterface
      */
     private $logger;
 
@@ -64,15 +64,16 @@ class SecurityAnnotationSubscriber implements EventSubscriberInterface
      * @param EventDispatcherInterface $dispatcher            The event dispatcher
      * @param TokenStorageInterface    $tokenStorage          The token storage
      * @param ExpressionLanguage       $expressionLanguage    The expression language
-     * @param string|null              $prefixRenameArguments Check if the controller arguments can be renamed in conflict
-     * @param LoggerInterface|null     $logger                The logger
+     * @param null|string              $prefixRenameArguments Check if the controller arguments can be renamed in conflict
+     * @param null|LoggerInterface     $logger                The logger
      */
-    public function __construct(EventDispatcherInterface $dispatcher,
-                                TokenStorageInterface $tokenStorage,
-                                ExpressionLanguage $expressionLanguage,
-                                $prefixRenameArguments = null,
-                                LoggerInterface $logger = null)
-    {
+    public function __construct(
+        EventDispatcherInterface $dispatcher,
+        TokenStorageInterface $tokenStorage,
+        ExpressionLanguage $expressionLanguage,
+        $prefixRenameArguments = null,
+        LoggerInterface $logger = null
+    ) {
         $this->dispatcher = $dispatcher;
         $this->tokenStorage = $tokenStorage;
         $this->expressionLanguage = $expressionLanguage;
@@ -85,7 +86,7 @@ class SecurityAnnotationSubscriber implements EventSubscriberInterface
      *
      * @param ExpressionFunctionProviderInterface $provider The expression function provider
      */
-    public function addExpressionLanguageProvider(ExpressionFunctionProviderInterface $provider)
+    public function addExpressionLanguageProvider(ExpressionFunctionProviderInterface $provider): void
     {
         $this->expressionLanguage->registerProvider($provider);
     }
@@ -103,7 +104,7 @@ class SecurityAnnotationSubscriber implements EventSubscriberInterface
      *
      * @param FilterControllerEvent $event The event
      */
-    public function onKernelController(FilterControllerEvent $event)
+    public function onKernelController(FilterControllerEvent $event): void
     {
         $request = $event->getRequest();
 
@@ -129,7 +130,7 @@ class SecurityAnnotationSubscriber implements EventSubscriberInterface
      */
     protected function getExpression(Request $request)
     {
-        /* @var Security[] $configurations */
+        /** @var Security[] $configurations */
         $configurations = $request->attributes->get('_fxp_security', []);
         $expressions = [];
 

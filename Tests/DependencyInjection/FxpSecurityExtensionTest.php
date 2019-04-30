@@ -28,16 +28,19 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
  * Security extension tests.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
+ *
+ * @internal
+ * @coversNothing
  */
-class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
+final class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
 {
-    public function testExtensionExist()
+    public function testExtensionExist(): void
     {
         $container = $this->createContainer([[]]);
         $this->assertTrue($container->hasExtension('fxp_security'));
     }
 
-    public function testObjectFilter()
+    public function testObjectFilter(): void
     {
         $container = $this->createContainer([[
             'object_filter' => [
@@ -63,12 +66,11 @@ class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
         $this->assertTrue($container->hasDefinition('fxp_security.object_filter.orm.listener'));
     }
 
-    /**
-     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage The "fxp_security.doctrine.orm.object_filter_voter" config require the "doctrine/orm" package
-     */
-    public function testOrmObjectFilterVoterWithoutDoctrine()
+    public function testOrmObjectFilterVoterWithoutDoctrine(): void
     {
+        $this->expectException(\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException::class);
+        $this->expectExceptionMessage('The "fxp_security.doctrine.orm.object_filter_voter" config require the "doctrine/orm" package');
+
         $this->createContainer([[
             'object_filter' => [
                 'enabled' => true,
@@ -81,12 +83,11 @@ class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
         ]]);
     }
 
-    /**
-     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage The "fxp_security.doctrine.orm.listeners.object_filter" config require the "doctrine/orm" package
-     */
-    public function testOrmObjectFilterListenerWithoutDoctrine()
+    public function testOrmObjectFilterListenerWithoutDoctrine(): void
     {
+        $this->expectException(\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException::class);
+        $this->expectExceptionMessage('The "fxp_security.doctrine.orm.listeners.object_filter" config require the "doctrine/orm" package');
+
         $this->createContainer([[
             'object_filter' => [
                 'enabled' => true,
@@ -101,7 +102,7 @@ class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
         ]]);
     }
 
-    public function testSecurityVoter()
+    public function testSecurityVoter(): void
     {
         $container = $this->createContainer([[
             'security_voter' => [
@@ -117,7 +118,7 @@ class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
         $this->assertSame(RoleSecurityIdentityVoter::class, $container->getDefinition('security.access.role_hierarchy_voter')->getClass());
     }
 
-    public function testRoleHierarchy()
+    public function testRoleHierarchy(): void
     {
         $container = $this->createContainer([[
             'role_hierarchy' => [
@@ -144,12 +145,11 @@ class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
         $this->assertSame(OrganizationalRoleHierarchy::class, $def->getClass());
     }
 
-    /**
-     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage The "fxp_security.role_hierarchy" config require the "doctrine/doctrine-bundle" package
-     */
-    public function testRoleHierarchyWithoutDoctrineBundle()
+    public function testRoleHierarchyWithoutDoctrineBundle(): void
     {
+        $this->expectException(\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException::class);
+        $this->expectExceptionMessage('The "fxp_security.role_hierarchy" config require the "doctrine/doctrine-bundle" package');
+
         $this->createContainer([[
             'role_hierarchy' => [
                 'enabled' => true,
@@ -157,12 +157,11 @@ class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
         ]]);
     }
 
-    /**
-     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage The "fxp_security.doctrine.orm.listeners.role_hierarchy" config require the "doctrine/orm" package
-     */
-    public function testOrmRoleHierarchyListenerWithoutDoctrine()
+    public function testOrmRoleHierarchyListenerWithoutDoctrine(): void
     {
+        $this->expectException(\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException::class);
+        $this->expectExceptionMessage('The "fxp_security.doctrine.orm.listeners.role_hierarchy" config require the "doctrine/orm" package');
+
         $this->createContainer([[
             'role_hierarchy' => [
                 'enabled' => true,
@@ -179,7 +178,7 @@ class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
         ]);
     }
 
-    public function testOrganizationalContext()
+    public function testOrganizationalContext(): void
     {
         $container = $this->createContainer([[
             'organizational_context' => [
@@ -193,7 +192,7 @@ class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
         $this->assertTrue($container->hasDefinition('fxp_security.subscriber.security_identity.organization'));
     }
 
-    public function testExpressionLanguage()
+    public function testExpressionLanguage(): void
     {
         $container = $this->createContainer([[
             'organizational_context' => [
@@ -225,12 +224,11 @@ class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
         $this->assertTrue($container->hasDefinition('fxp_security.expression.functions.is_organization'));
     }
 
-    /**
-     * @expectedException \Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException
-     * @expectedExceptionMessage The service "fxp_security.expression.functions.is_granted" has a dependency on a non-existent service "security.authorization_checker"
-     */
-    public function testExpressionLanguageWitMissingDependenciesForIsGranted()
+    public function testExpressionLanguageWitMissingDependenciesForIsGranted(): void
     {
+        $this->expectException(\Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException::class);
+        $this->expectExceptionMessage('The service "fxp_security.expression.functions.is_granted" has a dependency on a non-existent service "security.authorization_checker"');
+
         $this->createContainer([[
             'expression' => [
                 'override_voter' => true,
@@ -243,12 +241,11 @@ class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
         ]);
     }
 
-    /**
-     * @expectedException \Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException
-     * @expectedExceptionMessage The service "fxp_security.expression.functions.is_organization" has a dependency on a non-existent service "fxp_security.organizational_context"
-     */
-    public function testExpressionLanguageWitMissingDependenciesForIsOrganization()
+    public function testExpressionLanguageWitMissingDependenciesForIsOrganization(): void
     {
+        $this->expectException(\Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException::class);
+        $this->expectExceptionMessage('The service "fxp_security.expression.functions.is_organization" has a dependency on a non-existent service "fxp_security.organizational_context"');
+
         $this->createContainer([[
             'expression' => [
                 'override_voter' => true,
@@ -259,7 +256,7 @@ class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
         ]]);
     }
 
-    public function testAnnotation()
+    public function testAnnotation(): void
     {
         $container = $this->createContainer([[
             'annotations' => [
@@ -272,12 +269,11 @@ class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
         $this->assertTrue($container->hasDefinition('fxp_security.subscriber.security_annotation'));
     }
 
-    /**
-     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage The "fxp_security.annotations.security" config require the "sensio/framework-extra-bundle" package
-     */
-    public function testAnnotationWitMissingDependencies()
+    public function testAnnotationWitMissingDependencies(): void
     {
+        $this->expectException(\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException::class);
+        $this->expectExceptionMessage('The "fxp_security.annotations.security" config require the "sensio/framework-extra-bundle" package');
+
         $this->createContainer([[
             'annotations' => [
                 'security' => true,
@@ -285,7 +281,7 @@ class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
         ]]);
     }
 
-    public function testOrmSharing()
+    public function testOrmSharing(): void
     {
         $container = $this->createContainer([[
             'sharing' => [
@@ -305,12 +301,11 @@ class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
         $this->assertTrue($container->hasDefinition('fxp_security.orm.filter.subscriber.sharing'));
     }
 
-    /**
-     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage The "fxp_security.doctrine.orm.filter.sharing" config require the "doctrine/orm" package
-     */
-    public function testOrmSharingWithoutDoctrine()
+    public function testOrmSharingWithoutDoctrine(): void
     {
+        $this->expectException(\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException::class);
+        $this->expectExceptionMessage('The "fxp_security.doctrine.orm.filter.sharing" config require the "doctrine/orm" package');
+
         $this->createContainer([[
             'sharing' => [
                 'enabled' => true,
@@ -325,12 +320,11 @@ class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
         ]]);
     }
 
-    /**
-     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage The "fxp_security.sharing" config must be enabled
-     */
-    public function testOrmSharingDoctrineWithoutEnableSharing()
+    public function testOrmSharingDoctrineWithoutEnableSharing(): void
     {
+        $this->expectException(\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException::class);
+        $this->expectExceptionMessage('The "fxp_security.sharing" config must be enabled');
+
         $this->createContainer([[
             'doctrine' => [
                 'orm' => [
@@ -344,7 +338,7 @@ class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
         ]);
     }
 
-    public function testOrmSharingPrivateListener()
+    public function testOrmSharingPrivateListener(): void
     {
         $container = $this->createContainer([[
             'sharing' => [
@@ -367,12 +361,11 @@ class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
         $this->assertTrue($container->hasDefinition('fxp_security.orm.filter.sharing.private_listener'));
     }
 
-    /**
-     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage The "fxp_security.doctrine.orm.filter.sharing" config require the "doctrine/orm" package
-     */
-    public function testOrmSharingPrivateListenerWithoutDoctrine()
+    public function testOrmSharingPrivateListenerWithoutDoctrine(): void
     {
+        $this->expectException(\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException::class);
+        $this->expectExceptionMessage('The "fxp_security.doctrine.orm.filter.sharing" config require the "doctrine/orm" package');
+
         $this->createContainer([[
             'sharing' => [
                 'enabled' => true,
@@ -390,12 +383,11 @@ class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
         ]]);
     }
 
-    /**
-     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage The "fxp_security.doctrine.orm.filters.sharing" config must be enabled
-     */
-    public function testOrmSharingPrivateListenerWithoutEnableSharing()
+    public function testOrmSharingPrivateListenerWithoutEnableSharing(): void
     {
+        $this->expectException(\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException::class);
+        $this->expectExceptionMessage('The "fxp_security.doctrine.orm.filters.sharing" config must be enabled');
+
         $this->createContainer([[
             'doctrine' => [
                 'orm' => [
@@ -409,7 +401,7 @@ class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
         ]);
     }
 
-    public function testOrmSharingDelete()
+    public function testOrmSharingDelete(): void
     {
         $container = $this->createContainer([[
             'sharing' => [
@@ -429,12 +421,11 @@ class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
         $this->assertTrue($container->hasDefinition('fxp_security.orm.listener.sharing_delete'));
     }
 
-    /**
-     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage The "fxp_security.doctrine.orm.listeners.sharing_delete" config require the "doctrine/orm" package
-     */
-    public function testOrmSharingDeleteWithoutDoctrine()
+    public function testOrmSharingDeleteWithoutDoctrine(): void
     {
+        $this->expectException(\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException::class);
+        $this->expectExceptionMessage('The "fxp_security.doctrine.orm.listeners.sharing_delete" config require the "doctrine/orm" package');
+
         $this->createContainer([[
             'sharing' => [
                 'enabled' => true,
@@ -449,12 +440,11 @@ class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
         ]]);
     }
 
-    /**
-     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage The "fxp_security.sharing" config must be enabled
-     */
-    public function testOrmSharingDeleteDoctrineWithoutEnableSharing()
+    public function testOrmSharingDeleteDoctrineWithoutEnableSharing(): void
     {
+        $this->expectException(\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException::class);
+        $this->expectExceptionMessage('The "fxp_security.sharing" config must be enabled');
+
         $this->createContainer([[
             'doctrine' => [
                 'orm' => [
@@ -468,7 +458,7 @@ class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
         ]);
     }
 
-    public function testPermission()
+    public function testPermission(): void
     {
         $container = $this->createContainer([[
             'permissions' => [
@@ -494,12 +484,11 @@ class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
         $this->assertTrue($container->hasDefinition('fxp_security.permission_checker.orm.listener'));
     }
 
-    /**
-     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage The "FooBar" permission class does not exist
-     */
-    public function testPermissionWithNonExistentClass()
+    public function testPermissionWithNonExistentClass(): void
     {
+        $this->expectException(\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException::class);
+        $this->expectExceptionMessage('The "FooBar" permission class does not exist');
+
         $this->createContainer([[
             'permissions' => [
                 'FooBar' => true,
@@ -507,7 +496,7 @@ class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
         ]]);
     }
 
-    public function testPermissionWithFields()
+    public function testPermissionWithFields(): void
     {
         $container = $this->createContainer([[
             'permissions' => [
@@ -527,7 +516,7 @@ class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
         $this->assertCount(1, $permConfigs);
     }
 
-    public function testPermissionWithDefaultFields()
+    public function testPermissionWithDefaultFields(): void
     {
         $container = $this->createContainer([[
             'default_permissions' => [
@@ -551,7 +540,7 @@ class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
         $this->assertCount(1, $permConfigs);
     }
 
-    public function testMasterMappingPermissionWithDefaultMapping()
+    public function testMasterMappingPermissionWithDefaultMapping(): void
     {
         $container = $this->createContainer([[
             'default_permissions' => [
@@ -576,12 +565,11 @@ class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
         $this->assertCount(1, $permConfigs);
     }
 
-    /**
-     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage The permission field "foo" does not exist in "Fxp\Component\Security\Tests\Fixtures\Model\MockObject" class
-     */
-    public function testPermissionWithNonExistentField()
+    public function testPermissionWithNonExistentField(): void
     {
+        $this->expectException(\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException::class);
+        $this->expectExceptionMessage('The permission field "foo" does not exist in "Fxp\\Component\\Security\\Tests\\Fixtures\\Model\\MockObject" class');
+
         $this->createContainer([[
             'permissions' => [
                 MockObject::class => [
@@ -593,12 +581,11 @@ class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
         ]]);
     }
 
-    /**
-     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage The "fxp_security.doctrine.orm.listeners.permission_checker" config require the "doctrine/orm" package
-     */
-    public function testOrmPermissionCheckerListenerWithoutDoctrine()
+    public function testOrmPermissionCheckerListenerWithoutDoctrine(): void
     {
+        $this->expectException(\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException::class);
+        $this->expectExceptionMessage('The "fxp_security.doctrine.orm.listeners.permission_checker" config require the "doctrine/orm" package');
+
         $this->createContainer([[
             'permissions' => [
                 MockObject::class => [],
@@ -613,7 +600,7 @@ class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
         ]]);
     }
 
-    public function testSharing()
+    public function testSharing(): void
     {
         $container = $this->createContainer([[
             'sharing' => [
@@ -635,7 +622,7 @@ class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
         $this->assertCount(1, $identityConfigs);
     }
 
-    public function testSharingWithDirectIdentityAlias()
+    public function testSharingWithDirectIdentityAlias(): void
     {
         $container = $this->createContainer([[
             'sharing' => [
@@ -653,12 +640,11 @@ class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
         $this->assertCount(1, $identityConfigs);
     }
 
-    /**
-     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage The "FooBar" sharing identity class does not exist
-     */
-    public function testSharingWithNonExistentIdentityClass()
+    public function testSharingWithNonExistentIdentityClass(): void
     {
+        $this->expectException(\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException::class);
+        $this->expectExceptionMessage('The "FooBar" sharing identity class does not exist');
+
         $this->createContainer([[
             'sharing' => [
                 'enabled' => true,
@@ -673,7 +659,7 @@ class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
         ]]);
     }
 
-    public function testSharingWithSubject()
+    public function testSharingWithSubject(): void
     {
         $container = $this->createContainer([[
             'sharing' => [
@@ -691,12 +677,11 @@ class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
         $this->assertCount(1, $subjectConfigs);
     }
 
-    /**
-     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage The "FooBar" sharing subject class does not exist
-     */
-    public function testSharingWithNonExistentSubjectClass()
+    public function testSharingWithNonExistentSubjectClass(): void
     {
+        $this->expectException(\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException::class);
+        $this->expectExceptionMessage('The "FooBar" sharing subject class does not exist');
+
         $this->createContainer([[
             'sharing' => [
                 'enabled' => true,

@@ -22,7 +22,7 @@ class ExpressionLanguageBuilder implements ExtensionBuilderInterface
     /**
      * {@inheritdoc}
      */
-    public function build(ContainerBuilder $container, LoaderInterface $loader, array $config)
+    public function build(ContainerBuilder $container, LoaderInterface $loader, array $config): void
     {
         $loader->load('expression_variable_storage.xml');
 

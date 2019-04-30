@@ -28,9 +28,9 @@ class OrganizationalPass implements CompilerPassInterface
     /**
      * {@inheritdoc}
      */
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
-        /* @var $pb ParameterBag */
+        /** @var ParameterBag $pb */
         $pb = $container->getParameterBag();
         $alias = 'fxp_security.organizational_context';
         $serviceIdName = 'fxp_security.organizational_context.service_id';
@@ -64,8 +64,9 @@ class OrganizationalPass implements CompilerPassInterface
         $definition = $container->getDefinition($serviceId);
         $interfaces = class_implements($definition->getClass());
 
-        if (!\in_array(OrganizationalContextInterface::class, $interfaces)) {
+        if (!\in_array(OrganizationalContextInterface::class, $interfaces, true)) {
             $msg = 'The service "%s" must implement the %s';
+
             throw new InvalidConfigurationException(sprintf($msg, $serviceId, OrganizationalContextInterface::class));
         }
 

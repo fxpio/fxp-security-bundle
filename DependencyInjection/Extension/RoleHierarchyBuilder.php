@@ -23,7 +23,7 @@ class RoleHierarchyBuilder implements ExtensionBuilderInterface
     /**
      * {@inheritdoc}
      */
-    public function build(ContainerBuilder $container, LoaderInterface $loader, array $config)
+    public function build(ContainerBuilder $container, LoaderInterface $loader, array $config): void
     {
         if ($config['role_hierarchy']['enabled']) {
             BuilderUtils::validate($container, 'role_hierarchy', 'doctrine', 'doctrine/doctrine-bundle');

@@ -23,12 +23,15 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
  * Object Filter Listener Container Aware Tests.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
+ *
+ * @internal
+ * @coversNothing
  */
-class ObjectFilterListenerContainerAwareTest extends TestCase
+final class ObjectFilterListenerContainerAwareTest extends TestCase
 {
-    public function testOnFlush()
+    public function testOnFlush(): void
     {
-        /* @var OnFlushEventArgs|\PHPUnit_Framework_MockObject_MockObject $args */
+        /** @var OnFlushEventArgs|\PHPUnit_Framework_MockObject_MockObject $args */
         $args = $this->getMockBuilder(OnFlushEventArgs::class)->disableOriginalConstructor()->getMock();
         $tokenStorage = $this->getMockBuilder(TokenStorageInterface::class)->getMock();
         $permissionManager = $this->getMockBuilder(PermissionManagerInterface::class)->getMock();
@@ -38,17 +41,20 @@ class ObjectFilterListenerContainerAwareTest extends TestCase
         $container->expects($this->at(0))
             ->method('get')
             ->with('security.token_storage')
-            ->willReturn($tokenStorage);
+            ->willReturn($tokenStorage)
+        ;
 
         $container->expects($this->at(1))
             ->method('get')
             ->with('fxp_security.permission_manager')
-            ->willReturn($permissionManager);
+            ->willReturn($permissionManager)
+        ;
 
         $container->expects($this->at(2))
             ->method('get')
             ->with('fxp_security.object_filter')
-            ->willReturn($objectFilter);
+            ->willReturn($objectFilter)
+        ;
 
         $listener = new ObjectFilterListenerContainerAware();
         $listener->container = $container;

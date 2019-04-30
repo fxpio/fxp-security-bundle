@@ -23,10 +23,13 @@ use Symfony\Component\Config\Definition\Processor;
  * Configuration Tests.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
+ *
+ * @internal
+ * @coversNothing
  */
-class ConfigurationTest extends TestCase
+final class ConfigurationTest extends TestCase
 {
-    public function testNoConfig()
+    public function testNoConfig(): void
     {
         $config = [];
         $processor = new Processor();
@@ -34,7 +37,7 @@ class ConfigurationTest extends TestCase
         $this->assertCount(13, $processor->processConfiguration($configuration, [$config]));
     }
 
-    public function testPermissionConfigNormalization()
+    public function testPermissionConfigNormalization(): void
     {
         $config = [
             'permissions' => [
@@ -50,7 +53,7 @@ class ConfigurationTest extends TestCase
         $this->assertArrayHasKey(\stdClass::class, $res['permissions']);
     }
 
-    public function testPermissionFieldOperationNormalization()
+    public function testPermissionFieldOperationNormalization(): void
     {
         $operations = [
             'read',
@@ -83,7 +86,7 @@ class ConfigurationTest extends TestCase
         $this->assertNull($cConf['fields']['name']['editable']);
     }
 
-    public function testPermissionMasterFieldMapping()
+    public function testPermissionMasterFieldMapping(): void
     {
         $config = [
             'permissions' => [
@@ -107,7 +110,7 @@ class ConfigurationTest extends TestCase
         $this->assertArrayHasKey('update', $res['permissions'][\stdClass::class]['master_mapping_permissions']);
     }
 
-    public function testSharingSubjectConfigNormalization()
+    public function testSharingSubjectConfigNormalization(): void
     {
         $config = [
             'sharing' => [
@@ -126,7 +129,7 @@ class ConfigurationTest extends TestCase
         $this->assertArrayHasKey(\stdClass::class, $res['sharing']['subjects']);
     }
 
-    public function testObjectFilterConfigByDefault()
+    public function testObjectFilterConfigByDefault(): void
     {
         $expected = [
             PermissionInterface::class,
@@ -143,7 +146,7 @@ class ConfigurationTest extends TestCase
         $this->assertSame($expected, $res['object_filter']['excluded_classes']);
     }
 
-    public function testObjectFilterConfig()
+    public function testObjectFilterConfig(): void
     {
         $expected = [
             \stdClass::class,

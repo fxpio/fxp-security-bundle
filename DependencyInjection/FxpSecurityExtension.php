@@ -40,13 +40,13 @@ class FxpSecurityExtension extends Extension
     /**
      * {@inheritdoc}
      */
-    public function load(array $configs, ContainerBuilder $container)
+    public function load(array $configs, ContainerBuilder $container): void
     {
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
         $ref = new \ReflectionClass($this);
-        $configPath = \dirname(\dirname($ref->getFileName())).'/Resources/config';
+        $configPath = \dirname($ref->getFileName(), 2).'/Resources/config';
         $loader = new Loader\XmlFileLoader($container, new FileLocator($configPath));
 
         foreach ($this->getExtensionBuilders() as $extensionBuilder) {

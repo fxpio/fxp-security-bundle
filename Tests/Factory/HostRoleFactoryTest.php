@@ -20,24 +20,27 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  * Host Role Factory Tests.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
+ *
+ * @internal
+ * @coversNothing
  */
-class HostRoleFactoryTest extends TestCase
+final class HostRoleFactoryTest extends TestCase
 {
-    public function testGetPosition()
+    public function testGetPosition(): void
     {
         $factory = new HostRoleFactory();
 
         $this->assertSame('pre_auth', $factory->getPosition());
     }
 
-    public function testGetKey()
+    public function testGetKey(): void
     {
         $factory = new HostRoleFactory();
 
         $this->assertSame('host_roles', $factory->getKey());
     }
 
-    public function testAddConfiguration()
+    public function testAddConfiguration(): void
     {
         $builder = new ArrayNodeDefinition('test');
         $factory = new HostRoleFactory();
@@ -45,7 +48,7 @@ class HostRoleFactoryTest extends TestCase
         $this->assertSame($builder, $factory->addConfiguration($builder));
     }
 
-    public function testCreate()
+    public function testCreate(): void
     {
         $container = new ContainerBuilder();
         $factory = new HostRoleFactory();

@@ -22,8 +22,11 @@ use Symfony\Component\Security\Http\AccessMap;
  * Access Control Pass tests.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
+ *
+ * @internal
+ * @coversNothing
  */
-class AccessControlPassTest extends TestCase
+final class AccessControlPassTest extends TestCase
 {
     /**
      * @var ContainerBuilder
@@ -59,7 +62,7 @@ class AccessControlPassTest extends TestCase
         ],
     ];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->container = new ContainerBuilder();
         $this->compiler = new AccessControlPass();
@@ -75,19 +78,20 @@ class AccessControlPassTest extends TestCase
         $this->container->setDefinition('security.expression.custom_identity_function', $expressionDef);
     }
 
-    public function testProcessWithoutAccessControl()
+    public function testProcessWithoutAccessControl(): void
     {
-        /* @var ContainerBuilder|\PHPUnit_Framework_MockObject_MockObject $container */
+        /** @var ContainerBuilder|\PHPUnit_Framework_MockObject_MockObject $container */
         $container = $this->getMockBuilder(ContainerBuilder::class)->getMock();
         $container->expects($this->once())
             ->method('hasParameter')
             ->with('fxp_security.access_control')
-            ->willReturn(false);
+            ->willReturn(false)
+        ;
 
         $this->compiler->process($container);
     }
 
-    public function testProcess()
+    public function testProcess(): void
     {
         $this->container->setParameter('fxp_security.access_control', $this->accessControl);
 

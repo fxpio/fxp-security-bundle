@@ -47,7 +47,7 @@ class Security extends ConfigurationAnnotation
      *
      * @param string $expression The expression
      */
-    public function setExpression($expression)
+    public function setExpression($expression): void
     {
         $this->expression = $expression;
     }
@@ -57,7 +57,7 @@ class Security extends ConfigurationAnnotation
      *
      * @param string $expression The expression
      */
-    public function setValue($expression)
+    public function setValue($expression): void
     {
         $this->setExpression($expression);
     }
@@ -67,7 +67,7 @@ class Security extends ConfigurationAnnotation
      *
      * @param bool $override
      */
-    public function setOverride($override)
+    public function setOverride($override): void
     {
         $this->override = (bool) $override;
     }

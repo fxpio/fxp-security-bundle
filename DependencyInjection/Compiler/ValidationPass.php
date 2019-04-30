@@ -27,7 +27,7 @@ class ValidationPass implements CompilerPassInterface
     /**
      * {@inheritdoc}
      */
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         if (!$container->hasDefinition('validator.builder')) {
             return;
@@ -37,7 +37,8 @@ class ValidationPass implements CompilerPassInterface
 
         if (\count($xmlMappings) > 0) {
             $container->getDefinition('validator.builder')
-                ->addMethodCall('addXmlMappings', [$xmlMappings]);
+                ->addMethodCall('addXmlMappings', [$xmlMappings])
+            ;
         }
     }
 

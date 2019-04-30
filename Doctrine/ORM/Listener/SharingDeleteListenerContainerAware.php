@@ -30,10 +30,10 @@ class SharingDeleteListenerContainerAware extends SharingDeleteListener
     /**
      * {@inheritdoc}
      */
-    protected function init()
+    protected function init(): void
     {
         if (null !== $this->container) {
-            /* @var SharingManagerInterface $sharingManager */
+            /** @var SharingManagerInterface $sharingManager */
             $sharingManager = $this->container->get('fxp_security.sharing_manager');
 
             $this->setSharingManager($sharingManager);

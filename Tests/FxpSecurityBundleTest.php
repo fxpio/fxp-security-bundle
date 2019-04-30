@@ -19,21 +19,24 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  * Security bundle tests.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
+ *
+ * @internal
+ * @coversNothing
  */
-class FxpSecurityBundleTest extends TestCase
+final class FxpSecurityBundleTest extends TestCase
 {
-    /**
-     * @expectedException \Fxp\Component\Security\Exception\LogicException
-     * @expectedExceptionMessage The FxpSecurityBundle must be registered after the SecurityBundle in your App Kernel
-     */
-    public function testSecurityBundleNotRegistered()
+    public function testSecurityBundleNotRegistered(): void
     {
-        /* @var ContainerBuilder|\PHPUnit_Framework_MockObject_MockObject $container */
+        $this->expectException(\Fxp\Component\Security\Exception\LogicException::class);
+        $this->expectExceptionMessage('The FxpSecurityBundle must be registered after the SecurityBundle in your App Kernel');
+
+        /** @var ContainerBuilder|\PHPUnit_Framework_MockObject_MockObject $container */
         $container = $this->getMockBuilder(ContainerBuilder::class)->getMock();
         $container->expects($this->once())
             ->method('hasExtension')
             ->with('security')
-            ->willReturn(false);
+            ->willReturn(false)
+        ;
 
         $bundle = new FxpSecurityBundle();
         $bundle->build($container);

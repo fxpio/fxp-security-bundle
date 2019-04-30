@@ -18,10 +18,13 @@ use PHPUnit\Framework\TestCase;
  * Security Tests.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
+ *
+ * @internal
+ * @coversNothing
  */
-class SecurityTest extends TestCase
+final class SecurityTest extends TestCase
 {
-    public function testSecurityAnnotation()
+    public function testSecurityAnnotation(): void
     {
         $exp = 'has_role("ROLE_USER")';
         $exp2 = 'has_role("ROLE_ADMIN")';

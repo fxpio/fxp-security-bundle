@@ -37,7 +37,7 @@ class ModelBuilder implements ExtensionBuilderInterface
     /**
      * {@inheritdoc}
      */
-    public function build(ContainerBuilder $container, LoaderInterface $loader, array $config)
+    public function build(ContainerBuilder $container, LoaderInterface $loader, array $config): void
     {
         if ('custom' !== $config['db_driver']) {
             $container->setParameter($this->alias.'.backend_type_'.$config['db_driver'], true);

@@ -25,7 +25,7 @@ class AddExpressionLanguageProvidersPass implements CompilerPassInterface
     /**
      * {@inheritdoc}
      */
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         // annotation
         if ($container->has('fxp_security.subscriber.security_annotation')) {

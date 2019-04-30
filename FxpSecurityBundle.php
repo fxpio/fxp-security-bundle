@@ -37,7 +37,7 @@ class FxpSecurityBundle extends Bundle
     /**
      * {@inheritdoc}
      */
-    public function build(ContainerBuilder $container)
+    public function build(ContainerBuilder $container): void
     {
         parent::build($container);
 
@@ -50,9 +50,14 @@ class FxpSecurityBundle extends Bundle
         $container->addCompilerPass(new AddExpressionLanguageProvidersPass());
         $container->addCompilerPass(new ObjectFilterPass());
         $container->addCompilerPass(new OrganizationalPass());
-        $container->addCompilerPass(new RegisterListenersPass('event_dispatcher',
-            'fxp_security.event_listener', 'fxp_security.event_subscriber'),
-            PassConfig::TYPE_BEFORE_REMOVING);
+        $container->addCompilerPass(
+            new RegisterListenersPass(
+            'event_dispatcher',
+            'fxp_security.event_listener',
+            'fxp_security.event_subscriber'
+        ),
+            PassConfig::TYPE_BEFORE_REMOVING
+        );
     }
 
     /**
@@ -60,13 +65,13 @@ class FxpSecurityBundle extends Bundle
      *
      * @param ContainerBuilder $container The container
      */
-    private function registerSecurityExtension(ContainerBuilder $container)
+    private function registerSecurityExtension(ContainerBuilder $container): void
     {
         if (!$container->hasExtension('security')) {
             throw new LogicException('The FxpSecurityBundle must be registered after the SecurityBundle in your App Kernel');
         }
 
-        /* @var BaseSecurityExtension $extension */
+        /** @var BaseSecurityExtension $extension */
         $extension = $container->getExtension('security');
         $extension->addSecurityListenerFactory(new HostRoleFactory());
         $extension->addSecurityListenerFactory(new AnonymousRoleFactory());
