@@ -31,7 +31,7 @@ abstract class NodeUtils
     public static function createArrayNode($name, NodeBuilder $builder = null)
     {
         $treeBuilder = new TreeBuilder($name, 'array', $builder);
-        /** @var ArrayNodeDefinition $node */
+        /* @var ArrayNodeDefinition $node */
         return $treeBuilder->getRootNode();
     }
 }

@@ -65,14 +65,14 @@ class AccessControlConfiguration implements ConfigurationInterface
             ->scalarNode('host')->defaultNull()->end()
             ->arrayNode('ips')
             ->beforeNormalization()->ifString()->then(function ($v) {
-                            return [$v];
-                        })->end()
+                return [$v];
+            })->end()
             ->prototype('scalar')->end()
             ->end()
             ->arrayNode('methods')
             ->beforeNormalization()->ifString()->then(function ($v) {
-                            return preg_split('/\s*,\s*/', $v);
-                        })->end()
+                return preg_split('/\s*,\s*/', $v);
+            })->end()
             ->prototype('scalar')->end()
             ->end()
             ->scalarNode('allow_if')->defaultNull()->end()
@@ -81,8 +81,8 @@ class AccessControlConfiguration implements ConfigurationInterface
             ->children()
             ->arrayNode('roles')
             ->beforeNormalization()->ifString()->then(function ($v) {
-                            return preg_split('/\s*,\s*/', $v);
-                        })->end()
+                return preg_split('/\s*,\s*/', $v);
+            })->end()
             ->prototype('scalar')->end()
             ->end()
             ->end()

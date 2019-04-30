@@ -52,9 +52,9 @@ class FxpSecurityBundle extends Bundle
         $container->addCompilerPass(new OrganizationalPass());
         $container->addCompilerPass(
             new RegisterListenersPass(
-            'event_dispatcher',
-            'fxp_security.event_listener',
-            'fxp_security.event_subscriber'
+                'event_dispatcher',
+                'fxp_security.event_listener',
+                'fxp_security.event_subscriber'
         ),
             PassConfig::TYPE_BEFORE_REMOVING
         );

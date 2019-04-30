@@ -279,11 +279,11 @@ class Configuration implements ConfigurationInterface
             ->addDefaultsIfNotSet()
             ->beforeNormalization()
             ->ifTrue(function ($v) {
-                        return \is_array($v) && isset($v[0]);
-                    })
+                return \is_array($v) && isset($v[0]);
+            })
             ->then(function ($v) {
-                        return ['operations' => $v];
-                    })
+                return ['operations' => $v];
+            })
             ->end()
             ->canBeDisabled()
             ->children()
@@ -321,8 +321,8 @@ class Configuration implements ConfigurationInterface
             ->beforeNormalization()
             ->ifString()
             ->then(function ($v) {
-                                return ['visibility' => $v];
-                            })
+                return ['visibility' => $v];
+            })
             ->end()
             ->children()
             ->scalarNode('visibility')->defaultValue(SharingVisibilities::TYPE_NONE)->end()
@@ -338,8 +338,8 @@ class Configuration implements ConfigurationInterface
             ->beforeNormalization()
             ->ifString()
             ->then(function ($v) {
-                                return ['alias' => $v];
-                            })
+                return ['alias' => $v];
+            })
             ->end()
             ->children()
             ->scalarNode('alias')->defaultNull()->end()
