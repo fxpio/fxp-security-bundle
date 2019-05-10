@@ -26,6 +26,8 @@ class SharingBuilder implements ExtensionBuilderInterface
 {
     /**
      * {@inheritdoc}
+     *
+     * @throws
      */
     public function build(ContainerBuilder $container, LoaderInterface $loader, array $config): void
     {
@@ -149,7 +151,7 @@ class SharingBuilder implements ExtensionBuilderInterface
      *
      * @return Reference
      */
-    private function buildSharingSubjectConfig(ContainerBuilder $container, $type, array $config)
+    private function buildSharingSubjectConfig(ContainerBuilder $container, string $type, array $config): Reference
     {
         if (!class_exists($type)) {
             $msg = 'The "%s" sharing subject class does not exist';
@@ -178,7 +180,7 @@ class SharingBuilder implements ExtensionBuilderInterface
      *
      * @return Reference
      */
-    private function buildSharingIdentityConfig(ContainerBuilder $container, $type, array $config)
+    private function buildSharingIdentityConfig(ContainerBuilder $container, string $type, array $config): Reference
     {
         if (!class_exists($type)) {
             $msg = 'The "%s" sharing identity class does not exist';

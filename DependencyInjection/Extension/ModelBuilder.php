@@ -29,7 +29,7 @@ class ModelBuilder implements ExtensionBuilderInterface
      *
      * @param string $alias The security extension alias
      */
-    public function __construct($alias)
+    public function __construct(string $alias)
     {
         $this->alias = $alias;
     }

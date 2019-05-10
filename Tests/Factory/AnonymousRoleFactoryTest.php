@@ -62,7 +62,8 @@ final class AnonymousRoleFactoryTest extends TestCase
         $builder = new ArrayNodeDefinition('anonymous_role');
         $factory = new AnonymousRoleFactory();
 
-        $this->assertSame($builder, $factory->addConfiguration($builder));
+        $factory->addConfiguration($builder);
+        $this->assertCount(1, $builder->getChildNodeDefinitions());
 
         $processor = new Processor();
         $res = $processor->process($builder->getNode(), [$config]);

@@ -26,5 +26,5 @@ interface ExtensionBuilderInterface
      * @param LoaderInterface  $loader    The config loader
      * @param array            $config    The config
      */
-    public function build(ContainerBuilder $container, LoaderInterface $loader, array $config);
+    public function build(ContainerBuilder $container, LoaderInterface $loader, array $config): void;
 }

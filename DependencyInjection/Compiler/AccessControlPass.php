@@ -16,6 +16,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\ExpressionLanguage\ExpressionFunctionProviderInterface;
 use Symfony\Component\ExpressionLanguage\SerializedParsedExpression;
+use Symfony\Component\HttpFoundation\RequestMatcher;
 use Symfony\Component\Security\Core\Authorization\ExpressionLanguage;
 
 /**
@@ -91,28 +92,28 @@ class AccessControlPass implements CompilerPassInterface
     /**
      * Create the request matcher.
      *
-     * @param ContainerBuilder $container  The container
-     * @param null|string      $path       Tha path
-     * @param null|string      $host       The host
-     * @param array            $methods    The request methods
-     * @param null|string      $ip         The client ip
-     * @param array            $attributes The attributes
+     * @param ContainerBuilder     $container  The container
+     * @param null|string          $path       Tha path
+     * @param null|string          $host       The host
+     * @param array                $methods    The request methods
+     * @param null|string|string[] $ips        The client ip
+     * @param array                $attributes The attributes
      *
      * @return Reference
      */
     private function createRequestMatcher(
         ContainerBuilder $container,
-        $path = null,
-        $host = null,
-        $methods = [],
-        $ip = null,
+        ?string $path = null,
+        ?string $host = null,
+        array $methods = [],
+        $ips = null,
         array $attributes = []
-    ) {
+    ): Reference {
         if (!empty($methods)) {
-            $methods = array_map('strtoupper', (array) $methods);
+            $methods = array_map('strtoupper', $methods);
         }
 
-        $serialized = serialize([$path, $host, $methods, $ip, $attributes]);
+        $serialized = serialize([$path, $host, $methods, $ips, $attributes]);
         $id = 'security.request_matcher.'.md5($serialized).sha1($serialized);
 
         if (isset($this->requestMatchers[$id])) {
@@ -120,13 +121,13 @@ class AccessControlPass implements CompilerPassInterface
         }
 
         // only add arguments that are necessary
-        $arguments = [$path, $host, $methods, $ip, $attributes];
+        $arguments = [$path, $host, $methods, $ips, $attributes];
         while (\count($arguments) > 0 && !end($arguments)) {
             array_pop($arguments);
         }
 
         $container
-            ->register($id, 'Symfony\Component\HttpFoundation\RequestMatcher')
+            ->register($id, RequestMatcher::class)
             ->setPublic(false)
             ->setArguments($arguments)
         ;
@@ -142,7 +143,7 @@ class AccessControlPass implements CompilerPassInterface
      *
      * @return Reference
      */
-    private function createExpression(ContainerBuilder $container, $expression)
+    private function createExpression(ContainerBuilder $container, string $expression): Reference
     {
         if (isset($this->expressions[$id = 'security.expression.'.sha1($expression)])) {
             return $this->expressions[$id];
@@ -170,7 +171,7 @@ class AccessControlPass implements CompilerPassInterface
      *
      * @return ExpressionLanguage
      */
-    private function getExpressionLanguage(ContainerBuilder $container)
+    private function getExpressionLanguage(ContainerBuilder $container): ExpressionLanguage
     {
         if (null === $this->expressionLanguage) {
             $this->expressionLanguage = new ExpressionLanguage(
@@ -187,9 +188,11 @@ class AccessControlPass implements CompilerPassInterface
      *
      * @param ContainerBuilder $container The container
      *
+     * @throws
+     *
      * @return ExpressionFunctionProviderInterface[]
      */
-    private function getExpressionFunctions(ContainerBuilder $container)
+    private function getExpressionFunctions(ContainerBuilder $container): array
     {
         $providers = [];
         $services = $container->findTaggedServiceIds('security.expression_language_provider');

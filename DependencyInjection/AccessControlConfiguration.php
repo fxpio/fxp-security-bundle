@@ -26,7 +26,7 @@ class AccessControlConfiguration implements ConfigurationInterface
     /**
      * {@inheritdoc}
      */
-    public function getConfigTreeBuilder()
+    public function getConfigTreeBuilder(): TreeBuilder
     {
         $treeBuilder = new TreeBuilder('security');
         /** @var ArrayNodeDefinition $rootNode */
@@ -46,7 +46,7 @@ class AccessControlConfiguration implements ConfigurationInterface
      *
      * @return NodeDefinition
      */
-    private function getAccessControlNode()
+    private function getAccessControlNode(): NodeDefinition
     {
         $node = NodeUtils::createArrayNode('access_control');
 
@@ -64,13 +64,13 @@ class AccessControlConfiguration implements ConfigurationInterface
             ->end()
             ->scalarNode('host')->defaultNull()->end()
             ->arrayNode('ips')
-            ->beforeNormalization()->ifString()->then(function ($v) {
+            ->beforeNormalization()->ifString()->then(static function ($v) {
                 return [$v];
             })->end()
             ->prototype('scalar')->end()
             ->end()
             ->arrayNode('methods')
-            ->beforeNormalization()->ifString()->then(function ($v) {
+            ->beforeNormalization()->ifString()->then(static function ($v) {
                 return preg_split('/\s*,\s*/', $v);
             })->end()
             ->prototype('scalar')->end()
@@ -80,7 +80,7 @@ class AccessControlConfiguration implements ConfigurationInterface
             ->fixXmlConfig('role')
             ->children()
             ->arrayNode('roles')
-            ->beforeNormalization()->ifString()->then(function ($v) {
+            ->beforeNormalization()->ifString()->then(static function ($v) {
                 return preg_split('/\s*,\s*/', $v);
             })->end()
             ->prototype('scalar')->end()

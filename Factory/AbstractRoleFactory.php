@@ -25,7 +25,7 @@ abstract class AbstractRoleFactory implements SecurityFactoryInterface
     /**
      * {@inheritdoc}
      */
-    public function create(ContainerBuilder $container, $id, $config, $userProvider, $defaultEntryPoint)
+    public function create(ContainerBuilder $container, $id, $config, $userProvider, $defaultEntryPoint): array
     {
         $providerId = $this->getServiceId('provider').'.'.$id;
         $container
@@ -44,7 +44,7 @@ abstract class AbstractRoleFactory implements SecurityFactoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getPosition()
+    public function getPosition(): string
     {
         return 'pre_auth';
     }
@@ -56,7 +56,7 @@ abstract class AbstractRoleFactory implements SecurityFactoryInterface
      *
      * @return string
      */
-    protected function getServiceId($type)
+    protected function getServiceId($type): string
     {
         return sprintf('fxp_security.authentication.%s.%s', $type, $this->getKey());
     }

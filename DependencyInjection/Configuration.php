@@ -29,7 +29,7 @@ class Configuration implements ConfigurationInterface
     /**
      * {@inheritdoc}
      */
-    public function getConfigTreeBuilder()
+    public function getConfigTreeBuilder(): TreeBuilder
     {
         $treeBuilder = new TreeBuilder('fxp_security');
         /** @var ArrayNodeDefinition $rootNode */
@@ -70,7 +70,7 @@ class Configuration implements ConfigurationInterface
      *
      * @return NodeDefinition
      */
-    private function getHostRoleNode()
+    private function getHostRoleNode(): NodeDefinition
     {
         return NodeUtils::createArrayNode('host_role')
             ->addDefaultsIfNotSet()
@@ -83,7 +83,7 @@ class Configuration implements ConfigurationInterface
      *
      * @return NodeDefinition
      */
-    private function getAnonymousRoleNode()
+    private function getAnonymousRoleNode(): NodeDefinition
     {
         return NodeUtils::createArrayNode('anonymous_role')
             ->addDefaultsIfNotSet()
@@ -96,7 +96,7 @@ class Configuration implements ConfigurationInterface
      *
      * @return NodeDefinition
      */
-    private function getRoleHierarchyNode()
+    private function getRoleHierarchyNode(): NodeDefinition
     {
         return NodeUtils::createArrayNode('role_hierarchy')
             ->addDefaultsIfNotSet()
@@ -112,7 +112,7 @@ class Configuration implements ConfigurationInterface
      *
      * @return NodeDefinition
      */
-    private function getSecurityVoterNode()
+    private function getSecurityVoterNode(): NodeDefinition
     {
         return NodeUtils::createArrayNode('security_voter')
             ->addDefaultsIfNotSet()
@@ -128,7 +128,7 @@ class Configuration implements ConfigurationInterface
      *
      * @return NodeDefinition
      */
-    private function getObjectFilterNode()
+    private function getObjectFilterNode(): NodeDefinition
     {
         return NodeUtils::createArrayNode('object_filter')
             ->addDefaultsIfNotSet()
@@ -150,7 +150,7 @@ class Configuration implements ConfigurationInterface
      *
      * @return NodeDefinition
      */
-    private function getOrganizationalContextNode()
+    private function getOrganizationalContextNode(): NodeDefinition
     {
         return NodeUtils::createArrayNode('organizational_context')
             ->addDefaultsIfNotSet()
@@ -166,7 +166,7 @@ class Configuration implements ConfigurationInterface
      *
      * @return NodeDefinition
      */
-    private function getExpressionLanguageNode()
+    private function getExpressionLanguageNode(): NodeDefinition
     {
         return NodeUtils::createArrayNode('expression')
             ->addDefaultsIfNotSet()
@@ -189,7 +189,7 @@ class Configuration implements ConfigurationInterface
      *
      * @return NodeDefinition
      */
-    private function getAnnotationNode()
+    private function getAnnotationNode(): NodeDefinition
     {
         return NodeUtils::createArrayNode('annotations')
             ->addDefaultsIfNotSet()
@@ -211,7 +211,7 @@ class Configuration implements ConfigurationInterface
      *
      * @return NodeDefinition
      */
-    private function getFieldConfigPermissionNode()
+    private function getFieldConfigPermissionNode(): NodeDefinition
     {
         return NodeUtils::createArrayNode('default_permissions')
             ->addDefaultsIfNotSet()
@@ -231,7 +231,7 @@ class Configuration implements ConfigurationInterface
      *
      * @return NodeDefinition
      */
-    private function getPermissionNode()
+    private function getPermissionNode(): NodeDefinition
     {
         return NodeUtils::createArrayNode('permissions')
             ->requiresAtLeastOneElement()
@@ -269,7 +269,7 @@ class Configuration implements ConfigurationInterface
      *
      * @return NodeDefinition
      */
-    private function getPermissionFieldsNode()
+    private function getPermissionFieldsNode(): NodeDefinition
     {
         return NodeUtils::createArrayNode('fields')
             ->requiresAtLeastOneElement()
@@ -278,10 +278,10 @@ class Configuration implements ConfigurationInterface
             ->prototype('array')
             ->addDefaultsIfNotSet()
             ->beforeNormalization()
-            ->ifTrue(function ($v) {
+            ->ifTrue(static function ($v) {
                 return \is_array($v) && isset($v[0]);
             })
-            ->then(function ($v) {
+            ->then(static function ($v) {
                 return ['operations' => $v];
             })
             ->end()
@@ -306,7 +306,7 @@ class Configuration implements ConfigurationInterface
      *
      * @return NodeDefinition
      */
-    private function getSharingNode()
+    private function getSharingNode(): NodeDefinition
     {
         return NodeUtils::createArrayNode('sharing')
             ->addDefaultsIfNotSet()
@@ -320,7 +320,7 @@ class Configuration implements ConfigurationInterface
             ->addDefaultsIfNotSet()
             ->beforeNormalization()
             ->ifString()
-            ->then(function ($v) {
+            ->then(static function ($v) {
                 return ['visibility' => $v];
             })
             ->end()
@@ -337,7 +337,7 @@ class Configuration implements ConfigurationInterface
             ->addDefaultsIfNotSet()
             ->beforeNormalization()
             ->ifString()
-            ->then(function ($v) {
+            ->then(static function ($v) {
                 return ['alias' => $v];
             })
             ->end()
@@ -357,7 +357,7 @@ class Configuration implements ConfigurationInterface
      *
      * @return NodeDefinition
      */
-    private function getDoctrineNode()
+    private function getDoctrineNode(): NodeDefinition
     {
         return NodeUtils::createArrayNode('doctrine')
             ->addDefaultsIfNotSet()

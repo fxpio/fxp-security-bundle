@@ -12,6 +12,7 @@
 namespace Fxp\Bundle\SecurityBundle\DependencyInjection\Extension;
 
 use Fxp\Bundle\SecurityBundle\DependencyInjection\FxpSecurityExtension;
+use Fxp\Bundle\SecurityBundle\Listener\SecurityAnnotationSubscriber;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
@@ -37,6 +38,8 @@ class AnnotationBuilder implements ExtensionBuilderInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @throws
      */
     public function build(ContainerBuilder $container, LoaderInterface $loader, array $config): void
     {
@@ -49,7 +52,7 @@ class AnnotationBuilder implements ExtensionBuilderInterface
             ;
 
             $this->ext->addAnnotatedClassesToCompile([
-                'Fxp\\Bundle\\SecurityBundle\\Listener\\SecurityAnnotationSubscriber',
+                SecurityAnnotationSubscriber::class,
             ]);
         }
     }

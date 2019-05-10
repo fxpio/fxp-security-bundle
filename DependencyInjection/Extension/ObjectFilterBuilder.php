@@ -21,6 +21,8 @@ class ObjectFilterBuilder implements ExtensionBuilderInterface
 {
     /**
      * {@inheritdoc}
+     *
+     * @throws
      */
     public function build(ContainerBuilder $container, LoaderInterface $loader, array $config): void
     {

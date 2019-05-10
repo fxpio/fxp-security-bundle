@@ -37,7 +37,7 @@ class Security extends ConfigurationAnnotation
      *
      * @return string
      */
-    public function getExpression()
+    public function getExpression(): string
     {
         return $this->expression;
     }
@@ -47,7 +47,7 @@ class Security extends ConfigurationAnnotation
      *
      * @param string $expression The expression
      */
-    public function setExpression($expression): void
+    public function setExpression(string $expression): void
     {
         $this->expression = $expression;
     }
@@ -57,7 +57,7 @@ class Security extends ConfigurationAnnotation
      *
      * @param string $expression The expression
      */
-    public function setValue($expression): void
+    public function setValue(string $expression): void
     {
         $this->setExpression($expression);
     }
@@ -67,9 +67,9 @@ class Security extends ConfigurationAnnotation
      *
      * @param bool $override
      */
-    public function setOverride($override): void
+    public function setOverride(bool $override): void
     {
-        $this->override = (bool) $override;
+        $this->override = $override;
     }
 
     /**
@@ -77,7 +77,7 @@ class Security extends ConfigurationAnnotation
      *
      * @return bool
      */
-    public function isOverriding()
+    public function isOverriding(): bool
     {
         return $this->override;
     }
@@ -85,7 +85,7 @@ class Security extends ConfigurationAnnotation
     /**
      * {@inheritdoc}
      */
-    public function getAliasName()
+    public function getAliasName(): string
     {
         return 'fxp_security';
     }
@@ -93,7 +93,7 @@ class Security extends ConfigurationAnnotation
     /**
      * {@inheritdoc}
      */
-    public function allowArray()
+    public function allowArray(): bool
     {
         return true;
     }

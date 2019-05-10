@@ -26,6 +26,8 @@ class PermissionBuilder implements ExtensionBuilderInterface
 {
     /**
      * {@inheritdoc}
+     *
+     * @throws
      */
     public function build(ContainerBuilder $container, LoaderInterface $loader, array $config): void
     {
@@ -54,7 +56,7 @@ class PermissionBuilder implements ExtensionBuilderInterface
      *
      * @return Reference
      */
-    private function buildPermissionConfig(ContainerBuilder $container, $type, array $config, array $defaultPerms)
+    private function buildPermissionConfig(ContainerBuilder $container, string $type, array $config, array $defaultPerms): Reference
     {
         if (!class_exists($type)) {
             $msg = 'The "%s" permission class does not exist';
@@ -80,7 +82,7 @@ class PermissionBuilder implements ExtensionBuilderInterface
      *
      * @return array
      */
-    private function buildMasterMappingPermissions(array $config, array $defaultMapping)
+    private function buildMasterMappingPermissions(array $config, array $defaultMapping): array
     {
         $mapping = $config['master_mapping_permissions'];
 
@@ -99,9 +101,11 @@ class PermissionBuilder implements ExtensionBuilderInterface
      * @param array            $config       The config of permissions
      * @param array            $defaultPerms The config of default permissions
      *
+     * @throws
+     *
      * @return string[]
      */
-    private function buildPermissionConfigFields(ContainerBuilder $container, $type, array $config, array $defaultPerms)
+    private function buildPermissionConfigFields(ContainerBuilder $container, string $type, array $config, array $defaultPerms): array
     {
         $fields = [];
         $ref = new \ReflectionClass($type);
@@ -118,7 +122,7 @@ class PermissionBuilder implements ExtensionBuilderInterface
                 $field,
                 $fieldConfig['operations'],
                 $fieldConfig['mapping_permissions'],
-                \array_key_exists('editable', $fieldConfig) ? $fieldConfig['editable'] : null,
+                $fieldConfig['editable'] ?? null,
             ], $field);
         }
 
@@ -134,7 +138,7 @@ class PermissionBuilder implements ExtensionBuilderInterface
      *
      * @return array
      */
-    private function buildDefaultPermissionConfigFields(\ReflectionClass $ref, array $config, array $defaultPerms)
+    private function buildDefaultPermissionConfigFields(\ReflectionClass $ref, array $config, array $defaultPerms): array
     {
         $hasFields = \count($config['fields']) > 0;
         $hasDefaults = \count($defaultPerms) > 0;
@@ -145,7 +149,7 @@ class PermissionBuilder implements ExtensionBuilderInterface
             foreach ($ref->getProperties() as $property) {
                 $field = $property->getName();
 
-                if ($buildDefaultField && !isset($config['fields'][$field]) && isset($defaultPerms[$field])) {
+                if ($buildDefaultField && isset($defaultPerms[$field]) && !isset($config['fields'][$field])) {
                     $config['fields'][$field] = $defaultPerms[$field];
                 } elseif ($buildField && !$hasFields) {
                     $config['fields'][$field] = [
@@ -171,7 +175,7 @@ class PermissionBuilder implements ExtensionBuilderInterface
      *
      * @return Reference
      */
-    private function createConfigDefinition(ContainerBuilder $container, $class, $type, array $arguments, $field = null)
+    private function createConfigDefinition(ContainerBuilder $container, string $class, string $type, array $arguments, ?string $field = null): Reference
     {
         $def = new Definition($class, $arguments);
         $def->setPublic(false);
@@ -212,7 +216,7 @@ class PermissionBuilder implements ExtensionBuilderInterface
      *
      * @return bool
      */
-    private function isValidField(\ReflectionClass $reflectionClass, $field)
+    private function isValidField(\ReflectionClass $reflectionClass, string $field): bool
     {
         $getField = 'get'.ucfirst($field);
         $hasField = 'has'.ucfirst($field);

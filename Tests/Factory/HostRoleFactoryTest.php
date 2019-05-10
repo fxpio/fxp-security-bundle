@@ -44,7 +44,8 @@ final class HostRoleFactoryTest extends TestCase
         $builder = new ArrayNodeDefinition('test');
         $factory = new HostRoleFactory();
 
-        $this->assertSame($builder, $factory->addConfiguration($builder));
+        $factory->addConfiguration($builder);
+        $this->assertCount(1, $builder->getChildNodeDefinitions());
     }
 
     public function testCreate(): void

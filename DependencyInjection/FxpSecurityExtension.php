@@ -39,6 +39,8 @@ class FxpSecurityExtension extends Extension
 {
     /**
      * {@inheritdoc}
+     *
+     * @throws \ReflectionException
      */
     public function load(array $configs, ContainerBuilder $container): void
     {
@@ -59,7 +61,7 @@ class FxpSecurityExtension extends Extension
      *
      * @return ExtensionBuilderInterface[]
      */
-    private function getExtensionBuilders()
+    private function getExtensionBuilders(): array
     {
         return [
             new ModelBuilder($this->getAlias()),

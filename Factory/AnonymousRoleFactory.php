@@ -24,7 +24,7 @@ class AnonymousRoleFactory extends AbstractRoleFactory
     /**
      * {@inheritdoc}
      */
-    public function getKey()
+    public function getKey(): string
     {
         return 'anonymous_role';
     }
@@ -32,14 +32,14 @@ class AnonymousRoleFactory extends AbstractRoleFactory
     /**
      * {@inheritdoc}
      */
-    public function addConfiguration(NodeDefinition $builder)
+    public function addConfiguration(NodeDefinition $builder): void
     {
         /* @var ArrayNodeDefinition $builder */
         $builder
             ->example('ROLE_CUSTOM_ANONYMOUS')
             ->addDefaultsIfNotSet()
             ->beforeNormalization()
-            ->ifTrue(function ($v) {
+            ->ifTrue(static function ($v) {
                 return \is_bool($v) || \is_string($v);
             })
             ->then(function ($v) {
@@ -50,11 +50,14 @@ class AnonymousRoleFactory extends AbstractRoleFactory
             ->scalarNode('role')->defaultNull()->end()
             ->end()
         ;
-
-        return $builder;
     }
 
-    private function getAnonymousRole($v)
+    /**
+     * @param null|bool|string $v
+     *
+     * @return null|string
+     */
+    private function getAnonymousRole($v): ?string
     {
         if (true === $v) {
             $v = 'ROLE_ANONYMOUS';

@@ -47,9 +47,11 @@ class ValidationPass implements CompilerPassInterface
      *
      * @param ContainerBuilder $container The container
      *
+     * @throws
+     *
      * @return string[]
      */
-    private function getValidatorMappingFiles(ContainerBuilder $container)
+    private function getValidatorMappingFiles(ContainerBuilder $container): array
     {
         $files = [];
 
@@ -57,7 +59,9 @@ class ValidationPass implements CompilerPassInterface
         $dirname = \dirname($reflection->getFileName());
 
         if (is_dir($dir = $dirname.'/Resources/config/validation')) {
-            foreach (Finder::create()->files()->in($dir)->name('*.xml') as $file) {
+            $foundFiles = Finder::create()->files()->in($dir)->name('*.xml')->getIterator();
+
+            foreach ($foundFiles as $file) {
                 $files[] = realpath($file->getPathname());
             }
 

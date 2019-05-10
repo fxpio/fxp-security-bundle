@@ -43,7 +43,7 @@ class SecurityExtension extends Extension
     /**
      * {@inheritdoc}
      */
-    public function getAlias()
+    public function getAlias(): string
     {
         return $this->extension->getAlias();
     }
@@ -51,7 +51,7 @@ class SecurityExtension extends Extension
     /**
      * {@inheritdoc}
      */
-    public function getNamespace()
+    public function getNamespace(): string
     {
         return $this->extension->getNamespace();
     }
@@ -74,7 +74,7 @@ class SecurityExtension extends Extension
      *
      * @return ConfigurationInterface
      */
-    public function getConfiguration(array $config, ContainerBuilder $container)
+    public function getConfiguration(array $config, ContainerBuilder $container): ConfigurationInterface
     {
         return $this->extension->getConfiguration($config, $container);
     }

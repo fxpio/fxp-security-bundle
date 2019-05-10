@@ -24,7 +24,7 @@ class HostRoleFactory extends AbstractRoleFactory
     /**
      * {@inheritdoc}
      */
-    public function getKey()
+    public function getKey(): string
     {
         return 'host_roles';
     }
@@ -32,12 +32,10 @@ class HostRoleFactory extends AbstractRoleFactory
     /**
      * {@inheritdoc}
      */
-    public function addConfiguration(NodeDefinition $builder)
+    public function addConfiguration(NodeDefinition $builder): void
     {
         /* @var ArrayNodeDefinition $builder */
         $builder->example(['*.domain.*' => 'ROLE_WEBSITE', '*' => 'ROLE_PUBLIC']);
         $builder->prototype('scalar')->end();
-
-        return $builder;
     }
 }

@@ -71,8 +71,8 @@ class SecurityAnnotationSubscriber implements EventSubscriberInterface
         EventDispatcherInterface $dispatcher,
         TokenStorageInterface $tokenStorage,
         ExpressionLanguage $expressionLanguage,
-        $prefixRenameArguments = null,
-        LoggerInterface $logger = null
+        ?string $prefixRenameArguments = null,
+        ?LoggerInterface $logger = null
     ) {
         $this->dispatcher = $dispatcher;
         $this->tokenStorage = $tokenStorage;
@@ -94,7 +94,7 @@ class SecurityAnnotationSubscriber implements EventSubscriberInterface
     /**
      * {@inheritdoc}
      */
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [KernelEvents::CONTROLLER => 'onKernelController'];
     }
@@ -128,7 +128,7 @@ class SecurityAnnotationSubscriber implements EventSubscriberInterface
      *
      * @return string
      */
-    protected function getExpression(Request $request)
+    protected function getExpression(Request $request): string
     {
         /** @var Security[] $configurations */
         $configurations = $request->attributes->get('_fxp_security', []);
@@ -152,7 +152,7 @@ class SecurityAnnotationSubscriber implements EventSubscriberInterface
      *
      * @return array
      */
-    protected function getVariables(TokenInterface $token, Request $request)
+    protected function getVariables(TokenInterface $token, Request $request): array
     {
         $event = new GetExpressionVariablesEvent($token);
         $this->dispatcher->dispatch(ExpressionVariableEvents::GET, $event);
@@ -173,7 +173,7 @@ class SecurityAnnotationSubscriber implements EventSubscriberInterface
      *
      * @return array
      */
-    private function getRequestVariables(Request $request)
+    private function getRequestVariables(Request $request): array
     {
         $variables = [];
 
@@ -194,7 +194,7 @@ class SecurityAnnotationSubscriber implements EventSubscriberInterface
      *
      * @return array
      */
-    private function mergeRequestVariables(array $variables, array $requestVariables)
+    private function mergeRequestVariables(array $variables, array $requestVariables): array
     {
         if ($diff = array_intersect(array_keys($variables), array_keys($requestVariables))) {
             foreach ($diff as $key => $variableName) {
@@ -219,7 +219,7 @@ class SecurityAnnotationSubscriber implements EventSubscriberInterface
      *
      * @return array
      */
-    private function cleanRequestVariables(array $variables, array $diff)
+    private function cleanRequestVariables(array $variables, array $diff): array
     {
         if (null !== $this->prefixRenameArguments) {
             foreach ($diff as $name) {

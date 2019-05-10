@@ -52,9 +52,11 @@ class TranslatorPass implements CompilerPassInterface
      *
      * @param ContainerBuilder $container The container
      *
+     * @throws
+     *
      * @return array
      */
-    private function getTranslationFiles(ContainerBuilder $container)
+    private function getTranslationFiles(ContainerBuilder $container): array
     {
         $reflection = new \ReflectionClass(PermissionEvents::class);
         $dirname = \dirname($reflection->getFileName());
@@ -75,18 +77,18 @@ class TranslatorPass implements CompilerPassInterface
      *
      * @return array
      */
-    private function findTranslationFiles($dir)
+    private function findTranslationFiles(string $dir): array
     {
         $files = [];
         $finder = Finder::create()
             ->files()
-            ->filter(function (\SplFileInfo $file) {
+            ->filter(static function (\SplFileInfo $file) {
                 return 2 === substr_count($file->getBasename(), '.') && preg_match('/\.\w+$/', $file->getBasename());
             })
             ->in($dir)
         ;
 
-        foreach ($finder as $file) {
+        foreach ($finder->getIterator() as $file) {
             list(, $locale) = explode('.', $file->getBasename(), 3);
             if (!isset($files[$locale])) {
                 $files[$locale] = [];

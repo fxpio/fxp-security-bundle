@@ -28,7 +28,7 @@ abstract class NodeUtils
      *
      * @return ArrayNodeDefinition
      */
-    public static function createArrayNode($name, NodeBuilder $builder = null)
+    public static function createArrayNode(string $name, NodeBuilder $builder = null): ArrayNodeDefinition
     {
         $treeBuilder = new TreeBuilder($name, 'array', $builder);
         /* @var ArrayNodeDefinition $node */

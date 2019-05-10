@@ -27,7 +27,7 @@ abstract class BuilderUtils
      * @param string           $service   The required service id
      * @param string           $package   The required package name
      */
-    public static function validate(ContainerBuilder $container, $config, $service, $package): void
+    public static function validate(ContainerBuilder $container, string $config, string $service, string $package): void
     {
         $missingServices = $container->hasParameter('fxp_security.missing_services')
             ? $container->getParameter('fxp_security.missing_services')
@@ -46,7 +46,7 @@ abstract class BuilderUtils
      *
      * @throws
      */
-    public static function loadProvider(LoaderInterface $loader, array $config, $type): void
+    public static function loadProvider(LoaderInterface $loader, array $config, string $type): void
     {
         if ('custom' !== $config['db_driver']) {
             $loader->load($config['db_driver'].'_provider_'.$type.'.xml');
