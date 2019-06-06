@@ -40,7 +40,7 @@ final class AnonymousRoleFactoryTest extends TestCase
         $this->assertSame('anonymous_role', $factory->getKey());
     }
 
-    public function getConfiguration()
+    public function getConfiguration(): array
     {
         return [
             [true, 'ROLE_ANONYMOUS'],
@@ -68,7 +68,8 @@ final class AnonymousRoleFactoryTest extends TestCase
         $processor = new Processor();
         $res = $processor->process($builder->getNode(), [$config]);
 
-        $this->assertInternalType('array', $res);
+        $value = \is_array($res);
+        $this->assertTrue($value);
         $this->assertArrayHasKey('role', $res);
         $this->assertSame($expected, $res['role']);
     }

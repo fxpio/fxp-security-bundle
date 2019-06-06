@@ -13,13 +13,12 @@ namespace Fxp\Bundle\SecurityBundle\Listener;
 
 use Fxp\Bundle\SecurityBundle\Configuration\Security;
 use Fxp\Component\Security\Event\GetExpressionVariablesEvent;
-use Fxp\Component\Security\ExpressionVariableEvents;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\ExpressionLanguage\ExpressionFunctionProviderInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
+use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -102,9 +101,9 @@ class SecurityAnnotationSubscriber implements EventSubscriberInterface
     /**
      * On kernel controller action.
      *
-     * @param FilterControllerEvent $event The event
+     * @param ControllerEvent $event The event
      */
-    public function onKernelController(FilterControllerEvent $event): void
+    public function onKernelController(ControllerEvent $event): void
     {
         $request = $event->getRequest();
 
@@ -155,7 +154,7 @@ class SecurityAnnotationSubscriber implements EventSubscriberInterface
     protected function getVariables(TokenInterface $token, Request $request): array
     {
         $event = new GetExpressionVariablesEvent($token);
-        $this->dispatcher->dispatch(ExpressionVariableEvents::GET, $event);
+        $this->dispatcher->dispatch($event);
 
         $variables = array_merge([
             'object' => $request,

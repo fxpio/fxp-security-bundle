@@ -29,7 +29,7 @@ final class AccessControlConfigurationTest extends TestCase
         $config = [];
 
         $processor = new Processor();
-        $configuration = new AccessControlConfiguration([], []);
+        $configuration = new AccessControlConfiguration();
         $this->assertCount(1, $processor->processConfiguration($configuration, [$config]));
     }
 
@@ -59,7 +59,7 @@ final class AccessControlConfigurationTest extends TestCase
         ];
 
         $processor = new Processor();
-        $configuration = new AccessControlConfiguration([], []);
+        $configuration = new AccessControlConfiguration();
         $fConfig = $processor->processConfiguration($configuration, [$config]);
 
         $this->assertEquals($validConfig, $fConfig);

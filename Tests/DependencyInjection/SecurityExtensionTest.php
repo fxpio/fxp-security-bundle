@@ -12,6 +12,7 @@
 namespace Fxp\Bundle\SecurityBundle\Tests\DependencyInjection;
 
 use Fxp\Bundle\SecurityBundle\DependencyInjection\SecurityExtension;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Bundle\SecurityBundle\DependencyInjection\Security\Factory\SecurityFactoryInterface;
 use Symfony\Bundle\SecurityBundle\DependencyInjection\Security\UserProvider\UserProviderFactoryInterface;
@@ -29,7 +30,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 final class SecurityExtensionTest extends TestCase
 {
     /**
-     * @var BaseSecurityExtension|\PHPUnit_Framework_MockObject_MockObject
+     * @var BaseSecurityExtension|MockObject
      */
     protected $baseExt;
 
@@ -118,7 +119,7 @@ final class SecurityExtensionTest extends TestCase
 
     public function testLoad(): void
     {
-        /** @var ContainerBuilder|\PHPUnit_Framework_MockObject_MockObject $container */
+        /** @var ContainerBuilder|MockObject $container */
         $container = $this->getMockBuilder(ContainerBuilder::class)->getMock();
         $accessControl = [
             [
@@ -155,7 +156,7 @@ final class SecurityExtensionTest extends TestCase
 
     public function testLoadWithoutControlAccess(): void
     {
-        /** @var ContainerBuilder|\PHPUnit_Framework_MockObject_MockObject $container */
+        /** @var ContainerBuilder|MockObject $container */
         $container = $this->getMockBuilder(ContainerBuilder::class)->getMock();
         $configs = [[
             'rule' => 'RULE',

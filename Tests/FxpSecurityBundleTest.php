@@ -12,6 +12,7 @@
 namespace Fxp\Bundle\SecurityBundle\Tests;
 
 use Fxp\Bundle\SecurityBundle\FxpSecurityBundle;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
@@ -29,7 +30,7 @@ final class FxpSecurityBundleTest extends TestCase
         $this->expectException(\Fxp\Component\Security\Exception\LogicException::class);
         $this->expectExceptionMessage('The FxpSecurityBundle must be registered after the SecurityBundle in your App Kernel');
 
-        /** @var ContainerBuilder|\PHPUnit_Framework_MockObject_MockObject $container */
+        /** @var ContainerBuilder|MockObject $container */
         $container = $this->getMockBuilder(ContainerBuilder::class)->getMock();
         $container->expects($this->once())
             ->method('hasExtension')

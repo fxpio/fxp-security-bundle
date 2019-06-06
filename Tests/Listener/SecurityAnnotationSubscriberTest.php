@@ -14,14 +14,14 @@ namespace Fxp\Bundle\SecurityBundle\Tests;
 use Fxp\Bundle\SecurityBundle\Configuration\Security;
 use Fxp\Bundle\SecurityBundle\Listener\SecurityAnnotationSubscriber;
 use Fxp\Component\Security\Event\GetExpressionVariablesEvent;
-use Fxp\Component\Security\ExpressionVariableEvents;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\ExpressionLanguage\ExpressionFunctionProviderInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
+use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -42,22 +42,22 @@ final class SecurityAnnotationSubscriberTest extends TestCase
     protected $dispatcher;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|TokenStorageInterface
+     * @var MockObject|TokenStorageInterface
      */
     protected $tokenStorage;
 
     /**
-     * @var ExpressionLanguage|\PHPUnit_Framework_MockObject_MockObject
+     * @var ExpressionLanguage|MockObject
      */
     protected $expression;
 
     /**
-     * @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LoggerInterface|MockObject
      */
     protected $logger;
 
     /**
-     * @var HttpKernelInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var HttpKernelInterface|MockObject
      */
     protected $kernel;
 
@@ -78,7 +78,7 @@ final class SecurityAnnotationSubscriberTest extends TestCase
         $this->expression = $this->getMockBuilder(ExpressionLanguage::class)->disableOriginalConstructor()->getMock();
         $this->logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
         $this->kernel = $this->getMockBuilder(HttpKernelInterface::class)->getMock();
-        $this->controller = function () {
+        $this->controller = static function () {
             return new Response();
         };
         $this->listener = new SecurityAnnotationSubscriber(
@@ -89,7 +89,7 @@ final class SecurityAnnotationSubscriberTest extends TestCase
             $this->logger
         );
 
-        $this->assertCount(1, $this->listener->getSubscribedEvents());
+        $this->assertCount(1, $this->listener::getSubscribedEvents());
     }
 
     public function testAddExpressionLanguageProvider(): void
@@ -108,7 +108,7 @@ final class SecurityAnnotationSubscriberTest extends TestCase
     public function testOnKernelControllerWithoutAnnotation(): void
     {
         $request = $this->createRequest();
-        $event = new FilterControllerEvent($this->kernel, $this->controller, $request, HttpKernelInterface::MASTER_REQUEST);
+        $event = new ControllerEvent($this->kernel, $this->controller, $request, HttpKernelInterface::MASTER_REQUEST);
 
         $this->tokenStorage->expects($this->never())
             ->method('getToken')
@@ -123,7 +123,7 @@ final class SecurityAnnotationSubscriberTest extends TestCase
         $this->expectExceptionMessage('To use the @Security tag, your controller needs to be behind a firewall.');
 
         $request = $this->createRequest([new Security(['expression' => 'has_role("ROLE_ADMIN")'])]);
-        $event = new FilterControllerEvent($this->kernel, $this->controller, $request, HttpKernelInterface::MASTER_REQUEST);
+        $event = new ControllerEvent($this->kernel, $this->controller, $request, HttpKernelInterface::MASTER_REQUEST);
 
         $this->tokenStorage->expects($this->once())
             ->method('getToken')
@@ -137,14 +137,14 @@ final class SecurityAnnotationSubscriberTest extends TestCase
     {
         $token = $this->getMockBuilder(TokenInterface::class)->getMock();
         $request = $this->createRequest([new Security(['expression' => 'has_role("ROLE_ADMIN")'])]);
-        $event = new FilterControllerEvent($this->kernel, $this->controller, $request, HttpKernelInterface::MASTER_REQUEST);
+        $event = new ControllerEvent($this->kernel, $this->controller, $request, HttpKernelInterface::MASTER_REQUEST);
 
         $this->tokenStorage->expects($this->once())
             ->method('getToken')
             ->willReturn($token)
         ;
 
-        $this->dispatcher->addListener(ExpressionVariableEvents::GET, function (GetExpressionVariablesEvent $event) use ($token): void {
+        $this->dispatcher->addListener(GetExpressionVariablesEvent::class, function (GetExpressionVariablesEvent $event) use ($token): void {
             $this->assertSame($token, $event->getToken());
         });
 
@@ -168,7 +168,7 @@ final class SecurityAnnotationSubscriberTest extends TestCase
     {
         $token = $this->getMockBuilder(TokenInterface::class)->getMock();
         $request = $this->createRequest([new Security(['expression' => 'has_role("ROLE_ADMIN")'])]);
-        $event = new FilterControllerEvent($this->kernel, $this->controller, $request, HttpKernelInterface::MASTER_REQUEST);
+        $event = new ControllerEvent($this->kernel, $this->controller, $request, HttpKernelInterface::MASTER_REQUEST);
 
         $request->attributes->add([
             'foo' => 'bar',
@@ -180,7 +180,7 @@ final class SecurityAnnotationSubscriberTest extends TestCase
             ->willReturn($token)
         ;
 
-        $this->dispatcher->addListener(ExpressionVariableEvents::GET, function (GetExpressionVariablesEvent $event) use ($token): void {
+        $this->dispatcher->addListener(GetExpressionVariablesEvent::class, function (GetExpressionVariablesEvent $event) use ($token): void {
             $this->assertSame($token, $event->getToken());
         });
 
@@ -212,14 +212,14 @@ final class SecurityAnnotationSubscriberTest extends TestCase
 
         $token = $this->getMockBuilder(TokenInterface::class)->getMock();
         $request = $this->createRequest([new Security(['expression' => 'has_role("ROLE_ADMIN")'])]);
-        $event = new FilterControllerEvent($this->kernel, $this->controller, $request, HttpKernelInterface::MASTER_REQUEST);
+        $event = new ControllerEvent($this->kernel, $this->controller, $request, HttpKernelInterface::MASTER_REQUEST);
 
         $this->tokenStorage->expects($this->once())
             ->method('getToken')
             ->willReturn($token)
         ;
 
-        $this->dispatcher->addListener(ExpressionVariableEvents::GET, function (GetExpressionVariablesEvent $event) use ($token): void {
+        $this->dispatcher->addListener(GetExpressionVariablesEvent::class, function (GetExpressionVariablesEvent $event) use ($token): void {
             $this->assertSame($token, $event->getToken());
         });
 
@@ -246,14 +246,14 @@ final class SecurityAnnotationSubscriberTest extends TestCase
             new Security(['expression' => 'has_role("ROLE_USER")']),
             new Security(['expression' => 'has_role("ROLE_ADMIN")']),
         ]);
-        $event = new FilterControllerEvent($this->kernel, $this->controller, $request, HttpKernelInterface::MASTER_REQUEST);
+        $event = new ControllerEvent($this->kernel, $this->controller, $request, HttpKernelInterface::MASTER_REQUEST);
 
         $this->tokenStorage->expects($this->once())
             ->method('getToken')
             ->willReturn($token)
         ;
 
-        $this->dispatcher->addListener(ExpressionVariableEvents::GET, function (GetExpressionVariablesEvent $event) use ($token): void {
+        $this->dispatcher->addListener(GetExpressionVariablesEvent::class, function (GetExpressionVariablesEvent $event) use ($token): void {
             $this->assertSame($token, $event->getToken());
         });
 
@@ -280,14 +280,14 @@ final class SecurityAnnotationSubscriberTest extends TestCase
             new Security(['expression' => 'has_role("ROLE_USER")']),
             new Security(['expression' => 'has_role("ROLE_ADMIN")', 'override' => true]),
         ]);
-        $event = new FilterControllerEvent($this->kernel, $this->controller, $request, HttpKernelInterface::MASTER_REQUEST);
+        $event = new ControllerEvent($this->kernel, $this->controller, $request, HttpKernelInterface::MASTER_REQUEST);
 
         $this->tokenStorage->expects($this->once())
             ->method('getToken')
             ->willReturn($token)
         ;
 
-        $this->dispatcher->addListener(ExpressionVariableEvents::GET, function (GetExpressionVariablesEvent $event) use ($token): void {
+        $this->dispatcher->addListener(GetExpressionVariablesEvent::class, function (GetExpressionVariablesEvent $event) use ($token): void {
             $this->assertSame($token, $event->getToken());
         });
 
@@ -311,14 +311,14 @@ final class SecurityAnnotationSubscriberTest extends TestCase
     {
         $token = $this->getMockBuilder(TokenInterface::class)->getMock();
         $request = $this->createRequest([new Security(['expression' => 'has_role("ROLE_ADMIN")'])]);
-        $event = new FilterControllerEvent($this->kernel, $this->controller, $request, HttpKernelInterface::MASTER_REQUEST);
+        $event = new ControllerEvent($this->kernel, $this->controller, $request, HttpKernelInterface::MASTER_REQUEST);
 
         $this->tokenStorage->expects($this->once())
             ->method('getToken')
             ->willReturn($token)
         ;
 
-        $this->dispatcher->addListener(ExpressionVariableEvents::GET, function (GetExpressionVariablesEvent $event) use ($token): void {
+        $this->dispatcher->addListener(GetExpressionVariablesEvent::class, function (GetExpressionVariablesEvent $event) use ($token): void {
             $this->assertSame($token, $event->getToken());
             $event->addVariable('token', $token);
         });
@@ -350,14 +350,14 @@ final class SecurityAnnotationSubscriberTest extends TestCase
     {
         $token = $this->getMockBuilder(TokenInterface::class)->getMock();
         $request = $this->createRequest([new Security(['expression' => 'has_role("ROLE_ADMIN")'])]);
-        $event = new FilterControllerEvent($this->kernel, $this->controller, $request, HttpKernelInterface::MASTER_REQUEST);
+        $event = new ControllerEvent($this->kernel, $this->controller, $request, HttpKernelInterface::MASTER_REQUEST);
 
         $this->tokenStorage->expects($this->once())
             ->method('getToken')
             ->willReturn($token)
         ;
 
-        $this->dispatcher->addListener(ExpressionVariableEvents::GET, function (GetExpressionVariablesEvent $event) use ($token): void {
+        $this->dispatcher->addListener(GetExpressionVariablesEvent::class, function (GetExpressionVariablesEvent $event) use ($token): void {
             $this->assertSame($token, $event->getToken());
             $event->addVariable('token', $token);
         });
@@ -407,7 +407,7 @@ final class SecurityAnnotationSubscriberTest extends TestCase
      *
      * @return Request
      */
-    private function createRequest(array $security = [])
+    private function createRequest(array $security = []): Request
     {
         return new Request([], [], [
             '_fxp_security' => $security,

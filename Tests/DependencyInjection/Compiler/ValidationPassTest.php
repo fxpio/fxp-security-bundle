@@ -12,7 +12,8 @@
 namespace Fxp\Bundle\SecurityBundle\Tests\DependencyInjection\Compiler;
 
 use Fxp\Bundle\SecurityBundle\DependencyInjection\Compiler\ValidationPass;
-use Fxp\Component\Security\PermissionEvents;
+use Fxp\Component\Security\PermissionContexts;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -27,7 +28,7 @@ use Symfony\Component\DependencyInjection\Definition;
 final class ValidationPassTest extends TestCase
 {
     /**
-     * @var ContainerBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var ContainerBuilder|MockObject
      */
     protected $container;
 
@@ -44,7 +45,7 @@ final class ValidationPassTest extends TestCase
 
     public function testProcessWithoutValidator(): void
     {
-        /** @var ContainerBuilder|\PHPUnit_Framework_MockObject_MockObject $container */
+        /** @var ContainerBuilder|MockObject $container */
         $container = $this->getMockBuilder(ContainerBuilder::class)->getMock();
         $container->expects($this->once())
             ->method('hasDefinition')
@@ -57,7 +58,7 @@ final class ValidationPassTest extends TestCase
 
     public function testProcess(): void
     {
-        $reflection = new \ReflectionClass(PermissionEvents::class);
+        $reflection = new \ReflectionClass(PermissionContexts::class);
         $dirname = \dirname($reflection->getFileName());
         $permissionFile = realpath($dirname.'/Resources/config/validation/Permission.xml');
         $sharingFile = realpath($dirname.'/Resources/config/validation/Sharing.xml');

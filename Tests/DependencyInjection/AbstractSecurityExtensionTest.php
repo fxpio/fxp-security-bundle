@@ -36,9 +36,11 @@ abstract class AbstractSecurityExtensionTest extends TestCase
      * @param array $parameters The container parameters
      * @param array $services   The service definitions
      *
+     * @throws
+     *
      * @return ContainerBuilder
      */
-    protected function createContainer(array $configs = [], array $parameters = [], array $services = [])
+    protected function createContainer(array $configs = [], array $parameters = [], array $services = []): ContainerBuilder
     {
         $container = new ContainerBuilder(new ParameterBag([
             'kernel.bundles' => [

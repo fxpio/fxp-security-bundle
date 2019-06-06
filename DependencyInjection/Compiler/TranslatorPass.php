@@ -11,7 +11,7 @@
 
 namespace Fxp\Bundle\SecurityBundle\DependencyInjection\Compiler;
 
-use Fxp\Component\Security\PermissionEvents;
+use Fxp\Component\Security\PermissionContexts;
 use Symfony\Component\Config\Resource\DirectoryResource;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -58,7 +58,7 @@ class TranslatorPass implements CompilerPassInterface
      */
     private function getTranslationFiles(ContainerBuilder $container): array
     {
-        $reflection = new \ReflectionClass(PermissionEvents::class);
+        $reflection = new \ReflectionClass(PermissionContexts::class);
         $dirname = \dirname($reflection->getFileName());
         $files = [];
 

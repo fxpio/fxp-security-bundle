@@ -477,7 +477,8 @@ final class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
         $def = $container->getDefinition('fxp_security.permission_manager');
         $permConfigs = $def->getArgument(4);
 
-        $this->assertInternalType('array', $permConfigs);
+        $value = \is_array($permConfigs);
+        $this->assertTrue($value);
         $this->assertCount(1, $permConfigs);
 
         $this->assertTrue($container->hasDefinition('fxp_security.permission_checker.orm.listener'));
@@ -511,7 +512,8 @@ final class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
         $def = $container->getDefinition('fxp_security.permission_manager');
         $permConfigs = $def->getArgument(4);
 
-        $this->assertInternalType('array', $permConfigs);
+        $value = \is_array($permConfigs);
+        $this->assertTrue($value);
         $this->assertCount(1, $permConfigs);
     }
 
@@ -535,7 +537,8 @@ final class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
         $def = $container->getDefinition('fxp_security.permission_manager');
         $permConfigs = $def->getArgument(4);
 
-        $this->assertInternalType('array', $permConfigs);
+        $value = \is_array($permConfigs);
+        $this->assertTrue($value);
         $this->assertCount(1, $permConfigs);
     }
 
@@ -560,7 +563,8 @@ final class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
         $def = $container->getDefinition('fxp_security.permission_manager');
         $permConfigs = $def->getArgument(4);
 
-        $this->assertInternalType('array', $permConfigs);
+        $value = \is_array($permConfigs);
+        $this->assertTrue($value);
         $this->assertCount(1, $permConfigs);
     }
 
@@ -617,7 +621,8 @@ final class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
         $def = $container->getDefinition('fxp_security.sharing_manager');
         $identityConfigs = $def->getArgument(2);
 
-        $this->assertInternalType('array', $identityConfigs);
+        $value = \is_array($identityConfigs);
+        $this->assertTrue($value);
         $this->assertCount(1, $identityConfigs);
     }
 
@@ -635,7 +640,8 @@ final class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
         $def = $container->getDefinition('fxp_security.sharing_manager');
         $identityConfigs = $def->getArgument(2);
 
-        $this->assertInternalType('array', $identityConfigs);
+        $value = \is_array($identityConfigs);
+        $this->assertTrue($value);
         $this->assertCount(1, $identityConfigs);
     }
 
@@ -672,7 +678,8 @@ final class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
         $def = $container->getDefinition('fxp_security.sharing_manager');
         $subjectConfigs = $def->getArgument(1);
 
-        $this->assertInternalType('array', $subjectConfigs);
+        $value = \is_array($subjectConfigs);
+        $this->assertTrue($value);
         $this->assertCount(1, $subjectConfigs);
     }
 

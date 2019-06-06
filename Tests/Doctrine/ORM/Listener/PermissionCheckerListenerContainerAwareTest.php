@@ -14,6 +14,7 @@ namespace Fxp\Bundle\SecurityBundle\Tests\Doctrine\ORM\Listener;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Fxp\Bundle\SecurityBundle\Doctrine\ORM\Listener\PermissionCheckerListenerContainerAware;
 use Fxp\Component\Security\Permission\PermissionManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
@@ -30,7 +31,7 @@ final class PermissionCheckerListenerContainerAwareTest extends TestCase
 {
     public function testOnFlush(): void
     {
-        /** @var OnFlushEventArgs|\PHPUnit_Framework_MockObject_MockObject $args */
+        /** @var MockObject|OnFlushEventArgs $args */
         $args = $this->getMockBuilder(OnFlushEventArgs::class)->disableOriginalConstructor()->getMock();
         $tokenStorage = $this->getMockBuilder(TokenStorageInterface::class)->getMock();
         $authChecker = $this->getMockBuilder(AuthorizationCheckerInterface::class)->getMock();

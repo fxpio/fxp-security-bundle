@@ -12,6 +12,7 @@
 namespace Fxp\Bundle\SecurityBundle\Tests\DependencyInjection\Compiler;
 
 use Fxp\Bundle\SecurityBundle\DependencyInjection\Compiler\AccessControlPass;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -79,7 +80,7 @@ final class AccessControlPassTest extends TestCase
 
     public function testProcessWithoutAccessControl(): void
     {
-        /** @var ContainerBuilder|\PHPUnit_Framework_MockObject_MockObject $container */
+        /** @var ContainerBuilder|MockObject $container */
         $container = $this->getMockBuilder(ContainerBuilder::class)->getMock();
         $container->expects($this->once())
             ->method('hasParameter')
