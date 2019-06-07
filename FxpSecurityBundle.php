@@ -16,6 +16,7 @@ use Fxp\Bundle\SecurityBundle\DependencyInjection\Compiler\ConfigDependencyValid
 use Fxp\Bundle\SecurityBundle\DependencyInjection\Compiler\ExpressionVariableStoragePass;
 use Fxp\Bundle\SecurityBundle\DependencyInjection\Compiler\ObjectFilterPass;
 use Fxp\Bundle\SecurityBundle\DependencyInjection\Compiler\OrganizationalPass;
+use Fxp\Bundle\SecurityBundle\DependencyInjection\Compiler\SharingLoaderPass;
 use Fxp\Bundle\SecurityBundle\DependencyInjection\Compiler\TranslatorPass;
 use Fxp\Bundle\SecurityBundle\DependencyInjection\Compiler\ValidationPass;
 use Fxp\Bundle\SecurityBundle\DependencyInjection\SecurityExtension;
@@ -48,6 +49,7 @@ class FxpSecurityBundle extends Bundle
         $container->addCompilerPass(new ExpressionVariableStoragePass());
         $container->addCompilerPass(new ObjectFilterPass());
         $container->addCompilerPass(new OrganizationalPass());
+        $container->addCompilerPass(new SharingLoaderPass());
         $container->addCompilerPass(
             new RegisterListenersPass(
                 'event_dispatcher',
