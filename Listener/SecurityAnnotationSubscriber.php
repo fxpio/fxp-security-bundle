@@ -19,6 +19,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\ExpressionLanguage\ExpressionFunctionProviderInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -95,7 +96,7 @@ class SecurityAnnotationSubscriber implements EventSubscriberInterface
      */
     public static function getSubscribedEvents(): array
     {
-        return [KernelEvents::CONTROLLER => 'onKernelController'];
+        return [KernelEvents::CONTROLLER => ['onKernelController', -10]];
     }
 
     /**
@@ -106,8 +107,9 @@ class SecurityAnnotationSubscriber implements EventSubscriberInterface
     public function onKernelController(ControllerEvent $event): void
     {
         $request = $event->getRequest();
+        list($expression, $statusCode, $message) = $this->getExpression($request);
 
-        if (empty($expression = $this->getExpression($request))) {
+        if (empty($expression)) {
             return;
         }
 
@@ -116,7 +118,11 @@ class SecurityAnnotationSubscriber implements EventSubscriberInterface
         }
 
         if (!$this->expressionLanguage->evaluate($expression, $this->getVariables($token, $request))) {
-            throw new AccessDeniedException();
+            if (null !== $statusCode) {
+                throw new HttpException($statusCode, $message);
+            }
+
+            throw new AccessDeniedException($message);
         }
     }
 
@@ -125,22 +131,34 @@ class SecurityAnnotationSubscriber implements EventSubscriberInterface
      *
      * @param Request $request The request
      *
-     * @return string
+     * @return int[]|null[]|string[]
      */
-    protected function getExpression(Request $request): string
+    protected function getExpression(Request $request): array
     {
         /** @var Security[] $configurations */
         $configurations = $request->attributes->get('_fxp_security', []);
         $expressions = [];
+        $statusCode = null;
+        $message = null;
 
         foreach ($configurations as $configuration) {
             if ($configuration->isOverriding()) {
                 $expressions = [];
             }
             $expressions[] = $configuration->getExpression();
+
+            if (null !== $cStatusCode = $configuration->getStatusCode()) {
+                $statusCode = $cStatusCode;
+            }
+
+            if (null !== $cMessage = $configuration->getMessage()) {
+                $message = $cMessage;
+            }
         }
 
-        return \count($expressions) > 1 ? '('.implode(') and (', $expressions).')' : implode('', $expressions);
+        $expression = \count($expressions) > 1 ? '('.implode(') and (', $expressions).')' : implode('', $expressions);
+
+        return [$expression, $statusCode, $message ?? 'Access denied.'];
     }
 
     /**

@@ -35,6 +35,8 @@ final class SecurityTest extends TestCase
         $this->assertTrue($security->allowArray());
         $this->assertFalse($security->isOverriding());
         $this->assertSame($exp, $security->getExpression());
+        $this->assertNull($security->getStatusCode());
+        $this->assertNull($security->getMessage());
 
         $security->setOverride(true);
         $this->assertTrue($security->isOverriding());
@@ -44,5 +46,11 @@ final class SecurityTest extends TestCase
 
         $security->setValue($exp);
         $this->assertSame($exp, $security->getExpression());
+
+        $security->setStatusCode(401);
+        $this->assertSame(401, $security->getStatusCode());
+
+        $security->setMessage('Custom message');
+        $this->assertSame('Custom message', $security->getMessage());
     }
 }

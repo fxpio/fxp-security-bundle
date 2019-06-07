@@ -22,6 +22,7 @@ use Symfony\Component\ExpressionLanguage\ExpressionFunctionProviderInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -208,10 +209,48 @@ final class SecurityAnnotationSubscriberTest extends TestCase
     public function testOnKernelControllerWithAccessDeniedException(): void
     {
         $this->expectException(\Symfony\Component\Security\Core\Exception\AccessDeniedException::class);
-        $this->expectExceptionMessage('Access Denied');
+        $this->expectExceptionMessage('Access denied.');
 
         $token = $this->getMockBuilder(TokenInterface::class)->getMock();
         $request = $this->createRequest([new Security(['expression' => 'has_role("ROLE_ADMIN")'])]);
+        $event = new ControllerEvent($this->kernel, $this->controller, $request, HttpKernelInterface::MASTER_REQUEST);
+
+        $this->tokenStorage->expects($this->once())
+            ->method('getToken')
+            ->willReturn($token)
+        ;
+
+        $this->dispatcher->addListener(GetExpressionVariablesEvent::class, function (GetExpressionVariablesEvent $event) use ($token): void {
+            $this->assertSame($token, $event->getToken());
+        });
+
+        $this->expression->expects($this->once())
+            ->method('evaluate')
+            ->with('has_role("ROLE_ADMIN")', ['object' => $request, 'request' => $request, 'subject' => $request])
+            ->willReturnCallback(function ($expression, $variables) {
+                $this->assertSame('has_role("ROLE_ADMIN")', $expression);
+                $this->assertArrayHasKey('object', $variables);
+                $this->assertArrayHasKey('request', $variables);
+                $this->assertArrayHasKey('subject', $variables);
+
+                return false;
+            })
+        ;
+
+        $this->listener->onKernelController($event);
+    }
+
+    public function testOnKernelControllerWithCustomException(): void
+    {
+        $this->expectException(HttpException::class);
+        $this->expectExceptionMessage('Custom error message.');
+
+        $token = $this->getMockBuilder(TokenInterface::class)->getMock();
+        $request = $this->createRequest([new Security([
+            'expression' => 'has_role("ROLE_ADMIN")',
+            'statusCode' => 401,
+            'message' => 'Custom error message.',
+        ])]);
         $event = new ControllerEvent($this->kernel, $this->controller, $request, HttpKernelInterface::MASTER_REQUEST);
 
         $this->tokenStorage->expects($this->once())

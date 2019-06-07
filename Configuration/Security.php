@@ -28,6 +28,23 @@ class Security extends ConfigurationAnnotation
     protected $expression;
 
     /**
+     * If set, will throw Symfony\Component\HttpKernel\Exception\HttpException
+     * with the given $statusCode.
+     * If null, Symfony\Component\Security\Core\Exception\AccessDeniedException.
+     * will be used.
+     *
+     * @var null|int
+     */
+    protected $statusCode;
+
+    /**
+     * The message of the exception.
+     *
+     * @var null|string
+     */
+    protected $message;
+
+    /**
      * @var bool
      */
     protected $override = false;
@@ -50,6 +67,46 @@ class Security extends ConfigurationAnnotation
     public function setExpression(string $expression): void
     {
         $this->expression = $expression;
+    }
+
+    /**
+     * Get the status code.
+     *
+     * @return null|int
+     */
+    public function getStatusCode(): ?int
+    {
+        return $this->statusCode;
+    }
+
+    /**
+     * Set the status code.
+     *
+     * @param null|int $statusCode The status code
+     */
+    public function setStatusCode(?int $statusCode): void
+    {
+        $this->statusCode = $statusCode;
+    }
+
+    /**
+     * Get the message.
+     *
+     * @return null|string
+     */
+    public function getMessage(): ?string
+    {
+        return $this->message;
+    }
+
+    /**
+     * Set the message.
+     *
+     * @param null|string $message The message
+     */
+    public function setMessage(?string $message): void
+    {
+        $this->message = $message;
     }
 
     /**
