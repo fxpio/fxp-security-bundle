@@ -12,7 +12,6 @@
 namespace Fxp\Bundle\SecurityBundle;
 
 use Fxp\Bundle\SecurityBundle\DependencyInjection\Compiler\AccessControlPass;
-use Fxp\Bundle\SecurityBundle\DependencyInjection\Compiler\AddExpressionLanguageProvidersPass;
 use Fxp\Bundle\SecurityBundle\DependencyInjection\Compiler\ConfigDependencyValidationPass;
 use Fxp\Bundle\SecurityBundle\DependencyInjection\Compiler\ExpressionVariableStoragePass;
 use Fxp\Bundle\SecurityBundle\DependencyInjection\Compiler\ObjectFilterPass;
@@ -47,7 +46,6 @@ class FxpSecurityBundle extends Bundle
         $container->addCompilerPass(new ValidationPass());
         $container->addCompilerPass(new TranslatorPass());
         $container->addCompilerPass(new ExpressionVariableStoragePass());
-        $container->addCompilerPass(new AddExpressionLanguageProvidersPass());
         $container->addCompilerPass(new ObjectFilterPass());
         $container->addCompilerPass(new OrganizationalPass());
         $container->addCompilerPass(

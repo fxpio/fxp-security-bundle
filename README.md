@@ -21,8 +21,7 @@ Features include:
   functions defined with the tag `security.expression_language_provider` in `allow_if` option
   (expressions are compiled on cache compilation)
 - Compiler pass to inject service dependencies of custom expression function providers in
-  variables of expression voter
-- `@Security` annotation compatible with custom expression functions and variables
+  variables of expression voter (compatible with the Sensio FrameworkExtraBundle annotations)
 - Security factory for host role
 - Compiler pass for object filter voters
 

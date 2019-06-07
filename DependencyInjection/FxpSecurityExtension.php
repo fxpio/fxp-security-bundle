@@ -11,7 +11,6 @@
 
 namespace Fxp\Bundle\SecurityBundle\DependencyInjection;
 
-use Fxp\Bundle\SecurityBundle\DependencyInjection\Extension\AnnotationBuilder;
 use Fxp\Bundle\SecurityBundle\DependencyInjection\Extension\AnonymousRoleBuilder;
 use Fxp\Bundle\SecurityBundle\DependencyInjection\Extension\ExpressionLanguageBuilder;
 use Fxp\Bundle\SecurityBundle\DependencyInjection\Extension\ExtensionBuilderInterface;
@@ -74,7 +73,6 @@ class FxpSecurityExtension extends Extension
             new SecurityVoterBuilder(),
             new OrganizationalContextBuilder(),
             new ExpressionLanguageBuilder(),
-            new AnnotationBuilder($this),
             new SharingBuilder(),
             new ValidatorBuilder(),
         ];

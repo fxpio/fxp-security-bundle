@@ -4,22 +4,14 @@ Using the security annotations
 
 **Important:**
 
-To use the role hierarchy, you must add the dependency `sensio/framework-extra-bundle`:
-
-```
-$ composer require sensio/framework-extra-bundle
-```
+To use the security annotation, you must add the dependency `sensio/framework-extra-bundle`.
 
 ## Installation
 
-If you prefer to use the `@Security` annotation in your controllers to check the authorization on the field of object,
-you must enable this feature:
+Install the dependency:
 
-```yaml
-# config/packages/fxp_security.yaml
-fxp_security:
-    annotations:
-        security: true
+```
+$ composer require sensio/framework-extra-bundle
 ```
 
 ## Using security annotation
@@ -27,7 +19,7 @@ fxp_security:
 Now, you can use the `@Security` annotation in your controller like:
 
 ```php
-use Fxp\Bundle\SecurityBundle\Configuration\Security;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 MyController {
     /**

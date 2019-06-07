@@ -19,7 +19,6 @@ use Fxp\Component\Security\Role\OrganizationalRoleHierarchy;
 use Fxp\Component\Security\SharingVisibilities;
 use Fxp\Component\Security\Tests\Fixtures\Model\MockObject;
 use Fxp\Component\Security\Tests\Fixtures\Model\MockRole;
-use Sensio\Bundle\FrameworkExtraBundle\Templating\TemplateGuesser;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\Security\Core\Authentication\AuthenticationTrustResolver;
 use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
@@ -251,31 +250,6 @@ final class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
                 'functions' => [
                     'is_organization' => true,
                 ],
-            ],
-        ]]);
-    }
-
-    public function testAnnotation(): void
-    {
-        $container = $this->createContainer([[
-            'annotations' => [
-                'security' => true,
-            ],
-        ]], [], [
-            'sensio_framework_extra.view.guesser' => new Definition(TemplateGuesser::class),
-        ]);
-
-        $this->assertTrue($container->hasDefinition('fxp_security.subscriber.security_annotation'));
-    }
-
-    public function testAnnotationWitMissingDependencies(): void
-    {
-        $this->expectException(\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException::class);
-        $this->expectExceptionMessage('The "fxp_security.annotations.security" config require the "sensio/framework-extra-bundle" package');
-
-        $this->createContainer([[
-            'annotations' => [
-                'security' => true,
             ],
         ]]);
     }
