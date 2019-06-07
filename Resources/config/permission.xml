@@ -16,6 +16,9 @@
             <argument/>
         </service>
 
+        <service id="Fxp\Component\Security\Permission\PermissionManager" alias="fxp_security.permission_manager" />
+        <service id="Fxp\Component\Security\Permission\PermissionManagerInterface" alias="fxp_security.permission_manager" />
+
         <!-- Disable Permission Subscriber -->
         <service id="fxp_security.subscriber.permission.disable"
                  class="Fxp\Component\Security\Listener\DisablePermissionSubscriber">

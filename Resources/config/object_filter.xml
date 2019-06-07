@@ -15,6 +15,9 @@
             <argument type="service" id="event_dispatcher"/>
         </service>
 
+        <service id="Fxp\Component\Security\ObjectFilter\ObjectFilter" alias="fxp_security.object_filter" />
+        <service id="Fxp\Component\Security\ObjectFilter\ObjectFilterInterface" alias="fxp_security.object_filter" />
+
         <!-- Object Filter Extension -->
         <service id="fxp_security.object_filter.extension"
                  class="Fxp\Component\Security\ObjectFilter\ObjectFilterExtension"

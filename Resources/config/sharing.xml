@@ -16,5 +16,8 @@
                 <argument type="service" id="event_dispatcher" on-invalid="ignore"/>
             </call>
         </service>
+
+        <service id="Fxp\Component\Security\Sharing\SharingManager" alias="fxp_security.sharing_manager" />
+        <service id="Fxp\Component\Security\Sharing\SharingManagerInterface" alias="fxp_security.sharing_manager" />
     </services>
 </container>

@@ -13,6 +13,9 @@
             <argument type="service" id="security.role_hierarchy"/>
             <argument type="service" id="security.authentication.trust_resolver"/>
         </service>
+
+        <service id="Fxp\Component\Security\Identity\CacheSecurityIdentityManager" alias="fxp_security.security_identity_manager" />
+        <service id="Fxp\Component\Security\Identity\CacheSecurityIdentityManagerInterface" alias="fxp_security.security_identity_manager" />
     </services>
 
 </container>

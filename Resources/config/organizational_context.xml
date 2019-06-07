@@ -16,6 +16,9 @@
         <!-- Organizational Context -->
         <service id="fxp_security.organizational_context" alias="fxp_security.organizational_context.default" public="true"/>
 
+        <service id="Fxp\Component\Security\Organizational\OrganizationalContext" alias="fxp_security.organizational_context" />
+        <service id="Fxp\Component\Security\Organizational\OrganizationalContextInterface" alias="fxp_security.organizational_context" />
+
         <!-- Organizational Security Voter -->
         <service id="security.access.organization_voter"
                  class="Fxp\Component\Security\Authorization\Voter\OrganizationVoter"
