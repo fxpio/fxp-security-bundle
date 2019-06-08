@@ -431,6 +431,9 @@ final class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
         ]);
     }
 
+    /**
+     * @group bug
+     */
     public function testPermission(): void
     {
         $container = $this->createContainer([[
@@ -448,8 +451,8 @@ final class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
             'doctrine.orm.entity_manager' => new Definition(EntityManager::class),
         ]);
 
-        $def = $container->getDefinition('fxp_security.permission_manager');
-        $permConfigs = $def->getArgument(4);
+        $def = $container->getDefinition('fxp_security.permission_loader.configuration');
+        $permConfigs = $def->getArgument(0);
 
         $value = \is_array($permConfigs);
         $this->assertTrue($value);
@@ -483,8 +486,8 @@ final class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
             ],
         ]]);
 
-        $def = $container->getDefinition('fxp_security.permission_manager');
-        $permConfigs = $def->getArgument(4);
+        $def = $container->getDefinition('fxp_security.permission_loader.configuration');
+        $permConfigs = $def->getArgument(0);
 
         $value = \is_array($permConfigs);
         $this->assertTrue($value);
@@ -508,8 +511,8 @@ final class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
             ],
         ]]);
 
-        $def = $container->getDefinition('fxp_security.permission_manager');
-        $permConfigs = $def->getArgument(4);
+        $def = $container->getDefinition('fxp_security.permission_loader.configuration');
+        $permConfigs = $def->getArgument(0);
 
         $value = \is_array($permConfigs);
         $this->assertTrue($value);
@@ -534,8 +537,8 @@ final class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
             ],
         ]]);
 
-        $def = $container->getDefinition('fxp_security.permission_manager');
-        $permConfigs = $def->getArgument(4);
+        $def = $container->getDefinition('fxp_security.permission_loader.configuration');
+        $permConfigs = $def->getArgument(0);
 
         $value = \is_array($permConfigs);
         $this->assertTrue($value);

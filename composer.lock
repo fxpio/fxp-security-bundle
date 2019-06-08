@@ -565,12 +565,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/fxpio/fxp-security.git",
-                "reference": "6e5d065f9e37f2e2114261133d2816a452ad410c"
+                "reference": "0b26691bd550ca3bb87e79dd870ba4fc49825475"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fxpio/fxp-security/zipball/6e5d065f9e37f2e2114261133d2816a452ad410c",
-                "reference": "6e5d065f9e37f2e2114261133d2816a452ad410c",
+                "url": "https://api.github.com/repos/fxpio/fxp-security/zipball/0b26691bd550ca3bb87e79dd870ba4fc49825475",
+                "reference": "0b26691bd550ca3bb87e79dd870ba4fc49825475",
                 "shasum": ""
             },
             "require": {
@@ -625,7 +625,7 @@
                 "security",
                 "sharing"
             ],
-            "time": "2019-06-07T20:44:36+00:00"
+            "time": "2019-06-08T09:11:38+00:00"
         },
         {
             "name": "psr/cache",

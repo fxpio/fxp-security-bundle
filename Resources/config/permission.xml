@@ -13,11 +13,51 @@
             <argument type="service" id="fxp_security.permission_provider"/>
             <argument type="service" id="property_accessor"/>
             <argument type="service" id="fxp_security.sharing_manager" on-invalid="ignore"/>
-            <argument/>
+            <argument type="service" id="fxp_security.permission_loader.cache" />
         </service>
 
         <service id="Fxp\Component\Security\Permission\PermissionManager" alias="fxp_security.permission_manager" />
         <service id="Fxp\Component\Security\Permission\PermissionManagerInterface" alias="fxp_security.permission_manager" />
+
+        <!-- Permission Loader -->
+        <service id="fxp_security.permission_loader.chain"
+                 class="Fxp\Component\Security\Permission\Loader\ChainLoader"
+                 public="false">
+            <argument type="collection" />
+        </service>
+
+        <service id="fxp_security.permission_loader.configuration"
+                 class="Fxp\Component\Security\Permission\Loader\ConfigurationLoader"
+                 public="false">
+            <tag name="fxp_security.permission_loader" priority="100" />
+            <argument type="collection"/>
+        </service>
+
+        <!-- Permission Cache Loader -->
+        <service id="fxp_security.permission_loader.cache"
+                 class="Fxp\Component\Security\Permission\Loader\CacheLoader"
+                 public="false">
+            <argument type="service" id="fxp_security.permission_loader.chain" />
+            <argument type="collection">
+                <argument key="project_dir">%kernel.project_dir%</argument>
+                <argument key="cache_dir">%kernel.cache_dir%/fxp_security</argument>
+                <argument key="debug">%kernel.debug%</argument>
+                <argument key="resource_prefixes" type="collection"/>
+            </argument>
+            <call method="setConfigCacheFactory">
+                <argument type="service" id="config_cache_factory" />
+            </call>
+        </service>
+
+        <service id="Fxp\Component\Security\Permission\Loader\CacheLoader" alias="fxp_security.permission_loader.cache"/>
+
+        <service id="fxp_security.permission_loader.warmer"
+                 class="Fxp\Component\Security\CacheWarmer\PermissionLoaderCacheWarmer"
+                 public="false">
+            <tag name="container.service_subscriber" />
+            <tag name="kernel.cache_warmer" />
+            <argument type="service" id="Psr\Container\ContainerInterface" />
+        </service>
 
         <!-- Disable Permission Subscriber -->
         <service id="fxp_security.subscriber.permission.disable"

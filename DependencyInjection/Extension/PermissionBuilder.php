@@ -41,7 +41,7 @@ class PermissionBuilder implements ExtensionBuilderInterface
             }
         }
 
-        $container->getDefinition('fxp_security.permission_manager')->replaceArgument(4, $configs);
+        $container->getDefinition('fxp_security.permission_loader.configuration')->replaceArgument(0, $configs);
         BuilderUtils::loadProvider($loader, $config, 'permission');
         $this->buildDoctrineOrmChecker($container, $loader, $config);
     }
