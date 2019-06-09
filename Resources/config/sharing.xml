@@ -10,7 +10,7 @@
                  class="Fxp\Component\Security\Sharing\SharingManager"
                  public="true">
             <argument type="service" id="fxp_security.sharing_provider"/>
-            <argument type="service" id="fxp_security.sharing_loader.cache" />
+            <argument type="service" id="fxp_security.sharing_factory" />
             <call method="setEventDispatcher">
                 <argument type="service" id="event_dispatcher" on-invalid="ignore"/>
             </call>
@@ -18,6 +18,40 @@
 
         <service id="Fxp\Component\Security\Sharing\SharingManager" alias="fxp_security.sharing_manager" />
         <service id="Fxp\Component\Security\Sharing\SharingManagerInterface" alias="fxp_security.sharing_manager" />
+
+        <!-- Sharing Factory -->
+        <service id="fxp_security.sharing_factory"
+                 class="Fxp\Component\Security\Sharing\SharingFactory"
+                 public="false">
+            <argument type="service" id="fxp_security.sharing_loader.chain" />
+        </service>
+
+        <service id="Fxp\Component\Security\Sharing\SharingFactory" alias="fxp_security.sharing_factory" />
+        <service id="Fxp\Component\Security\Sharing\SharingFactoryInterface" alias="fxp_security.sharing_factory" />
+
+        <!-- Sharing Factory Cache -->
+        <service id="fxp_security.sharing_factory.cache"
+                 class="Fxp\Component\Security\Sharing\CacheSharingFactory"
+                 decorates="fxp_security.sharing_factory"
+                 public="false">
+            <argument type="service" id="fxp_security.sharing_factory.cache.inner" />
+            <argument type="collection">
+                <argument key="project_dir">%kernel.project_dir%</argument>
+                <argument key="cache_dir">%kernel.cache_dir%/fxp_security</argument>
+                <argument key="resource_prefixes" type="collection"/>
+            </argument>
+            <call method="setConfigCacheFactory">
+                <argument type="service" id="config_cache_factory" />
+            </call>
+        </service>
+
+        <service id="fxp_security.sharing_factory.warmer"
+                 class="Fxp\Component\Security\Sharing\SharingFactoryCacheWarmer"
+                 public="false">
+            <tag name="container.service_subscriber" />
+            <tag name="kernel.cache_warmer" />
+            <argument type="service" id="Psr\Container\ContainerInterface" />
+        </service>
 
         <!-- Sharing Loader -->
         <service id="fxp_security.sharing_loader.chain"
@@ -32,32 +66,6 @@
             <tag name="fxp_security.sharing_loader" priority="100" />
             <argument type="collection"/>
             <argument type="collection"/>
-        </service>
-
-        <!-- Sharing Cache Loader -->
-        <service id="fxp_security.sharing_loader.cache"
-                 class="Fxp\Component\Security\Sharing\Loader\CacheLoader"
-                 public="false">
-            <argument type="service" id="fxp_security.sharing_loader.chain" />
-            <argument type="collection">
-                <argument key="project_dir">%kernel.project_dir%</argument>
-                <argument key="cache_dir">%kernel.cache_dir%/fxp_security</argument>
-                <argument key="debug">%kernel.debug%</argument>
-                <argument key="resource_prefixes" type="collection"/>
-            </argument>
-            <call method="setConfigCacheFactory">
-                <argument type="service" id="config_cache_factory" />
-            </call>
-        </service>
-
-        <service id="Fxp\Component\Security\Sharing\Loader\CacheLoader" alias="fxp_security.sharing_loader.cache"/>
-
-        <service id="fxp_security.sharing_loader.warmer"
-                 class="Fxp\Component\Security\CacheWarmer\SharingLoaderCacheWarmer"
-                 public="false">
-            <tag name="container.service_subscriber" />
-            <tag name="kernel.cache_warmer" />
-            <argument type="service" id="Psr\Container\ContainerInterface" />
         </service>
     </services>
 </container>

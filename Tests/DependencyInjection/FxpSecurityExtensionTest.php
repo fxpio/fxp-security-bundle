@@ -431,9 +431,6 @@ final class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
         ]);
     }
 
-    /**
-     * @group bug
-     */
     public function testPermission(): void
     {
         $container = $this->createContainer([[
@@ -482,57 +479,6 @@ final class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
                         'id' => null,
                         'name' => null,
                     ],
-                ],
-            ],
-        ]]);
-
-        $def = $container->getDefinition('fxp_security.permission_loader.configuration');
-        $permConfigs = $def->getArgument(0);
-
-        $value = \is_array($permConfigs);
-        $this->assertTrue($value);
-        $this->assertCount(1, $permConfigs);
-    }
-
-    public function testPermissionWithDefaultFields(): void
-    {
-        $container = $this->createContainer([[
-            'default_permissions' => [
-                'fields' => [
-                    'id' => ['read'],
-                ],
-            ],
-            'permissions' => [
-                MockObject::class => [
-                    'fields' => [
-                        'name' => null,
-                    ],
-                ],
-            ],
-        ]]);
-
-        $def = $container->getDefinition('fxp_security.permission_loader.configuration');
-        $permConfigs = $def->getArgument(0);
-
-        $value = \is_array($permConfigs);
-        $this->assertTrue($value);
-        $this->assertCount(1, $permConfigs);
-    }
-
-    public function testMasterMappingPermissionWithDefaultMapping(): void
-    {
-        $container = $this->createContainer([[
-            'default_permissions' => [
-                'master_mapping_permissions' => [
-                    'view' => 'read',
-                    'update' => 'edit',
-                    'create' => 'edit',
-                    'delete' => 'edit',
-                ],
-            ],
-            'permissions' => [
-                MockObject::class => [
-                    'master' => 'name',
                 ],
             ],
         ]]);

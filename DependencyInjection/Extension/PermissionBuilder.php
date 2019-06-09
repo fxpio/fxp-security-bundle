@@ -32,12 +32,13 @@ class PermissionBuilder implements ExtensionBuilderInterface
     public function build(ContainerBuilder $container, LoaderInterface $loader, array $config): void
     {
         $loader->load('permission.xml');
-        $defaultPerms = $config['default_permissions'];
+        $container->getDefinition('fxp_security.permission_factory')->replaceArgument(1, $config['default_permissions']);
+
         $configs = [];
 
         foreach ($config['permissions'] as $type => $permConfig) {
             if ($permConfig['enabled']) {
-                $configs[] = $this->buildPermissionConfig($container, $type, $permConfig, $defaultPerms);
+                $configs[] = $this->buildPermissionConfig($container, $type, $permConfig);
             }
         }
 
@@ -49,14 +50,13 @@ class PermissionBuilder implements ExtensionBuilderInterface
     /**
      * Build the permission config.
      *
-     * @param ContainerBuilder $container    The container
-     * @param string           $type         The type of permission
-     * @param array            $config       The config of permissions
-     * @param array            $defaultPerms The config of default permissions
+     * @param ContainerBuilder $container The container
+     * @param string           $type      The type of permission
+     * @param array            $config    The config of permissions
      *
      * @return Reference
      */
-    private function buildPermissionConfig(ContainerBuilder $container, string $type, array $config, array $defaultPerms): Reference
+    private function buildPermissionConfig(ContainerBuilder $container, string $type, array $config): Reference
     {
         if (!class_exists($type)) {
             $msg = 'The "%s" permission class does not exist';
@@ -68,48 +68,29 @@ class PermissionBuilder implements ExtensionBuilderInterface
             $type,
             $config['operations'],
             $config['mapping_permissions'],
-            $this->buildPermissionConfigFields($container, $type, $config, $defaultPerms['fields']),
+            $this->buildPermissionConfigFields($container, $type, $config),
             $config['master'],
-            $this->buildMasterMappingPermissions($config, $defaultPerms['master_mapping_permissions']),
+            $config['master_mapping_permissions'],
+            $config['build_fields'],
+            $config['build_default_fields'],
         ]);
-    }
-
-    /**
-     * Build the master mapping permissions.
-     *
-     * @param array $config         The config of permissions
-     * @param array $defaultMapping The config of default master mapping permissions
-     *
-     * @return array
-     */
-    private function buildMasterMappingPermissions(array $config, array $defaultMapping): array
-    {
-        $mapping = $config['master_mapping_permissions'];
-
-        if (!empty($defaultMapping) && empty($mapping) && null !== $config['master']) {
-            $mapping = $defaultMapping;
-        }
-
-        return $mapping;
     }
 
     /**
      * Build the fields of permission config.
      *
-     * @param ContainerBuilder $container    The container
-     * @param string           $type         The type of permission
-     * @param array            $config       The config of permissions
-     * @param array            $defaultPerms The config of default permissions
+     * @param ContainerBuilder $container The container
+     * @param string           $type      The type of permission
+     * @param array            $config    The config of permissions
      *
      * @throws
      *
      * @return string[]
      */
-    private function buildPermissionConfigFields(ContainerBuilder $container, string $type, array $config, array $defaultPerms): array
+    private function buildPermissionConfigFields(ContainerBuilder $container, string $type, array $config): array
     {
         $fields = [];
         $ref = new \ReflectionClass($type);
-        $config = $this->buildDefaultPermissionConfigFields($ref, $config, $defaultPerms);
 
         foreach ($config['fields'] as $field => $fieldConfig) {
             if (!$this->isValidField($ref, $field)) {
@@ -127,41 +108,6 @@ class PermissionBuilder implements ExtensionBuilderInterface
         }
 
         return $fields;
-    }
-
-    /**
-     * Build the fields of permission config with all class properties and defaults.
-     *
-     * @param \ReflectionClass $ref          The reflection class
-     * @param array            $config       The config of permissions
-     * @param array            $defaultPerms The config of default permissions
-     *
-     * @return array
-     */
-    private function buildDefaultPermissionConfigFields(\ReflectionClass $ref, array $config, array $defaultPerms): array
-    {
-        $hasFields = \count($config['fields']) > 0;
-        $hasDefaults = \count($defaultPerms) > 0;
-        $buildField = $config['build_fields'] && !$hasFields;
-        $buildDefaultField = $config['build_default_fields'] && $hasDefaults;
-
-        if ($buildField || $buildDefaultField) {
-            foreach ($ref->getProperties() as $property) {
-                $field = $property->getName();
-
-                if ($buildDefaultField && isset($defaultPerms[$field]) && !isset($config['fields'][$field])) {
-                    $config['fields'][$field] = $defaultPerms[$field];
-                } elseif ($buildField && !$hasFields) {
-                    $config['fields'][$field] = [
-                        'enabled' => true,
-                        'operations' => [],
-                        'mapping_permissions' => [],
-                    ];
-                }
-            }
-        }
-
-        return $config;
     }
 
     /**
