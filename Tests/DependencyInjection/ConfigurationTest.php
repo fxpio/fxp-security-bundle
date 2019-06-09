@@ -33,7 +33,7 @@ final class ConfigurationTest extends TestCase
         $config = [];
         $processor = new Processor();
         $configuration = new Configuration();
-        $this->assertCount(13, $processor->processConfiguration($configuration, [$config]));
+        $this->assertCount(12, $processor->processConfiguration($configuration, [$config]));
     }
 
     public function testPermissionConfigNormalization(): void
