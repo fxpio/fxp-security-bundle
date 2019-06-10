@@ -203,6 +203,7 @@ class Configuration implements ConfigurationInterface
             ->end()
             ->end()
             ->booleanNode('permissions')->defaultTrue()->end()
+            ->booleanNode('sharing')->defaultTrue()->end()
             ->end()
         ;
     }

@@ -70,10 +70,38 @@ class Post
 }
 ```
 
-Of course, all the configuration of the [global permissions](annotations.md) can be configured
+Of course, all the configuration of the [global permissions](permissions.md) can be configured
 with the annotations.
 
 > **Note:**
 >
 > The `@PermissionField` annotation can be added in the `@Permission` annotation or directly in
 > the PHPDoc of the property.
+
+
+## Using the sharing annotations
+
+With the `@SharingSubject` and `@SharingIdentity` annotations, you can configure the global
+sharing like the configuration of the Symfony Bundles, mut directly in your models:
+
+```php
+use Fxp\Component\Security\Configuration as FxpSecurity;
+
+/**
+ * @FxpSecurity\SharingSubject(
+ *     visibility="private"
+ * )
+ *
+ * @FxpSecurity\SharingIdentity(
+ *     roleable="true",
+ *     permissible="true"
+ * )
+ */
+class Post
+{
+    // ...
+}
+```
+
+Of course, all the configuration of the [global sharing](sharing.md) can be configured
+with the annotations.

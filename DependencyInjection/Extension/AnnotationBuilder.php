@@ -13,7 +13,8 @@ namespace Fxp\Bundle\SecurityBundle\DependencyInjection\Extension;
 
 use Doctrine\Common\Annotations\Reader;
 use Fxp\Bundle\SecurityBundle\DependencyInjection\FxpSecurityExtension;
-use Fxp\Component\Security\Permission\Loader\AnnotationLoader;
+use Fxp\Component\Security\Permission\Loader\AnnotationLoader as PermissionAnnotationLoader;
+use Fxp\Component\Security\Sharing\Loader\AnnotationLoader as SharingAnnotationLoader;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Finder\Finder;
@@ -57,7 +58,15 @@ class AnnotationBuilder implements ExtensionBuilderInterface
                 $loader->load('annotation_permission.xml');
 
                 $this->ext->addAnnotatedClassesToCompile([
-                    AnnotationLoader::class,
+                    PermissionAnnotationLoader::class,
+                ]);
+            }
+
+            if ($config['annotations']['sharing']) {
+                $loader->load('annotation_sharing.xml');
+
+                $this->ext->addAnnotatedClassesToCompile([
+                    SharingAnnotationLoader::class,
                 ]);
             }
         }
