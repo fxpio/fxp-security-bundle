@@ -33,7 +33,7 @@ final class ConfigurationTest extends TestCase
         $config = [];
         $processor = new Processor();
         $configuration = new Configuration();
-        $this->assertCount(12, $processor->processConfiguration($configuration, [$config]));
+        $this->assertCount(13, $processor->processConfiguration($configuration, [$config]));
     }
 
     public function testPermissionConfigNormalization(): void
@@ -164,5 +164,18 @@ final class ConfigurationTest extends TestCase
         $this->assertArrayHasKey('object_filter', $res);
         $this->assertArrayHasKey('excluded_classes', $res['object_filter']);
         $this->assertSame($expected, $res['object_filter']['excluded_classes']);
+    }
+
+    public function testAnnotationConfig(): void
+    {
+        $processor = new Processor();
+        $configuration = new Configuration();
+        $res = $processor->processConfiguration($configuration, []);
+
+        $this->assertArrayHasKey('annotations', $res);
+        $this->assertArrayHasKey('include_paths', $res['annotations']);
+        $this->assertArrayHasKey('exclude_paths', $res['annotations']);
+        $this->assertSame(['%kernel.project_dir%/src'], $res['annotations']['include_paths']);
+        $this->assertSame([], $res['annotations']['exclude_paths']);
     }
 }

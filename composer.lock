@@ -571,12 +571,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/fxpio/fxp-security.git",
-                "reference": "2bf4c1712e9f25d5f7a65ded597bbcc5bceeb14e"
+                "reference": "0330eb5b06b65a0618653e1ab03c2a2818c0ce65"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fxpio/fxp-security/zipball/2bf4c1712e9f25d5f7a65ded597bbcc5bceeb14e",
-                "reference": "2bf4c1712e9f25d5f7a65ded597bbcc5bceeb14e",
+                "url": "https://api.github.com/repos/fxpio/fxp-security/zipball/0330eb5b06b65a0618653e1ab03c2a2818c0ce65",
+                "reference": "0330eb5b06b65a0618653e1ab03c2a2818c0ce65",
                 "shasum": ""
             },
             "require": {
@@ -592,11 +592,13 @@
                 "symfony/validator": "^4.3.0"
             },
             "require-dev": {
+                "doctrine/annotations": "^1.6.0",
                 "doctrine/orm": "^2.6.0",
                 "fxp/cache": "^2.0.0",
                 "fxp/doctrine-extensions": "^2.0.0",
                 "symfony/config": "^4.3.0",
-                "symfony/dependency-injection": "^4.3.0"
+                "symfony/dependency-injection": "^4.3.0",
+                "symfony/finder": "^4.3.0"
             },
             "type": "library",
             "extra": {
@@ -631,7 +633,7 @@
                 "security",
                 "sharing"
             ],
-            "time": "2019-06-09T15:04:41+00:00"
+            "time": "2019-06-10T17:55:10+00:00"
         },
         {
             "name": "psr/cache",

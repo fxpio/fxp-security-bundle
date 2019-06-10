@@ -55,6 +55,7 @@ class Configuration implements ConfigurationInterface
             ->append($this->getObjectFilterNode())
             ->append($this->getOrganizationalContextNode())
             ->append($this->getExpressionLanguageNode())
+            ->append($this->getAnnotationNode())
             ->append($this->getFieldConfigPermissionNode())
             ->append($this->getPermissionNode())
             ->append($this->getSharingNode())
@@ -179,6 +180,29 @@ class Configuration implements ConfigurationInterface
             ->scalarNode('is_organization')->defaultFalse()->end()
             ->end()
             ->end()
+            ->end()
+        ;
+    }
+
+    /**
+     * Get annotation node.
+     *
+     * @return NodeDefinition
+     */
+    private function getAnnotationNode(): NodeDefinition
+    {
+        return NodeUtils::createArrayNode('annotations')
+            ->addDefaultsIfNotSet()
+            ->children()
+            ->arrayNode('include_paths')
+            ->defaultValue(['%kernel.project_dir%/src'])
+            ->scalarPrototype()->end()
+            ->end()
+            ->arrayNode('exclude_paths')
+            ->scalarPrototype()
+            ->end()
+            ->end()
+            ->booleanNode('permissions')->defaultTrue()->end()
             ->end()
         ;
     }
