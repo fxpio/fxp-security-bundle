@@ -14,7 +14,7 @@ namespace Fxp\Bundle\SecurityBundle\Tests\DependencyInjection;
 use Doctrine\Bundle\DoctrineBundle\Registry;
 use Doctrine\ORM\EntityManager;
 use Fxp\Component\Security\Authorization\Voter\ExpressionVoter;
-use Fxp\Component\Security\Authorization\Voter\RoleSecurityIdentityVoter;
+use Fxp\Component\Security\Authorization\Voter\RoleVoter;
 use Fxp\Component\Security\Role\OrganizationalRoleHierarchy;
 use Fxp\Component\Security\SharingVisibilities;
 use Fxp\Component\Security\Tests\Fixtures\Model\MockObject;
@@ -104,16 +104,18 @@ final class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
     {
         $container = $this->createContainer([[
             'security_voter' => [
-                'role_security_identity' => true,
+                'role' => true,
                 'group' => true,
             ],
         ]]);
 
-        $this->assertTrue($container->hasDefinition('security.access.role_hierarchy_voter'));
-        $this->assertTrue($container->hasDefinition('security.access.groupable_voter'));
+        $this->assertFalse($container->hasDefinition('security.access.role_hierarchy_voter'));
+        $this->assertFalse($container->hasDefinition('security.access.simple_role_voter'));
+        $this->assertTrue($container->hasDefinition('fxp_security.access.role_voter'));
+        $this->assertTrue($container->hasDefinition('fxp_security.access.group_voter'));
         $this->assertTrue($container->hasDefinition('fxp_security.subscriber.security_identity.group'));
 
-        $this->assertSame(RoleSecurityIdentityVoter::class, $container->getDefinition('security.access.role_hierarchy_voter')->getClass());
+        $this->assertSame(RoleVoter::class, $container->getDefinition('fxp_security.access.role_voter')->getClass());
     }
 
     public function testRoleHierarchy(): void

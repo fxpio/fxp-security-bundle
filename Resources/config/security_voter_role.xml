@@ -5,9 +5,8 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
-        <!-- Override Symfony Role Hierarchy Security Voter -->
-        <service id="security.access.role_hierarchy_voter"
-                 class="Fxp\Component\Security\Authorization\Voter\RoleSecurityIdentityVoter"
+        <service id="fxp_security.access.role_voter"
+                 class="Fxp\Component\Security\Authorization\Voter\RoleVoter"
                  public="false">
             <tag name="security.voter" priority="245"/>
             <argument type="service" id="fxp_security.security_identity_manager"/>

@@ -26,8 +26,8 @@ class SecurityVoterBuilder implements ExtensionBuilderInterface
      */
     public function build(ContainerBuilder $container, LoaderInterface $loader, array $config): void
     {
-        if ($config['security_voter']['role_security_identity']) {
-            $loader->load('security_voter_role_security_identity.xml');
+        if ($config['security_voter']['role']) {
+            $loader->load('security_voter_role.xml');
         }
 
         if ($config['security_voter']['group']) {
