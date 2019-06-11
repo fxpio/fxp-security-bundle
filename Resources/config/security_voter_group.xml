@@ -5,9 +5,9 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
-        <!-- Groupable Security Voter -->
-        <service id="security.access.groupable_voter"
-                 class="Fxp\Component\Security\Authorization\Voter\GroupableVoter"
+        <!-- Group Security Voter -->
+        <service id="fxp_security.access.group_voter"
+                 class="Fxp\Component\Security\Authorization\Voter\GroupVoter"
                  public="false">
             <tag name="security.voter" priority="245"/>
             <argument type="service" id="fxp_security.security_identity_manager"/>

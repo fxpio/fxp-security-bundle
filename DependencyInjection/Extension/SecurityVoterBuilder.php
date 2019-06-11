@@ -30,8 +30,8 @@ class SecurityVoterBuilder implements ExtensionBuilderInterface
             $loader->load('security_voter_role_security_identity.xml');
         }
 
-        if ($config['security_voter']['groupable']) {
-            $loader->load('security_voter_groupable.xml');
+        if ($config['security_voter']['group']) {
+            $loader->load('security_voter_group.xml');
         }
     }
 }

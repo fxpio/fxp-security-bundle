@@ -105,7 +105,7 @@ final class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
         $container = $this->createContainer([[
             'security_voter' => [
                 'role_security_identity' => true,
-                'groupable' => true,
+                'group' => true,
             ],
         ]]);
 

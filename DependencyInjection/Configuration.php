@@ -118,7 +118,7 @@ class Configuration implements ConfigurationInterface
             ->addDefaultsIfNotSet()
             ->children()
             ->scalarNode('role_security_identity')->defaultFalse()->end()
-            ->scalarNode('groupable')->defaultFalse()->end()
+            ->scalarNode('group')->defaultFalse()->end()
             ->end()
         ;
     }
