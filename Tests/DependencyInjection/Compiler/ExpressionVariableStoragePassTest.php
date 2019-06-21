@@ -29,8 +29,8 @@ final class ExpressionVariableStoragePassTest extends TestCase
         $container = new ContainerBuilder();
         $compiler = new ExpressionVariableStoragePass();
 
-        $this->assertCount(1, $container->getDefinitions());
+        static::assertCount(1, $container->getDefinitions());
         $compiler->process($container);
-        $this->assertCount(1, $container->getDefinitions());
+        static::assertCount(1, $container->getDefinitions());
     }
 }

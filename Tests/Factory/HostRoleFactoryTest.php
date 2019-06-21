@@ -29,14 +29,14 @@ final class HostRoleFactoryTest extends TestCase
     {
         $factory = new HostRoleFactory();
 
-        $this->assertSame('pre_auth', $factory->getPosition());
+        static::assertSame('pre_auth', $factory->getPosition());
     }
 
     public function testGetKey(): void
     {
         $factory = new HostRoleFactory();
 
-        $this->assertSame('host_roles', $factory->getKey());
+        static::assertSame('host_roles', $factory->getKey());
     }
 
     public function testAddConfiguration(): void
@@ -45,7 +45,7 @@ final class HostRoleFactoryTest extends TestCase
         $factory = new HostRoleFactory();
 
         $factory->addConfiguration($builder);
-        $this->assertCount(1, $builder->getChildNodeDefinitions());
+        static::assertCount(1, $builder->getChildNodeDefinitions());
     }
 
     public function testCreate(): void
@@ -53,7 +53,7 @@ final class HostRoleFactoryTest extends TestCase
         $container = new ContainerBuilder();
         $factory = new HostRoleFactory();
 
-        $this->assertCount(1, $container->getDefinitions());
+        static::assertCount(1, $container->getDefinitions());
 
         $res = $factory->create($container, 'test_id', [], 'user_provider', 'default_entry_point');
         $valid = [
@@ -62,7 +62,7 @@ final class HostRoleFactoryTest extends TestCase
             'default_entry_point',
         ];
 
-        $this->assertEquals($valid, $res);
-        $this->assertCount(3, $container->getDefinitions());
+        static::assertEquals($valid, $res);
+        static::assertCount(3, $container->getDefinitions());
     }
 }

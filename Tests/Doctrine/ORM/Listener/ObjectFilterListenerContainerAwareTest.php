@@ -38,19 +38,19 @@ final class ObjectFilterListenerContainerAwareTest extends TestCase
         $objectFilter = $this->getMockBuilder(ObjectFilterInterface::class)->getMock();
         $container = $this->getMockBuilder(ContainerInterface::class)->getMock();
 
-        $container->expects($this->at(0))
+        $container->expects(static::at(0))
             ->method('get')
             ->with('security.token_storage')
             ->willReturn($tokenStorage)
         ;
 
-        $container->expects($this->at(1))
+        $container->expects(static::at(1))
             ->method('get')
             ->with('fxp_security.permission_manager')
             ->willReturn($permissionManager)
         ;
 
-        $container->expects($this->at(2))
+        $container->expects(static::at(2))
             ->method('get')
             ->with('fxp_security.object_filter')
             ->willReturn($objectFilter)
@@ -61,6 +61,6 @@ final class ObjectFilterListenerContainerAwareTest extends TestCase
 
         $listener->onFlush($args);
 
-        $this->assertNull($listener->container);
+        static::assertNull($listener->container);
     }
 }

@@ -33,7 +33,7 @@ final class ConfigurationTest extends TestCase
         $config = [];
         $processor = new Processor();
         $configuration = new Configuration();
-        $this->assertCount(13, $processor->processConfiguration($configuration, [$config]));
+        static::assertCount(13, $processor->processConfiguration($configuration, [$config]));
     }
 
     public function testPermissionConfigNormalization(): void
@@ -48,8 +48,8 @@ final class ConfigurationTest extends TestCase
         $configuration = new Configuration();
         $res = $processor->processConfiguration($configuration, [$config]);
 
-        $this->assertArrayHasKey('permissions', $res);
-        $this->assertArrayHasKey(\stdClass::class, $res['permissions']);
+        static::assertArrayHasKey('permissions', $res);
+        static::assertArrayHasKey(\stdClass::class, $res['permissions']);
     }
 
     public function testPermissionFieldOperationNormalization(): void
@@ -72,17 +72,17 @@ final class ConfigurationTest extends TestCase
         $configuration = new Configuration();
         $res = $processor->processConfiguration($configuration, [$config]);
 
-        $this->assertArrayHasKey('permissions', $res);
-        $this->assertArrayHasKey(MockObject::class, $res['permissions']);
-        $this->assertArrayHasKey('master_mapping_permissions', $res['permissions'][MockObject::class]);
+        static::assertArrayHasKey('permissions', $res);
+        static::assertArrayHasKey(MockObject::class, $res['permissions']);
+        static::assertArrayHasKey('master_mapping_permissions', $res['permissions'][MockObject::class]);
 
         $cConf = $res['permissions'][MockObject::class];
 
-        $this->assertArrayHasKey('fields', $cConf);
-        $this->assertArrayHasKey('name', $cConf['fields']);
-        $this->assertArrayHasKey('operations', $cConf['fields']['name']);
-        $this->assertSame($operations, $cConf['fields']['name']['operations']);
-        $this->assertNull($cConf['fields']['name']['editable']);
+        static::assertArrayHasKey('fields', $cConf);
+        static::assertArrayHasKey('name', $cConf['fields']);
+        static::assertArrayHasKey('operations', $cConf['fields']['name']);
+        static::assertSame($operations, $cConf['fields']['name']['operations']);
+        static::assertNull($cConf['fields']['name']['editable']);
     }
 
     public function testPermissionMasterFieldMapping(): void
@@ -102,11 +102,11 @@ final class ConfigurationTest extends TestCase
         $configuration = new Configuration();
         $res = $processor->processConfiguration($configuration, [$config]);
 
-        $this->assertArrayHasKey('permissions', $res);
-        $this->assertArrayHasKey(\stdClass::class, $res['permissions']);
-        $this->assertArrayHasKey('master_mapping_permissions', $res['permissions'][\stdClass::class]);
-        $this->assertArrayHasKey('view', $res['permissions'][\stdClass::class]['master_mapping_permissions']);
-        $this->assertArrayHasKey('update', $res['permissions'][\stdClass::class]['master_mapping_permissions']);
+        static::assertArrayHasKey('permissions', $res);
+        static::assertArrayHasKey(\stdClass::class, $res['permissions']);
+        static::assertArrayHasKey('master_mapping_permissions', $res['permissions'][\stdClass::class]);
+        static::assertArrayHasKey('view', $res['permissions'][\stdClass::class]['master_mapping_permissions']);
+        static::assertArrayHasKey('update', $res['permissions'][\stdClass::class]['master_mapping_permissions']);
     }
 
     public function testSharingSubjectConfigNormalization(): void
@@ -123,9 +123,9 @@ final class ConfigurationTest extends TestCase
         $configuration = new Configuration();
         $res = $processor->processConfiguration($configuration, [$config]);
 
-        $this->assertArrayHasKey('sharing', $res);
-        $this->assertArrayHasKey('subjects', $res['sharing']);
-        $this->assertArrayHasKey(\stdClass::class, $res['sharing']['subjects']);
+        static::assertArrayHasKey('sharing', $res);
+        static::assertArrayHasKey('subjects', $res['sharing']);
+        static::assertArrayHasKey(\stdClass::class, $res['sharing']['subjects']);
     }
 
     public function testObjectFilterConfigByDefault(): void
@@ -140,9 +140,9 @@ final class ConfigurationTest extends TestCase
         $configuration = new Configuration();
         $res = $processor->processConfiguration($configuration, [$config]);
 
-        $this->assertArrayHasKey('object_filter', $res);
-        $this->assertArrayHasKey('excluded_classes', $res['object_filter']);
-        $this->assertSame($expected, $res['object_filter']['excluded_classes']);
+        static::assertArrayHasKey('object_filter', $res);
+        static::assertArrayHasKey('excluded_classes', $res['object_filter']);
+        static::assertSame($expected, $res['object_filter']['excluded_classes']);
     }
 
     public function testObjectFilterConfig(): void
@@ -161,9 +161,9 @@ final class ConfigurationTest extends TestCase
         $configuration = new Configuration();
         $res = $processor->processConfiguration($configuration, [$config]);
 
-        $this->assertArrayHasKey('object_filter', $res);
-        $this->assertArrayHasKey('excluded_classes', $res['object_filter']);
-        $this->assertSame($expected, $res['object_filter']['excluded_classes']);
+        static::assertArrayHasKey('object_filter', $res);
+        static::assertArrayHasKey('excluded_classes', $res['object_filter']);
+        static::assertSame($expected, $res['object_filter']['excluded_classes']);
     }
 
     public function testAnnotationConfig(): void
@@ -172,10 +172,10 @@ final class ConfigurationTest extends TestCase
         $configuration = new Configuration();
         $res = $processor->processConfiguration($configuration, []);
 
-        $this->assertArrayHasKey('annotations', $res);
-        $this->assertArrayHasKey('include_paths', $res['annotations']);
-        $this->assertArrayHasKey('exclude_paths', $res['annotations']);
-        $this->assertSame(['%kernel.project_dir%/src'], $res['annotations']['include_paths']);
-        $this->assertSame([], $res['annotations']['exclude_paths']);
+        static::assertArrayHasKey('annotations', $res);
+        static::assertArrayHasKey('include_paths', $res['annotations']);
+        static::assertArrayHasKey('exclude_paths', $res['annotations']);
+        static::assertSame(['%kernel.project_dir%/src'], $res['annotations']['include_paths']);
+        static::assertSame([], $res['annotations']['exclude_paths']);
     }
 }

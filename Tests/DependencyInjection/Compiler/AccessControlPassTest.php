@@ -82,7 +82,7 @@ final class AccessControlPassTest extends TestCase
     {
         /** @var ContainerBuilder|MockObject $container */
         $container = $this->getMockBuilder(ContainerBuilder::class)->getMock();
-        $container->expects($this->once())
+        $container->expects(static::once())
             ->method('hasParameter')
             ->with('fxp_security.access_control')
             ->willReturn(false)
@@ -97,6 +97,6 @@ final class AccessControlPassTest extends TestCase
 
         $this->compiler->process($this->container);
 
-        $this->assertFalse($this->container->hasParameter('fxp_security.access_control'));
+        static::assertFalse($this->container->hasParameter('fxp_security.access_control'));
     }
 }

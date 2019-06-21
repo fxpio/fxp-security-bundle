@@ -32,9 +32,9 @@ final class ObjectFilterPassTest extends TestCase
         $container = new ContainerBuilder();
         $compiler = new ObjectFilterPass();
 
-        $this->assertCount(1, $container->getDefinitions());
+        static::assertCount(1, $container->getDefinitions());
         $compiler->process($container);
-        $this->assertCount(1, $container->getDefinitions());
+        static::assertCount(1, $container->getDefinitions());
     }
 
     public function testProcess(): void
@@ -54,7 +54,7 @@ final class ObjectFilterPassTest extends TestCase
         $container->setDefinition('fxp_security.object_filter.voter.mixed', $defVoter);
 
         $compiler->process($container);
-        $this->assertCount(3, $container->getDefinitions());
-        $this->assertCount(1, $def->getArgument(0));
+        static::assertCount(3, $container->getDefinitions());
+        static::assertCount(1, $def->getArgument(0));
     }
 }

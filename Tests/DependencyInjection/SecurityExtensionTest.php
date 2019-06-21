@@ -47,32 +47,32 @@ final class SecurityExtensionTest extends TestCase
 
     public function testGetAlias(): void
     {
-        $this->baseExt->expects($this->once())
+        $this->baseExt->expects(static::once())
             ->method('getAlias')
             ->willReturn('ALIAS')
         ;
 
-        $this->assertSame('ALIAS', $this->ext->getAlias());
+        static::assertSame('ALIAS', $this->ext->getAlias());
     }
 
     public function testGetNamespace(): void
     {
-        $this->baseExt->expects($this->once())
+        $this->baseExt->expects(static::once())
             ->method('getNamespace')
             ->willReturn('NAMESPACE')
         ;
 
-        $this->assertSame('NAMESPACE', $this->ext->getNamespace());
+        static::assertSame('NAMESPACE', $this->ext->getNamespace());
     }
 
     public function testGetXsdValidationBasePath(): void
     {
-        $this->baseExt->expects($this->once())
+        $this->baseExt->expects(static::once())
             ->method('getXsdValidationBasePath')
             ->willReturn('XSD')
         ;
 
-        $this->assertSame('XSD', $this->ext->getXsdValidationBasePath());
+        static::assertSame('XSD', $this->ext->getXsdValidationBasePath());
     }
 
     public function testGetConfiguration(): void
@@ -82,13 +82,13 @@ final class SecurityExtensionTest extends TestCase
         $config = [];
         $configuration = $this->getMockBuilder(ConfigurationInterface::class)->getMock();
 
-        $this->baseExt->expects($this->once())
+        $this->baseExt->expects(static::once())
             ->method('getConfiguration')
             ->with($config, $container)
             ->willReturn($configuration)
         ;
 
-        $this->assertSame($configuration, $this->ext->getConfiguration($config, $container));
+        static::assertSame($configuration, $this->ext->getConfiguration($config, $container));
     }
 
     public function testAddSecurityListenerFactory(): void
@@ -96,7 +96,7 @@ final class SecurityExtensionTest extends TestCase
         /** @var SecurityFactoryInterface $factory */
         $factory = $this->getMockBuilder(SecurityFactoryInterface::class)->getMock();
 
-        $this->baseExt->expects($this->once())
+        $this->baseExt->expects(static::once())
             ->method('addSecurityListenerFactory')
             ->with($factory)
         ;
@@ -109,7 +109,7 @@ final class SecurityExtensionTest extends TestCase
         /** @var UserProviderFactoryInterface $factory */
         $factory = $this->getMockBuilder(UserProviderFactoryInterface::class)->getMock();
 
-        $this->baseExt->expects($this->once())
+        $this->baseExt->expects(static::once())
             ->method('addUserProviderFactory')
             ->with($factory)
         ;
@@ -141,12 +141,12 @@ final class SecurityExtensionTest extends TestCase
             'KEY' => 'VALUE',
         ]];
 
-        $this->baseExt->expects($this->once())
+        $this->baseExt->expects(static::once())
             ->method('load')
             ->with($validConfigs, $container)
         ;
 
-        $container->expects($this->once())
+        $container->expects(static::once())
             ->method('setParameter')
             ->with('fxp_security.access_control', $accessControl)
         ;
@@ -167,12 +167,12 @@ final class SecurityExtensionTest extends TestCase
             'KEY' => 'VALUE',
         ]];
 
-        $this->baseExt->expects($this->once())
+        $this->baseExt->expects(static::once())
             ->method('load')
             ->with($validConfigs, $container)
         ;
 
-        $container->expects($this->never())
+        $container->expects(static::never())
             ->method('setParameter')
         ;
 

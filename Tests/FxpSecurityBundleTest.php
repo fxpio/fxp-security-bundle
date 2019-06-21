@@ -32,7 +32,7 @@ final class FxpSecurityBundleTest extends TestCase
 
         /** @var ContainerBuilder|MockObject $container */
         $container = $this->getMockBuilder(ContainerBuilder::class)->getMock();
-        $container->expects($this->once())
+        $container->expects(static::once())
             ->method('hasExtension')
             ->with('security')
             ->willReturn(false)

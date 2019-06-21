@@ -35,7 +35,7 @@ final class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
     public function testExtensionExist(): void
     {
         $container = $this->createContainer([[]]);
-        $this->assertTrue($container->hasExtension('fxp_security'));
+        static::assertTrue($container->hasExtension('fxp_security'));
     }
 
     public function testObjectFilter(): void
@@ -56,12 +56,12 @@ final class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
             'doctrine.orm.entity_manager' => new Definition(EntityManager::class),
         ]);
 
-        $this->assertTrue($container->hasDefinition('fxp_security.object_filter'));
-        $this->assertTrue($container->hasDefinition('fxp_security.object_filter.extension'));
-        $this->assertTrue($container->hasDefinition('fxp_security.object_filter.voter.mixed'));
+        static::assertTrue($container->hasDefinition('fxp_security.object_filter'));
+        static::assertTrue($container->hasDefinition('fxp_security.object_filter.extension'));
+        static::assertTrue($container->hasDefinition('fxp_security.object_filter.voter.mixed'));
 
-        $this->assertTrue($container->hasDefinition('fxp_security.object_filter.voter.doctrine_orm_collection'));
-        $this->assertTrue($container->hasDefinition('fxp_security.object_filter.orm.listener'));
+        static::assertTrue($container->hasDefinition('fxp_security.object_filter.voter.doctrine_orm_collection'));
+        static::assertTrue($container->hasDefinition('fxp_security.object_filter.orm.listener'));
     }
 
     public function testOrmObjectFilterVoterWithoutDoctrine(): void
@@ -109,13 +109,13 @@ final class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
             ],
         ]]);
 
-        $this->assertFalse($container->hasDefinition('security.access.role_hierarchy_voter'));
-        $this->assertFalse($container->hasDefinition('security.access.simple_role_voter'));
-        $this->assertTrue($container->hasDefinition('fxp_security.access.role_voter'));
-        $this->assertTrue($container->hasDefinition('fxp_security.access.group_voter'));
-        $this->assertTrue($container->hasDefinition('fxp_security.subscriber.security_identity.group'));
+        static::assertFalse($container->hasDefinition('security.access.role_hierarchy_voter'));
+        static::assertFalse($container->hasDefinition('security.access.simple_role_voter'));
+        static::assertTrue($container->hasDefinition('fxp_security.access.role_voter'));
+        static::assertTrue($container->hasDefinition('fxp_security.access.group_voter'));
+        static::assertTrue($container->hasDefinition('fxp_security.subscriber.security_identity.group'));
 
-        $this->assertSame(RoleVoter::class, $container->getDefinition('fxp_security.access.role_voter')->getClass());
+        static::assertSame(RoleVoter::class, $container->getDefinition('fxp_security.access.role_voter')->getClass());
     }
 
     public function testRoleHierarchy(): void
@@ -137,12 +137,12 @@ final class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
             'doctrine.orm.entity_manager' => new Definition(EntityManager::class),
         ]);
 
-        $this->assertTrue($container->hasDefinition('security.role_hierarchy'));
-        $this->assertTrue($container->hasAlias('fxp_security.role_hierarchy.cache'));
-        $this->assertTrue($container->hasDefinition('fxp_security.role_hierarchy.cache.listener'));
+        static::assertTrue($container->hasDefinition('security.role_hierarchy'));
+        static::assertTrue($container->hasAlias('fxp_security.role_hierarchy.cache'));
+        static::assertTrue($container->hasDefinition('fxp_security.role_hierarchy.cache.listener'));
 
         $def = $container->getDefinition('security.role_hierarchy');
-        $this->assertSame(OrganizationalRoleHierarchy::class, $def->getClass());
+        static::assertSame(OrganizationalRoleHierarchy::class, $def->getClass());
     }
 
     public function testRoleHierarchyWithoutDoctrineBundle(): void
@@ -186,10 +186,10 @@ final class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
             ],
         ]]);
 
-        $this->assertTrue($container->hasDefinition('fxp_security.organizational_context.default'));
-        $this->assertTrue($container->hasAlias('fxp_security.organizational_context'));
-        $this->assertTrue($container->hasDefinition('security.access.organization_voter'));
-        $this->assertTrue($container->hasDefinition('fxp_security.subscriber.security_identity.organization'));
+        static::assertTrue($container->hasDefinition('fxp_security.organizational_context.default'));
+        static::assertTrue($container->hasAlias('fxp_security.organizational_context'));
+        static::assertTrue($container->hasDefinition('security.access.organization_voter'));
+        static::assertTrue($container->hasDefinition('fxp_security.subscriber.security_identity.organization'));
     }
 
     public function testExpressionLanguage(): void
@@ -211,17 +211,17 @@ final class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
             'security.authentication.trust_resolver' => new Definition(AuthenticationTrustResolver::class),
         ]);
 
-        $this->assertTrue($container->hasDefinition('fxp_security.expression.variable_storage'));
-        $this->assertTrue($container->hasDefinition('security.access.expression_voter'));
-        $this->assertTrue($container->hasDefinition('fxp_security.organizational_context.default'));
-        $this->assertTrue($container->hasAlias('fxp_security.organizational_context'));
+        static::assertTrue($container->hasDefinition('fxp_security.expression.variable_storage'));
+        static::assertTrue($container->hasDefinition('security.access.expression_voter'));
+        static::assertTrue($container->hasDefinition('fxp_security.organizational_context.default'));
+        static::assertTrue($container->hasAlias('fxp_security.organizational_context'));
 
         $def = $container->getDefinition('security.access.expression_voter');
-        $this->assertSame(ExpressionVoter::class, $def->getClass());
+        static::assertSame(ExpressionVoter::class, $def->getClass());
 
-        $this->assertTrue($container->hasDefinition('fxp_security.expression.functions.is_basic_auth'));
-        $this->assertTrue($container->hasDefinition('fxp_security.expression.functions.is_granted'));
-        $this->assertTrue($container->hasDefinition('fxp_security.expression.functions.is_organization'));
+        static::assertTrue($container->hasDefinition('fxp_security.expression.functions.is_basic_auth'));
+        static::assertTrue($container->hasDefinition('fxp_security.expression.functions.is_granted'));
+        static::assertTrue($container->hasDefinition('fxp_security.expression.functions.is_organization'));
     }
 
     public function testExpressionLanguageWitMissingDependenciesForIsGranted(): void
@@ -273,7 +273,7 @@ final class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
             'doctrine.orm.entity_manager' => new Definition(EntityManager::class),
         ]);
 
-        $this->assertTrue($container->hasDefinition('fxp_security.orm.filter.subscriber.sharing'));
+        static::assertTrue($container->hasDefinition('fxp_security.orm.filter.subscriber.sharing'));
     }
 
     public function testOrmSharingWithoutDoctrine(): void
@@ -333,7 +333,7 @@ final class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
             'doctrine.orm.entity_manager' => new Definition(EntityManager::class),
         ]);
 
-        $this->assertTrue($container->hasDefinition('fxp_security.orm.filter.sharing.private_listener'));
+        static::assertTrue($container->hasDefinition('fxp_security.orm.filter.sharing.private_listener'));
     }
 
     public function testOrmSharingPrivateListenerWithoutDoctrine(): void
@@ -393,7 +393,7 @@ final class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
             'doctrine.orm.entity_manager' => new Definition(EntityManager::class),
         ]);
 
-        $this->assertTrue($container->hasDefinition('fxp_security.orm.listener.sharing_delete'));
+        static::assertTrue($container->hasDefinition('fxp_security.orm.listener.sharing_delete'));
     }
 
     public function testOrmSharingDeleteWithoutDoctrine(): void
@@ -454,10 +454,10 @@ final class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
         $permConfigs = $def->getArgument(0);
 
         $value = \is_array($permConfigs);
-        $this->assertTrue($value);
-        $this->assertCount(1, $permConfigs);
+        static::assertTrue($value);
+        static::assertCount(1, $permConfigs);
 
-        $this->assertTrue($container->hasDefinition('fxp_security.permission_checker.orm.listener'));
+        static::assertTrue($container->hasDefinition('fxp_security.permission_checker.orm.listener'));
     }
 
     public function testPermissionWithNonExistentClass(): void
@@ -489,8 +489,8 @@ final class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
         $permConfigs = $def->getArgument(0);
 
         $value = \is_array($permConfigs);
-        $this->assertTrue($value);
-        $this->assertCount(1, $permConfigs);
+        static::assertTrue($value);
+        static::assertCount(1, $permConfigs);
     }
 
     public function testPermissionWithNonExistentField(): void
@@ -547,8 +547,8 @@ final class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
         $identityConfigs = $def->getArgument(1);
 
         $value = \is_array($identityConfigs);
-        $this->assertTrue($value);
-        $this->assertCount(1, $identityConfigs);
+        static::assertTrue($value);
+        static::assertCount(1, $identityConfigs);
     }
 
     public function testSharingWithDirectIdentityAlias(): void
@@ -566,8 +566,8 @@ final class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
         $identityConfigs = $def->getArgument(1);
 
         $value = \is_array($identityConfigs);
-        $this->assertTrue($value);
-        $this->assertCount(1, $identityConfigs);
+        static::assertTrue($value);
+        static::assertCount(1, $identityConfigs);
     }
 
     public function testSharingWithNonExistentIdentityClass(): void
@@ -604,8 +604,8 @@ final class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
         $subjectConfigs = $def->getArgument(0);
 
         $value = \is_array($subjectConfigs);
-        $this->assertTrue($value);
-        $this->assertCount(1, $subjectConfigs);
+        static::assertTrue($value);
+        static::assertCount(1, $subjectConfigs);
     }
 
     public function testSharingWithNonExistentSubjectClass(): void

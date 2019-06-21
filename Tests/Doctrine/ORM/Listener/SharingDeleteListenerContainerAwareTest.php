@@ -31,7 +31,7 @@ final class SharingDeleteListenerContainerAwareTest extends TestCase
         $sharingManager = $this->getMockBuilder(SharingManagerInterface::class)->getMock();
         $container = $this->getMockBuilder(ContainerInterface::class)->getMock();
 
-        $container->expects($this->at(0))
+        $container->expects(static::at(0))
             ->method('get')
             ->with('fxp_security.sharing_manager')
             ->willReturn($sharingManager)
@@ -40,7 +40,7 @@ final class SharingDeleteListenerContainerAwareTest extends TestCase
         $listener = new SharingDeleteListenerContainerAware(MockSharing::class);
         $listener->container = $container;
 
-        $this->assertSame($sharingManager, $listener->getSharingManager());
-        $this->assertNull($listener->container);
+        static::assertSame($sharingManager, $listener->getSharingManager());
+        static::assertNull($listener->container);
     }
 }

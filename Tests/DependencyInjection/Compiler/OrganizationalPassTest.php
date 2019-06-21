@@ -31,9 +31,9 @@ final class OrganizationalPassTest extends TestCase
         $container = new ContainerBuilder();
         $compiler = new OrganizationalPass();
 
-        $this->assertCount(1, $container->getDefinitions());
+        static::assertCount(1, $container->getDefinitions());
         $compiler->process($container);
-        $this->assertCount(1, $container->getDefinitions());
+        static::assertCount(1, $container->getDefinitions());
     }
 
     public function testProcess(): void
@@ -55,10 +55,10 @@ final class OrganizationalPassTest extends TestCase
 
         $compiler->process($container);
 
-        $this->assertTrue($container->hasAlias('fxp_security.organizational_context'));
-        $this->assertTrue($container->hasDefinition($serviceId));
-        $this->assertFalse($container->hasDefinition($serviceIdDefault));
-        $this->assertFalse($container->hasParameter($serviceIdName));
+        static::assertTrue($container->hasAlias('fxp_security.organizational_context'));
+        static::assertTrue($container->hasDefinition($serviceId));
+        static::assertFalse($container->hasDefinition($serviceIdDefault));
+        static::assertFalse($container->hasParameter($serviceIdName));
     }
 
     public function testProcessWithInvalidInterface(): void

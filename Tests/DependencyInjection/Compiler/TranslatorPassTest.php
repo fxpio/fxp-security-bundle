@@ -47,7 +47,7 @@ final class TranslatorPassTest extends TestCase
     {
         /** @var ContainerBuilder|MockObject $container */
         $container = $this->getMockBuilder(ContainerBuilder::class)->getMock();
-        $container->expects($this->once())
+        $container->expects(static::once())
             ->method('hasDefinition')
             ->with('translator.default')
             ->willReturn(false)
@@ -62,34 +62,34 @@ final class TranslatorPassTest extends TestCase
         $dirname = \dirname($reflection->getFileName());
         $file = realpath($dirname.'/Resources/config/translations/validators.en.xlf');
 
-        $this->assertFileExists($file);
+        static::assertFileExists($file);
 
         $translator = $this->getMockBuilder(Definition::class)->disableOriginalConstructor()->getMock();
 
-        $this->container->expects($this->once())
+        $this->container->expects(static::once())
             ->method('hasDefinition')
             ->with('translator.default')
             ->willReturn(true)
         ;
 
-        $this->container->expects($this->once())
+        $this->container->expects(static::once())
             ->method('getDefinition')
             ->with('translator.default')
             ->willReturn($translator)
         ;
 
-        $translator->expects($this->once())
+        $translator->expects(static::once())
             ->method('getArguments')
             ->willReturn([null, null, [], []])
         ;
 
-        $translator->expects($this->once())
+        $translator->expects(static::once())
             ->method('getArgument')
             ->with(3)
             ->willReturn([])
         ;
 
-        $translator->expects($this->once())
+        $translator->expects(static::once())
             ->method('replaceArgument')
             ->with(3, [
                 'resource_files' => [

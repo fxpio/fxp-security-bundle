@@ -30,14 +30,14 @@ final class AnonymousRoleFactoryTest extends TestCase
     {
         $factory = new AnonymousRoleFactory();
 
-        $this->assertSame('pre_auth', $factory->getPosition());
+        static::assertSame('pre_auth', $factory->getPosition());
     }
 
     public function testGetKey(): void
     {
         $factory = new AnonymousRoleFactory();
 
-        $this->assertSame('anonymous_role', $factory->getKey());
+        static::assertSame('anonymous_role', $factory->getKey());
     }
 
     public function getConfiguration(): array
@@ -63,15 +63,15 @@ final class AnonymousRoleFactoryTest extends TestCase
         $factory = new AnonymousRoleFactory();
 
         $factory->addConfiguration($builder);
-        $this->assertCount(1, $builder->getChildNodeDefinitions());
+        static::assertCount(1, $builder->getChildNodeDefinitions());
 
         $processor = new Processor();
         $res = $processor->process($builder->getNode(), [$config]);
 
         $value = \is_array($res);
-        $this->assertTrue($value);
-        $this->assertArrayHasKey('role', $res);
-        $this->assertSame($expected, $res['role']);
+        static::assertTrue($value);
+        static::assertArrayHasKey('role', $res);
+        static::assertSame($expected, $res['role']);
     }
 
     public function testCreate(): void
@@ -79,7 +79,7 @@ final class AnonymousRoleFactoryTest extends TestCase
         $container = new ContainerBuilder();
         $factory = new AnonymousRoleFactory();
 
-        $this->assertCount(1, $container->getDefinitions());
+        static::assertCount(1, $container->getDefinitions());
 
         $res = $factory->create($container, 'test_id', [], 'user_provider', 'default_entry_point');
         $valid = [
@@ -88,7 +88,7 @@ final class AnonymousRoleFactoryTest extends TestCase
             'default_entry_point',
         ];
 
-        $this->assertEquals($valid, $res);
-        $this->assertCount(3, $container->getDefinitions());
+        static::assertEquals($valid, $res);
+        static::assertCount(3, $container->getDefinitions());
     }
 }

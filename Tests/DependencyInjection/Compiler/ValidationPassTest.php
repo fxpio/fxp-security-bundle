@@ -47,7 +47,7 @@ final class ValidationPassTest extends TestCase
     {
         /** @var ContainerBuilder|MockObject $container */
         $container = $this->getMockBuilder(ContainerBuilder::class)->getMock();
-        $container->expects($this->once())
+        $container->expects(static::once())
             ->method('hasDefinition')
             ->with('validator.builder')
             ->willReturn(false)
@@ -63,24 +63,24 @@ final class ValidationPassTest extends TestCase
         $permissionFile = realpath($dirname.'/Resources/config/validation/Permission.xml');
         $sharingFile = realpath($dirname.'/Resources/config/validation/Sharing.xml');
 
-        $this->assertFileExists($permissionFile);
-        $this->assertFileExists($sharingFile);
+        static::assertFileExists($permissionFile);
+        static::assertFileExists($sharingFile);
 
         $validator = $this->getMockBuilder(Definition::class)->disableOriginalConstructor()->getMock();
 
-        $this->container->expects($this->once())
+        $this->container->expects(static::once())
             ->method('hasDefinition')
             ->with('validator.builder')
             ->willReturn(true)
         ;
 
-        $this->container->expects($this->once())
+        $this->container->expects(static::once())
             ->method('getDefinition')
             ->with('validator.builder')
             ->willReturn($validator)
         ;
 
-        $validator->expects($this->once())
+        $validator->expects(static::once())
             ->method('addMethodCall')
             ->with('addXmlMappings', [
                 [
