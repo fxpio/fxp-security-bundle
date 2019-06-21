@@ -117,6 +117,7 @@ class Configuration implements ConfigurationInterface
         return NodeUtils::createArrayNode('security_voter')
             ->addDefaultsIfNotSet()
             ->children()
+            ->scalarNode('allow_not_managed_subject')->defaultTrue()->end()
             ->scalarNode('role')->defaultFalse()->end()
             ->scalarNode('group')->defaultFalse()->end()
             ->end()

@@ -33,5 +33,11 @@ class SecurityVoterBuilder implements ExtensionBuilderInterface
         if ($config['security_voter']['group']) {
             $loader->load('security_voter_group.xml');
         }
+
+        if ($container->hasDefinition('fxp_security.access.permission_voter')) {
+            $container->getDefinition('fxp_security.access.permission_voter')
+                ->replaceArgument(2, $config['security_voter']['allow_not_managed_subject'])
+            ;
+        }
     }
 }

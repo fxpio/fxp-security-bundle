@@ -104,6 +104,7 @@ final class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
     {
         $container = $this->createContainer([[
             'security_voter' => [
+                'allow_not_managed_subject' => false,
                 'role' => true,
                 'group' => true,
             ],
@@ -111,10 +112,13 @@ final class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
 
         static::assertFalse($container->hasDefinition('security.access.role_hierarchy_voter'));
         static::assertFalse($container->hasDefinition('security.access.simple_role_voter'));
+
+        static::assertTrue($container->hasDefinition('fxp_security.access.permission_voter'));
         static::assertTrue($container->hasDefinition('fxp_security.access.role_voter'));
         static::assertTrue($container->hasDefinition('fxp_security.access.group_voter'));
         static::assertTrue($container->hasDefinition('fxp_security.subscriber.security_identity.group'));
 
+        static::assertFalse($container->getDefinition('fxp_security.access.permission_voter')->getArgument(2));
         static::assertSame(RoleVoter::class, $container->getDefinition('fxp_security.access.role_voter')->getClass());
     }
 

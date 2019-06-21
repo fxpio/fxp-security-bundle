@@ -87,6 +87,7 @@
                  public="false">
             <argument type="service" id="fxp_security.permission_manager"/>
             <argument type="service" id="fxp_security.security_identity_manager"/>
+            <argument>true</argument>
             <tag name="security.voter" priority="260"/>
         </service>
     </services>
