@@ -47,7 +47,7 @@ class Group implements GroupInterface
 # config/packages/fxp_security.yaml
 fxp_security:
     security_voter:
-        groupable: true # Enable to check the group in the Symfony Security Authorization Checker
+        group: true # Enable to check the group in the Symfony Security Authorization Checker
 ```
 
 ```yaml
