@@ -45,7 +45,7 @@ fxp_security:
     role_hierarchy:
         enabled: true # Enable the role hierarchy
     security_voter:
-        role_security_identity: true # Override the Symfony Role Hierarchy Voter (optional)
+        role: true # Override the Symfony Role Hierarchy Voter (optional)
     doctrine:
         orm:
             listeners:
