@@ -42,7 +42,7 @@ With the `@Permission` and `@PermissionField` annotations, you can configure the
 permissions like the configuration of the Symfony Bundles, mut directly in your models:
 
 ```php
-use Fxp\Component\Security\Configuration as FxpSecurity;
+use Fxp\Component\Security\Annotation as FxpSecurity;
 
 /**
  * @FxpSecurity\Permission(
@@ -85,7 +85,7 @@ With the `@SharingSubject` and `@SharingIdentity` annotations, you can configure
 sharing like the configuration of the Symfony Bundles, mut directly in your models:
 
 ```php
-use Fxp\Component\Security\Configuration as FxpSecurity;
+use Fxp\Component\Security\Annotation as FxpSecurity;
 
 /**
  * @FxpSecurity\SharingSubject(

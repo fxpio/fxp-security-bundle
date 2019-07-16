@@ -7,7 +7,7 @@
     <services>
         <!-- Class Finder -->
         <service id="fxp_security.class_finder"
-                 class="Fxp\Component\Security\Annotation\ClassFinder"
+                 class="Fxp\Component\Config\Loader\ClassFinder"
                  public="false">
             <argument type="collection"/>
             <argument type="collection"/>
