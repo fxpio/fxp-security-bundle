@@ -35,15 +35,22 @@ abstract class AbstractLoaderPass implements CompilerPassInterface
     private $tagName;
 
     /**
+     * @var int
+     */
+    private $argumentPosition;
+
+    /**
      * Constructor.
      *
-     * @param string $serviceId The service id
-     * @param string $tagName   The tag name
+     * @param string $serviceId        The service id
+     * @param string $tagName          The tag name
+     * @param int    $argumentPosition The argument position
      */
-    public function __construct($serviceId, $tagName)
+    public function __construct($serviceId, $tagName, int $argumentPosition = 0)
     {
         $this->serviceId = $serviceId;
         $this->tagName = $tagName;
+        $this->argumentPosition = $argumentPosition;
     }
 
     /**
@@ -61,6 +68,6 @@ abstract class AbstractLoaderPass implements CompilerPassInterface
             $loaders[] = $service;
         }
 
-        $container->getDefinition($this->serviceId)->replaceArgument(0, $loaders);
+        $container->getDefinition($this->serviceId)->replaceArgument($this->argumentPosition, $loaders);
     }
 }

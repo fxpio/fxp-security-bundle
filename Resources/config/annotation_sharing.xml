@@ -5,13 +5,20 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
-        <!-- Annotation Sharing Loader -->
-        <service id="fxp_security.sharing_loader.annotation"
-                 class="Fxp\Component\Security\Sharing\Loader\AnnotationLoader"
+        <!-- Annotation Sharing Subject Loader -->
+        <service id="fxp_security.sharing_subject_loader.annotation"
+                 class="Fxp\Component\Security\Sharing\Loader\SubjectAnnotationLoader"
                  public="false">
-            <tag name="fxp_security.sharing_loader" />
+            <tag name="fxp_security.sharing_subject_loader" priority="-10" />
             <argument type="service" id="annotations.reader"/>
-            <argument type="service" id="fxp_security.class_finder"/>
+        </service>
+
+        <!-- Annotation Sharing Identity Loader -->
+        <service id="fxp_security.sharing_identity_loader.annotation"
+                 class="Fxp\Component\Security\Sharing\Loader\IdentityAnnotationLoader"
+                 public="false">
+            <tag name="fxp_security.sharing_identity_loader" priority="-10" />
+            <argument type="service" id="annotations.reader"/>
         </service>
     </services>
 </container>

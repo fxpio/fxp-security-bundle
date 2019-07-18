@@ -12,18 +12,18 @@
 namespace Fxp\Bundle\SecurityBundle\DependencyInjection\Compiler;
 
 /**
- * Adds all services with the tags "fxp_security.sharing_loader" as arguments
- * of the "fxp_security.sharing_loader.chain" service.
+ * Adds all services with the tags "fxp_security.sharing_identity_loader" as arguments
+ * of the "fxp_security.sharing_identity_resolver" service.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
  */
-class SharingLoaderPass extends AbstractLoaderPass
+class SharingIdentityLoaderPass extends AbstractLoaderPass
 {
     /**
      * Constructor.
      */
     public function __construct()
     {
-        parent::__construct('fxp_security.sharing_loader.chain', 'fxp_security.sharing_loader');
+        parent::__construct('fxp_security.sharing_identity_resolver', 'fxp_security.sharing_identity_loader');
     }
 }

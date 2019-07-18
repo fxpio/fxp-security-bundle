@@ -18,7 +18,8 @@ use Fxp\Bundle\SecurityBundle\DependencyInjection\Compiler\ObjectFilterPass;
 use Fxp\Bundle\SecurityBundle\DependencyInjection\Compiler\OrganizationalPass;
 use Fxp\Bundle\SecurityBundle\DependencyInjection\Compiler\PermissionLoaderPass;
 use Fxp\Bundle\SecurityBundle\DependencyInjection\Compiler\RoleHierarchyVoterPass;
-use Fxp\Bundle\SecurityBundle\DependencyInjection\Compiler\SharingLoaderPass;
+use Fxp\Bundle\SecurityBundle\DependencyInjection\Compiler\SharingIdentityLoaderPass;
+use Fxp\Bundle\SecurityBundle\DependencyInjection\Compiler\SharingSubjectLoaderPass;
 use Fxp\Bundle\SecurityBundle\DependencyInjection\Compiler\TranslatorPass;
 use Fxp\Bundle\SecurityBundle\DependencyInjection\Compiler\ValidationPass;
 use Fxp\Bundle\SecurityBundle\DependencyInjection\SecurityExtension;
@@ -51,7 +52,8 @@ class FxpSecurityBundle extends Bundle
         $container->addCompilerPass(new ExpressionVariableStoragePass());
         $container->addCompilerPass(new ObjectFilterPass());
         $container->addCompilerPass(new OrganizationalPass());
-        $container->addCompilerPass(new SharingLoaderPass());
+        $container->addCompilerPass(new SharingSubjectLoaderPass());
+        $container->addCompilerPass(new SharingIdentityLoaderPass());
         $container->addCompilerPass(new PermissionLoaderPass());
         $container->addCompilerPass(new RoleHierarchyVoterPass(), PassConfig::TYPE_BEFORE_OPTIMIZATION, 100);
         $container->addCompilerPass(

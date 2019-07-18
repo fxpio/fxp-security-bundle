@@ -174,8 +174,6 @@ final class ConfigurationTest extends TestCase
 
         static::assertArrayHasKey('annotations', $res);
         static::assertArrayHasKey('include_paths', $res['annotations']);
-        static::assertArrayHasKey('exclude_paths', $res['annotations']);
         static::assertSame(['%kernel.project_dir%/src'], $res['annotations']['include_paths']);
-        static::assertSame([], $res['annotations']['exclude_paths']);
     }
 }

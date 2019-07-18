@@ -23,8 +23,19 @@
         <service id="fxp_security.permission_factory"
                  class="Fxp\Component\Security\Permission\PermissionFactory"
                  public="false">
-            <argument type="service" id="fxp_security.permission_loader.chain" />
+            <argument type="service" id="fxp_security.permission_loader" />
+            <argument type="service" id="fxp_security.permission.array_resource" />
             <argument type="collection"/>
+        </service>
+
+        <service id="fxp_security.permission.array_resource"
+                 class="Fxp\Component\Config\ArrayResource"
+                 public="false">
+            <argument type="collection" />
+            <call method="add">
+                <argument>.</argument>
+                <argument>config</argument>
+            </call>
         </service>
 
         <service id="Fxp\Component\Security\Permission\PermissionFactory" alias="fxp_security.permission_factory" />
@@ -37,9 +48,7 @@
                  public="false">
             <argument type="service" id="fxp_security.permission_factory.cache.inner" />
             <argument type="collection">
-                <argument key="project_dir">%kernel.project_dir%</argument>
                 <argument key="cache_dir">%kernel.cache_dir%/fxp_security</argument>
-                <argument key="resource_prefixes" type="collection"/>
             </argument>
             <call method="setConfigCacheFactory">
                 <argument type="service" id="config_cache_factory" />
@@ -55,10 +64,22 @@
         </service>
 
         <!-- Permission Loader -->
-        <service id="fxp_security.permission_loader.chain"
-                 class="Fxp\Component\Security\Permission\Loader\ChainLoader"
+        <service id="fxp_security.permission_resolver"
+                 class="Symfony\Component\Config\Loader\LoaderResolver"
                  public="false">
             <argument type="collection" />
+        </service>
+
+        <service id="fxp_security.permission_loader"
+                 class="Symfony\Component\Config\Loader\DelegatingLoader"
+                 public="false">
+            <argument type="service" id="fxp_security.permission_resolver" />
+        </service>
+
+        <service id="fxp_security.permission_loader.array_resource"
+                 class="Fxp\Component\Security\Permission\Loader\ArrayResourceLoader"
+                 public="false">
+            <tag name="fxp_security.permission_loader" priority="200" />
         </service>
 
         <service id="fxp_security.permission_loader.configuration"

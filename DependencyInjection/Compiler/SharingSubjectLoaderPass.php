@@ -12,18 +12,18 @@
 namespace Fxp\Bundle\SecurityBundle\DependencyInjection\Compiler;
 
 /**
- * Adds all services with the tags "fxp_security.permission_loader" as arguments
- * of the "fxp_security.permission_resolver" service.
+ * Adds all services with the tags "fxp_security.sharing_subject_loader" as arguments
+ * of the "fxp_security.sharing_subject_resolver" service.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
  */
-class PermissionLoaderPass extends AbstractLoaderPass
+class SharingSubjectLoaderPass extends AbstractLoaderPass
 {
     /**
      * Constructor.
      */
     public function __construct()
     {
-        parent::__construct('fxp_security.permission_resolver', 'fxp_security.permission_loader');
+        parent::__construct('fxp_security.sharing_subject_resolver', 'fxp_security.sharing_subject_loader');
     }
 }

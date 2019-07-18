@@ -32,7 +32,9 @@ class PermissionBuilder implements ExtensionBuilderInterface
     public function build(ContainerBuilder $container, LoaderInterface $loader, array $config): void
     {
         $loader->load('permission.xml');
-        $container->getDefinition('fxp_security.permission_factory')->replaceArgument(1, $config['default_permissions']);
+        $container->getDefinition('fxp_security.permission_factory')
+            ->replaceArgument(2, $config['default_permissions'])
+        ;
 
         $configs = [];
 

@@ -61,9 +61,12 @@ class SharingBuilder implements ExtensionBuilderInterface
             $identityConfigs[] = $this->buildSharingIdentityConfig($container, $type, $identityConfig);
         }
 
-        $container->getDefinition('fxp_security.sharing_loader.configuration')
+        $container->getDefinition('fxp_security.sharing_subject_loader.configuration')
             ->replaceArgument(0, $subjectConfigs)
-            ->replaceArgument(1, $identityConfigs)
+        ;
+
+        $container->getDefinition('fxp_security.sharing_identity_loader.configuration')
+            ->replaceArgument(0, $identityConfigs)
         ;
     }
 

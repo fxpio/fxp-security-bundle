@@ -9,9 +9,8 @@
         <service id="fxp_security.permission_loader.annotation"
                  class="Fxp\Component\Security\Permission\Loader\AnnotationLoader"
                  public="false">
-            <tag name="fxp_security.permission_loader" />
+            <tag name="fxp_security.permission_loader" priority="-10" />
             <argument type="service" id="annotations.reader"/>
-            <argument type="service" id="fxp_security.class_finder"/>
         </service>
     </services>
 </container>

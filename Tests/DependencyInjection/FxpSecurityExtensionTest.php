@@ -547,8 +547,8 @@ final class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
             ],
         ]]);
 
-        $def = $container->getDefinition('fxp_security.sharing_loader.configuration');
-        $identityConfigs = $def->getArgument(1);
+        $def = $container->getDefinition('fxp_security.sharing_identity_loader.configuration');
+        $identityConfigs = $def->getArgument(0);
 
         $value = \is_array($identityConfigs);
         static::assertTrue($value);
@@ -566,8 +566,8 @@ final class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
             ],
         ]]);
 
-        $def = $container->getDefinition('fxp_security.sharing_loader.configuration');
-        $identityConfigs = $def->getArgument(1);
+        $def = $container->getDefinition('fxp_security.sharing_identity_loader.configuration');
+        $identityConfigs = $def->getArgument(0);
 
         $value = \is_array($identityConfigs);
         static::assertTrue($value);
@@ -604,7 +604,7 @@ final class FxpSecurityExtensionTest extends AbstractSecurityExtensionTest
             ],
         ]]);
 
-        $def = $container->getDefinition('fxp_security.sharing_loader.configuration');
+        $def = $container->getDefinition('fxp_security.sharing_subject_loader.configuration');
         $subjectConfigs = $def->getArgument(0);
 
         $value = \is_array($subjectConfigs);

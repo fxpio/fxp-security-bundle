@@ -23,7 +23,19 @@
         <service id="fxp_security.sharing_factory"
                  class="Fxp\Component\Security\Sharing\SharingFactory"
                  public="false">
-            <argument type="service" id="fxp_security.sharing_loader.chain" />
+            <argument type="service" id="fxp_security.sharing_subject_loader" />
+            <argument type="service" id="fxp_security.sharing_identity_loader" />
+            <argument type="service" id="fxp_security.permission.array_resource" />
+        </service>
+
+        <service id="fxp_security.sharing.array_resource"
+                 class="Fxp\Component\Config\ArrayResource"
+                 public="false">
+            <argument type="collection" />
+            <call method="add">
+                <argument>.</argument>
+                <argument>config</argument>
+            </call>
         </service>
 
         <service id="Fxp\Component\Security\Sharing\SharingFactory" alias="fxp_security.sharing_factory" />
@@ -36,9 +48,7 @@
                  public="false">
             <argument type="service" id="fxp_security.sharing_factory.cache.inner" />
             <argument type="collection">
-                <argument key="project_dir">%kernel.project_dir%</argument>
                 <argument key="cache_dir">%kernel.cache_dir%/fxp_security</argument>
-                <argument key="resource_prefixes" type="collection"/>
             </argument>
             <call method="setConfigCacheFactory">
                 <argument type="service" id="config_cache_factory" />
@@ -53,18 +63,55 @@
             <argument type="service" id="Psr\Container\ContainerInterface" />
         </service>
 
-        <!-- Sharing Loader -->
-        <service id="fxp_security.sharing_loader.chain"
-                 class="Fxp\Component\Security\Sharing\Loader\ChainLoader"
+        <!-- Sharing Subject Loader -->
+        <service id="fxp_security.sharing_subject_resolver"
+                 class="Symfony\Component\Config\Loader\LoaderResolver"
                  public="false">
             <argument type="collection" />
         </service>
 
-        <service id="fxp_security.sharing_loader.configuration"
-                 class="Fxp\Component\Security\Sharing\Loader\ConfigurationLoader"
+        <service id="fxp_security.sharing_subject_loader"
+                 class="Symfony\Component\Config\Loader\DelegatingLoader"
                  public="false">
-            <tag name="fxp_security.sharing_loader" priority="100" />
+            <argument type="service" id="fxp_security.sharing_subject_resolver" />
+        </service>
+
+        <service id="fxp_security.sharing_subject_loader.array_resource"
+                 class="Fxp\Component\Security\Sharing\Loader\SubjectArrayResourceLoader"
+                 public="false">
+            <tag name="fxp_security.sharing_subject_loader" priority="200" />
+        </service>
+
+        <service id="fxp_security.sharing_subject_loader.configuration"
+                 class="Fxp\Component\Security\Sharing\Loader\SubjectConfigurationLoader"
+                 public="false">
+            <tag name="fxp_security.sharing_subject_loader" priority="100" />
             <argument type="collection"/>
+        </service>
+
+        <!-- Sharing Identity Loader -->
+        <service id="fxp_security.sharing_identity_resolver"
+                 class="Symfony\Component\Config\Loader\LoaderResolver"
+                 public="false">
+            <argument type="collection" />
+        </service>
+
+        <service id="fxp_security.sharing_identity_loader"
+                 class="Symfony\Component\Config\Loader\DelegatingLoader"
+                 public="false">
+            <argument type="service" id="fxp_security.sharing_identity_resolver" />
+        </service>
+
+        <service id="fxp_security.sharing_identity_loader.array_resource"
+                 class="Fxp\Component\Security\Sharing\Loader\IdentityArrayResourceLoader"
+                 public="false">
+            <tag name="fxp_security.sharing_identity_loader" priority="200" />
+        </service>
+
+        <service id="fxp_security.sharing_identity_loader.configuration"
+                 class="Fxp\Component\Security\Sharing\Loader\IdentityConfigurationLoader"
+                 public="false">
+            <tag name="fxp_security.sharing_identity_loader" priority="100" />
             <argument type="collection"/>
         </service>
     </services>

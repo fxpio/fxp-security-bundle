@@ -14,7 +14,8 @@ namespace Fxp\Bundle\SecurityBundle\DependencyInjection\Extension;
 use Doctrine\Common\Annotations\Reader;
 use Fxp\Bundle\SecurityBundle\DependencyInjection\FxpSecurityExtension;
 use Fxp\Component\Security\Permission\Loader\AnnotationLoader as PermissionAnnotationLoader;
-use Fxp\Component\Security\Sharing\Loader\AnnotationLoader as SharingAnnotationLoader;
+use Fxp\Component\Security\Sharing\Loader\IdentityAnnotationLoader as SharingIdentityAnnotationLoader;
+use Fxp\Component\Security\Sharing\Loader\SubjectAnnotationLoader as SharingSubjectAnnotationLoader;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Finder\Finder;
@@ -47,12 +48,11 @@ class AnnotationBuilder implements ExtensionBuilderInterface
     public function build(ContainerBuilder $container, LoaderInterface $loader, array $config): void
     {
         if (interface_exists(Reader::class) && class_exists(Finder::class)) {
-            $loader->load('annotation.xml');
+            $resourcesDef = $container->getDefinition('fxp_security.permission.array_resource');
 
-            $container->getDefinition('fxp_security.class_finder')
-                ->replaceArgument(0, $config['annotations']['include_paths'])
-                ->replaceArgument(1, $config['annotations']['exclude_paths'])
-            ;
+            foreach ($config['annotations']['include_paths'] as $path) {
+                $resourcesDef->addMethodCall('add', [$path, 'annotation']);
+            }
 
             if ($config['annotations']['permissions']) {
                 $loader->load('annotation_permission.xml');
@@ -66,7 +66,8 @@ class AnnotationBuilder implements ExtensionBuilderInterface
                 $loader->load('annotation_sharing.xml');
 
                 $this->ext->addAnnotatedClassesToCompile([
-                    SharingAnnotationLoader::class,
+                    SharingIdentityAnnotationLoader::class,
+                    SharingSubjectAnnotationLoader::class,
                 ]);
             }
         }

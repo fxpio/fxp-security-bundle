@@ -516,12 +516,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/fxpio/fxp-config.git",
-                "reference": "95a12167a0f478cefbbdc3296173660fce23b4bc"
+                "reference": "1d14fefe2e7d122e61661086fb87212efa66b2ae"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fxpio/fxp-config/zipball/95a12167a0f478cefbbdc3296173660fce23b4bc",
-                "reference": "95a12167a0f478cefbbdc3296173660fce23b4bc",
+                "url": "https://api.github.com/repos/fxpio/fxp-config/zipball/1d14fefe2e7d122e61661086fb87212efa66b2ae",
+                "reference": "1d14fefe2e7d122e61661086fb87212efa66b2ae",
                 "shasum": ""
             },
             "require": {
@@ -529,6 +529,9 @@
                 "php": "^7.1.0",
                 "symfony/config": "^4.3.0",
                 "symfony/finder": "^4.3.0"
+            },
+            "require-dev": {
+                "symfony/http-kernel": "^4.3.0"
             },
             "type": "library",
             "extra": {
@@ -561,7 +564,7 @@
                 "config",
                 "loader"
             ],
-            "time": "2019-07-16T17:12:58+00:00"
+            "time": "2019-07-18T10:00:00+00:00"
         },
         {
             "name": "fxp/doctrine-extra",
@@ -624,12 +627,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/fxpio/fxp-security.git",
-                "reference": "c2c3b2204b4902e2f91c91a3ed5f5aaf29da95f6"
+                "reference": "742b871414b8a99441006e87152b26269aed16f1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fxpio/fxp-security/zipball/c2c3b2204b4902e2f91c91a3ed5f5aaf29da95f6",
-                "reference": "c2c3b2204b4902e2f91c91a3ed5f5aaf29da95f6",
+                "url": "https://api.github.com/repos/fxpio/fxp-security/zipball/742b871414b8a99441006e87152b26269aed16f1",
+                "reference": "742b871414b8a99441006e87152b26269aed16f1",
                 "shasum": ""
             },
             "require": {
@@ -689,7 +692,7 @@
                 "security",
                 "sharing"
             ],
-            "time": "2019-07-16T17:25:12+00:00"
+            "time": "2019-07-18T10:17:20+00:00"
         },
         {
             "name": "psr/cache",
