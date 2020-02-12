@@ -516,12 +516,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/fxpio/fxp-config.git",
-                "reference": "1d14fefe2e7d122e61661086fb87212efa66b2ae"
+                "reference": "6cc549beb8542afe2a6dc8d6a471473981005450"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fxpio/fxp-config/zipball/1d14fefe2e7d122e61661086fb87212efa66b2ae",
-                "reference": "1d14fefe2e7d122e61661086fb87212efa66b2ae",
+                "url": "https://api.github.com/repos/fxpio/fxp-config/zipball/6cc549beb8542afe2a6dc8d6a471473981005450",
+                "reference": "6cc549beb8542afe2a6dc8d6a471473981005450",
                 "shasum": ""
             },
             "require": {
@@ -531,6 +531,7 @@
                 "symfony/finder": "^4.3.0"
             },
             "require-dev": {
+                "fxp/doctrine-extra": "^2.0.0",
                 "symfony/http-kernel": "^4.3.0"
             },
             "type": "library",
@@ -564,7 +565,7 @@
                 "config",
                 "loader"
             ],
-            "time": "2019-07-18T10:00:00+00:00"
+            "time": "2019-08-02T07:36:05+00:00"
         },
         {
             "name": "fxp/doctrine-extra",
@@ -627,12 +628,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/fxpio/fxp-security.git",
-                "reference": "742b871414b8a99441006e87152b26269aed16f1"
+                "reference": "b44196fb0e40dceed6a1b3f2f2c8ec60e4bb8e12"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fxpio/fxp-security/zipball/742b871414b8a99441006e87152b26269aed16f1",
-                "reference": "742b871414b8a99441006e87152b26269aed16f1",
+                "url": "https://api.github.com/repos/fxpio/fxp-security/zipball/b44196fb0e40dceed6a1b3f2f2c8ec60e4bb8e12",
+                "reference": "b44196fb0e40dceed6a1b3f2f2c8ec60e4bb8e12",
                 "shasum": ""
             },
             "require": {
@@ -692,7 +693,7 @@
                 "security",
                 "sharing"
             ],
-            "time": "2019-07-18T10:17:20+00:00"
+            "time": "2019-10-28T08:25:36+00:00"
         },
         {
             "name": "psr/cache",
@@ -1874,7 +1875,7 @@
                 },
                 {
                     "name": "Gert de Pagter",
-                    "email": "backendtea@gmail.com"
+                    "email": "BackEndTea@gmail.com"
                 }
             ],
             "description": "Symfony polyfill for ctype functions",
@@ -2639,28 +2640,28 @@
         },
         {
             "name": "symfony/var-exporter",
-            "version": "v4.3.2",
+            "version": "v4.4.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/var-exporter.git",
-                "reference": "9dee83031dcf6dcb53bb7ec1c51de085329bf5cb"
+                "reference": "1a76a943f2af334da13bc9f33f49392fa530eec9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/var-exporter/zipball/9dee83031dcf6dcb53bb7ec1c51de085329bf5cb",
-                "reference": "9dee83031dcf6dcb53bb7ec1c51de085329bf5cb",
+                "url": "https://api.github.com/repos/symfony/var-exporter/zipball/1a76a943f2af334da13bc9f33f49392fa530eec9",
+                "reference": "1a76a943f2af334da13bc9f33f49392fa530eec9",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.1.3"
             },
             "require-dev": {
-                "symfony/var-dumper": "^4.1.1"
+                "symfony/var-dumper": "^4.1.1|^5.0"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "4.3-dev"
+                    "dev-master": "4.4-dev"
                 }
             },
             "autoload": {
@@ -2695,7 +2696,7 @@
                 "instantiate",
                 "serialize"
             ],
-            "time": "2019-06-22T08:39:44+00:00"
+            "time": "2020-01-04T13:00:46+00:00"
         }
     ],
     "packages-dev": [
